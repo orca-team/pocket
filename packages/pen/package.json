@@ -1,0 +1,42 @@
+{
+  "name": "@orca-fe/pen",
+  "version": "1.0.0",
+  "description": "UI components by orca-team",
+  "keywords": [
+    "react",
+    "view",
+    "ui",
+    "antd",
+    "components",
+    "lib",
+    "orca-fe",
+    "orca",
+    "orca-team"
+  ],
+  "author": "NicoKam",
+  "homepage": "http://later",
+  "license": "MIT",
+  "module": "esm/index.js",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "esm",
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry-cnpm.dayu.work/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@code.aliyun.com:orca-team/pen.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+
+  }
+}
