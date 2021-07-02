@@ -37,6 +37,9 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-
+    "ahooks": "^2"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
   }
 }
