@@ -29,7 +29,10 @@
   },
   "dependencies": {
     "ahooks": "^2.10.6",
-    "react": "16"
+    "lodash-es": "^4.17.21"
+  },
+  "peerDependencies": {
+    "react": ">=16"
   },
   "devDependencies": {
     "@umijs/test": "^3.0.5",
