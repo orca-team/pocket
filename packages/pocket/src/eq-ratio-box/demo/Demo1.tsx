@@ -6,7 +6,7 @@
  * desc.zh-CN: 下面的例子，设置高度为100。分别展示居左，居中，居右。
  */
 import React from 'react';
-import { EqRatioBox } from '@orca-fe/pen';
+import { EqRatioBox } from '@orca-fe/pocket';
 import Ruler from './Ruler';
 
 const Demo = () => {

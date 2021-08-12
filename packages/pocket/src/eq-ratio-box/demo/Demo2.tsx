@@ -6,7 +6,7 @@
  * desc.zh-CN: 这个例子为cover模式，标尺永远占满容器，尺寸为 10x60 20x60 30x60 40x60 50x60 60x60 70x60 80x60 90x60
  */
 import React from 'react';
-import { EqRatioBox } from '@orca-fe/pen';
+import { EqRatioBox } from '@orca-fe/pocket';
 import Ruler from './Ruler';
 
 const Demo = () => {

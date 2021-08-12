@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useSize } from 'ahooks';
-import './EqRatioBox.less';
+// import './EqRatioBox.less';
 
 export interface EqRatioBoxProps extends React.HTMLAttributes<HTMLDivElement> {
   width: number;

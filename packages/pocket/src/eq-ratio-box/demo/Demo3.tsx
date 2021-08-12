@@ -6,7 +6,7 @@
  * desc.zh-CN: 这个例子，参数和上一个一样，但禁用了 `scaleMode` 因此只有容器尺寸发生变化，但内容不会被缩放
  */
 import React from 'react';
-import { EqRatioBox } from '@orca-fe/pen';
+import { EqRatioBox } from '@orca-fe/pocket';
 import Ruler from './Ruler';
 
 const Demo = () => {
