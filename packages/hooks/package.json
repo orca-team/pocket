@@ -27,7 +27,8 @@
     "url": "git@code.aliyun.com:orca-team/pocket.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "build": "npm run clear && tsc -p config/tsconfig.prod.json && tsc -p config/tsconfig.esm.prod.json",
+    "clear": "rimraf lib dist esm"
   },
   "dependencies": {
     "lodash-es": "^4.17.21",
