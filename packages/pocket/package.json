@@ -34,7 +34,7 @@
   },
   "scripts": {
     "build": "npm run clear && node copyFile.js",
-    "clear": "rimraf lib"
+    "clear": "rimraf lib esm"
   },
   "dependencies": {
     "ahooks": "^2",

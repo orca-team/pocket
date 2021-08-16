@@ -27,12 +27,12 @@ glob.sync('*/style', { cwd: './src' }).map((filePath) => {
           console.error(err);
           return;
         }
-        fs.mkdirSync(path.dirname(output));
+        fs.mkdirSync(path.dirname(output), { recursive: true });
         fs.writeFileSync(output, res.code);
       },
     );
 
-    fs.mkdirSync(path.dirname(outputEs));
+    fs.mkdirSync(path.dirname(outputEs), { recursive: true });
     fs.writeFileSync(outputEs, code);
   }
 });
