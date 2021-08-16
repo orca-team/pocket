@@ -16,12 +16,9 @@
   "author": "NicoKam",
   "homepage": "http://later",
   "license": "MIT",
-  "module": "esm/index.js",
-  "main": "lib/index.js",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
+  "types": "dist/packages/pocket/src/index.d.ts",
+  "module": "dist/index.esm.js",
+  "main": "dist/index.js",
   "files": [
     "esm",
     "lib"
@@ -35,16 +32,21 @@
     "url": "git@code.aliyun.com:orca-team/pocket.git"
   },
   "scripts": {
-    "build": "npm run clear && tsc -p config/tsconfig.prod.json && tsc -p config/tsconfig.esm.prod.json && copyfiles -u src/**/*.less lib && copyfiles -u src/**/*.less esm",
-    "clear": "rimraf lib dist esm"
+    "build": "npm run clear copyfiles -u src/**/*.less lib",
+    "clear": "rimraf lib"
   },
   "dependencies": {
     "ahooks": "^2",
     "prefix-classnames": "^0.0.5",
     "rc-animate": "^3.1.1",
+    "rc-trigger": "^5.2.10",
     "tslib": "^2.3.1"
   },
   "peerDependencies": {
-    "react": ">=16.8.0"
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "@orca-fe/hooks": "*"
   }
 }

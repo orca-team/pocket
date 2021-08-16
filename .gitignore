@@ -26,3 +26,5 @@
 
 /packages/*/lib/
 /packages/*/esm/
+/packages/*/dist/
+/packages/*/node_modules/

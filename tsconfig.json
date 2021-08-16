@@ -12,6 +12,7 @@
     "baseUrl": "./",
     "strict": true,
     "skipLibCheck": true,
+    "rootDir": ".",
     "paths": {
       "@/*": ["src/*"],
       "@@/*": ["src/.umi/*"],
