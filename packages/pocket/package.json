@@ -35,7 +35,7 @@
     "url": "git@code.aliyun.com:orca-team/pocket.git"
   },
   "scripts": {
-    "build": "npm run clear && tsc -p config/tsconfig.prod.json && tsc -p config/tsconfig.esm.prod.json",
+    "build": "npm run clear && tsc -p config/tsconfig.prod.json && tsc -p config/tsconfig.esm.prod.json && copyfiles -u src/**/*.less lib && copyfiles -u src/**/*.less esm",
     "clear": "rimraf lib dist esm"
   },
   "dependencies": {
