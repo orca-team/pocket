@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import pc from 'prefix-classnames';
 import OpenBox from '../../../open-box';
 import Trigger from 'rc-trigger';
-// @ts-expect-error no @types/rc-animate
 import Animate from 'rc-animate';
 import { MenuItemType } from '../../menuUtils';
 import Arrow from '../Arrow';
@@ -18,7 +17,7 @@ const Span = ({
 
 const px = pc('orca-menu-item');
 
-const eArr: any[] = [];
+const eArr = [];
 
 const MenuLevelContext = React.createContext({
   level: 0,

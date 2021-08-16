@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import pc from 'prefix-classnames';
 import { useLocation } from 'react-router';
+// @ts-ignore
 import { useControllableProps } from '@orca-fe/hooks';
 import Menu, { MenuProps } from './Menu';
 import {
@@ -67,7 +68,7 @@ export interface MenuLayoutProps
   onItemClick?: MenuProps['onItemClick'];
 }
 
-const eArr: any[] = [];
+const eArr = [];
 const MenuLayout = (props: MenuLayoutProps) => {
   const [
     {

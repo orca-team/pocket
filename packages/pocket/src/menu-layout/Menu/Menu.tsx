@@ -22,7 +22,7 @@ export interface MenuProps extends React.HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark' | string;
 }
 
-const eArr: any[] = [];
+const eArr = [];
 const ef = () => {};
 
 const Menu = (props: MenuProps) => {
