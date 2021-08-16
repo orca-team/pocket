@@ -18,11 +18,11 @@ export const getPropListenerName = (key: string): string =>
 export const getPropsListenerName = (props = {}) =>
   Object.keys(props).map(getPropListenerName);
 
-export const validateProps = <T extends Object>(
-  initProps: T,
-  newProps = {},
+export const validateProps = (
+  initProps: Record<string, any>,
+  newProps: Record<string, any> = {},
 ) => {
-  const res = {};
+  const res: Record<string, any> = {};
   Object.keys(newProps).forEach((key) => {
     if (Object.hasOwnProperty.call(initProps, key)) {
       res[key] = newProps[key];
@@ -36,15 +36,18 @@ export const validateProps = <T extends Object>(
  * @param newProps
  * @private
  */
-export const getChangedState = <T extends Object>(props: T, newProps = {}) => {
-  let res: Partial<T> | undefined;
+export const getChangedState = <T extends Record<string, any>>(
+  props: T,
+  newProps: Record<string, any> = {},
+) => {
+  let res: Record<string, any> | undefined;
   Object.keys(newProps).forEach((key) => {
     if (props[key] === undefined) {
-      if (!res) res = {};
+      if (!res) res = {} as T;
       res[key] = newProps[key];
     }
   });
-  return res;
+  return res as T;
 };
 
 export type ControllablePropsConfig = {
@@ -54,7 +57,7 @@ export type ControllablePropsConfig = {
 };
 
 export default function useControllableProps<
-  T extends { [key: string]: any },
+  T extends Record<string, any>,
   P extends Partial<T>,
 >(
   props: T,

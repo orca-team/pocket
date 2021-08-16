@@ -28,7 +28,7 @@ export default function usePassThroughEvents<
   listener: T,
   localReturn: boolean = false,
 ): Pick<{ [key: string]: T }, E> {
-  const persistListener = usePersistFn(function (...args: any[]) {
+  const persistListener = usePersistFn(function (this: any, ...args: any[]) {
     const res = listener.call(this, ...args);
     if (props != null && typeof props[eventName] === 'function') {
       if (!localReturn) return props[eventName](...args);

@@ -34,10 +34,14 @@
     "url": "git@code.aliyun.com:orca-team/pen.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "build": "npm run clear && tsc -p config/tsconfig.prod.json && tsc -p config/tsconfig.esm.prod.json",
+    "clear": "rimraf lib dist esm"
   },
   "dependencies": {
-    "ahooks": "^2"
+    "ahooks": "^2",
+    "prefix-classnames": "^0.0.5",
+    "rc-animate": "^3.1.1",
+    "tslib": "^2.3.1"
   },
   "peerDependencies": {
     "react": ">=16.8.0"

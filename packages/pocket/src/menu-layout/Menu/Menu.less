@@ -1,0 +1,25 @@
+@prefix: orca-menu;
+
+.@{prefix} {
+  &- {
+    &root {
+      position: relative;
+      display: flex;
+      align-items: stretch;
+      height: 100%;
+      background-color: #262931;
+      font-size: 14px;
+    }
+
+    &vertical {
+      flex-direction: column;
+      height: auto;
+    }
+
+    /* theme default */
+
+    &root.@{prefix}-theme-light {
+      background-color: #ffffff;
+    }
+  }
+}
