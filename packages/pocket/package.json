@@ -20,6 +20,7 @@
   "module": "dist/index.esm.js",
   "main": "dist/index.js",
   "files": [
+    "dist",
     "esm",
     "lib"
   ],
@@ -32,7 +33,7 @@
     "url": "git@code.aliyun.com:orca-team/pocket.git"
   },
   "scripts": {
-    "build": "npm run clear copyfiles -u src/**/*.less lib",
+    "build": "npm run clear && node copyFile.js",
     "clear": "rimraf lib"
   },
   "dependencies": {
