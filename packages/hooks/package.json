@@ -32,7 +32,8 @@
   },
   "dependencies": {
     "lodash-es": "^4.17.21",
-    "ahooks": "^2"
+    "ahooks": "^2",
+    "tslib": "^2.3.1"
   },
   "peerDependencies": {
     "react": ">=16"
