@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/pocket",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "UI components by orca-team",
   "keywords": [
     "react",
@@ -27,11 +27,11 @@
     "lib"
   ],
   "publishConfig": {
-    "registry": "https://registry-cnpm.dayu.work/"
+    "registry": "https://registry.npmjs.org/"
   },
   "repository": {
     "type": "git",
-    "url": "git@code.aliyun.com:orca-team/pen.git"
+    "url": "git@code.aliyun.com:orca-team/pocket.git"
   },
   "scripts": {
     "build": "npm run clear && tsc -p config/tsconfig.prod.json && tsc -p config/tsconfig.esm.prod.json",

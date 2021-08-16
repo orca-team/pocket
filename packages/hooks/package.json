@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/hooks",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "React Hooks Collections",
   "keywords": [
     "react",
@@ -11,6 +11,7 @@
   "author": "NicoKam <331677620@qq.com>",
   "homepage": "",
   "license": "MIT",
+  "module": "esm/index.js",
   "main": "lib/hooks.js",
   "directories": {
     "lib": "lib",
@@ -20,7 +21,7 @@
     "lib"
   ],
   "publishConfig": {
-    "registry": "https://registry-cnpm.dayu.work/"
+    "registry": "https://registry.npmjs.org/"
   },
   "repository": {
     "type": "git",
