@@ -31,19 +31,6 @@
     ]
   },
   "dependencies": {
-    "@ant-design/icons": "^4.6.2",
-    "@types/lodash-es": "^4.17.4",
-    "ahooks": "^2.10.6",
-    "lodash-es": "^4.17.21",
-    "prefix-classnames": "0.0.5",
-    "prop-types": "^15.7.2",
-    "rc-animate": "^3.1.1",
-    "tslib": "^2.3.1"
-  },
-  "peerDependencies": {
-    "react": ">=16"
-  },
-  "devDependencies": {
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
@@ -59,6 +46,20 @@
     "lerna": "^4.0.0",
     "lint-staged": "^11.1.2",
     "prettier": "^2.2.1",
-    "yorkie": "^2.0.0"
+    "yorkie": "^2.0.0",
+    "@ant-design/icons": "^4.6.2",
+    "@types/lodash-es": "^4.17.4",
+    "ahooks": "^2.10.6",
+    "lodash-es": "^4.17.21",
+    "prefix-classnames": "0.0.5",
+    "prop-types": "^15.7.2",
+    "rc-animate": "^3.1.1",
+    "tslib": "^2.3.1"
+  },
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "devDependencies": {
+
   }
 }
