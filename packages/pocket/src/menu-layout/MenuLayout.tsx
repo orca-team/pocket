@@ -81,7 +81,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
       mainMenuSide = 'left',
       themeHeader = 'dark',
       themeSide = 'dark',
-      title = '点睛开发平台',
+      title = 'Menu Layout',
       logo,
       pathname: _pathname,
       onItemClick,
