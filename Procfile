@@ -1,1 +1,1 @@
-web: yarn && npm run docs:run-build
+web: yarn && npm run docs:serve
