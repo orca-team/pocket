@@ -6,7 +6,7 @@
     "start": "dumi dev",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d docs-dist",
-    "docs:serve": "http-server docs-dist --spa -p $PORT",
+    "docs:serve": "http-server docs-dist --spa",
     "build-all": "father-build && lerna run build",
     "build": "echo \"ok\"",
     "deploy": "npm run docs:build && npm run docs:deploy",
