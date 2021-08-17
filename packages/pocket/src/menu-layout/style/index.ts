@@ -1,3 +1,4 @@
+import '../../open-box/style';
 import '../MenuLayout.less';
 import '../Menu/Menu.less';
 import '../Menu/MenuItem/MenuItem.less';

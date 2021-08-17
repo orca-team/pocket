@@ -131,16 +131,16 @@
         > .@{prefix}-link {
           background-color: rgba(255, 255, 255, 0.1);
 
-          //&:after {
-          //  position: absolute;
-          //  content: '';
-          //  top: 0;
-          //  left: auto;
-          //  right: 0;
-          //  width: 3px;
-          //  height: 100%;
-          //  background-color: #1199ff;
-          //}
+          &:after {
+            position: absolute;
+            content: '';
+            top: 0;
+            left: auto;
+            right: 0;
+            width: 3px;
+            height: 100%;
+            background-color: #1199ff;
+          }
         }
       }
 
@@ -247,6 +247,11 @@
         &.@{prefix}-child-checked {
           > .@{prefix}-link {
             color: #1199ff;
+
+            // 浅色主题下，路径节点右侧的蓝色边去除
+            &:after {
+              display: none;
+            }
           }
         }
       }
