@@ -1,1 +1,1 @@
-web: npm run docs:run-build
+web: npm run docs:run-build -- -p $PORT
