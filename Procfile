@@ -1,1 +1,1 @@
-web: npm run docs:run-build -- -p $PORT
+web: yarn && npm run docs:run-build -- -p $PORT
