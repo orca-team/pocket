@@ -16,9 +16,9 @@
   "author": "NicoKam",
   "homepage": "http://later",
   "license": "MIT",
-  "types": "dist/packages/pocket/src/index.d.ts",
-  "module": "dist/index.esm.js",
-  "main": "dist/index.js",
+  "types": "esm/index.d.ts",
+  "module": "esm/index.js",
+  "main": "lib/index.js",
   "files": [
     "dist",
     "esm",
