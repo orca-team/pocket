@@ -1,4 +1,5 @@
 import OpenBox from './OpenBox';
+import './style';
 
 export default OpenBox;
 

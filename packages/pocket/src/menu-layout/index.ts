@@ -1,4 +1,5 @@
 import MenuLayout from './MenuLayout';
+import './style';
 
 export default MenuLayout;
 

@@ -32,10 +32,13 @@
     ]
   },
   "dependencies": {
+    "@ant-design/icons": "^4.6.2",
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
+    "@types/lodash-es": "^4.17.4",
     "@umijs/test": "^3.0.5",
+    "ahooks": "^2.10.6",
     "antd": "^4.16.11",
     "babel-plugin-import": "^1.13.3",
     "copyfiles": "^2.4.1",
@@ -43,24 +46,21 @@
     "father-build": "^1.19.8",
     "gh-pages": "^3.0.0",
     "http-server": "^13.0.0",
-    "k-tools": "1.0.0-beta.2",
+    "k-tools": "^1.0.0",
     "lerna": "^4.0.0",
     "lint-staged": "^11.1.2",
-    "prettier": "^2.2.1",
-    "yorkie": "^2.0.0",
-    "@ant-design/icons": "^4.6.2",
-    "@types/lodash-es": "^4.17.4",
-    "ahooks": "^2.10.6",
     "lodash-es": "^4.17.21",
     "prefix-classnames": "0.0.5",
+    "prettier": "^2.2.1",
     "prop-types": "^15.7.2",
     "rc-animate": "^3.1.1",
-    "tslib": "^2.3.1"
+    "rollup": "^2.56.3",
+    "tslib": "^2.3.1",
+    "typescript": "^4.4.2",
+    "yorkie": "^2.0.0"
   },
   "peerDependencies": {
     "react": ">=16"
   },
-  "devDependencies": {
-
-  }
+  "devDependencies": {}
 }

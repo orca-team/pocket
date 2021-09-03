@@ -10,18 +10,18 @@ export default defineConfig({
   outputPath: 'docs-dist',
   mode: 'site',
   // more config: https://d.umijs.org/config
-  extraBabelPlugins: [
-    [
-      'import',
-      {
-        libraryName: '@orca-fe/pocket',
-        libraryDirectory: isDev ? 'src' : 'lib',
-        style: (name: string, file: Object) => {
-          if (/@orca-fe\/pocket\/(src|lib|esm?)\/[^/]+/.test(name))
-            return `${name}/style`;
-          return false;
-        },
-      },
-    ],
-  ],
+  // extraBabelPlugins: [
+  //   [
+  //     'import',
+  //     {
+  //       libraryName: '@orca-fe/pocket',
+  //       libraryDirectory: isDev ? 'src' : 'lib',
+  //       style: (name: string, file: Object) => {
+  //         if (/@orca-fe\/pocket\/(src|lib|esm?)\/[^/]+/.test(name))
+  //           return `${name}/style`;
+  //         return false;
+  //       },
+  //     },
+  //   ],
+  // ],
 });

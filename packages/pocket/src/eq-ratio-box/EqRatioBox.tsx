@@ -1,6 +1,8 @@
 import type { CSSProperties } from 'react';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useSize } from 'ahooks';
+import EqRatioBoxContext from './EqRatioBoxContext';
+
 // import './EqRatioBox.less';
 
 export interface EqRatioBoxProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -29,16 +31,22 @@ const EqRatioBox = (props: EqRatioBoxProps) => {
     ...otherProps
   } = props;
   const rootRef = useRef<HTMLDivElement>(null);
-  const { width: containerWidth = width, height: containerHeight = height } =
-    useSize(rootRef);
+  const { width: containerWidth, height: containerHeight } = useSize(rootRef);
+
+  const hasSize = containerWidth != null && containerHeight != null;
 
   const { ratio, ...style } = useMemo(() => {
+    if (!hasSize) {
+      return {
+        ratio: 0,
+      };
+    }
     const fn = mode === 'contain' ? Math.min : Math.max;
-    const ratio = fn(containerWidth / width, containerHeight / height);
+    const ratio = fn(containerWidth! / width, containerHeight! / height);
     const contentWidth = scaleMode ? width : ratio * width;
     const contentHeight = scaleMode ? height : ratio * height;
-    let left = 0.5 * (containerWidth - ratio * width);
-    let top = 0.5 * (containerHeight - ratio * height);
+    let left = 0.5 * (containerWidth! - ratio * width);
+    let top = 0.5 * (containerHeight! - ratio * height);
     if (mode === 'contain') {
       if (xAlign === 'left') left = 0;
       if (xAlign === 'right') left *= 2;
@@ -57,21 +65,27 @@ const EqRatioBox = (props: EqRatioBoxProps) => {
       position: 'absolute',
       transformOrigin: 'top left',
       transform: scaleMode ? `scale(${ratio})` : '',
-      top,
-      left,
-      width: contentWidth,
-      height: contentHeight,
+      top: Math.round(top),
+      left: Math.round(left),
+      width: Math.round(contentWidth),
+      height: Math.round(contentHeight),
     };
   }, [containerWidth, containerHeight, width, height, xAlign, yAlign, mode]);
 
   useEffect(() => {
-    onRatioChange(ratio);
+    if (ratio) {
+      onRatioChange(ratio);
+    }
   }, [ratio]);
 
   return (
     <div className={`eq-ratio-box ${className}`} ref={rootRef} {...otherProps}>
       <div className="eq-ratio-box-content" style={style as CSSProperties}>
-        {children}
+        {hasSize && (
+          <EqRatioBoxContext.Provider value={{ ratio: ratio }}>
+            {children}
+          </EqRatioBoxContext.Provider>
+        )}
       </div>
     </div>
   );
