@@ -10,9 +10,9 @@
     "build-all": "father-build && lerna run build",
     "build": "echo \"ok\"",
     "deploy": "npm run docs:build && npm run docs:deploy",
-    "release": "npm run build && lerna publish",
+    "release": "npm run build-all && lerna publish",
     "pub:only": "lerna publish",
-    "release:force": "npm run build && lerna publish --force-publish",
+    "release:force": "npm run build-all && lerna publish --force-publish",
     "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\"",
     "test": "umi-test",
     "test:coverage": "umi-test --coverage"

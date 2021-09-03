@@ -49,7 +49,7 @@ export interface MenuLayoutProps
   title?: React.ReactNode;
 
   /** 是否支持侧边菜单收起 */
-  collapsable?: boolean;
+  collapsible?: boolean;
 
   /** 是否侧边菜单收起 */
   collapse?: boolean;
@@ -65,6 +65,15 @@ export interface MenuLayoutProps
 
   /** 菜单点击事件 */
   onItemClick?: MenuProps['onItemClick'];
+
+  /** 默认展开的节点 */
+  defaultOpenKeys?: string[];
+
+  /** 展开的节点 */
+  openKeys?: string[];
+
+  /** 节点展开事件 */
+  onOpenKeysChange?: (openKeys: string[]) => void;
 }
 
 const eArr = [];
@@ -76,8 +85,8 @@ const MenuLayout = (props: MenuLayoutProps) => {
       headerExtra,
       children,
       useTopMenu: _useTopMenu = true,
-      collapsable = true,
-      collapse,
+      collapsible = true,
+      collapse: _collapse,
       mainMenuSide = 'left',
       themeHeader = 'dark',
       themeSide = 'dark',
@@ -85,12 +94,18 @@ const MenuLayout = (props: MenuLayoutProps) => {
       logo,
       pathname: _pathname,
       onItemClick,
+      defaultOpenKeys,
+      openKeys,
       ...otherProps
     },
     changeProps,
   ] = useControllableProps(props, {
     collapse: false,
+    openKeys: props.defaultOpenKeys as string[],
   });
+
+  // 如果 collapsible 为 false，则一定不能收起
+  const collapse = collapsible ? _collapse : true;
 
   const location = useLocation();
   // 判断取用哪个 pathname
@@ -177,7 +192,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
       {/* 非侧边栏为主，顶栏需要显示logo */}
       {!mainSideLeft && logoDiv}
       {/* 侧边栏为主，且支持收缩时，显示 switch 按钮 */}
-      {mainSideLeft && collapsable && collapseSwitchDiv}
+      {mainSideLeft && collapsible && collapseSwitchDiv}
       {useTopMenu && (
         <Menu
           className={px('header-menu')}
@@ -204,7 +219,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
       {/* 当侧边栏为主时，logo展示在 SideMenu 第一位 */}
       {mainSideLeft && logoDiv}
       {/* 非侧边栏为主，且支持收缩时，显示 switch 按钮 */}
-      {!mainSideLeft && collapsable && collapseSwitchDiv}
+      {!mainSideLeft && collapsible && collapseSwitchDiv}
       <Menu
         className={px('side-menu')}
         collapsed={collapse}
@@ -213,6 +228,8 @@ const MenuLayout = (props: MenuLayoutProps) => {
         checked={checkedMenuKey[checkedMenuKey.length - 1]}
         direction="vertical"
         onItemClick={onItemClick}
+        openKeys={openKeys}
+        onOpenKeysChange={(openKeys) => changeProps({ openKeys })}
       />
     </div>
   );
