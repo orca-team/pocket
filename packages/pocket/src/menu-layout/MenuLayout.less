@@ -10,6 +10,7 @@
       * {
         box-sizing: border-box;
       }
+
       a {
         text-decoration: none;
       }
@@ -109,7 +110,6 @@
       box-shadow: 0 0 5px #666666;
       display: flex;
       flex-direction: column;
-      transition: width 300ms;
 
       &.@{prefix}-top-splitter {
         //border-top: 1px solid rgba(125, 125, 125, 0.3);
@@ -131,7 +131,6 @@
       color: rgba(125, 125, 125, 0.9);
       cursor: pointer;
       background-color: rgba(125, 125, 125, 0);
-      transition: background-color 300ms;
 
       &:hover {
         background-color: rgba(125, 125, 125, 0.2);
@@ -145,6 +144,16 @@
       &.@{prefix}-collapsed {
         transform: rotate(-360deg);
       }
+    }
+
+    &header,
+    &collapse-handle,
+    &side-menu {
+      transition: color 300ms, background-color 300ms;
+    }
+
+    &side-menu-container {
+      transition: color 300ms, width 300ms, background-color 300ms;
     }
 
     &side-menu {
@@ -166,7 +175,7 @@
       }
 
       .@{prefix}-collapse-handle {
-        background-color: #ffffff;
+        background-color: transparent;
       }
 
       &.@{prefix}-side-menu-container {
