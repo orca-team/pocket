@@ -3207,7 +3207,7 @@
               exact: !0,
               meta: {
                 filePath: 'packages/pocket/src/menu-layout/index.md',
-                updatedTime: 1629100945e3,
+                updatedTime: 1630654895e3,
                 title: 'MenuLayout \u83dc\u5355\u5e03\u5c40',
                 nav: { title: 'Pocket \u7ec4\u4ef6', path: '/component' },
                 group: { title: 'Layout', path: '/component/layout' },
@@ -6640,6 +6640,25 @@
                 a.a.createElement(
                   'tr',
                   null,
+                  a.a.createElement('td', null, 'pathname'),
+                  a.a.createElement(
+                    'td',
+                    null,
+                    '\u4f20\u5165\u81ea\u5b9a\u4e49\u7684\u8def\u5f84\uff0c\u7528\u4e8e\u81ea\u5b9a\u4e49\u5f53\u524d\u83dc\u5355\u5e94\u8be5\u88ab\u9009\u4e2d\u7684\u9879\uff0c\u5982\u679c\u4e0d\u4f20\uff0c\u4f1a\u81ea\u52a8\u8bfb\u53d6 ',
+                    a.a.createElement('code', null, 'history'),
+                    ' \u7684 ',
+                    a.a.createElement('code', null, 'pathname'),
+                  ),
+                  a.a.createElement(
+                    'td',
+                    null,
+                    a.a.createElement('code', null, 'string'),
+                  ),
+                  a.a.createElement('td', null, '-'),
+                ),
+                a.a.createElement(
+                  'tr',
+                  null,
                   a.a.createElement('td', null, 'mainMenuSide'),
                   a.a.createElement(
                     'td',
@@ -6677,7 +6696,11 @@
                     null,
                     a.a.createElement('code', null, 'boolean'),
                   ),
-                  a.a.createElement('td', null, 'true'),
+                  a.a.createElement(
+                    'td',
+                    null,
+                    a.a.createElement('code', null, 'true'),
+                  ),
                 ),
                 a.a.createElement(
                   'tr',
@@ -6753,7 +6776,11 @@
                     null,
                     a.a.createElement('code', null, 'boolean'),
                   ),
-                  a.a.createElement('td', null, 'true'),
+                  a.a.createElement(
+                    'td',
+                    null,
+                    a.a.createElement('code', null, 'true'),
+                  ),
                 ),
                 a.a.createElement(
                   'tr',
@@ -6805,7 +6832,7 @@
                     null,
                     a.a.createElement('code', null, "'dark'"),
                     '|',
-                    a.a.createElement('code', null, "'default'"),
+                    a.a.createElement('code', null, "'light'"),
                   ),
                   a.a.createElement(
                     'td',
@@ -6827,7 +6854,7 @@
                     null,
                     a.a.createElement('code', null, "'dark'"),
                     '|',
-                    a.a.createElement('code', null, "'default'"),
+                    a.a.createElement('code', null, "'light'"),
                   ),
                   a.a.createElement(
                     'td',
@@ -22437,7 +22464,7 @@
           },
           dependencies: {
             react: { version: '16.14.0' },
-            '@orca-fe/pocket': { version: '1.0.0-alpha.1' },
+            '@orca-fe/pocket': { version: '1.0.0' },
             'react-dom': { version: '>=16.8.0' },
             'react-router': { version: '^5.2.0' },
             'react-router-dom': { version: '^5.2.0' },
@@ -22460,7 +22487,7 @@
           },
           dependencies: {
             react: { version: '16.14.0' },
-            '@orca-fe/pocket': { version: '1.0.0-alpha.1' },
+            '@orca-fe/pocket': { version: '1.0.0' },
             'react-dom': { version: '>=16.8.0' },
             'react-router': { version: '^5.2.0' },
             'react-router-dom': { version: '^5.2.0' },
@@ -22483,7 +22510,7 @@
           },
           dependencies: {
             react: { version: '16.14.0' },
-            '@orca-fe/pocket': { version: '1.0.0-alpha.1' },
+            '@orca-fe/pocket': { version: '1.0.0' },
             'react-dom': { version: '>=16.8.0' },
             'react-router': { version: '^5.2.0' },
             'react-router-dom': { version: '^5.2.0' },
@@ -22502,7 +22529,7 @@
           sources: { _: { tsx: c } },
           dependencies: {
             react: { version: '>=16.0.0' },
-            '@orca-fe/pocket': { version: '1.0.0-alpha.1' },
+            '@orca-fe/pocket': { version: '1.0.0' },
             '@ant-design/icons': { version: '4.6.3' },
             'react-dom': { version: '>=16.0.0' },
             'react-router': { version: '^5.2.0' },
@@ -22521,7 +22548,7 @@
           sources: { _: { tsx: l } },
           dependencies: {
             react: { version: '>=16.9.0' },
-            '@orca-fe/pocket': { version: '1.0.0-alpha.1' },
+            '@orca-fe/pocket': { version: '1.0.0' },
             '@ant-design/icons': { version: '4.6.3' },
             antd: { version: '4.16.12', css: 'antd/dist/antd.css' },
             'react-dom': { version: '>=16.9.0' },
@@ -22627,7 +22654,7 @@
           },
           dependencies: {
             react: { version: '>=16.9.0' },
-            '@orca-fe/pocket': { version: '1.0.0-alpha.1' },
+            '@orca-fe/pocket': { version: '1.0.0' },
             antd: { version: '4.16.12', css: 'antd/dist/antd.css' },
             'react-dom': { version: '>=16.9.0' },
             'react-router': { version: '^5.2.0' },
@@ -22747,7 +22774,7 @@
           },
           dependencies: {
             react: { version: '>=16.9.0' },
-            '@orca-fe/pocket': { version: '1.0.0-alpha.1' },
+            '@orca-fe/pocket': { version: '1.0.0' },
             antd: { version: '4.16.12', css: 'antd/dist/antd.css' },
             'react-dom': { version: '>=16.9.0' },
             'react-router': { version: '^5.2.0' },
@@ -31356,7 +31383,7 @@
       dd = [],
       fd = (e) => {
         var t,
-          n = Ps(e, { collapse: !1 }),
+          n = Ps(e, { collapse: !1, openKeys: e.defaultOpenKeys }),
           a = Object(x['default'])(n, 2),
           l = a[0],
           s = l.className,
@@ -31381,7 +31408,8 @@
           C = l.logo,
           T = l.pathname,
           D = l.onItemClick,
-          N = o(l, [
+          N = (l.defaultOpenKeys, l.openKeys),
+          P = o(l, [
             'className',
             'menu',
             'headerExtra',
@@ -31396,27 +31424,29 @@
             'logo',
             'pathname',
             'onItemClick',
+            'defaultOpenKeys',
+            'openKeys',
           ]),
-          P = a[1],
-          Y = !1 === y || g,
-          R = Object(L['k'])(),
-          A = null != T ? T : R.pathname,
-          I = Object(i['useMemo'])(() => Bu(A, f), [f, A]),
-          F = Object(i['useMemo'])(() => Vu(A, f), [f, A]),
-          H = 'left' === w,
-          z = v && !H,
-          W = f;
-        z &&
-          (W =
-            null !== (t = I.length > 0 ? f[I[0]].children : void 0) &&
+          Y = a[1],
+          R = !y || g,
+          A = Object(L['k'])(),
+          I = null != T ? T : A.pathname,
+          F = Object(i['useMemo'])(() => Bu(I, f), [f, I]),
+          H = Object(i['useMemo'])(() => Vu(I, f), [f, I]),
+          z = 'left' === w,
+          W = v && !z,
+          B = f;
+        W &&
+          (B =
+            null !== (t = F.length > 0 ? f[F[0]].children : void 0) &&
             void 0 !== t
               ? t
               : []);
-        var B = F.length > 0 ? F[0] : void 0,
-          V = c.a.createElement('div', { className: ud('title') }, S),
-          K = c.a.createElement(
+        var V = H.length > 0 ? H[0] : void 0,
+          K = c.a.createElement('div', { className: ud('title') }, S),
+          U = c.a.createElement(
             'div',
-            { className: ud('logo-container', { 'left-side': H }) },
+            { className: ud('logo-container', { 'left-side': z }) },
             c.a.createElement(
               'div',
               { className: ud('logo') },
@@ -31430,18 +31460,18 @@
                   },
                 }),
             ),
-            V,
+            K,
           ),
-          U = c.a.createElement(
+          q = c.a.createElement(
             'div',
             {
               className: ud('collapse-handle'),
-              onClick: () => P({ collapse: !Y }),
+              onClick: () => Y({ collapse: !R }),
             },
             c.a.createElement(
               'svg',
               {
-                className: ud('collapse-handle-icon', { collapsed: Y }),
+                className: ud('collapse-handle-icon', { collapsed: R }),
                 viewBox: '64 64 896 896',
                 focusable: 'false',
                 'data-icon': 'menu',
@@ -31450,66 +31480,68 @@
                 fill: 'currentColor',
                 'aria-hidden': 'true',
               },
-              c.a.createElement('path', { d: Y ? sd : ld }),
+              c.a.createElement('path', { d: R ? sd : ld }),
             ),
           ),
-          q = c.a.createElement(
+          G = c.a.createElement(
             'div',
             { className: ud('header', 'theme-'.concat(k)) },
-            !H && K,
-            H && y && U,
-            z &&
+            !z && U,
+            z && y && q,
+            W &&
               c.a.createElement(cd, {
                 className: ud('header-menu'),
                 menu: f,
                 theme: k,
-                checked: B,
+                checked: V,
                 onItemClick: D,
               }),
             c.a.createElement('div', { style: { flex: 1 } }),
             p,
           ),
-          G = c.a.createElement('div', { className: ud('content') }, m),
-          $ =
-            W.length > 0 &&
+          $ = c.a.createElement('div', { className: ud('content') }, m),
+          J =
+            B.length > 0 &&
             c.a.createElement(
               'div',
               {
                 className: ud('side-menu-container', 'theme-'.concat(j), {
-                  'top-splitter': z,
-                  collapsed: Y,
+                  'top-splitter': W,
+                  collapsed: R,
                 }),
               },
-              H && K,
-              !H && y && U,
+              z && U,
+              !z && y && q,
               c.a.createElement(cd, {
                 className: ud('side-menu'),
-                collapsed: Y,
-                menu: W,
+                collapsed: R,
+                menu: B,
                 theme: j,
-                checked: F[F.length - 1],
+                checked: H[H.length - 1],
                 direction: 'vertical',
                 onItemClick: D,
+                openKeys: N,
+                onOpenKeysChange: (e) => Y({ openKeys: e }),
               }),
             ),
-          J = c.a.createElement(
+          X = c.a.createElement(
             'div',
             { className: ud('center') },
-            H ? q : $,
-            G,
+            z ? G : J,
+            $,
           );
         return c.a.createElement(
           'div',
           r(
             {
               className: ''
-                .concat(ud('root', { 'main-side-left': H }), ' ')
+                .concat(ud('root', { 'main-side-left': z }), ' ')
                 .concat(u),
             },
-            N,
+            P,
           ),
-          H ? $ : q,
-          J,
+          z ? J : G,
+          X,
         );
       },
       pd = fd,
