@@ -2,7 +2,7 @@ import { useMount, usePersistFn, useUpdateEffect } from 'ahooks';
 import React, { useImperativeHandle, useRef } from 'react';
 import prefixClassnames from 'prefix-classnames';
 
-const px = prefixClassnames('open-box');
+const px = prefixClassnames('orca-open-box');
 
 export interface OpenBoxProps extends React.HTMLAttributes<HTMLDivElement> {
   open: boolean;
@@ -10,7 +10,7 @@ export interface OpenBoxProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const OpenBox: React.FC<OpenBoxProps> = React.forwardRef((props, pRef) => {
-  const { className, open, height, style, ...otherProps } = props;
+  const { className = '', open, height = 0, style, ...otherProps } = props;
   const ref = useRef<HTMLDivElement>(null);
   useImperativeHandle(pRef, () => ref.current);
 
@@ -53,10 +53,5 @@ const OpenBox: React.FC<OpenBoxProps> = React.forwardRef((props, pRef) => {
     />
   );
 });
-
-OpenBox.defaultProps = {
-  className: '',
-  height: 0,
-};
 
 export default OpenBox;
