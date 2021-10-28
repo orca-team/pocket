@@ -63,8 +63,12 @@ const Menu = (props: MenuProps) => {
         {...otherProps}
       >
         {menu.map((menu) => {
-          const { key } = menu;
-          return <MenuItem key={key} menu={menu} showIcon={showIcon} />;
+          const { key, visible } = menu;
+          return (
+            visible !== false && (
+              <MenuItem key={key} menu={menu} showIcon={showIcon} />
+            )
+          );
         })}
       </div>
     </MenuProvider>
