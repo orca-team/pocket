@@ -54,7 +54,9 @@ export const SubMenu = (props: SubMenuProps) => {
           const { key, visible } = menu;
           return (
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            !visible && <MenuItem key={key} menu={menu} showIcon={showIcon} />
+            visible !== false && (
+              <MenuItem key={key} menu={menu} showIcon={showIcon} />
+            )
           );
         })}
       </OpenBox>
@@ -77,7 +79,8 @@ const MenuItem = (props: MenuItemProps) => {
     ...otherProps
   } = props;
   const { children = eArr, key, path, render, text, icon } = menu;
-  const hasChildren = children.filter((child) => !child.visible).length > 0;
+  const hasChildren =
+    children.filter((child) => child.visible !== false).length > 0;
 
   const {
     isVertical,
