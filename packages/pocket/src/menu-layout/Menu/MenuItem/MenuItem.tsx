@@ -51,10 +51,10 @@ export const SubMenu = (props: SubMenuProps) => {
         height={0}
       >
         {menu.map((menu) => {
-          const { key } = menu;
+          const { key, visible } = menu;
           return (
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            <MenuItem key={key} menu={menu} showIcon={showIcon} />
+            !visible && <MenuItem key={key} menu={menu} showIcon={showIcon} />
           );
         })}
       </OpenBox>
@@ -77,7 +77,7 @@ const MenuItem = (props: MenuItemProps) => {
     ...otherProps
   } = props;
   const { children = eArr, key, path, render, text, icon } = menu;
-  const hasChildren = children.length > 0;
+  const hasChildren = children.filter((child) => !child.visible).length > 0;
 
   const {
     isVertical,

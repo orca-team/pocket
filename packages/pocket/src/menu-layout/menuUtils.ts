@@ -9,6 +9,7 @@ export interface MenuItemType {
   icon?: React.ReactNode;
   path?: string;
   text?: string;
+  visible?: boolean;
   render?: (options: RenderOptions) => React.ReactNode;
   children?: MenuItemType[];
 }
