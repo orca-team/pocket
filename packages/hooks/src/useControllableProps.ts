@@ -78,7 +78,7 @@ export default function useControllableProps<
 
   let finalProps = {
     ...state,
-    ...omitBy(props, isUndefined),
+    ...omitBy(props, isUndefined), // remove all undefined props
   } as unknown as ControllableState<T, P>;
 
   // final state
