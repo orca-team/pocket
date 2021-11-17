@@ -1,6 +1,6 @@
 import { usePersistFn } from 'ahooks';
 import { useState } from 'react';
-import { omit, omitBy, isUndefined } from 'lodash-es';
+import { isUndefined, omit, omitBy, pick } from 'lodash-es';
 
 type ControllableState<T, U> = { [P in keyof T]: T[P] } &
   { [P in keyof U]-?: Exclude<U[P], undefined> } & { [key: string]: any };
@@ -33,6 +33,7 @@ export const validateProps = (
 
 /**
  * 对比变化的属性，提取出需要变化的state（属性值为undefined）
+ *
  * @param newProps
  * @private
  */
@@ -70,14 +71,29 @@ export default function useControllableProps<
     combineListener = true,
   } = config;
 
+  const [initPropsKeys] = useState(() => Object.keys(initProps));
+
+  // inner state
   const [state, setState] = useState(initProps);
+
+  let finalProps = {
+    ...state,
+    ...omitBy(props, isUndefined),
+  } as unknown as ControllableState<T, P>;
+
+  // final state
+  const mergedState = pick(finalProps, initPropsKeys) as P;
 
   const changeProps = usePersistFn((newProps = {}) => {
     const { onPropsChange } = props;
+    // delete attrs which not in `initProps`
     const validProps = validateProps(initProps, newProps);
     const nextState = getChangedState(props, validProps);
     if (nextState) {
-      setState({ ...state, ...nextState });
+      setState({
+        ...mergedState,
+        ...nextState,
+      });
     }
 
     const result: any = {};
@@ -92,18 +108,18 @@ export default function useControllableProps<
       });
     }
     if (combineListener && typeof onPropsChange === 'function') {
-      result.default = onPropsChange({ ...state, ...newProps });
+      result.default = onPropsChange({ ...mergedState, ...newProps });
     }
     return result;
   });
-  let finalProps = {
-    ...state,
-    ...omitBy(props, isUndefined),
-  } as unknown as ControllableState<T, P>;
+
   if (omitListener) {
+    // get the listener prop name according `initProps`
     const omitProps: string[] = ([] as string[])
       .concat(combineListener ? ['onPropsChange'] : [])
       .concat(autoOnChange ? getPropsListenerName(initProps) : []);
+
+    // remove all listener
     finalProps = omit(finalProps as any, omitProps) as ControllableState<T, P>;
   }
 
