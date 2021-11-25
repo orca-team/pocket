@@ -10,7 +10,7 @@
     "build-all": "father-build && lerna run build",
     "build": "echo \"ok\"",
     "deploy": "npm run docs:build && npm run docs:deploy",
-    "release": "npm run build-all && lerna publish",
+    "pub": "npm run build-all && lerna publish",
     "pub:only": "lerna publish",
     "release:force": "npm run build-all && lerna publish --force-publish",
     "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\"",

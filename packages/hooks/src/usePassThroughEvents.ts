@@ -1,7 +1,5 @@
 import { usePersistFn } from 'ahooks';
 
-export type Listener = (...args: any[]) => any;
-
 /**
  * 事件透传
  * 返回一个包含事件名的对象，用于监听组件的事件，但不影响事件向上抛出
@@ -19,21 +17,26 @@ export type Listener = (...args: any[]) => any;
  * @param localReturn 是否直接 return 本函数的返回值
  */
 export default function usePassThroughEvents<
-  T extends Listener,
+  E extends keyof HTMLElementEventMap,
   P extends { [key: string]: any } = {},
-  E extends string = string,
 >(
   props: P,
   eventName: E,
-  listener: T,
+  listener: (event: HTMLElementEventMap[E]) => void,
   localReturn: boolean = false,
-): Pick<{ [key: string]: T }, E> {
-  const persistListener = usePersistFn(function (this: any, ...args: any[]) {
-    const res = listener.call(this, ...args);
+) {
+  const persistListener = usePersistFn(function (
+    this: any,
+    ev: HTMLElementEventMap[E],
+  ) {
+    const res = listener.call(this, ev);
     if (props != null && typeof props[eventName] === 'function') {
-      if (!localReturn) return props[eventName](...args);
+      if (!localReturn) return props[eventName](ev);
     }
     return res;
   });
-  return <Pick<{ [key: string]: T }, E>>{ [eventName]: persistListener };
+  return { [eventName]: persistListener } as Pick<
+    { [key: string]: (ev: HTMLElementEventMap[E]) => void },
+    E
+  >;
 }
