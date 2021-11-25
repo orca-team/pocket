@@ -12,7 +12,7 @@
     "deploy": "npm run docs:build && npm run docs:deploy",
     "pub": "npm run build-all && lerna publish",
     "pub:only": "lerna publish",
-    "release:force": "npm run build-all && lerna publish --force-publish",
+    "pub:force": "npm run build-all && lerna publish --force-publish",
     "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\"",
     "test": "umi-test",
     "test:coverage": "umi-test --coverage"
