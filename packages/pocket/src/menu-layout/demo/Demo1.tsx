@@ -33,6 +33,14 @@ const menu: MenuItemType[] = [
         key: '/api/get-user',
         path: '/api/get-user',
         text: '获取用户信息',
+        children: [
+          {
+            key: '/api/get-user/detail',
+            path: '/api/get-user/detail',
+            text: '用户详情',
+            visible: false,
+          },
+        ],
       },
       {
         key: '/api/add-user',
@@ -57,6 +65,7 @@ const menu: MenuItemType[] = [
     path: '/about',
     icon: <QuestionOutlined />,
     text: '关于',
+    visible: true,
   },
 ];
 
