@@ -1,4 +1,9 @@
+import React from 'react';
 import { usePersistFn } from 'ahooks';
+
+type EventAttributes = Required<
+  Omit<React.DOMAttributes<HTMLElement>, 'children' | 'dangerouslySetInnerHTML'>
+>;
 
 /**
  * 事件透传
@@ -17,17 +22,17 @@ import { usePersistFn } from 'ahooks';
  * @param localReturn 是否直接 return 本函数的返回值
  */
 export default function usePassThroughEvents<
-  E extends keyof HTMLElementEventMap,
-  P extends { [key: string]: any } = {},
+  E extends keyof EventAttributes,
+  P extends Record<string, any>,
 >(
   props: P,
-  eventName: E,
-  listener: (event: HTMLElementEventMap[E]) => void,
+  eventName: E | string,
+  listener: (event: EventAttributes[E]) => boolean | undefined,
   localReturn: boolean = false,
 ) {
   const persistListener = usePersistFn(function (
-    this: any,
-    ev: HTMLElementEventMap[E],
+    this: unknown,
+    ev: EventAttributes[E],
   ) {
     const res = listener.call(this, ev);
     if (props != null && typeof props[eventName] === 'function') {
@@ -36,7 +41,7 @@ export default function usePassThroughEvents<
     return res;
   });
   return { [eventName]: persistListener } as Pick<
-    { [key: string]: (ev: HTMLElementEventMap[E]) => void },
+    Record<string, (ev: EventAttributes[E]) => void>,
     E
   >;
 }
