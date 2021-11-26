@@ -8,14 +8,22 @@
 
 import React, { useState } from 'react';
 import { Img } from '@orca-fe/pocket';
+import { Button } from 'antd';
+import 'antd/es/button/style';
 
-const imgSrc = '/tmp.jpg';
+const imgSrc = `${window['publicPath']}/tmp.jpg`;
 
 const Demo = () => {
   const [key, setKey] = useState(-1);
   return (
     <div key={key}>
-      <button onClick={() => setKey(-key)}>Reload</button>
+      <Button
+        onClick={() => {
+          setKey(-key);
+        }}
+      >
+        Reload
+      </Button>
       <div>默认Loading样式（支持自定义图片，Demo上没有放图，就不演示了）</div>
       <Img src={imgSrc} style={{ width: 100, height: 100 }} />
       <div>自定义Loading Element</div>

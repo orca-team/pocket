@@ -8,37 +8,35 @@
 import React from 'react';
 import { Img } from '@orca-fe/pocket';
 
-const errSrc = '/error.jpg';
+const errSrc = `${window['publicPath']}/error.jpg`;
 
-const Demo = () => {
-  return (
-    <div>
-      <div>默认Error样式</div>
-      <Img src="err url" style={{ width: 100, height: 100 }} />
-      <div>自定义Error图片</div>
-      <Img src="err url" errSrc={errSrc} style={{ width: 100, height: 100 }} />
-      <div>自定义Error Element</div>
-      <Img
-        src="err url"
-        errSrc={
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyItems: 'center',
-              height: '100%',
-            }}
-          >
-            Custom Error
-          </div>
-        }
-        style={{ width: 100, height: 100 }}
-      />
-    </div>
-  );
-};
+const Demo = () => (
+  <div>
+    <div>默认Error样式</div>
+    <Img src="err url" style={{ width: 100, height: 100 }} />
+    <div>自定义Error图片</div>
+    <Img src="err url" errSrc={errSrc} style={{ width: 100, height: 100 }} />
+    <div>自定义Error Element</div>
+    <Img
+      src="err url"
+      errSrc={
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyItems: 'center',
+            height: '100%',
+          }}
+        >
+          Custom Error
+        </div>
+      }
+      style={{ width: 100, height: 100 }}
+    />
+  </div>
+);
 
 export default Demo;
