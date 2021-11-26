@@ -1,0 +1,8 @@
+44 warn complete Waiting for 1 child process to exit. CTRL-C to exit immediately.
+45 error Error: Command failed with exit code 128: git tag @orca-fe/hooks@0.3.0 -m @orca-fe/hooks@0.3.0
+45 error fatal: tag '@orca-fe/hooks@0.3.0' already exists
+45 error     at makeError (D:\orca-fe\pocket\node_modules\execa\lib\error.js:60:11)
+45 error     at handlePromise (D:\orca-fe\pocket\node_modules\execa\index.js:118:26)
+45 error     at processTicksAndRejections (internal/process/task_queues.js:95:5)
+45 error     at async Promise.all (index 0)
+45 error     at async Promise.all (index 0)
