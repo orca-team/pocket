@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useSize } from 'ahooks';
-import EqRatioBoxContext from './EqRatioBoxContext';
+import EqRatioBoxContext, { useRatio } from './EqRatioBoxContext';
 
 // import './EqRatioBox.less';
 
@@ -42,11 +42,11 @@ const EqRatioBox = (props: EqRatioBoxProps) => {
       };
     }
     const fn = mode === 'contain' ? Math.min : Math.max;
-    const ratio = fn(containerWidth! / width, containerHeight! / height);
+    const ratio = fn(containerWidth / width, containerHeight / height);
     const contentWidth = scaleMode ? width : ratio * width;
     const contentHeight = scaleMode ? height : ratio * height;
-    let left = 0.5 * (containerWidth! - ratio * width);
-    let top = 0.5 * (containerHeight! - ratio * height);
+    let left = 0.5 * (containerWidth - ratio * width);
+    let top = 0.5 * (containerHeight - ratio * height);
     if (mode === 'contain') {
       if (xAlign === 'left') left = 0;
       if (xAlign === 'right') left *= 2;
@@ -82,7 +82,7 @@ const EqRatioBox = (props: EqRatioBoxProps) => {
     <div className={`eq-ratio-box ${className}`} ref={rootRef} {...otherProps}>
       <div className="eq-ratio-box-content" style={style as CSSProperties}>
         {hasSize && (
-          <EqRatioBoxContext.Provider value={{ ratio: ratio }}>
+          <EqRatioBoxContext.Provider value={{ ratio }}>
             {children}
           </EqRatioBoxContext.Provider>
         )}
@@ -90,5 +90,7 @@ const EqRatioBox = (props: EqRatioBoxProps) => {
     </div>
   );
 };
+
+EqRatioBox.useRatio = useRatio;
 
 export default EqRatioBox;
