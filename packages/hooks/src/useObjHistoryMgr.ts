@@ -60,7 +60,7 @@ export default function useObjHistoryMgr<T extends Object>(
     },
   );
 
-  const setValue = usePersistFn<UseObjHistoryMgrType<T>['setValue']>(
+  const setValue = useMemoizedFn<UseObjHistoryMgrType<T>['setValue']>(
     (value) => {
       // state 和 ref 中的 current 不匹配，说明执行了多次 setValue，调用 replace 来合并
       if (history.current !== currentRef.current) {
@@ -86,7 +86,7 @@ export default function useObjHistoryMgr<T extends Object>(
     },
   );
 
-  const reset = usePersistFn<UseObjHistoryMgrType<T>['reset']>((value) => {
+  const reset = useMemoizedFn<UseObjHistoryMgrType<T>['reset']>((value) => {
     setHistory(() => {
       const newValue = _defaultValue;
       if (value) {
@@ -96,7 +96,7 @@ export default function useObjHistoryMgr<T extends Object>(
     });
   });
 
-  const go = usePersistFn<UseObjHistoryMgrType<T>['go']>((num) => {
+  const go = useMemoizedFn<UseObjHistoryMgrType<T>['go']>((num) => {
     setHistory(({ history: historyArr, current }) => {
       const newIndex = Math.max(
         0,
@@ -109,10 +109,10 @@ export default function useObjHistoryMgr<T extends Object>(
     });
   });
 
-  const back = usePersistFn<UseObjHistoryMgrType<T>['back']>(() => {
+  const back = useMemoizedFn<UseObjHistoryMgrType<T>['back']>(() => {
     go(-1);
   });
-  const forward = usePersistFn<UseObjHistoryMgrType<T>['forward']>(() => {
+  const forward = useMemoizedFn<UseObjHistoryMgrType<T>['forward']>(() => {
     go(1);
   });
 
