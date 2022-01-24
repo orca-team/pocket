@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { usePersistFn } from 'ahooks';
+import { usePersistFn } from 'ahooks-v2';
 import { findSelectedMenuKey, MenuItemType } from '../menuUtils';
 
 export interface MenuContextBaseType {

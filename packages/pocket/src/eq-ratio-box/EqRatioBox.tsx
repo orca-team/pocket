@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import React, { useEffect, useMemo, useRef } from 'react';
-import { useSize } from 'ahooks';
+import { useSize } from 'ahooks-v2';
 import EqRatioBoxContext, { useRatio } from './EqRatioBoxContext';
 
 // import './EqRatioBox.less';

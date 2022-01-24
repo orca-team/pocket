@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { usePersistFn } from 'ahooks';
+import { usePersistFn } from 'ahooks-v2';
 
 type UseUniqArrayResult<T> = [
   T[],

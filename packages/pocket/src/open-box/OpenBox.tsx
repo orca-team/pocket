@@ -1,4 +1,4 @@
-import { useMount, usePersistFn, useUpdateEffect } from 'ahooks';
+import { useMount, usePersistFn, useUpdateEffect } from 'ahooks-v2';
 import React, { useImperativeHandle, useRef } from 'react';
 import prefixClassnames from 'prefix-classnames';
 

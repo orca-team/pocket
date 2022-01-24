@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import pc from 'prefix-classnames';
 import { Transition } from 'react-transition-group';
-import { useBoolean, useClickAway, useEventListener } from 'ahooks';
+import { useBoolean, useClickAway, useEventListener } from 'ahooks-v2';
 import ReactDOM from 'react-dom';
 
 // eslint-disable-next-line max-len

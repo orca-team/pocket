@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { shouldUpdate } from '@orca-fe/pocket';
-import { useInterval } from 'ahooks';
+import { useInterval } from 'ahooks-v2';
 
 const MyComponent = (props: { num: number }) => {
   const { num = 1 } = props;
