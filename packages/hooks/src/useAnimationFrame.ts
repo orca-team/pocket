@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { usePersistFn } from 'ahooks';
+import useMemoizedFn from './useMemorizedFn';
 
 const useAnimationFrame = (callback = (ms: number, stepMs: number) => {}) => {
-  const cb = usePersistFn(callback);
+  const cb = useMemoizedFn(callback);
   useEffect(() => {
     let timer = -1;
     let lastTime = 0;

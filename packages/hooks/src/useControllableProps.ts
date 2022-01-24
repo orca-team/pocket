@@ -1,6 +1,6 @@
-import { usePersistFn } from 'ahooks';
 import { useState } from 'react';
 import { isUndefined, omit, omitBy, pick } from 'lodash-es';
+import useMemoizedFn from './useMemorizedFn';
 
 type ControllableState<T, U> = { [P in keyof T]: T[P] } &
   { [P in keyof U]-?: Exclude<U[P], undefined> } & { [key: string]: any };
@@ -84,7 +84,7 @@ export default function useControllableProps<
   // final state
   const mergedState = pick(finalProps, initPropsKeys) as P;
 
-  const changeProps = usePersistFn((newProps = {}) => {
+  const changeProps = useMemoizedFn((newProps = {}) => {
     const { onPropsChange } = props;
     // delete attrs which not in `initProps`
     const validProps = validateProps(initProps, newProps);

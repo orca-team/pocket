@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { usePersistFn } from 'ahooks';
+import useMemoizedFn from './useMemorizedFn';
 
 export interface UseObjHistoryMgrType<T extends Object> {
   value: T | undefined;
@@ -38,7 +38,7 @@ export default function useObjHistoryMgr<T extends Object>(
   const backLength = current;
   const forwardLength = historyArr.length - current - 1;
 
-  const replaceValue = usePersistFn<UseObjHistoryMgrType<T>['replaceValue']>(
+  const replaceValue = useMemoizedFn<UseObjHistoryMgrType<T>['replaceValue']>(
     (value) => {
       setHistory(({ history: historyArr, current }) => {
         const currentValue = historyArr[current];

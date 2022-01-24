@@ -1,5 +1,5 @@
 import React from 'react';
-import { usePersistFn } from 'ahooks';
+import useMemoizedFn from './useMemorizedFn';
 
 type EventAttributes = Required<
   Omit<React.DOMAttributes<HTMLElement>, 'children' | 'dangerouslySetInnerHTML'>
@@ -30,7 +30,7 @@ export default function usePassThroughEvents<
   listener: (event: EventAttributes[E]) => boolean | undefined,
   localReturn: boolean = false,
 ) {
-  const persistListener = usePersistFn(function (
+  const persistListener = useMemoizedFn(function (
     this: unknown,
     ev: EventAttributes[E],
   ) {
