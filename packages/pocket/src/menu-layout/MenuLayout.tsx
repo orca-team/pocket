@@ -3,11 +3,8 @@ import pc from 'prefix-classnames';
 import { useLocation } from 'react-router';
 import { useControllableProps } from '@orca-fe/hooks';
 import Menu, { MenuProps } from './Menu';
-import {
-  findSelectedMenuIndex,
-  findSelectedMenuKey,
-  MenuItemType,
-} from './menuUtils';
+import { findSelectedMenuIndexTraverse, findSelectedMenuKey, MenuItemType } from './menuUtils';
+import BreadcrumbContext, { BreadCrumbProvider } from '../custom-breadcrumb/BreadcrumbContext';
 
 // 菜单展开按钮
 const iconMenuPathExpand =
@@ -25,8 +22,8 @@ const iconMenuPathCollapse =
 
 const px = pc('orca-menu-layout');
 
-export interface MenuLayoutProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+export interface MenuLayoutProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+
   /** 传入自定义的路径 */
   pathname?: string;
 
@@ -78,6 +75,7 @@ export interface MenuLayoutProps
 
 const eArr = [];
 const MenuLayout = (props: MenuLayoutProps) => {
+  const { defaultOpenKeys: _defaultOpenKeys } = props;
   const [
     {
       className = '',
@@ -101,7 +99,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
     changeProps,
   ] = useControllableProps(props, {
     collapse: false,
-    openKeys: props.defaultOpenKeys as string[],
+    openKeys: _defaultOpenKeys ?? [],
   });
 
   // 如果 collapsible 为 false，则一定不能收起
@@ -112,7 +110,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
   const pathname = _pathname != null ? _pathname : location.pathname;
 
   const checkedMenuIndex = useMemo(
-    () => findSelectedMenuIndex(pathname, menu),
+    () => findSelectedMenuIndexTraverse(pathname, menu),
     [menu, pathname],
   );
 
@@ -137,7 +135,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
   }
 
   const headerCheckedKey =
-    checkedMenuKey.length > 0 ? checkedMenuKey[0] : undefined;
+    checkedMenuIndex.length > 0 ? menu[checkedMenuIndex[0]].key : undefined;
 
   const titleDiv = <div className={px('title')}>{title}</div>;
 
@@ -229,7 +227,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
         direction="vertical"
         onItemClick={onItemClick}
         openKeys={openKeys}
-        onOpenKeysChange={(openKeys) => changeProps({ openKeys })}
+        onOpenKeysChange={openKeys => changeProps({ openKeys })}
       />
     </div>
   );
@@ -248,8 +246,10 @@ const MenuLayout = (props: MenuLayoutProps) => {
       })} ${className}`}
       {...otherProps}
     >
-      {mainSideLeft ? sideMenuDiv : header}
-      {center}
+      <BreadCrumbProvider menu={menu} pathname={pathname}>
+        {mainSideLeft ? sideMenuDiv : header}
+        {center}
+      </BreadCrumbProvider>
     </div>
   );
 };

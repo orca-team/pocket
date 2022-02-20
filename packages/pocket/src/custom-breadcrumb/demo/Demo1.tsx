@@ -1,15 +1,13 @@
 /**
- * title: Props
+ * title: With MenuLayout
  * desc:
  *
- * title.zh-CN: 常用属性
+ * title.zh-CN: 在 MenuLayout 内部
  * desc.zh-CN:
  */
 import React, { useState } from 'react';
-import { MenuItemType, MenuLayout } from '@orca-fe/pocket';
+import { CustomBreadcrumb, MenuItemType, MenuLayout } from '@orca-fe/pocket';
 import { ApiOutlined, HomeOutlined, QuestionOutlined, SettingOutlined } from '@ant-design/icons';
-import { Space, Switch } from 'antd';
-import 'antd/lib/switch/style';
 
 // 菜单配置
 const menu: MenuItemType[] = [
@@ -63,44 +61,9 @@ export default () => {
   // 模拟 location.pathname (实际使用时，不需要设置 pathname)
   const [pathname, setPathname] = useState('/home');
 
-  const [useTopMenu, setUseTopMenu] = useState(false);
-  const [mainMenuSide, setMainMenuSide] = useState<'left' | 'top'>('left');
-  const [themeHeader, setThemeHeader] = useState<'dark' | 'light'>('dark');
-  const [themeSide, setThemeSide] = useState<'dark' | 'light'>('dark');
 
   return (
     <div>
-      <div>
-        <span>主菜单放在左侧：</span>
-        <Switch
-          checked={mainMenuSide === 'left'}
-          onClick={(checked) => { setMainMenuSide(checked ? 'left' : 'top'); }}
-        />
-      </div>
-      <div>
-        <span>顶部显示一级菜单：</span>
-        <Switch
-          checked={useTopMenu}
-          onChange={(checked) => { setUseTopMenu(checked); }}
-        />
-      </div>
-      <div>
-        <div>提示：当主菜单放在顶部时，才能设置顶部显示一级菜单</div>
-        <span>顶栏深色主题：</span>
-        <Switch
-          checked={themeHeader === 'dark'}
-          onChange={(checked) => { setThemeHeader(checked ? 'dark' : 'light'); }}
-        />
-      </div>
-      <div>
-        <span>侧边栏深色主题：</span>
-        <Switch
-          checked={themeSide === 'dark'}
-          onChange={(checked) => { setThemeSide(checked ? 'dark' : 'light'); }}
-        />
-      </div>
-
-
       <MenuLayout
         title="标题"
         menu={menu}
@@ -111,12 +74,11 @@ export default () => {
           e.preventDefault();
           if (info.path) setPathname(info.path);
         }}
-        useTopMenu={useTopMenu}
-        mainMenuSide={mainMenuSide}
-        themeHeader={themeHeader}
-        themeSide={themeSide}
         style={{ height: 400 }}
       >
+        <div>
+          <CustomBreadcrumb.Renderer />
+        </div>
         inner content
       </MenuLayout>
     </div>

@@ -3,11 +3,9 @@ import Img, { ImgProps } from './img';
 import MenuLayout, { MenuLayoutProps } from './menu-layout';
 import { MenuItemType } from './menu-layout/menuUtils';
 import OpenBox, { OpenBoxProps } from './open-box';
+import CustomBreadcrumb from './custom-breadcrumb';
 import ErrorCatcher, { ErrorCatcherProps } from './error-catcher';
-import ContextMenu, {
-  ContextMenuProps,
-  ContextMenuItemWithSplitType,
-} from './context-menu';
+import ContextMenu, { ContextMenuItemWithSplitType, ContextMenuProps } from './context-menu';
 import shouldUpdate from './should-update';
 
 export {
@@ -26,4 +24,5 @@ export {
   ErrorCatcher,
   ErrorCatcherProps,
   shouldUpdate,
+  CustomBreadcrumb,
 };

@@ -1,4 +1,5 @@
 import { defineConfig } from 'dumi';
+import fs from 'fs';
 
 let isDev = process.env.NODE_ENV === 'development';
 
