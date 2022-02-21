@@ -7,12 +7,9 @@
  */
 import React, { useState } from 'react';
 import { CustomBreadcrumb, MenuItemType, MenuLayout } from '@orca-fe/pocket';
-import {
-  ApiOutlined,
-  HomeOutlined,
-  QuestionOutlined,
-  SettingOutlined,
-} from '@ant-design/icons';
+import { ApiOutlined, HomeOutlined } from '@ant-design/icons';
+import { Button, Skeleton } from 'antd';
+import 'antd/dist/antd.css';
 
 // 菜单配置
 const menu: MenuItemType[] = [
@@ -23,55 +20,41 @@ const menu: MenuItemType[] = [
     text: '首页',
   },
   {
-    key: '/api',
-    path: '/api',
+    key: '/mgr',
+    path: '/mgr',
     icon: <ApiOutlined />,
-    text: 'API',
+    text: '管理',
     children: [
       {
-        key: '/api/get-user',
-        path: '/api/get-user',
-        text: '获取用户信息',
+        key: '/mgr/get-user',
+        path: '/mgr/get-user',
+        text: '用户列表',
         icon: <ApiOutlined />,
       },
       {
-        key: '/api/add-user',
-        path: '/api/add-user',
+        key: '/mgr/add-user',
+        path: '/mgr/add-user',
         text: '添加用户信息',
         icon: <ApiOutlined />,
       },
       {
-        key: '/api/update-user',
-        path: '/api/update-user',
+        key: '/mgr/update-user',
+        path: '/mgr/update-user',
         text: '更新用户信息',
         icon: <ApiOutlined />,
       },
     ],
   },
-  {
-    key: '/setting',
-    path: '/setting',
-    icon: <SettingOutlined />,
-    text: '设置',
-  },
-  {
-    key: '/about',
-    path: '/about',
-    icon: <QuestionOutlined />,
-    text: '关于',
-  },
 ];
 
 export default () => {
   // 模拟 location.pathname (实际使用时，不需要设置 pathname)
-  const [pathname, setPathname] = useState('/home');
+  const [pathname, setPathname] = useState('/mgr/get-user');
 
   return (
     <div>
       <MenuLayout
         title="标题"
-        useTopMenu
-        mainMenuSide="top"
         menu={menu}
         // 实际使用时不需要设置 pathname
         pathname={pathname}
@@ -83,7 +66,6 @@ export default () => {
         style={{ height: 400 }}
       >
         <div>
-          {/* 渲染面包屑 */}
           <CustomBreadcrumb.Renderer
             prefix={{ path: '/home', text: '首页' }}
             onLinkClick={(link, e) => {
@@ -93,7 +75,28 @@ export default () => {
             }}
           />
         </div>
-        <div style={{ padding: '0 16px' }}>current pathname: {pathname}</div>
+        <div style={{ padding: '0 16px' }}>
+          {pathname === '/mgr/get-user' && (
+            <div>
+              <h3>用户列表页面</h3>
+              <Button
+                onClick={() => {
+                  setPathname('/mgr/get-user/detail');
+                }}
+              >
+                进入用户详情
+              </Button>
+            </div>
+          )}
+          {pathname === '/mgr/get-user/detail' && (
+            <div>
+              <h3>用户详情页面</h3>
+              <CustomBreadcrumb path="/mgr/get-user/detail" text="用户详情" />
+              <div>注意：当前面包屑的最后一项为自定义面内容</div>
+              <Skeleton avatar paragraph={{ rows: 4 }} />
+            </div>
+          )}
+        </div>
       </MenuLayout>
     </div>
   );

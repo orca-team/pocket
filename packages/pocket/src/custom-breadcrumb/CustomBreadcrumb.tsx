@@ -1,15 +1,22 @@
-import React from 'react';
-import pc from 'prefix-classnames';
+import { useContext, useEffect } from 'react';
 import Breadcrumb from './Breadcrumb';
+import BreadcrumbContext, { BaseMenuType } from './BreadcrumbContext';
 
-const px = pc('custom-bread-crumb');
-
-export interface BreadCrumbProps  {}
+export interface BreadCrumbProps extends BaseMenuType {}
 
 const CustomBreadcrumb = (props: BreadCrumbProps) => {
-  return (
-    null
-  );
+  const { add, remove } = useContext(BreadcrumbContext);
+
+  const { path, text, order } = props;
+  useEffect(() => {
+    const menuObj = { path, text, order };
+    add(menuObj);
+    return () => {
+      remove(menuObj);
+    };
+  }, [path, text, order]);
+
+  return null;
 };
 
 CustomBreadcrumb.Renderer = Breadcrumb;

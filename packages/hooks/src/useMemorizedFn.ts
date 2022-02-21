@@ -3,11 +3,11 @@ import { useMemo, useRef } from 'react';
 
 type noop = (...args: any[]) => any;
 
-function useMemoizedFn<T extends noop>(fn: T) {
+function useMemorizedFn<T extends noop>(fn: T) {
   if (process.env.NODE_ENV === 'development') {
     if (typeof fn !== 'function') {
       console.error(
-        `useMemoizedFn expected parameter is a function, got ${typeof fn}`,
+        `useMemorizedFn expected parameter is a function, got ${typeof fn}`,
       );
     }
   }
@@ -30,4 +30,4 @@ function useMemoizedFn<T extends noop>(fn: T) {
   return memoizedFn.current;
 }
 
-export default useMemoizedFn;
+export default useMemorizedFn;

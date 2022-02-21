@@ -4,6 +4,7 @@ import usePassThroughEvents from './usePassThroughEvents';
 import useThis from './useThis';
 import useAnimationFrame from './useAnimationFrame';
 import useObjHistoryMgr, { getHistoryModifiedKeys } from './useObjHistoryMgr';
+import useMemorizedFn from './useMemorizedFn';
 
 export {
   useWindowSize,
@@ -12,5 +13,6 @@ export {
   useThis,
   useAnimationFrame,
   useObjHistoryMgr,
+  useMemorizedFn,
   getHistoryModifiedKeys,
 };

@@ -10,29 +10,35 @@ group:
 
 # CustomBreadcrumb 自定义面包屑
 
-自定义面包屑
+自定义面包屑。自定义面包屑具备面包屑的基础功能，会根据菜单的定义及当前路由，自动整理出对应的面包屑信息，并实现面包屑渲染。
+同时支持在页面任意位置自定义额外的面包屑信息，适用于渲染临时页面的面包屑状态（如提交结果，详情页等）
+
+**注意： `CustomBreadcrumb` 本身仅有自定义面包屑声明的功能，如需渲染面包屑，必须在页面顶部使用 `CustomBreadcrumb.Renderer` 组件。详见下方示例**
 
 ## 示例
 
-### 结合 MenuLayout 使用
+### 基础用法（建议结合 MenuLayout 使用）
 
 <code src="./demo/Demo1.tsx"></code>
 
+### 自定义面包屑（详情页）
+
+<code src="./demo/Demo2.tsx"></code>
+
 ## API
 
-| 属性             | 说明                                                                                                                        | 类型                                                                  | 默认值          |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | --------------- |
-| pathname         | 传入自定义的路径，用于自定义当前菜单应该被选中的项，如果不传，会自动读取 `history` 的 `pathname`                            | `string`                                                              | -               |
-| mainMenuSide     | 主菜单所在位置，以 顶部/侧边 为主                                                                                           | `'top'` \| `'left' `                                                  | `'left'`        |
-| useTopMenu       | 是否在顶部渲染一级菜单，当 `mainMenuSide` = `left` 时，该配置项不生效，因为在主菜单设为左侧时，顶栏是没有足够空间渲染菜单的 | `boolean`                                                             | `true`          |
-| menu             | 菜单数据                                                                                                                    | `MenuItemType[] `                                                     | -               |
-| headerExtra      | 顶栏的额外内容（最右侧，支持自定义 React 内容）                                                                             | `React.ReactNode`                                                     | -               |
-| logo             | 自定义 logo                                                                                                                 | `React.ReactNode`                                                     | -               |
-| title            | 自定义 标题                                                                                                                 | `React.ReactNode`                                                     | `'Menu Layout'` |
-| collapsible      | 是否支持侧边菜单收起                                                                                                        | `boolean`                                                             | `true`          |
-| collapse         | 控制侧边菜单收起                                                                                                            | `boolean`                                                             | -               |
-| onCollapseChange | 侧边菜单收起事件                                                                                                            | `(collapse: boolean) => void`                                         | -               |
-| themeHeader      | 顶栏的主题色                                                                                                                | `'dark'`\|`'light'`                                                   | `'dark'`        |
-| themeSide        | 侧边栏的主题色                                                                                                              | `'dark'`\|`'light'`                                                   | `'dark'`        |
-| onItemClick      | 菜单点击事件                                                                                                                | `((event: React.MouseEvent, menuInfo: MenuItemType) => void) => void` | -               |
+### CustomBreadcrumb
 
+| 属性  | 说明                                                                                                         | 类型              | 默认值 |
+| ----- | ------------------------------------------------------------------------------------------------------------ | ----------------- | ------ |
+| path  | 自定义面包屑的路径                                                                                           | `string`          | -      |
+| text  | 自定义面包屑的显示内容                                                                                       | `React.ReactNode` | -      |
+| order | 自定义面包屑的排序，该字段会参与到面包屑数组下标的排序中，你甚至可以通过该属性，将自定义面包屑插入到指定位置 | `number`          | -      |
+
+### CustomBreadcrumb.Renderer
+
+| 属性        | 说明                        | 类型                                                         | 默认值 |
+| ----------- | --------------------------- | ------------------------------------------------------------ | ------ |
+| prefix      | 自定义面包屑前缀，如 `首页` | `{ path?: string; text?: React.ReactNode; order?: number; }` | -      |
+| separator   | 面包屑分隔符                | `React.ReactNode`                                            | '/'    |
+| onLinkClick | 面包屑 Link 点击事件        | `(link: BaseMenuType, e: React.MouseEvent) => void`          | -      |
