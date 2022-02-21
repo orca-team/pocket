@@ -1,6 +1,5 @@
 import React, { useContext, useMemo } from 'react';
 import pc from 'prefix-classnames';
-import './Breadcrumb.less';
 import { Link } from 'react-router-dom';
 import BreadcrumbContext, { BaseMenuType } from './BreadcrumbContext';
 
