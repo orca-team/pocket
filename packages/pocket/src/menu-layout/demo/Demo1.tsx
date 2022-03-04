@@ -26,6 +26,7 @@ const menu: MenuItemType[] = [
   {
     key: '/api',
     path: '/api',
+    redirect: '/api/get-user',
     icon: <ApiOutlined />,
     text: 'API',
     children: [

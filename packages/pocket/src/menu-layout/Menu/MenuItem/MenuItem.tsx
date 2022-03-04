@@ -78,7 +78,7 @@ const MenuItem = (props: MenuItemProps) => {
     showIcon = false,
     ...otherProps
   } = props;
-  const { children = eArr, key, path, render, text, icon } = menu;
+  const { children = eArr, key, path, redirect, render, text, icon } = menu;
   const hasChildren =
     children.filter((child) => child.visible !== false).length > 0;
 
@@ -161,7 +161,7 @@ const MenuItem = (props: MenuItemProps) => {
   let menuText = path ? (
     <Link
       className={px('link')}
-      to={path}
+      to={redirect || path}
       style={{ paddingLeft }}
       onClick={handleItemClick}
     >
