@@ -12,6 +12,7 @@ export interface MenuItemType {
   key: string;
   icon?: React.ReactNode;
   path?: string;
+  redirect?: string;
   text?: string;
   visible?: boolean;
   render?: (options: RenderOptions) => React.ReactNode;
@@ -47,8 +48,7 @@ export function findSelectedMenuIndexTraverse<T extends BaseMenuItemType<T>>(
   let { length } = pathArr;
   let res: number[] = [];
   while (res.length === 0 && length > 1) {
-    const p = pathArr.slice(0, length)
-      .join('/');
+    const p = pathArr.slice(0, length).join('/');
     res = findSelectedMenuIndex(p, menu, key);
     length -= 1;
   }
