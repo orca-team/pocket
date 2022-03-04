@@ -27,13 +27,14 @@ export default function usePassThroughEvents<
 >(
   props: P,
   eventName: E | string,
-  listener: (event: EventAttributes[E]) => boolean | undefined,
+  listener: (
+    ...args: Parameters<Required<EventAttributes>[E]>
+  ) => boolean | undefined,
   localReturn: boolean = false,
 ) {
-  const persistListener = useMemoizedFn(function (
-    this: unknown,
-    ev: EventAttributes[E],
-  ) {
+  const persistListener = useMemoizedFn<typeof listener>(function (ev) {
+    // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
+    // @ts-expect-error
     const res = listener.call(this, ev);
     if (props != null && typeof props[eventName] === 'function') {
       if (!localReturn) return props[eventName](ev);
@@ -41,7 +42,7 @@ export default function usePassThroughEvents<
     return res;
   });
   return { [eventName]: persistListener } as Pick<
-    Record<string, (ev: EventAttributes[E]) => void>,
+    Record<string, EventAttributes[E]>,
     E
   >;
 }
