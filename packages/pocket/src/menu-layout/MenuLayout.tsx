@@ -200,6 +200,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
       {mainSideLeft && collapsible && collapseSwitchDiv}
       {useTopMenu && (
         <Menu
+          classPrefix={classPrefix}
           className={px('header-menu')}
           menu={menu}
           theme={themeHeader}
@@ -226,6 +227,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
       {/* 非侧边栏为主，且支持收缩时，显示 switch 按钮 */}
       {!mainSideLeft && collapsible && collapseSwitchDiv}
       <Menu
+        classPrefix={classPrefix}
         className={px('side-menu')}
         collapsed={collapse}
         menu={sideMenu}
