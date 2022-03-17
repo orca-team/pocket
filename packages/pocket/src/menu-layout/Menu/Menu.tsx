@@ -5,10 +5,9 @@ import { MenuItemType } from '../menuUtils';
 import MenuItem from './MenuItem';
 import { MenuContextBaseType, MenuProvider } from './MenuContext';
 
-const px = pc('orca-menu');
-
 export interface MenuProps extends React.HTMLAttributes<HTMLDivElement> {
   menu?: MenuItemType[];
+  classPrefix?: string;
   checked?: string;
   direction?: 'vertical' | 'horizontal';
   openKeys?: string[];
@@ -37,12 +36,16 @@ const Menu = (props: MenuProps) => {
       collapsed = false,
       theme = 'dark',
       onItemClick = ef,
+      classPrefix = 'orca-menu',
       ...otherProps
     },
     changeProps,
   ] = useControllableProps(props, {
     openKeys: eArr as string[],
   });
+
+  const px = pc(classPrefix);
+
   const isVertical = direction === 'vertical';
   const showIcon = useMemo(() => menu.some(({ icon }) => icon != null), [menu]);
   return (

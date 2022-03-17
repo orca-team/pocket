@@ -3,8 +3,12 @@ import pc from 'prefix-classnames';
 import { useLocation } from 'react-router';
 import { useControllableProps } from '@orca-fe/hooks';
 import Menu, { MenuProps } from './Menu';
-import { findSelectedMenuIndexTraverse, findSelectedMenuKey, MenuItemType } from './menuUtils';
-import BreadcrumbContext, { BreadCrumbProvider } from '../custom-breadcrumb/BreadcrumbContext';
+import {
+  findSelectedMenuIndexTraverse,
+  findSelectedMenuKey,
+  MenuItemType,
+} from './menuUtils';
+import { BreadCrumbProvider } from '../custom-breadcrumb/BreadcrumbContext';
 
 // 菜单展开按钮
 const iconMenuPathExpand =
@@ -20,10 +24,8 @@ const iconMenuPathCollapse =
   'c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56' +
   'c0-4.4-3.6-8-8-8zM142.4 642.1L298.7 519a8.84 8.84 0 000-13.9L142.4 381.9c-5.8-4.6-14.4-.5-14.4 6.9v246.3a8.9 8.9 0 0014.4 7z';
 
-const px = pc('orca-menu-layout');
-
-export interface MenuLayoutProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
-
+export interface MenuLayoutProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   /** 传入自定义的路径 */
   pathname?: string;
 
@@ -71,6 +73,8 @@ export interface MenuLayoutProps extends Omit<React.HTMLAttributes<HTMLDivElemen
 
   /** 节点展开事件 */
   onOpenKeysChange?: (openKeys: string[]) => void;
+
+  classPrefix?: string;
 }
 
 const eArr = [];
@@ -94,6 +98,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
       onItemClick,
       defaultOpenKeys,
       openKeys,
+      classPrefix = 'orca-menu',
       ...otherProps
     },
     changeProps,
@@ -101,6 +106,8 @@ const MenuLayout = (props: MenuLayoutProps) => {
     collapse: false,
     openKeys: _defaultOpenKeys ?? [],
   });
+
+  const px = pc(`${classPrefix}-layout`);
 
   // 如果 collapsible 为 false，则一定不能收起
   const collapse = collapsible ? _collapse : true;
@@ -227,7 +234,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
         direction="vertical"
         onItemClick={onItemClick}
         openKeys={openKeys}
-        onOpenKeysChange={openKeys => changeProps({ openKeys })}
+        onOpenKeysChange={(openKeys) => changeProps({ openKeys })}
       />
     </div>
   );
