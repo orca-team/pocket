@@ -65,11 +65,15 @@ const Menu = (props: MenuProps) => {
         className={`${px('root', `theme-${theme}`, direction)} ${className}`}
         {...otherProps}
       >
-        {menu.map((menu) => {
+        {menu.map((menu, index) => {
           const { key, visible } = menu;
           return (
             visible !== false && (
-              <MenuItem key={key} menu={menu} showIcon={showIcon} />
+              <MenuItem
+                key={key || `menu-item-${index}`}
+                menu={menu}
+                showIcon={showIcon}
+              />
             )
           );
         })}

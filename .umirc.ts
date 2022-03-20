@@ -21,11 +21,12 @@ export default defineConfig({
       {
         libraryName: '@orca-fe/pocket',
         libraryDirectory: isDev ? 'src' : 'lib',
-        style: (name: string, file: Object) => {
-          if (/@orca-fe\/pocket\/(src|lib|esm?)\/[^/]+/.test(name))
-            return `${name}/style`;
-          return false;
-        },
+        style: true,
+        // style: (name: string, file: Object) => {
+        //   if (/@orca-fe\/pocket\/(src|lib|esm?)\/[^/]+/.test(name))
+        //     return `${name}/style`;
+        //   return false;
+        // },
       },
     ],
   ],
