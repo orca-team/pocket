@@ -8,8 +8,8 @@
     "orca",
     "orca-fe"
   ],
-  "author": "NicoKam <331677620@qq.com>",
-  "homepage": "",
+  "author": "NicoKam",
+  "homepage": "https://orca.nicokam.work/",
   "license": "MIT",
   "types": "dist/index.d.ts",
   "module": "dist/index.esm.js",
