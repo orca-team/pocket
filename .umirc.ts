@@ -4,8 +4,8 @@ import fs from 'fs';
 let isDev = process.env.NODE_ENV === 'development';
 
 export default defineConfig({
-  base: '/orca-fe/',
-  publicPath: '/orca-fe/',
+  base: '/',
+  publicPath: '/',
   runtimePublicPath: true,
   title: 'Orca-team',
   hash: true,

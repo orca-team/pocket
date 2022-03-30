@@ -14,7 +14,7 @@
     "orca-team"
   ],
   "author": "NicoKam",
-  "homepage": "http://nicokam.gitee.io/orca-fe",
+  "homepage": "https://orca.nicokam.work/",
   "license": "MIT",
   "types": "esm/index.d.ts",
   "module": "esm/index.js",

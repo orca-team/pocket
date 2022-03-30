@@ -5,7 +5,7 @@
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
-    "docs:deploy": "gh-pages -d docs-dist",
+    "docs:deploy": "gh-pages -d docs-dist -r git@github.com:NicoKam/orca-pocket-page.git",
     "docs:serve": "http-server docs-dist --spa",
     "build-all": "father-build && lerna run build",
     "build": "echo \"ok\"",
