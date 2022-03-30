@@ -14,7 +14,7 @@
     "orca-team"
   ],
   "author": "NicoKam",
-  "homepage": "http://orca-pocket.nicokam.work",
+  "homepage": "http://nicokam.gitee.io/orca-fe",
   "license": "MIT",
   "types": "esm/index.d.ts",
   "module": "esm/index.js",
@@ -49,8 +49,8 @@
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
-    "react-router": "^5.2.0",
-    "react-router-dom": "^5.2.0"
+    "react-router": ">=5.0.0",
+    "react-router-dom": ">=5.0.0"
   },
   "devDependencies": {
     "autod": "^3.1.2"

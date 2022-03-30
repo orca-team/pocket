@@ -19,6 +19,7 @@ export interface MenuProps extends React.HTMLAttributes<HTMLDivElement> {
   collapsed?: boolean;
   onItemClick?: MenuContextBaseType['onItemClick'];
   theme?: 'light' | 'dark' | string;
+  toggleOnItemClick?: boolean;
 }
 
 const eArr = [];
@@ -37,6 +38,7 @@ const Menu = (props: MenuProps) => {
       theme = 'dark',
       onItemClick = ef,
       classPrefix = 'orca-menu',
+      toggleOnItemClick = false,
       ...otherProps
     },
     changeProps,
@@ -57,6 +59,7 @@ const Menu = (props: MenuProps) => {
       menu={menu}
       collapsed={collapsed}
       onItemClick={onItemClick}
+      toggleOnItemClick={toggleOnItemClick}
       onOpenKeysChange={(openKeys) => {
         changeProps({ openKeys });
       }}

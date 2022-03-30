@@ -9,6 +9,7 @@ export interface MenuContextBaseType {
   collapsed: boolean;
   theme: string;
   onItemClick: (event: React.MouseEvent, menuInfo: MenuItemType) => void;
+  toggleOnItemClick: boolean;
 }
 
 export interface MenuContextType extends MenuContextBaseType {
@@ -22,6 +23,7 @@ const MenuContext = React.createContext<MenuContextType>({
   openKeys: [],
   isVertical: false,
   collapsed: false,
+  toggleOnItemClick: false,
   toggleOpenKey: () => {},
   onItemClick: () => {},
   theme: '',

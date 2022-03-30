@@ -4,8 +4,8 @@ import { useLocation } from 'react-router';
 import { useControllableProps } from '@orca-fe/hooks';
 import Menu, { MenuProps } from './Menu';
 import {
+  findSelectedMenu,
   findSelectedMenuIndexTraverse,
-  findSelectedMenuKey,
   MenuItemType,
 } from './menuUtils';
 import { BreadCrumbProvider } from '../custom-breadcrumb/BreadcrumbContext';
@@ -74,7 +74,16 @@ export interface MenuLayoutProps
   /** 节点展开事件 */
   onOpenKeysChange?: (openKeys: string[]) => void;
 
+  /** 点击包含子菜单的项目时，强制开启 */
+  toggleOnItemClick?: boolean;
+
   classPrefix?: string;
+
+  /** 内部容器的 className */
+  wrapperClassName?: string;
+
+  /** 内部容器的 className */
+  wrapperStyle?: React.CSSProperties;
 }
 
 const eArr = [];
@@ -83,10 +92,13 @@ const MenuLayout = (props: MenuLayoutProps) => {
   const [
     {
       className = '',
+      wrapperClassName = '',
+      wrapperStyle = {},
       menu = eArr,
       headerExtra,
       children,
       useTopMenu: _useTopMenu = true,
+      toggleOnItemClick,
       collapsible = true,
       collapse: _collapse,
       mainMenuSide = 'left',
@@ -121,8 +133,8 @@ const MenuLayout = (props: MenuLayoutProps) => {
     [menu, pathname],
   );
 
-  const checkedMenuKey = useMemo(
-    () => findSelectedMenuKey(pathname, menu),
+  const checkedMenu = useMemo(
+    () => findSelectedMenu(pathname, menu),
     [menu, pathname],
   );
 
@@ -205,6 +217,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
           menu={menu}
           theme={themeHeader}
           checked={headerCheckedKey}
+          toggleOnItemClick={toggleOnItemClick}
           onItemClick={onItemClick}
         />
       )}
@@ -213,7 +226,19 @@ const MenuLayout = (props: MenuLayoutProps) => {
     </div>
   );
 
-  const content = <div className={px('content')}>{children}</div>;
+  const matchedItem = checkedMenu.length
+    ? checkedMenu[checkedMenu.length - 1]
+    : undefined;
+  const { style: itemStyle } = matchedItem || {};
+
+  const content = (
+    <div
+      className={`${px('content')} ${wrapperClassName}`}
+      style={{ ...wrapperStyle, ...itemStyle }}
+    >
+      {children}
+    </div>
+  );
 
   const sideMenuDiv = sideMenu.length > 0 && (
     <div
@@ -232,7 +257,8 @@ const MenuLayout = (props: MenuLayoutProps) => {
         collapsed={collapse}
         menu={sideMenu}
         theme={themeSide}
-        checked={checkedMenuKey[checkedMenuKey.length - 1]}
+        checked={checkedMenu[checkedMenu.length - 1]?.key}
+        toggleOnItemClick={toggleOnItemClick}
         direction="vertical"
         onItemClick={onItemClick}
         openKeys={openKeys}

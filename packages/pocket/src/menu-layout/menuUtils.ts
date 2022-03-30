@@ -17,6 +17,7 @@ export interface MenuItemType {
   visible?: boolean;
   render?: (options: RenderOptions) => React.ReactNode;
   children?: MenuItemType[];
+  style?: React.CSSProperties;
 }
 
 export function findSelectedMenuIndex<T extends BaseMenuItemType<T>>(

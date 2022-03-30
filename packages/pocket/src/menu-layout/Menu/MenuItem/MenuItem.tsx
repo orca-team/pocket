@@ -1,9 +1,9 @@
 import React, { useContext, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import pc from 'prefix-classnames';
-import OpenBox from '../../../open-box';
 import Trigger from 'rc-trigger';
 import Animate from 'rc-animate';
+import OpenBox from '../../../open-box';
 import { MenuItemType } from '../../menuUtils';
 import Arrow from '../Arrow';
 import MenuContext from '../MenuContext';
@@ -53,8 +53,8 @@ export const SubMenu = (props: SubMenuProps) => {
         {menu.map((menu) => {
           const { key, visible } = menu;
           return (
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
             visible !== false && (
+              // eslint-disable-next-line @typescript-eslint/no-use-before-define
               <MenuItem key={key} menu={menu} showIcon={showIcon} />
             )
           );
@@ -90,6 +90,7 @@ const MenuItem = (props: MenuItemProps) => {
     toggleOpenKey,
     collapsed,
     theme,
+    toggleOnItemClick,
     onItemClick,
   } = useContext(MenuContext);
   const { level, isInPopup } = useContext(MenuLevelContext);
@@ -149,7 +150,7 @@ const MenuItem = (props: MenuItemProps) => {
 
   const handleItemClick = (e: React.MouseEvent) => {
     onItemClick(e, menu);
-    if (!path) {
+    if (!path || toggleOnItemClick) {
       toggleOpenKey(key);
     }
   };
