@@ -55,3 +55,4 @@ group:
 | visible  | 菜单是否隐藏   | `boolean`                                            |
 | render   | 自定义菜单渲染 | `(options: { checked: boolean }) => React.ReactNode` |
 | children | 子菜单         | `MenuItemType[]`                                     |
+| style    | 自定义样式     | `CSS`                                                |
