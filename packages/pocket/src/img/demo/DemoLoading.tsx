@@ -11,7 +11,7 @@ import { Img } from '@orca-fe/pocket';
 import { Button } from 'antd';
 import 'antd/es/button/style';
 
-const imgSrc = `${window['publicPath']}/tmp.jpg`;
+const imgSrc = `${window['publicPath'] ?? '/'}tmp.jpg`;
 
 const Demo = () => {
   const [key, setKey] = useState(-1);

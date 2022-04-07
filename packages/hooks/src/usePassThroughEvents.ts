@@ -29,11 +29,11 @@ export default function usePassThroughEvents<
   eventName: E | string,
   listener: (
     ...args: Parameters<Required<EventAttributes>[E]>
-  ) => boolean | undefined,
+  ) => // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  boolean | void,
   localReturn: boolean = false,
 ) {
   const persistListener = useMemoizedFn<typeof listener>(function (ev) {
-    // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
     // @ts-expect-error
     const res = listener.call(this, ev);
     if (props != null && typeof props[eventName] === 'function') {

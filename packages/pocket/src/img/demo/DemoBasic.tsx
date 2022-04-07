@@ -9,7 +9,7 @@
 import React from 'react';
 import { Img } from '@orca-fe/pocket';
 
-const imgSrc = `${window['publicPath']}/tmp.jpg`;
+const imgSrc = `${window['publicPath'] ?? '/'}tmp.jpg`;
 
 const Demo = () => (
   <div>

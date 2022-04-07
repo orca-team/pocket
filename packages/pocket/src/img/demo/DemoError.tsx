@@ -8,7 +8,7 @@
 import React from 'react';
 import { Img } from '@orca-fe/pocket';
 
-const errSrc = `${window['publicPath']}/error.jpg`;
+const errSrc = `${window['publicPath'] ?? '/'}not-exists.jpg`;
 
 const Demo = () => (
   <div>

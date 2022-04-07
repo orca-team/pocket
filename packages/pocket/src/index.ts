@@ -5,8 +5,12 @@ import { MenuItemType } from './menu-layout/menuUtils';
 import OpenBox, { OpenBoxProps } from './open-box';
 import CustomBreadcrumb from './custom-breadcrumb';
 import ErrorCatcher, { ErrorCatcherProps } from './error-catcher';
-import ContextMenu, { ContextMenuItemWithSplitType, ContextMenuProps } from './context-menu';
+import ContextMenu, {
+  ContextMenuItemWithSplitType,
+  ContextMenuProps,
+} from './context-menu';
 import shouldUpdate from './should-update';
+import EqRatioImg, { EqRatioImgProps } from './eq-ratio-img';
 
 export {
   EqRatioBox,
@@ -25,4 +29,6 @@ export {
   ErrorCatcherProps,
   shouldUpdate,
   CustomBreadcrumb,
+  EqRatioImg,
+  EqRatioImgProps,
 };

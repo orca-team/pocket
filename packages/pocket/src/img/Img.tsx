@@ -9,24 +9,25 @@ import pc from 'prefix-classnames';
 
 const px = pc('orca-img');
 
-let defaultErrSrc = <div className={px('error-tip')}>暂无图片</div>;
-let ef = () => undefined;
+const defaultErrSrc = <div className={px('error-tip')}>暂无图片</div>;
+const ef = () => undefined;
 
 export interface ImgProps extends React.HTMLAttributes<HTMLImageElement> {
+  /** 图片 ref */
   imgRef?:
     | ((instance: HTMLImageElement) => void)
     | React.MutableRefObject<HTMLImageElement>;
 
-  /* 图片链接 */
+  /** 图片链接 */
   src: string;
 
-  /* 是否按图片默认大小 */
+  /** 是否按图片默认大小 */
   stretch?: boolean;
 
-  /* loading图片 */
+  /** loading图片 */
   loadingSrc?: React.ReactElement | string;
 
-  /* 错误图片 */
+  /** 错误图片 */
   errSrc?: React.ReactElement | string;
 }
 
@@ -61,7 +62,7 @@ const Img = React.forwardRef<HTMLDivElement, ImgProps>((props, pRef) => {
       if (imgState !== 'loaded') {
         setImgState('loaded');
       }
-      return onLoad(event);
+      onLoad(event);
     },
     [imgState],
   );
@@ -70,7 +71,7 @@ const Img = React.forwardRef<HTMLDivElement, ImgProps>((props, pRef) => {
       if (imgState !== 'error') {
         setImgState('error');
       }
-      return onError(event);
+      onError(event);
     },
     [imgState],
   );
