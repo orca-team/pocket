@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@ahooksjs/use-request@^2.8.13":
-  version "2.8.13"
-  resolved "https://registry.npmmirror.com/@ahooksjs/use-request/download/@ahooksjs/use-request-2.8.13.tgz?cache=0&sync_timestamp=1635254708617&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40ahooksjs%2Fuse-request%2Fdownload%2F%40ahooksjs%2Fuse-request-2.8.13.tgz#5ace53859feb6b4fe9ebcbf2e72982bb9b7db383"
-  integrity sha1-Ws5ThZ/ra0/p68vy5ymCu5t9s4M=
+"@ahooksjs/use-request@^2.8.15":
+  version "2.8.15"
+  resolved "https://registry.npmjs.org/@ahooksjs/use-request/-/use-request-2.8.15.tgz#daa32a8395ba75e8deb9f4fde4e221a4a8f525db"
+  integrity sha512-xhVaM4fyIiAMdVFuuU5i3CFUdFa/IblF+fvITVMFaUEO3w/V5tVCAF6WIA3T03n1/RPuzRkA7Ao1PFtSGtGelw==
   dependencies:
     lodash.debounce "^4.0.8"
     lodash.throttle "^4.1.1"
@@ -22,12 +22,11 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@orca-fe/hooks@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.npmmirror.com/@orca-fe/hooks/download/@orca-fe/hooks-0.3.1.tgz#352a4419abc4292abaf739ac3ffd8f4556b760f5"
-  integrity sha512-DMssCzMRe6cz9O/r1/bldH5xcWjnvWB2CB5ACY6i3tEz0i8lCqg8FvZg2HDsOUx7mIFBz5rGYbGkDywnS5zEdg==
+"@orca-fe/hooks@^0.4.2":
+  version "0.4.2"
+  resolved "https://registry.npmjs.org/@orca-fe/hooks/-/hooks-0.4.2.tgz#d9807aa43691e17634fa3fda3ffdd043c9a3e16f"
+  integrity sha512-38EHU1qQ5svx2e34l7+p69IfBHivDm1X6490vb63xPUdwF9/UExeHCCfcLIMv4eZzj/xFs5mdHP8xCm3Fimjgw==
   dependencies:
-    ahooks "^2"
     lodash-es "^4.17.21"
     tslib "^2.3.1"
 
@@ -40,6 +39,25 @@
   version "2.2.7"
   resolved "https://registry.npmmirror.com/@types/js-cookie/download/@types/js-cookie-2.2.7.tgz#226a9e31680835a6188e887f3988e60c04d3f6a3"
   integrity sha1-ImqeMWgINaYYjoh/OYjmDATT9qM=
+
+"@types/prop-types@*":
+  version "15.7.5"
+  resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.5.tgz#5f19d2b85a98e9558036f6a3cacc8819420f05cf"
+  integrity sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==
+
+"@types/react@^18.0.0":
+  version "18.0.0"
+  resolved "https://registry.npmjs.org/@types/react/-/react-18.0.0.tgz#4be8aa3a2d04afc3ac2cc1ca43d39b0bd412890c"
+  integrity sha512-7+K7zEQYu7NzOwQGLR91KwWXXDzmTFODRVizJyIALf6RfLv2GDpqpknX64pvRVILXCpXi7O/pua8NGk44dLvJw==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
+"@types/scheduler@*":
+  version "0.16.2"
+  resolved "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
+  integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
 
 add-dom-event-listener@^1.1.0:
   version "1.1.0"
@@ -60,12 +78,12 @@ agent-base@6, agent-base@^6.0.0, agent-base@^6.0.2:
   dependencies:
     debug "4"
 
-ahooks@^2:
-  version "2.10.12"
-  resolved "https://registry.npmmirror.com/ahooks/download/ahooks-2.10.12.tgz#e8cab653039434279e69569a8342c602b3545dab"
-  integrity sha1-6Mq2UwOUNCeeaVaag0LGArNUXas=
+ahooks-v2@^2:
+  version "2.10.15"
+  resolved "https://registry.npmjs.org/ahooks-v2/-/ahooks-v2-2.10.15.tgz#95572b1a836ba7516e3a346cca7475bb50a294a4"
+  integrity sha512-e60NcA3dSmFdGmqTCnL044Xt5PdX2WmAw4/tMP7f3VY4hpSeDnzDYWHLr3yks0HRCTPe7CEbgoVUpYixdD5oiw==
   dependencies:
-    "@ahooksjs/use-request" "^2.8.13"
+    "@ahooksjs/use-request" "^2.8.15"
     "@types/js-cookie" "^2.2.6"
     dayjs "^1.9.1"
     intersection-observer "^0.7.0"

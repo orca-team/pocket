@@ -53,6 +53,7 @@
     "react-router-dom": ">=5.0.0"
   },
   "devDependencies": {
+    "@types/react": "^18.0.0",
     "autod": "^3.1.2"
   }
 }

@@ -1,15 +1,13 @@
 import React, { useEffect } from 'react';
 import pc from 'prefix-classnames';
 import './EqRatioImg.less';
-import { LoadingOutlined, PictureOutlined } from '@ant-design/icons';
 import { useControllableProps, useMemorizedFn } from '@orca-fe/hooks';
 
 const px = pc('eq-ratio-img');
 
 const ef = () => {};
 
-const loadingComponent = <LoadingOutlined className={px('default-img')} />;
-const failedComponent = <PictureOutlined className={px('default-img')} />;
+const failedComponent = <div className={px('error-tip')}>暂无图片</div>;
 
 export interface EqRatioImgProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onLoad' | 'onError'>,
@@ -55,7 +53,7 @@ const EqRatioImg = (props: EqRatioImgProps) => {
       onLoad = ef,
       onError = ef,
       status,
-      loadingSrc = loadingComponent,
+      loadingSrc,
       errSrc = failedComponent,
       ...otherProps
     },
