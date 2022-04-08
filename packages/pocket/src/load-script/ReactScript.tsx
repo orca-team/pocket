@@ -1,6 +1,7 @@
-import { usePersistFn, usePrevious } from 'ahooks';
+import { usePrevious } from 'ahooks-v2';
 import { eq } from 'lodash-es';
 import React, { useEffect, useState } from 'react';
+import { useMemorizedFn } from '@orca-fe/hooks';
 import loadScript from './LoadScript';
 
 export interface ReactScriptProps {
@@ -14,11 +15,11 @@ const ReactScript = (props: ReactScriptProps) => {
   const { src, onError, onLoad, children = null } = props;
   const [loaded, setLoaded] = useState(false);
 
-  const handleLoad = usePersistFn(() => {
+  const handleLoad = useMemorizedFn(() => {
     onLoad?.();
     setLoaded(true);
   });
-  const handleError = usePersistFn((err) => {
+  const handleError = useMemorizedFn((err) => {
     onError?.(err);
   });
 
