@@ -11,6 +11,7 @@ import ContextMenu, {
 } from './context-menu';
 import shouldUpdate from './should-update';
 import EqRatioImg, { EqRatioImgProps } from './eq-ratio-img';
+import loadScript, { ReactScript } from './load-script';
 
 export {
   EqRatioBox,
@@ -31,4 +32,6 @@ export {
   CustomBreadcrumb,
   EqRatioImg,
   EqRatioImgProps,
+  loadScript,
+  ReactScript,
 };
