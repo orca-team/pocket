@@ -40,8 +40,7 @@ export function useSizeUpdateListener(
   useSizeListener(({ width, height }) => {
     if (
       _this.size &&
-      _this.size.width !== width &&
-      _this.size.height !== height
+      (_this.size.width !== width || _this.size.height !== height)
     ) {
       callbackProxy({
         width,
