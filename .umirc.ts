@@ -20,7 +20,7 @@ export default defineConfig({
       'import',
       {
         libraryName: '@orca-fe/pocket',
-        libraryDirectory: isDev ? 'src' : 'lib',
+        libraryDirectory: 'src',
         style: true,
         // style: (name: string, file: Object) => {
         //   if (/@orca-fe\/pocket\/(src|lib|esm?)\/[^/]+/.test(name))

@@ -29,6 +29,7 @@ const ComponentWithError = () => {
       <Button
         onClick={async () => {
           const result = await apiNotStable();
+          // @ts-expect-error
           setResult(result);
         }}
       >

@@ -14,6 +14,7 @@ const ComponentWithError = () => {
         onClick={() => {
           const number = num - Math.random() * 3;
           // 错误地将 num 改为了 string 类型，导致渲染报错
+          // @ts-expect-error
           setNum(number > '0' ? number : '0');
         }}
       >
