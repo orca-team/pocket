@@ -6,6 +6,7 @@ import useAnimationFrame from './useAnimationFrame';
 import useObjHistoryMgr, { getHistoryModifiedKeys } from './useObjHistoryMgr';
 import useMemorizedFn from './useMemorizedFn';
 import useEventEmitter, { EventEmitterWithHook } from './useEventEmitter';
+import useSizeListener, { useSizeUpdateListener } from './useSizeListener';
 
 export {
   useWindowSize,
@@ -18,4 +19,6 @@ export {
   getHistoryModifiedKeys,
   useEventEmitter,
   EventEmitterWithHook,
+  useSizeListener,
+  useSizeUpdateListener,
 };
