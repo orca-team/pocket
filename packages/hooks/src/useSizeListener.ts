@@ -11,16 +11,21 @@ export default function useSizeListener(
 ) {
   const callbackProxy = useMemorizedFn(callback);
 
-  const realTarget = getTargetElement(target);
+  let realTarget = getTargetElement(target);
   useEffect(() => {
+    if (!realTarget) {
+      realTarget = getTargetElement(target);
+    }
     if (realTarget) {
       const ro = new ResizeObserver(() => {
-        const width = realTarget.clientWidth;
-        const height = realTarget.clientHeight;
-        callbackProxy({
-          width,
-          height,
-        });
+        if (realTarget) {
+          const width = realTarget.clientWidth;
+          const height = realTarget.clientHeight;
+          callbackProxy({
+            width,
+            height,
+          });
+        }
       });
       ro.observe(realTarget);
       return () => {
