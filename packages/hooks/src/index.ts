@@ -7,6 +7,9 @@ import useObjHistoryMgr, { getHistoryModifiedKeys } from './useObjHistoryMgr';
 import useMemorizedFn from './useMemorizedFn';
 import useEventEmitter, { EventEmitterWithHook } from './useEventEmitter';
 import useSizeListener, { useSizeUpdateListener } from './useSizeListener';
+import useEffectWithTarget, {
+  useLayoutEffectWithTarget,
+} from './useEffectWithTarget';
 
 export {
   useWindowSize,
@@ -21,4 +24,6 @@ export {
   EventEmitterWithHook,
   useSizeListener,
   useSizeUpdateListener,
+  useEffectWithTarget,
+  useLayoutEffectWithTarget,
 };

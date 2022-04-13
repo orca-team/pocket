@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
-import { BasicTarget, getTargetElement } from './domTarget';
+import { BasicTarget, getTargetElement } from './utils/domTarget';
 import useMemorizedFn from './useMemorizedFn';
+import useEffectWithTarget from './useEffectWithTarget';
 
 type Size = { width: number; height: number };
 
@@ -11,29 +12,30 @@ export default function useSizeListener(
 ) {
   const callbackProxy = useMemorizedFn(callback);
 
-  let realTarget = getTargetElement(target);
-  useEffect(() => {
-    if (!realTarget) {
-      realTarget = getTargetElement(target);
-    }
-    if (realTarget) {
-      const ro = new ResizeObserver(() => {
-        if (realTarget) {
-          const width = realTarget.clientWidth;
-          const height = realTarget.clientHeight;
-          callbackProxy({
-            width,
-            height,
-          });
-        }
-      });
-      ro.observe(realTarget);
-      return () => {
-        ro.disconnect();
-      };
-    }
-    return undefined;
-  }, [realTarget]);
+  useEffectWithTarget(
+    () => {
+      const realTarget = getTargetElement(target);
+      if (realTarget) {
+        const ro = new ResizeObserver(() => {
+          if (realTarget) {
+            const width = realTarget.clientWidth;
+            const height = realTarget.clientHeight;
+            callbackProxy({
+              width,
+              height,
+            });
+          }
+        });
+        ro.observe(realTarget);
+        return () => {
+          ro.disconnect();
+        };
+      }
+      return undefined;
+    },
+    [],
+    target,
+  );
 }
 
 export function useSizeUpdateListener(
