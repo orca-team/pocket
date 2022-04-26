@@ -17,6 +17,11 @@ export function objMap<T extends Object>(
   return changed ? result : obj;
 }
 
+/**
+ * 对象内容过滤器
+ * @param obj 对象本身
+ * @param callback 过滤器回调
+ */
 export function objFilter<T extends Object>(
   obj: T,
   callback: (key: string, value: any) => boolean,

@@ -6,13 +6,21 @@ export const changeArr = <T>(arr: T[], index: number, newItem: T) => {
   return newArr;
 };
 
-export const removeArrIndex = <T>(arr: T[], index: number) =>
-  arr.filter((_, i) => i !== index);
+export const removeArrIndex = <T>(arr: T[], ...index: number[]) => {
+  const cache = new Set(index);
+  const newArr: T[] = [];
+  arr.forEach((item, i) => {
+    if (!cache.has(i)) {
+      newArr.push(item);
+    }
+  });
+  return newArr;
+};
 
-// eslint-disable-next-line eqeqeq
 export const toggleArr = <T>(
   arr: T[],
   item: T,
+  // eslint-disable-next-line eqeqeq
   compare = (a: T, b: T) => a == b,
 ) => {
   let includes = false;
