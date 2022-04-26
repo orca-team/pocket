@@ -38,9 +38,11 @@
     "clear": "rimraf lib esm"
   },
   "dependencies": {
+    "@orca-fe/tools": "^0.0.1",
     "@orca-fe/hooks": "^0.6.1",
     "ahooks-v2": "^2",
     "prefix-classnames": "^0.0.5",
+    "react-countup": "^6.2.0",
     "rc-animate": "^3.1.1",
     "rc-trigger": "^5.2.10",
     "react-transition-group": "^4.4.2",

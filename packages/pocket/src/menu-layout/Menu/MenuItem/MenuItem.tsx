@@ -85,6 +85,7 @@ const MenuItem = (props: MenuItemProps) => {
   const {
     isVertical,
     openKeys,
+    defaultOpenAll,
     checkedKey,
     groupCheckedKeys,
     toggleOpenKey,
@@ -96,7 +97,8 @@ const MenuItem = (props: MenuItemProps) => {
   const { level, isInPopup } = useContext(MenuLevelContext);
   const collapseAndZero = level === 0 && collapsed;
 
-  const isOpen = useMemo(() => openKeys.includes(key), [openKeys, key]);
+  const isOpen = openKeys[key] ?? defaultOpenAll;
+
   const childChecked = useMemo(
     () => groupCheckedKeys.includes(key),
     [groupCheckedKeys, key],

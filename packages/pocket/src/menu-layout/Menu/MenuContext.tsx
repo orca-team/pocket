@@ -1,10 +1,13 @@
 import React, { useMemo } from 'react';
-import { usePersistFn } from 'ahooks-v2';
+import { useMemorizedFn } from '@orca-fe/hooks';
 import { findSelectedMenuKey, MenuItemType } from '../menuUtils';
+
+export type OpenKeysType = Record<string, boolean | undefined>;
 
 export interface MenuContextBaseType {
   checkedKey: string;
-  openKeys: string[];
+  defaultOpenAll: boolean;
+  openKeys: OpenKeysType;
   isVertical: boolean;
   collapsed: boolean;
   theme: string;
@@ -19,8 +22,9 @@ export interface MenuContextType extends MenuContextBaseType {
 
 const MenuContext = React.createContext<MenuContextType>({
   checkedKey: '',
+  defaultOpenAll: false,
   groupCheckedKeys: [],
-  openKeys: [],
+  openKeys: {},
   isVertical: false,
   collapsed: false,
   toggleOnItemClick: false,
@@ -34,7 +38,7 @@ export default MenuContext;
 export interface MenuProviderProps extends MenuContextBaseType {
   menu: MenuItemType[];
   onOpenKeysChange: (
-    openKeys: string[],
+    openKeys: OpenKeysType,
     changedKey: string,
     isOpen: boolean,
   ) => void;
@@ -42,32 +46,28 @@ export interface MenuProviderProps extends MenuContextBaseType {
 }
 
 export const MenuProvider = (props: MenuProviderProps) => {
-  const { children, onOpenKeysChange, menu, ...otherProps } = props;
-  const { checkedKey } = otherProps;
+  const { children, onOpenKeysChange, menu, defaultOpenAll, ...otherProps } =
+    props;
+  const { checkedKey, openKeys } = otherProps;
   const allCheckedKeys = useMemo(
     () => findSelectedMenuKey(checkedKey, menu, 'key'),
     [menu, checkedKey],
   );
 
-  const toggleOpenKey = usePersistFn((key: string) => {
-    const { openKeys } = otherProps;
-    let has = false;
-    const newOpenKeys = openKeys.filter((k) => {
-      if (k === key) {
-        has = true;
-        return false;
-      }
-      return true;
-    });
-    if (has) {
-      onOpenKeysChange(newOpenKeys, key, false);
-    } else {
-      onOpenKeysChange([...openKeys, key], key, true);
-    }
+  const toggleOpenKey = useMemorizedFn((key: string) => {
+    const newOpenKeys = { ...openKeys };
+    const isOpen = !(newOpenKeys[key] ?? defaultOpenAll);
+    newOpenKeys[key] = isOpen;
+    onOpenKeysChange(newOpenKeys, key, isOpen);
   });
   return (
     <MenuContext.Provider
-      value={{ ...otherProps, toggleOpenKey, groupCheckedKeys: allCheckedKeys }}
+      value={{
+        ...otherProps,
+        defaultOpenAll,
+        toggleOpenKey,
+        groupCheckedKeys: allCheckedKeys,
+      }}
     >
       {children}
     </MenuContext.Provider>

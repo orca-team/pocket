@@ -3,16 +3,17 @@ import pc from 'prefix-classnames';
 import { useControllableProps } from '@orca-fe/hooks';
 import { MenuItemType } from '../menuUtils';
 import MenuItem from './MenuItem';
-import { MenuContextBaseType, MenuProvider } from './MenuContext';
+import { MenuContextBaseType, MenuProvider, OpenKeysType } from './MenuContext';
 
 export interface MenuProps extends React.HTMLAttributes<HTMLDivElement> {
   menu?: MenuItemType[];
   classPrefix?: string;
   checked?: string;
   direction?: 'vertical' | 'horizontal';
-  openKeys?: string[];
+  openKeys?: OpenKeysType;
+  defaultOpenAll?: boolean;
   onOpenKeysChange?: (
-    openKeys: string[],
+    openKeys: OpenKeysType,
     currentChange: string,
     isOpen: boolean,
   ) => void;
@@ -23,6 +24,7 @@ export interface MenuProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const eArr = [];
+const eObj = {};
 const ef = () => {};
 
 const Menu = (props: MenuProps) => {
@@ -32,18 +34,19 @@ const Menu = (props: MenuProps) => {
       menu = eArr,
       checked = '',
       direction = 'horizontal',
-      openKeys = eArr,
+      openKeys = eObj,
       onOpenKeysChange,
       collapsed = false,
       theme = 'dark',
       onItemClick = ef,
       classPrefix = 'orca-menu',
       toggleOnItemClick = false,
+      defaultOpenAll = false,
       ...otherProps
     },
     changeProps,
   ] = useControllableProps(props, {
-    openKeys: eArr as string[],
+    openKeys: {},
   });
 
   const px = pc(classPrefix);
@@ -52,6 +55,7 @@ const Menu = (props: MenuProps) => {
   const showIcon = useMemo(() => menu.some(({ icon }) => icon != null), [menu]);
   return (
     <MenuProvider
+      defaultOpenAll={defaultOpenAll}
       isVertical={isVertical}
       openKeys={openKeys}
       checkedKey={checked}

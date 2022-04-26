@@ -13,7 +13,6 @@ import {
   QuestionOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
-import { Switch } from 'antd';
 
 // 菜单配置
 const menu: MenuItemType[] = [
@@ -77,9 +76,10 @@ export default () => {
   return (
     <div>
       <MenuLayout
-        title={'标题'}
+        title="标题"
+        defaultOpenAll
         menu={menu}
-        /* 实际使用时不需要设置 pathname */
+        // 实际使用时不需要设置 pathname
         pathname={pathname}
         onItemClick={(e, info) => {
           // 仅在Demo使用，禁止默认点击行为（路由跳转）

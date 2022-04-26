@@ -11,6 +11,7 @@ import ContextMenu, {
 } from './context-menu';
 import shouldUpdate from './should-update';
 import EqRatioImg, { EqRatioImgProps } from './eq-ratio-img';
+import Flop, { FlopProps } from './flop';
 import loadScript, { ReactScript } from './load-script';
 
 export {
@@ -34,4 +35,6 @@ export {
   EqRatioImgProps,
   loadScript,
   ReactScript,
+  Flop,
+  FlopProps,
 };

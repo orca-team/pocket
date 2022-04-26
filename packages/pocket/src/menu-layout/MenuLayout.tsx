@@ -9,6 +9,7 @@ import {
   MenuItemType,
 } from './menuUtils';
 import { BreadCrumbProvider } from '../custom-breadcrumb/BreadcrumbContext';
+import { OpenKeysType } from './Menu/MenuContext';
 
 // 菜单展开按钮
 const iconMenuPathExpand =
@@ -66,13 +67,16 @@ export interface MenuLayoutProps
   onItemClick?: MenuProps['onItemClick'];
 
   /** 默认展开的节点 */
-  defaultOpenKeys?: string[];
+  defaultOpenKeys?: string[] | OpenKeysType;
 
   /** 展开的节点 */
-  openKeys?: string[];
+  openKeys?: string[] | OpenKeysType;
+
+  /** 是否默认展开所有节点 */
+  defaultOpenAll?: boolean;
 
   /** 节点展开事件 */
-  onOpenKeysChange?: (openKeys: string[]) => void;
+  onOpenKeysChange?: (openKeys: OpenKeysType) => void;
 
   /** 点击包含子菜单的项目时，强制开启 */
   toggleOnItemClick?: boolean;
@@ -109,8 +113,9 @@ const MenuLayout = (props: MenuLayoutProps) => {
       pathname: _pathname,
       onItemClick,
       defaultOpenKeys,
-      openKeys,
+      openKeys: _openKeys,
       classPrefix = 'orca-menu',
+      defaultOpenAll = false,
       ...otherProps
     },
     changeProps,
@@ -118,6 +123,20 @@ const MenuLayout = (props: MenuLayoutProps) => {
     collapse: false,
     openKeys: _defaultOpenKeys ?? [],
   });
+
+  const openKeys: OpenKeysType = useMemo(
+    () =>
+      Array.isArray(_openKeys)
+        ? (() => {
+            const res: OpenKeysType = {};
+            _openKeys.forEach((key) => {
+              res[key] = true;
+            });
+            return res;
+          })()
+        : _openKeys,
+    [_openKeys],
+  );
 
   const px = pc(`${classPrefix}-layout`);
 
@@ -261,6 +280,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
         toggleOnItemClick={toggleOnItemClick}
         direction="vertical"
         onItemClick={onItemClick}
+        defaultOpenAll={defaultOpenAll}
         openKeys={openKeys}
         onOpenKeysChange={(openKeys) => changeProps({ openKeys })}
       />
