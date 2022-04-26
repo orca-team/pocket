@@ -10,9 +10,9 @@
   "author": "wang.kangning <331677620@qq.com>",
   "homepage": "https://orca.nicokam.work/",
   "license": "MIT",
-  "types": "dist/index.d.ts",
-  "module": "dist/index.esm.js",
-  "main": "dist/index.js",
+  "types": "es/index.d.ts",
+  "module": "es/index.js",
+  "main": "lib/index.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"

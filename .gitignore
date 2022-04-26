@@ -24,7 +24,9 @@
 /.vscode
 /.idea
 
+/docs-dist/
 /packages/*/lib/
+/packages/*/es/
 /packages/*/esm/
 /packages/*/dist/
 /packages/*/node_modules/
