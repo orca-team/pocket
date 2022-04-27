@@ -1,14 +1,11 @@
 export class UnitValue {
   unit: string = '';
+  strValue: string = '0';
   value: number = 0;
-  times: number = 1;
-
-  get originValue() {
-    return this.value * this.times;
-  }
+  originValue: number = 0;
 
   toString() {
-    return this.value + this.unit;
+    return this.strValue + this.unit;
   }
 }
 
@@ -19,14 +16,15 @@ export class UnitValue {
  * @param times 倍数
  */
 export function createUnitValue(
-  value: unknown,
+  value: string | number,
   unit: string,
-  times = 1,
+  originValue?: number,
 ): UnitValue {
   const uv = new UnitValue();
   uv.value = Number(value) || 0;
+  uv.strValue = String(value);
   uv.unit = unit || '';
-  uv.times = times;
+  uv.originValue = originValue ?? uv.value;
   return uv;
 }
 
@@ -47,6 +45,33 @@ export type ConvertOptions = {
 };
 
 /**
+ * 根据精度，计算出 num 需要保留的小数位数
+ * @param num 数本身
+ * @param precision 精度
+ */
+function getDecimalLengthByPrecision(num: number, precision?: number) {
+  const numStr = String(num);
+  const dotIndex = numStr.indexOf('.');
+  if (dotIndex < 0) {
+    return 0;
+  }
+  // 计算得出小数的长度
+  const decimalLength = numStr.length - 1 - dotIndex;
+
+  if (precision === undefined) {
+    return decimalLength;
+  }
+
+  // 在给出了精度的情况下，计算出整数部分的位数
+  const intLength = Math.floor(Math.log10(num));
+
+  // 计算得出剩余给小数部分的精度
+  const p = precision - Math.min(Math.max(0, intLength), precision);
+  // 剩余精度不能超过小数位数
+  return Math.min(decimalLength, p);
+}
+
+/**
  * 根据转换规则，构造一个单位转换函数
  * @param rules 规则
  * @param options 其他配置
@@ -56,11 +81,10 @@ export function createCovertUnitFn(
   options: ConvertOptions = {},
 ) {
   const { precisionMode = 'auto' } = options;
-  return (value, defaultPrecision = 6, defaultUnit = '') => {
+  return (value, defaultPrecision?: number, defaultUnit = '') => {
     let num = Number(value);
     let lastUnit = defaultUnit;
     let lastPrecision = defaultPrecision;
-    let times = 1;
     for (const rule of rules) {
       const { divisor, minValue = divisor, unit, precision = 2 } = rule;
       if (num < minValue) {
@@ -68,17 +92,36 @@ export function createCovertUnitFn(
       }
       lastPrecision = precision;
       num /= divisor;
-      times *= divisor;
       lastUnit = unit;
     }
-    const fixed = Math.floor(
-      lastPrecision -
-        Math.min(Math.max(0, Math.floor(Math.log10(num))), lastPrecision),
-    );
+    const fixed = getDecimalLengthByPrecision(num, lastPrecision);
+
     return createUnitValue(
       num.toFixed(precisionMode === 'auto' ? fixed : lastPrecision),
       lastUnit,
-      times,
+      Number(value),
     );
   };
 }
+
+export const chineseUnit = createCovertUnitFn([
+  { divisor: 10000, unit: '万' },
+  { divisor: 10000, unit: '亿' },
+  { divisor: 10000, unit: '万亿' },
+]);
+
+export const byteUnit = createCovertUnitFn([
+  { divisor: 1024, unit: 'K', minValue: 1000 },
+  { divisor: 1024, unit: 'M', minValue: 1000 },
+  { divisor: 1024, unit: 'G', minValue: 1000 },
+  { divisor: 1024, unit: 'T', minValue: 1000 },
+  { divisor: 1024, unit: 'P', minValue: 1000 },
+  { divisor: 1024, unit: 'E', minValue: 1000 },
+  { divisor: 1024, unit: 'Z', minValue: 1000 },
+  { divisor: 1024, unit: 'Y', minValue: 1000 },
+  { divisor: 1024, unit: 'B', minValue: 1000 },
+  { divisor: 1024, unit: 'N', minValue: 1000 },
+  { divisor: 1024, unit: 'D', minValue: 1000 },
+  { divisor: 1024, unit: 'C', minValue: 1000 },
+  { divisor: 1024, unit: 'X', minValue: 1000 },
+]);
