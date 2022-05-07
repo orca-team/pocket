@@ -7,6 +7,7 @@ import useObjHistoryMgr, { getHistoryModifiedKeys } from './useObjHistoryMgr';
 import useMemorizedFn from './useMemorizedFn';
 import useEventEmitter, { EventEmitterWithHook } from './useEventEmitter';
 import useSizeListener, { useSizeUpdateListener } from './useSizeListener';
+import usePromisifyModal, { usePromisifyDrawer } from './usePromisifyModal';
 import useEffectWithTarget, {
   useLayoutEffectWithTarget,
 } from './useEffectWithTarget';
@@ -26,4 +27,6 @@ export {
   useSizeUpdateListener,
   useEffectWithTarget,
   useLayoutEffectWithTarget,
+  usePromisifyModal,
+  usePromisifyDrawer,
 };

@@ -37,3 +37,47 @@ export const toggleArr = <T>(
   }
   return filterData;
 };
+
+type Arr2KeysCallback<T> = (
+  item: T,
+  index: number,
+  array: T[],
+) => string | number;
+
+/**
+ * 遍历数组，并获取 键值缓存
+ * @param arr 数组
+ * @param callback 回调函数，用于获取指定键值，默认取 item.key
+ */
+export function arr2Keys<T>(
+  arr: T[],
+  callback: Arr2KeysCallback<T> = (item) => item['key'],
+): Set<string | number> {
+  const set = new Set<string | number>();
+  arr.forEach((item, index, array) => {
+    const key = callback(item, index, array);
+    if (key !== null) {
+      set.add(key);
+    }
+  });
+  return set;
+}
+
+/**
+ * 遍历数组，并获取 key-value 缓存
+ * @param arr 数组
+ * @param callback 回调函数，用于获取指定键值，默认取 item.key
+ */
+export function arr2KeyValues<T>(
+  arr: T[],
+  callback: Arr2KeysCallback<T> = (item) => item['key'],
+): Map<string | number, T> {
+  const set = new Map<string | number, T>();
+  arr.forEach((item, index, array) => {
+    const key = callback(item, index, array);
+    if (key !== null) {
+      set.set(key, item);
+    }
+  });
+  return set;
+}

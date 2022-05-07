@@ -100,3 +100,123 @@ export default () => {
   );
 };
 ```
+
+## arr2Keys 提取对象数组中的 key
+
+`v0.1.0+`
+
+遍历数组并提取对象的 key，生成 Set 集合用于查询缓存，比如，用于判断名称是否重复。
+
+```ts
+type Arr2KeysCallback<T> = (
+  item: T,
+  index: number,
+  array: T[],
+) => string | number;
+
+/**
+ * 遍历数组，并获取 键值缓存
+ * @param arr 数组
+ * @param callback 回调函数，用于获取指定键值，默认取 item.key
+ */
+export function arr2Keys<T>(
+  arr: T[],
+  callback: PickKeyCallback<T> = (item) => item['key'],
+): Set<string | number>;
+```
+
+```tsx
+/**
+ * title: 简单示例
+ * desc: 在这个例子中，我们利用 arr2Keys 提取数组中的 key，避免创建重复的 key。请点击 + 号，并在弹出的表单中输入内容体验。
+ */
+import React, { useMemo } from 'react';
+import { Button, Form, Input, Modal } from 'antd';
+import { useDynamicList } from 'ahooks';
+import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { usePromisifyModal } from '@orca-fe/hooks';
+import { arr2Keys } from '@orca-fe/tools';
+
+export default () => {
+  const { list, remove, getKey, insert } = useDynamicList([
+    { key: 'abc', name: 'ABC' },
+    { key: 'a', name: 'A' },
+    { key: 'bb', name: 'BB' },
+  ]);
+
+  const keys = useMemo(() => arr2Keys(list), [list]);
+
+  const modal = usePromisifyModal();
+
+  return (
+    <div>
+      {list.map((item, index) => (
+        <div
+          key={getKey(index)}
+          style={{
+            marginBottom: 16,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+          }}
+        >
+          key: {item.key} - value: {item.name}
+          {list.length > 1 && (
+            <MinusCircleOutlined
+              style={{ marginLeft: 8 }}
+              onClick={() => {
+                remove(index);
+              }}
+            />
+          )}
+        </div>
+      ))}
+      <PlusCircleOutlined
+        style={{ marginLeft: 8 }}
+        onClick={() => {
+          modal.show(
+            <Modal title="添加" footer={null}>
+              <Form
+                labelCol={{ span: 3 }}
+                onFinish={(item) => {
+                  insert(list.length, item);
+                  modal.hide();
+                }}
+              >
+                <Form.Item
+                  name="key"
+                  label="key"
+                  rules={[
+                    { required: true },
+                    {
+                      validator: async (_, value) => {
+                        if (keys.has(value)) {
+                          throw new Error('key 已存在');
+                        }
+                        return true;
+                      },
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  name="name"
+                  label="name"
+                  rules={[{ required: true }]}
+                >
+                  <Input />
+                </Form.Item>
+                <Button type="primary" htmlType="submit">
+                  确定
+                </Button>
+              </Form>
+            </Modal>,
+          );
+        }}
+      />
+      {modal.instance}
+    </div>
+  );
+};
+```
