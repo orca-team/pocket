@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/pocket",
-  "version": "1.10.2",
+  "version": "1.10.3",
   "description": "UI components by orca-team",
   "keywords": [
     "react",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@orca-fe/hooks": "^0.6.2",
-    "@orca-fe/tools": "^0.1.0",
+    "@orca-fe/tools": "^0.1.1",
     "ahooks-v2": "^2",
     "prefix-classnames": "^0.0.5",
     "rc-animate": "^3.1.1",
