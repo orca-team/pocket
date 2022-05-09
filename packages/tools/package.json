@@ -19,7 +19,7 @@
   },
   "files": [
     "lib",
-    "esm"
+    "es"
   ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
