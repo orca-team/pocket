@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/pocket",
-  "version": "1.10.3",
+  "version": "1.10.4",
   "description": "UI components by orca-team",
   "keywords": [
     "react",
@@ -38,8 +38,8 @@
     "clear": "rimraf lib esm"
   },
   "dependencies": {
-    "@orca-fe/hooks": "^0.6.2",
-    "@orca-fe/tools": "^0.1.1",
+    "@orca-fe/hooks": "^0.7.0",
+    "@orca-fe/tools": "^0.1.2",
     "ahooks-v2": "^2",
     "prefix-classnames": "^0.0.5",
     "rc-animate": "^3.1.1",
