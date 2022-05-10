@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDebounceFn } from 'ahooks';
 import useMemorizedFn from './useMemorizedFn';
 
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+// export type OnOkType<T> = (result: T) => (void | boolean | Promise<void | boolean>);
+
 export type UsePromisifyModalOptions = {
   visibleField?: string;
   onOkField?: string;
@@ -48,18 +51,16 @@ export default function usePromisifyModal(
     { wait: destroyDelay },
   );
 
+  const hide = useMemorizedFn(() => {
+    setInstance((instance) =>
+      instance ? React.cloneElement(instance, { [visibleField]: false }) : null,
+    );
+    destroyAfterClose.run();
+  });
+
   const show = useMemorizedFn((element: React.ReactElement) => {
     destroyAfterClose.cancel();
     const key = new Date().getTime();
-
-    function hide() {
-      setInstance((instance) =>
-        instance
-          ? React.cloneElement(instance, { key, [visibleField]: false })
-          : null,
-      );
-      destroyAfterClose.run();
-    }
 
     const handler = new Promise((resolve, reject) => {
       const newElement = React.cloneElement(element, {
@@ -78,7 +79,7 @@ export default function usePromisifyModal(
               return res
                 .then((r) => {
                   hide();
-                  resolve(args);
+                  resolve(args[0]);
                   return r;
                 })
                 .catch(() => {
@@ -92,11 +93,11 @@ export default function usePromisifyModal(
               return undefined;
             }
             hide();
-            resolve(args);
+            resolve(args[0]);
             return res;
           }
           hide();
-          resolve(args);
+          resolve(args[0]);
 
           return undefined;
         },
@@ -116,11 +117,6 @@ export default function usePromisifyModal(
 
     handler['hide'] = hide;
     return handler as typeof handler & { hide: () => void };
-  });
-
-  const hide = useMemorizedFn(() => {
-    destroyAfterClose.cancel();
-    setInstance(null);
   });
 
   return { show, hide, instance };

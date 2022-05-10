@@ -5,3 +5,4 @@ export * from './obj';
 export * from './time';
 export * from './tree';
 export * from './convertUnit';
+export * from './number';
