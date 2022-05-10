@@ -1,5 +1,4 @@
 import { defineConfig } from 'dumi';
-import fs from 'fs';
 
 let isDev = process.env.NODE_ENV === 'development';
 
@@ -13,6 +12,16 @@ export default defineConfig({
   logo: '/orca-logo.png',
   outputPath: 'docs-dist',
   mode: 'site',
+  navs: {
+    'en-US': [
+      null,
+      { title: 'GitHub', path: 'https://github.com/orca-team/pocket' },
+    ],
+    'zh-CN': [
+      null,
+      { title: 'GitHub', path: 'https://github.com/orca-team/pocket' },
+    ],
+  },
   // more config: https://d.umijs.org/config
   extraBabelPlugins: [
     [
