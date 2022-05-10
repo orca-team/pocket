@@ -36,7 +36,7 @@ export default () => {
     <div>
       <Button
         onClick={async () => {
-          const name = await modal.show(<CustomModal />);
+          const name = await modal.show<string>(<CustomModal />);
           message.success(`已添加：${name}`);
         }}
       >

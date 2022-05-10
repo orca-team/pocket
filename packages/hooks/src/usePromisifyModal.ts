@@ -58,49 +58,55 @@ export default function usePromisifyModal(
     destroyAfterClose.run();
   });
 
-  const show = useMemorizedFn((element: React.ReactElement) => {
+  const show = useMemorizedFn(<T>(element: React.ReactElement) => {
     destroyAfterClose.cancel();
     const key = new Date().getTime();
 
-    const handler = new Promise((resolve, reject) => {
+    const handler = new Promise<T>((resolve, reject) => {
+      const onOkHandler = (...args) => {
+        if (typeof element.props[onOkField] === 'function') {
+          const res = element.props[onOkField].apply(null, args);
+          if (res instanceof Promise) {
+            setInstance((instance) =>
+              instance
+                ? React.cloneElement(instance, { confirmLoading: true })
+                : null,
+            );
+            return res
+              .then((r) => {
+                hide();
+                resolve(args[0]);
+                return r;
+              })
+              .catch(() => {
+                setInstance((instance) =>
+                  instance
+                    ? React.cloneElement(instance, { confirmLoading: false })
+                    : null,
+                );
+              });
+          } else if (res === false) {
+            return undefined;
+          }
+          hide();
+          resolve(args[0]);
+          return res;
+        }
+        hide();
+        resolve(args[0]);
+
+        return undefined;
+      };
+
       const newElement = React.cloneElement(element, {
         key,
         [visibleField]: false,
         [readyVisible]: true,
-        [onOkField]: (...args) => {
-          if (typeof element.props[onOkField] === 'function') {
-            const res = element.props[onOkField].apply(null, args);
-            if (res instanceof Promise) {
-              setInstance((instance) =>
-                instance
-                  ? React.cloneElement(instance, { confirmLoading: true })
-                  : null,
-              );
-              return res
-                .then((r) => {
-                  hide();
-                  resolve(args[0]);
-                  return r;
-                })
-                .catch(() => {
-                  setInstance((instance) =>
-                    instance
-                      ? React.cloneElement(instance, { confirmLoading: false })
-                      : null,
-                  );
-                });
-            } else if (res === false) {
-              return undefined;
+        ...(onOkField
+          ? {
+              [onOkField]: onOkHandler,
             }
-            hide();
-            resolve(args[0]);
-            return res;
-          }
-          hide();
-          resolve(args[0]);
-
-          return undefined;
-        },
+          : {}),
         [onCloseField]: (...args) => {
           hide();
           if (rejectOnClose) {
@@ -122,10 +128,9 @@ export default function usePromisifyModal(
   return { show, hide, instance };
 }
 
-export const usePromisifyDrawer = (options: UsePromisifyModalOptions = {}) => {
-  const { onCloseField = 'onClose', ...otherOptions } = options;
-  return usePromisifyModal({
-    onCloseField,
-    ...otherOptions,
+export const usePromisifyDrawer = (options: UsePromisifyModalOptions = {}) =>
+  usePromisifyModal({
+    onCloseField: 'onClose',
+    onOkField: '',
+    ...options,
   });
-};

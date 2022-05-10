@@ -63,9 +63,11 @@ export default () => {
 
 <code title="自定义弹窗" description="自定义弹窗指的是，你可以基于`Modal`封装属于自己的弹框组件，将复杂的业务逻辑放在弹框组件内部实现，只要对外仍保留 visible/onOk/onCancel 属性即可。" src="./usePromisifyModal/custom.tsx" />
 
+<code title="Drawer" description="我们对侧边抽屉组件 Drawer 也做了类似的封装。" src="./usePromisifyModal/drawer.tsx" />
+
 ## API
 
-```ts
+```ts | pure
 // ts 定义
 function usePromisifyModal(options: UsePromisifyModalOptions): Handler;
 ```
@@ -82,13 +84,13 @@ function usePromisifyModal(options: UsePromisifyModalOptions): Handler;
 
 ### Handler 弹框控制句柄
 
-```ts
+```ts | pure
 const modal = usePromisifyModal();
 ```
 
 #### show 显示
 
-```tsx
+```tsx | pure
 modal.show(<Modal title="title">content</Modal>);
 ```
 
