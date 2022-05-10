@@ -57,13 +57,13 @@ export default () => {
 
 ## Demo
 
-<code title="基本使用" src="./usePromisifyModal/basic.tsx" />
+<code title="基本使用" src="../../demo/usePromisifyModal/basic.tsx" />
 
-<code title="带交互" description="弹窗中包含输入框等需要交互的内容" src="./usePromisifyModal/interactive.tsx" />
+<code title="带交互" description="弹窗中包含输入框等需要交互的内容" src="../../demo/usePromisifyModal/interactive.tsx" />
 
-<code title="自定义弹窗" description="自定义弹窗指的是，你可以基于`Modal`封装属于自己的弹框组件，将复杂的业务逻辑放在弹框组件内部实现，只要对外仍保留 visible/onOk/onCancel 属性即可。" src="./usePromisifyModal/custom.tsx" />
+<code title="自定义弹窗" description="自定义弹窗指的是，你可以基于`Modal`封装属于自己的弹框组件，将复杂的业务逻辑放在弹框组件内部实现，只要对外仍保留 visible/onOk/onCancel 属性即可。" src="../../demo/usePromisifyModal/custom.tsx" />
 
-<code title="Drawer" description="我们对侧边抽屉组件 Drawer 也做了类似的封装。" src="./usePromisifyModal/drawer.tsx" />
+<code title="Drawer" description="我们对侧边抽屉组件 Drawer 也做了类似的封装。" src="../../demo/usePromisifyModal/drawer.tsx" />
 
 ## API
 
