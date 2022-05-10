@@ -30,7 +30,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@code.aliyun.com:orca-team/pocket.git"
+    "url": "https://github.com/orca-team/pocket.git"
   },
   "scripts": {
     "build": "k-tools compile && node copyFile.js",

@@ -27,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@codeup.aliyun.com:5f9fea3b22a8c7ff3934fa84/orca-team/pocket.git"
+    "url": "https://github.com/orca-team/pocket.git"
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
