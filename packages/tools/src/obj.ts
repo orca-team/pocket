@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types,@typescript-eslint/no-explicit-any */
+type ObjMapCallback = (key: string, value: any) => any;
+
 export function objMap<T extends Object>(
   obj: T,
-  callback: (key: string, value: any) => any,
+  callback: ObjMapCallback = (k, v) => v,
 ) {
   const result: any = {};
   let changed = false;
