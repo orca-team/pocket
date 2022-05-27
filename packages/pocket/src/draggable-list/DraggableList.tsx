@@ -3,7 +3,6 @@ import pc from 'prefix-classnames';
 import { useClickAway, useEventListener } from 'ahooks';
 import ReactDOM from 'react-dom';
 import { changeArr, removeArrIndex, toggleArr, arr2Keys } from '@orca-fe/tools';
-import './DraggableList.less';
 import { isCopy, isPaste } from './events';
 
 const px = pc('draggable-list');
