@@ -13,6 +13,7 @@ import shouldUpdate from './should-update';
 import EqRatioImg, { EqRatioImgProps } from './eq-ratio-img';
 import Flop, { FlopProps } from './flop';
 import loadScript, { ReactScript } from './load-script';
+import DraggableList, { DraggableListProps } from './draggable-list';
 
 export {
   EqRatioBox,
@@ -37,4 +38,6 @@ export {
   ReactScript,
   Flop,
   FlopProps,
+  DraggableList,
+  DraggableListProps,
 };
