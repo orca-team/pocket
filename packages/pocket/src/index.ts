@@ -14,6 +14,7 @@ import EqRatioImg, { EqRatioImgProps } from './eq-ratio-img';
 import Flop, { FlopProps } from './flop';
 import loadScript, { ReactScript } from './load-script';
 import DraggableList, { DraggableListProps } from './draggable-list';
+import Toast, { ToastProps } from './toast';
 
 export {
   EqRatioBox,
@@ -40,4 +41,6 @@ export {
   FlopProps,
   DraggableList,
   DraggableListProps,
+  Toast,
+  ToastProps,
 };
