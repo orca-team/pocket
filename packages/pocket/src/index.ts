@@ -15,6 +15,7 @@ import Flop, { FlopProps } from './flop';
 import loadScript, { ReactScript } from './load-script';
 import DraggableList, { DraggableListProps } from './draggable-list';
 import Toast, { ToastProps } from './toast';
+import ResizableWrapper, { ResizableWrapperProps } from './resizable-wrapper';
 
 export {
   EqRatioBox,
@@ -43,4 +44,6 @@ export {
   DraggableListProps,
   Toast,
   ToastProps,
+  ResizableWrapper,
+  ResizableWrapperProps,
 };
