@@ -46,13 +46,18 @@
     "rc-trigger": "^5.2.10",
     "react-countup": "^6.2.0",
     "react-transition-group": "^4.4.2",
-    "tslib": "^2.3.1"
+    "tslib": "^2.3.1",
+    "@orca-fe/pocket": "^1.10.10",
+    "ahooks": "^2.10.14",
+    "lodash-es": "^4.17.21"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
     "react-router": ">=5.0.0",
-    "react-router-dom": ">=5.0.0"
+    "react-router-dom": ">=5.0.0",
+    "@ant-design/icons": "^4.7.0",
+    "antd": "^4.19.5"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",

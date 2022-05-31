@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTimeout } from 'ahooks';
 import pc from 'prefix-classnames';
-import './Toast.less';
 import { useMemorizedFn } from '@orca-fe/hooks';
 import { render } from '../utils/Portal';
 
