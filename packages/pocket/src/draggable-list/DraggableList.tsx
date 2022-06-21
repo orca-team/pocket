@@ -154,7 +154,7 @@ const DraggableList = <T extends DraggableData>(
   }, [draggingItem]);
 
   // 点击其它地方后，取消选中
-  useClickAway((event) => {
+  useClickAway((event: MouseEvent) => {
     // TODO 优化拖拽到外面的逻辑处理
     const { ctrlKey, shiftKey } = event;
     if (ctrlKey || shiftKey) {
