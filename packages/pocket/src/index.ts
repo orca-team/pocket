@@ -16,6 +16,7 @@ import loadScript, { ReactScript } from './load-script';
 import DraggableList, { DraggableListProps } from './draggable-list';
 import Toast, { ToastProps } from './toast';
 import ResizableWrapper, { ResizableWrapperProps } from './resizable-wrapper';
+import UcInput, { UcInputProps } from './uc-input';
 
 export {
   EqRatioBox,
@@ -46,4 +47,6 @@ export {
   ToastProps,
   ResizableWrapper,
   ResizableWrapperProps,
+  UcInput,
+  UcInputProps,
 };
