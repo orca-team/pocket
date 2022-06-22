@@ -24,13 +24,14 @@ group:
 
 ## API
 
-| 属性                   | 说明                  | 类型                                      | 默认值                |
-| ---------------------- | --------------------- | ----------------------------------------- | --------------------- |
-| data                   | 菜单数据              | `(ContextMenuItemType \| 'split-line')[]` | `[]`                  |
-| onMenuClick            | 菜单点击事件          | `(menu: ContextMenuItemType) => void`     | -                     |
-| getContainer           | 菜单弹出的位置        | `(element: HTMLElement) => HTMLElement`   | `() => document.body` |
-| menuContainerClassName | 菜单容器的`className` | `string`                                  | -                     |
-| mainMenuMinWidth       | 首层菜单的最小宽度    | `number`                                  | `300`                 |
+| 属性                   | 说明                  | 类型                                    | 默认值                |
+| ---------------------- | --------------------- | --------------------------------------- | --------------------- | ---- |
+| data                   | 菜单数据              | `(ContextMenuItemType \                 | 'split-line')[]`      | `[]` |
+| onMenuClick            | 菜单点击事件          | `(menu: ContextMenuItemType) => void`   | -                     |
+| getContainer           | 菜单弹出的位置        | `(element: HTMLElement) => HTMLElement` | `() => document.body` |
+| menuContainerClassName | 菜单容器的`className` | `string`                                | -                     |
+| mainMenuMinWidth       | 首层菜单的最小宽度    | `number`                                | `300`                 |
+| wrapperStyle           | 菜单容器的样式        | `CSSProperties`                         | -                     |
 
 ### ContextMenuItemType
 

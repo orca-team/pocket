@@ -216,6 +216,7 @@ export interface ContextMenuProps<T extends ContextMenuItemType>
   getContainer?: (element: HTMLElement) => HTMLElement;
   menuContainerClassName?: string;
   mainMenuMinWidth?: number;
+  wrapperStyle?: React.CSSProperties;
 }
 
 const ContextMenu = <T extends ContextMenuItemType>(
@@ -229,6 +230,7 @@ const ContextMenu = <T extends ContextMenuItemType>(
     getContainer = ef,
     menuContainerClassName = '',
     mainMenuMinWidth = 300,
+    wrapperStyle,
     ...otherProps
   } = props;
   const triggerTarget = useRef(document.body);
@@ -310,7 +312,10 @@ const ContextMenu = <T extends ContextMenuItemType>(
             <div
               ref={menuRef}
               className={px('wrapper')}
-              style={transitionStyles[state]}
+              style={{
+                ...transitionStyles[state],
+                ...wrapperStyle,
+              }}
             >
               <MenuContainer
                 className={menuContainerClassName}

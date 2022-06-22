@@ -8,14 +8,15 @@
 
     // 菜单根容器
     &wrapper {
+      position: fixed;
       transition: opacity 300ms;
       width: 0;
       height: 0;
+      z-index: 10000;
     }
 
     &container {
-      position: fixed;
-      z-index: 10000;
+      position: absolute;
       min-width: 200px;
       user-select: none;
       padding: 5px;
