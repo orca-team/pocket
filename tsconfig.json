@@ -14,11 +14,9 @@
     "skipLibCheck": true,
     "rootDir": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@@/*": ["src/.umi/*"],
-      "@orca-fe/pocket": ["packages/pocket/src"],
-      "@orca-fe/tools": ["packages/tools/src"],
-      "@orca-fe/hooks": ["packages/hooks/src"]
+      "@orca-fe/pocket": ["./packages/pocket/src"],
+      "@orca-fe/tools": ["./packages/tools/src"],
+      "@orca-fe/hooks": ["./packages/hooks/src"]
     },
     "outDir": "./lib",
     "allowSyntheticDefaultImports": true

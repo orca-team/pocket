@@ -16,12 +16,12 @@
   "author": "NicoKam",
   "homepage": "https://orca.nicokam.work/",
   "license": "MIT",
-  "types": "esm/index.d.ts",
-  "module": "esm/index.js",
+  "types": "es/index.d.ts",
+  "module": "es/index.js",
   "main": "lib/index.js",
   "files": [
     "dist",
-    "esm",
+    "es",
     "lib"
   ],
   "publishConfig": {
@@ -35,7 +35,7 @@
   "scripts": {
     "build": "k-tools compile && node copyFile.js",
     "autod": "autod",
-    "clear": "rimraf lib esm"
+    "clear": "rimraf lib es"
   },
   "dependencies": {
     "@orca-fe/hooks": "^0.7.4",

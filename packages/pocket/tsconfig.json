@@ -1,5 +1,12 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["./src"],
-  "exclude": ["node_modules"]
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "..",
+    "paths": {
+      "@orca-fe/pocket": ["./src"],
+      "@orca-fe/tools": ["../tools/src"],
+      "@orca-fe/hooks": ["../hooks/src"]
+    }
+  }
 }

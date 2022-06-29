@@ -1,7 +1,7 @@
 export default {
   esm: 'babel',
   cjs: 'babel',
-  pkgFilter: {
-    include: ['@orca-fe/hooks', '@orca-fe/tools'],
-  },
+  // pkgFilter: {
+  //   include: ['@orca-fe/hooks', '@orca-fe/tools'],
+  // },
 };

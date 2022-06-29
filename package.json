@@ -7,7 +7,7 @@
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d docs-dist -r git@github.com:NicoKam/orca-pocket-page.git",
     "docs:serve": "http-server docs-dist --spa",
-    "build-all": "father-build && lerna run build",
+    "build-all": "father-build ",
     "build": "echo \"ok\"",
     "deploy": "npm run docs:build && npm run docs:deploy",
     "pub": "npm run build-all && lerna publish",
