@@ -17,6 +17,9 @@ import DraggableList, { DraggableListProps } from './draggable-list';
 import Toast, { ToastProps } from './toast';
 import ResizableWrapper, { ResizableWrapperProps } from './resizable-wrapper';
 import UcInput, { UcInputProps } from './uc-input';
+import SimpleNumberInput, {
+  SimpleNumberInputProps,
+} from './simple-number-input';
 
 export {
   EqRatioBox,
@@ -49,4 +52,6 @@ export {
   ResizableWrapperProps,
   UcInput,
   UcInputProps,
+  SimpleNumberInput,
+  SimpleNumberInputProps,
 };

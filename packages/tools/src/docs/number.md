@@ -10,6 +10,38 @@ group:
 
 # Number 数字相关工具集
 
+## clamp 限制最大值&最小值
+
+```ts | pure
+/**
+ * 把一个值限制在一个上限和下限之间
+ * @param _num 当前数字
+ * @param lower 最小值
+ * @param upper 最大值
+ */
+export function clamp(_num: number, lower?: number, upper?: number): number;
+```
+
+```tsx
+import React, { useState } from 'react';
+import { Slider } from 'antd';
+import { clamp } from '@orca-fe/tools';
+
+export default () => {
+  const [value, setValue] = useState(0);
+
+  return (
+    <div>
+      <Slider min={-100} max={100} value={value} onChange={setValue} />
+      <div>调整值以查看结果</div>
+      <pre>
+        <code>{`clamp(${value}, -30, 50) = ${clamp(value, -30, 50)}`}</code>
+      </pre>
+    </div>
+  );
+};
+```
+
 ## toFixedNumber 保留小数
 
 ```ts | pure

@@ -1,0 +1,22 @@
+@prefix: simple-number-input;
+
+.@{prefix} {
+  &- {
+    &root {
+      display: inline-block;
+    }
+
+    &editable:not(.@{prefix}-editing) {
+      color: #1199ff;
+      text-decoration: underline;
+      cursor: ew-resize;
+    }
+
+    &editing {
+      border: 2px solid #1199ff;
+      border-radius: 4px;
+      padding-left: 2px;
+      padding-right: 2px;
+    }
+  }
+}
