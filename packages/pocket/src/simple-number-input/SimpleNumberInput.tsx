@@ -63,6 +63,7 @@ const SimpleNumberInput = (props: SimpleNumberInputProps) => {
     if (rootRef.current) {
       const editingValue = rootRef.current.innerText;
       rootRef.current.innerText = `${value}`;
+      console.warn(editingValue);
       if (!Number.isNaN(Number(editingValue))) {
         setValue(clamp(Number(editingValue), min, max));
       }
@@ -73,6 +74,7 @@ const SimpleNumberInput = (props: SimpleNumberInputProps) => {
   const [_this] = useState({
     lastValue: Number.NaN,
     lastEditing: editing,
+    focus: false,
     // 开始拖拽时鼠标的位置
     startPageX: undefined as number | undefined,
     // 开始拖拽时的具体值
@@ -146,9 +148,18 @@ const SimpleNumberInput = (props: SimpleNumberInputProps) => {
   });
 
   useEventListener(
+    'focus',
+    (e) => {
+      _this.focus = true;
+    },
+    { target: rootRef },
+  );
+  useEventListener(
     'blur',
     (e) => {
-      confirm();
+      if (_this.focus) {
+        confirm();
+      }
     },
     { target: rootRef },
   );
@@ -172,11 +183,13 @@ const SimpleNumberInput = (props: SimpleNumberInputProps) => {
 
       if (key === 'Escape') {
         // 取消本次编辑
+        _this.focus = false;
         setEditing(false);
       }
       if (key === 'Enter') {
         // 确认本次编辑
         e.preventDefault();
+        _this.focus = false;
         confirm();
       }
     },
