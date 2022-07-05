@@ -2,8 +2,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import pc from 'prefix-classnames';
 import { useClickAway, useEventListener } from 'ahooks';
 import ReactDOM from 'react-dom';
-import { changeArr, removeArrIndex, toggleArr, arr2Keys } from '@orca-fe/tools';
-import { isCopy, isPaste } from './events';
+import { arr2Keys, changeArr, isCopy, isPaste, removeArrIndex, toggleArr } from '@orca-fe/tools';
 
 const px = pc('draggable-list');
 
@@ -134,7 +133,7 @@ const DraggableList = <T extends DraggableData>(
     data.forEach((item) => {
       if (item.key) cache[item.key] = item;
     });
-    return (_k) => cache[_k];
+    return _k => cache[_k];
   }, [data]);
 
   const isChecked = useMemo<(key?: string | number) => boolean>(() => {
@@ -142,7 +141,7 @@ const DraggableList = <T extends DraggableData>(
     checked.forEach((key) => {
       cache[key] = 1;
     });
-    return (_k) => (_k != null ? !!cache[_k] : false);
+    return _k => (_k != null ? !!cache[_k] : false);
   }, [checked]);
 
   const isDragging = useMemo<(key?: string | number) => boolean>(() => {
@@ -150,11 +149,11 @@ const DraggableList = <T extends DraggableData>(
     draggingItem.forEach((key) => {
       cache[key] = 1;
     });
-    return (_k) => (_k != null ? !!cache[_k] : false);
+    return _k => (_k != null ? !!cache[_k] : false);
   }, [draggingItem]);
 
   // 点击其它地方后，取消选中
-  useClickAway((event: MouseEvent) => {
+  useClickAway((event) => {
     // TODO 优化拖拽到外面的逻辑处理
     const { ctrlKey, shiftKey } = event;
     if (ctrlKey || shiftKey) {
@@ -224,8 +223,8 @@ const DraggableList = <T extends DraggableData>(
     // 替换内容
     onDataChange(
       newData
-        .filter((item) => item !== fromItem)
-        .map((item) => (item === placeholder ? fromItem : item)),
+        .filter(item => item !== fromItem)
+        .map(item => (item === placeholder ? fromItem : item)),
     );
     return true;
   };
@@ -240,17 +239,17 @@ const DraggableList = <T extends DraggableData>(
       tabIndex={-1}
       onKeyDown={(e) => {
         if (
-          isCopy(e) &&
+          isCopy(e.nativeEvent) &&
           (e.target['tagName'] === 'DIV' || checked.length > 1)
         ) {
           e.stopPropagation();
           const keys = arr2Keys(data);
-          if (checked.filter((key) => keys.has(key)).length > 0) {
+          if (checked.filter(key => keys.has(key)).length > 0) {
             setCopyItem(checked);
             // Toast.infoTop(`${checked.length} 项已复制`);
           }
         }
-        if (isPaste(e) && e.target['tagName'] === 'DIV') {
+        if (isPaste(e.nativeEvent) && e.target['tagName'] === 'DIV') {
           e.stopPropagation();
           // 粘贴
           if (copyItem.length > 0) {
@@ -268,7 +267,7 @@ const DraggableList = <T extends DraggableData>(
             setChecked(
               newCopyData
                 .map(({ key }) => key)
-                .filter((key) => key != null) as (string | number)[],
+                .filter(key => key != null) as (string | number)[],
             );
           }
         }
@@ -326,7 +325,7 @@ const DraggableList = <T extends DraggableData>(
               if (shiftKey) {
                 // 连续选择模式
                 let index1 = data.findIndex(
-                  (value) => value.key === checked[0],
+                  value => value.key === checked[0],
                 );
                 if (index1 < 0) index1 = 0;
                 const start = Math.min(index, index1);
@@ -336,7 +335,7 @@ const DraggableList = <T extends DraggableData>(
                   ...(data
                     .slice(start, end)
                     .map(({ key }) => key)
-                    .filter((key) => key != null && key !== checked[0]) as (
+                    .filter(key => key != null && key !== checked[0]) as (
                     | string
                     | number
                   )[]),
@@ -344,7 +343,7 @@ const DraggableList = <T extends DraggableData>(
               } else if (ctrlKey) {
                 // toggle模式
                 setChecked(
-                  toggleArr(checked, item.key).filter((key) => key != null) as (
+                  toggleArr(checked, item.key).filter(key => key != null) as (
                     | string
                     | number
                   )[],

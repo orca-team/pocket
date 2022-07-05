@@ -14,8 +14,10 @@
     "pub:only": "lerna publish",
     "pub:force": "npm run build-all && lerna publish --force-publish",
     "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\"",
+    "lint-staged": "lint-staged",
     "test": "umi-test",
-    "test:coverage": "umi-test --coverage"
+    "test:coverage": "umi-test --coverage",
+    "postinstall": "husky install"
   },
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -49,6 +51,7 @@
     "father-build": "^1.22.3",
     "gh-pages": "^3.2.3",
     "http-server": "^14.1.1",
+    "husky": "^8.0.1",
     "k-tools": "^1.0.0",
     "lerna": "^4.0.0",
     "lint-staged": "^13.0.3",
@@ -62,8 +65,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "rollup": "^2.75.7",
     "tslib": "^2.4.0",
-    "typescript": "^4.7.4",
-    "yorkie": "^2.0.0"
+    "typescript": "^4.7.4"
   },
   "peerDependencies": {
     "react": ">=16"

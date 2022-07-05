@@ -7,3 +7,4 @@ export * from './tree';
 export * from './convertUnit';
 export * from './number';
 export * from './error';
+export * from './events';
