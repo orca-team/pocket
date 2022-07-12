@@ -8,5 +8,6 @@
       "@orca-fe/tools": ["../tools/src"],
       "@orca-fe/hooks": ["../hooks/src"]
     }
-  }
+  },
+  "include": ["../../typings.d.ts"]
 }

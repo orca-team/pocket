@@ -73,6 +73,7 @@ export interface DraggableListProps<T extends DraggableData>
       dragging: boolean;
       changeItem: (item: Partial<T>) => void;
       removeItem: () => void;
+      drag: () => void;
       moveUp: () => boolean;
       moveDown: () => boolean;
     },
@@ -87,6 +88,9 @@ export interface DraggableListProps<T extends DraggableData>
   onGenerateKey?: (data: T) => T;
 
   checkMode?: boolean;
+
+  // 自定义拖拽内容
+  customDragHandler?: boolean;
 }
 
 let index = 0;
@@ -107,6 +111,7 @@ const DraggableList = <T extends DraggableData>(
     customStyle,
     checkMode = true,
     onGenerateKey = defaultHandleGenerateKey,
+    customDragHandler = false,
     ...otherProps
   } = props;
 
@@ -114,6 +119,7 @@ const DraggableList = <T extends DraggableData>(
 
   const [_this] = useState(() => ({
     mouseDownTargetTagName: '',
+    lastChangeTime: 0,
   }));
 
   // 已复制的记录
@@ -161,9 +167,12 @@ const DraggableList = <T extends DraggableData>(
 
   // 点击其它地方后，取消选中
   useClickAway((event) => {
-    // TODO 优化拖拽到外面的逻辑处理
     const { ctrlKey, shiftKey } = event as MouseEvent;
     if (ctrlKey || shiftKey) {
+      return;
+    }
+    // 拖拽到容器外部时，pointerup 事件会与 Click 重复，临时使用一个 debounce 方案解决。
+    if (Date.now() - _this.lastChangeTime < 50) {
       return;
     }
     if (checked.length > 0) {
@@ -216,6 +225,7 @@ const DraggableList = <T extends DraggableData>(
       newData.splice(startIndex + 1, 0, ...tmp);
       onDataChange(newData);
       cancelDrag();
+      _this.lastChangeTime = Date.now();
     }
   });
 
@@ -297,6 +307,18 @@ const DraggableList = <T extends DraggableData>(
         const removeItem = () => {
           onDataChange(removeArrIndex(data, index));
         };
+
+        const dragItem = () => {
+          if (currentChecked) {
+            // 如果当前元素是已选择的，则拖拽所选元素
+            setDraggingItem(checked);
+          } else if (item.key != null) {
+            // 拖拽了一个未选择元素，则单独选中该元素
+            setChecked([item.key]);
+            setDraggingItem([item.key]);
+          }
+        };
+
         return (
           <div
             className={px('item', {
@@ -306,7 +328,7 @@ const DraggableList = <T extends DraggableData>(
               after: index === insertFlag,
             })}
             key={item.key}
-            draggable
+            draggable={!customDragHandler}
             onMouseDown={(e) => {
               _this.mouseDownTargetTagName = e.target['tagName'];
             }}
@@ -315,14 +337,7 @@ const DraggableList = <T extends DraggableData>(
               if (_this.mouseDownTargetTagName === 'INPUT') {
                 return;
               }
-              if (currentChecked) {
-                // 如果当前元素是已选择的，则拖拽所选元素
-                setDraggingItem(checked);
-              } else if (item.key != null) {
-                // 拖拽了一个未选择元素，则单独选中该元素
-                setChecked([item.key]);
-                setDraggingItem([item.key]);
-              }
+              dragItem();
             }}
             onClick={(e) => {
               // TODO 优化拖拽后的 Click 事件响应
@@ -383,6 +398,7 @@ const DraggableList = <T extends DraggableData>(
                 removeItem,
                 moveUp,
                 moveDown,
+                drag: dragItem,
               },
               index,
             )}

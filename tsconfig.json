@@ -21,7 +21,7 @@
     "outDir": "./lib",
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*", "packages/**/*", ".eslintrc.js"],
+  "include": ["src/**/*", "packages/**/*", ".eslintrc.js", "typings.d.ts"],
   "exclude": [
     "node_modules",
     "lib",
