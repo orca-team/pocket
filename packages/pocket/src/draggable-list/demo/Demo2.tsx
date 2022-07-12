@@ -2,6 +2,7 @@
  * title: 自定义拖拽 handle
  */
 
+import '../../../../../typings.d';
 import React, { useState } from 'react';
 import { DraggableList } from '@orca-fe/pocket';
 import cn from 'classnames';
