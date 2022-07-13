@@ -103,7 +103,8 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
   useEventListener('pointerup', () => {
     if (dragging) {
       setDragging(null);
-    } else if (_this.size) {
+    }
+    if (_this.size) {
       if (triggerOnResize) {
         if (vertical && _this.size.height !== height) {
           changeProps({ height: clampHeight(_this.size.height) });
@@ -131,7 +132,16 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
     <div
       ref={rootRef}
       className={`${px('root')} ${className}`}
-      style={{ ...style, width, height, flexShrink: dragging ? 0 : '' }}
+      style={{
+        minWidth,
+        minHeight,
+        maxWidth,
+        maxHeight,
+        ...style,
+        width,
+        height,
+        flexShrink: dragging ? 1 : '',
+      }}
       {...otherProps}
     >
       {children}
