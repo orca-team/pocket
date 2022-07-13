@@ -3,7 +3,7 @@ import pc from 'prefix-classnames';
 import { useMap, useMemoizedFn } from 'ahooks';
 import './TabsLayout.less';
 import ReactDOM from 'react-dom';
-import { Tabs } from 'antd';
+import { Tabs, TabsProps } from 'antd';
 import { changeArr, removeArrIndex } from '@orca-fe/tools';
 import TabsLayoutContext, {
   TabCloseListener,
@@ -40,6 +40,7 @@ const TabView = (
 
 export interface TabsLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   emptyContent?: React.ReactElement;
+  tabsProps?: TabsProps;
 }
 
 const TabsLayout = (props: TabsLayoutProps) => {
@@ -47,6 +48,7 @@ const TabsLayout = (props: TabsLayoutProps) => {
     className = '',
     children = <TabView />,
     emptyContent = null,
+    tabsProps,
     ...otherProps
   } = props;
 
@@ -187,6 +189,7 @@ const TabsLayout = (props: TabsLayoutProps) => {
                     }
                   }}
                   tabBarExtraContent={<div ref={extraRef} />}
+                  {...tabsProps}
                 >
                   {tabs.map((tabConfig, index) => {
                     const { key, content, title, params } = tabConfig;
