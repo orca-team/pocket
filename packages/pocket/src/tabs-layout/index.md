@@ -10,6 +10,8 @@ group:
 
 # TabsLayout 多页签布局
 
+`@orca-fe/pocket@1.15.0`
+
 适用于传统中后台的多页签布局。
 
 ## 示例
