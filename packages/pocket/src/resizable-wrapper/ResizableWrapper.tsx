@@ -102,6 +102,10 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
     }
   });
 
+  useEventListener('pointerdown', () => {
+    _this.size = undefined;
+  });
+
   useSizeListener(() => {
     if (rootRef.current) {
       const { width, height } = rootRef.current.getBoundingClientRect();
