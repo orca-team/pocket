@@ -1,7 +1,7 @@
 import React, { useImperativeHandle, useRef, useState } from 'react';
 import pc from 'prefix-classnames';
 import { useEventListener } from 'ahooks';
-import { useControllableProps } from '@orca-fe/hooks';
+import { useControllableProps, useSizeListener } from '@orca-fe/hooks';
 
 const px = pc('resizable-wrapper');
 
@@ -21,6 +21,7 @@ export interface ResizableWrapperProps
   onHeightChange?: (height: number) => void;
   verticalPosition?: 'top' | 'bottom';
   horizontalPosition?: 'left' | 'right';
+  triggerOnResize?: boolean;
 }
 
 /**
@@ -43,6 +44,7 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
       defaultWidth: _nouse2,
       verticalPosition = 'right',
       horizontalPosition = 'bottom',
+      triggerOnResize = true,
       ...otherProps
     },
     changeProps,
@@ -53,6 +55,10 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
 
   const rootRef = useRef<HTMLDivElement>(null);
   useImperativeHandle(pRef, () => rootRef.current);
+
+  const [_this] = useState<{
+    size?: { width: number; height: number };
+  }>({});
 
   const [dragging, setDragging] = useState<{
     type: 'vertical' | 'horizontal';
@@ -71,7 +77,7 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
       ) {
         sign = -1;
       }
-      const curNum = initialNum + sign * (curMouse - initialMouse);
+      const curNum = Math.max(1, initialNum + sign * (curMouse - initialMouse));
       if (type === 'vertical') {
         if (height !== curNum) changeProps({ height: curNum });
       } else if (width !== curNum) {
@@ -83,14 +89,28 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
   useEventListener('pointerup', () => {
     if (dragging) {
       setDragging(null);
+    } else if (_this.size) {
+      if (triggerOnResize) {
+        if (vertical && _this.size.height !== height) {
+          changeProps({ height: _this.size.height });
+        }
+        if (horizontal && _this.size.width !== width) {
+          changeProps({ width: _this.size.width });
+        }
+      }
+      _this.size = undefined;
     }
   });
+
+  useSizeListener((size) => {
+    _this.size = size;
+  }, rootRef);
 
   return (
     <div
       ref={rootRef}
       className={`${px('root')} ${className}`}
-      style={{ ...style, width, height }}
+      style={{ ...style, width, height, flexShrink: dragging ? 0 : '' }}
       {...otherProps}
     >
       {children}
