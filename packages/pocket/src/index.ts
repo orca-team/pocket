@@ -20,6 +20,7 @@ import UcInput, { UcInputProps } from './uc-input';
 import SimpleNumberInput, {
   SimpleNumberInputProps,
 } from './simple-number-input';
+import TabsLayout from './tabs-layout';
 
 export {
   EqRatioBox,
@@ -54,4 +55,5 @@ export {
   UcInputProps,
   SimpleNumberInput,
   SimpleNumberInputProps,
+  TabsLayout,
 };

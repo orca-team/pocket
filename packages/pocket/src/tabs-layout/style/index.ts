@@ -1,0 +1,1 @@
+import '../TabsLayout.less';
