@@ -1,7 +1,8 @@
-import React, { useImperativeHandle, useRef, useState } from 'react';
+import React, { useImperativeHandle, useMemo, useRef, useState } from 'react';
 import pc from 'prefix-classnames';
 import { useEventListener } from 'ahooks';
 import { useControllableProps, useSizeListener } from '@orca-fe/hooks';
+import { clamp } from '@orca-fe/tools';
 
 const px = pc('resizable-wrapper');
 
@@ -45,6 +46,10 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
       verticalPosition = 'right',
       horizontalPosition = 'bottom',
       triggerOnResize = true,
+      minHeight,
+      minWidth,
+      maxHeight,
+      maxWidth,
       ...otherProps
     },
     changeProps,
@@ -55,6 +60,15 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
 
   const rootRef = useRef<HTMLDivElement>(null);
   useImperativeHandle(pRef, () => rootRef.current);
+
+  const clampWidth = useMemo(
+    () => (value: number) => clamp(value, minWidth, maxWidth),
+    [minWidth, maxWidth],
+  );
+  const clampHeight = useMemo(
+    () => (value: number) => clamp(value, minHeight, maxHeight),
+    [minHeight, maxHeight],
+  );
 
   const [_this] = useState<{
     size?: { width: number; height: number };
@@ -79,9 +93,9 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
       }
       const curNum = Math.max(1, initialNum + sign * (curMouse - initialMouse));
       if (type === 'vertical') {
-        if (height !== curNum) changeProps({ height: curNum });
+        if (height !== curNum) changeProps({ height: clampHeight(curNum) });
       } else if (width !== curNum) {
-        changeProps({ width: curNum });
+        changeProps({ width: clampWidth(curNum) });
       }
     }
   });
@@ -92,10 +106,10 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
     } else if (_this.size) {
       if (triggerOnResize) {
         if (vertical && _this.size.height !== height) {
-          changeProps({ height: _this.size.height });
+          changeProps({ height: clampHeight(_this.size.height) });
         }
         if (horizontal && _this.size.width !== width) {
-          changeProps({ width: _this.size.width });
+          changeProps({ width: clampWidth(_this.size.width) });
         }
       }
       _this.size = undefined;
