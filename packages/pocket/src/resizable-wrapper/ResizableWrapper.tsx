@@ -102,8 +102,11 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
     }
   });
 
-  useSizeListener((size) => {
-    _this.size = size;
+  useSizeListener(() => {
+    if (rootRef.current) {
+      const { width, height } = rootRef.current.getBoundingClientRect();
+      _this.size = { width, height };
+    }
   }, rootRef);
 
   return (
