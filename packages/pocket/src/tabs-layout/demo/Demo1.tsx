@@ -2,9 +2,8 @@
  * title: 基本用法
  */
 import React, { useContext } from 'react';
-import { TabsLayout } from '@orca-fe/pocket';
+import { TabsLayout, TabsLayoutContext } from '@orca-fe/pocket';
 import { Button, Space } from 'antd';
-import TabsLayoutContext from '../TabsLayoutContext';
 
 let index = 0;
 

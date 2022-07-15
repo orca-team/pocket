@@ -2,13 +2,14 @@
  * title: 关闭事件监听
  */
 import React, { useContext, useEffect } from 'react';
-import { TabsLayout } from '@orca-fe/pocket';
+import {
+  TabConfigContext,
+  TabsLayout,
+  TabsLayoutContext,
+  useTabCloseListener,
+} from '@orca-fe/pocket';
 import { Button, Modal, Space } from 'antd';
 import { usePromisifyModal } from '@orca-fe/hooks';
-import TabsLayoutContext, {
-  TabConfigContext,
-  useTabCloseListener,
-} from '../TabsLayoutContext';
 
 const Content = () => {
   const currentTab = useContext(TabConfigContext);

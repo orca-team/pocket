@@ -2,9 +2,12 @@
  * title: 标签自身的操作
  */
 import React, { useContext, useEffect } from 'react';
-import { TabsLayout } from '@orca-fe/pocket';
+import {
+  TabConfigContext,
+  TabsLayout,
+  TabsLayoutContext,
+} from '@orca-fe/pocket';
 import { Button, Space } from 'antd';
-import TabsLayoutContext, { TabConfigContext } from '../TabsLayoutContext';
 
 const Content = () => {
   const currentTab = useContext(TabConfigContext);
