@@ -147,7 +147,7 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
       {children}
       {vertical && (
         <div
-          className={px('handle-vertical', {
+          className={px('drag-handle', 'handle-vertical', {
             dragging: dragging?.type === 'vertical',
             'handle-vertical-top': verticalPosition === 'top',
           })}
@@ -166,7 +166,7 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
       )}
       {horizontal && (
         <div
-          className={px('handle-horizontal', {
+          className={px('drag-handle', 'handle-horizontal', {
             dragging: dragging?.type === 'horizontal',
             'handle-horizontal-left': horizontalPosition === 'left',
           })}
