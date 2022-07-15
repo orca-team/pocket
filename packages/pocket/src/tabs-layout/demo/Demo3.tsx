@@ -2,21 +2,16 @@
  * title: 关闭事件监听
  */
 import React, { useContext, useEffect } from 'react';
-import {
-  TabConfigContext,
-  TabsLayout,
-  TabsLayoutContext,
-  useTabCloseListener,
-} from '@orca-fe/pocket';
+import { TabsLayout } from '@orca-fe/pocket';
 import { Button, Modal, Space } from 'antd';
 import { usePromisifyModal } from '@orca-fe/hooks';
 
 const Content = () => {
-  const currentTab = useContext(TabConfigContext);
+  const currentTab = useContext(TabsLayout.TabConfigContext);
 
   const modal = usePromisifyModal();
 
-  useTabCloseListener(async () => {
+  TabsLayout.useTabCloseListener(async () => {
     await modal.show(
       <Modal title="确认关闭？" okText="确认" cancelText="再看看">
         <div>确认关闭页签？当前内容可能会丢失。</div>
@@ -47,7 +42,7 @@ const Content = () => {
 };
 
 const Demo = () => {
-  const tab = useContext(TabsLayoutContext);
+  const tab = useContext(TabsLayout.TabsLayoutContext);
   useEffect(() => {
     // 添加几个页签
     tab.add({

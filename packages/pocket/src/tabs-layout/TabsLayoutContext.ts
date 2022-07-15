@@ -27,7 +27,7 @@ export type TabsLayoutContextType = {
   extraRef?: React.RefObject<HTMLDivElement>;
 };
 
-const TabsLayoutContext = React.createContext<TabsLayoutContextType>({
+export const TabsLayoutContext = React.createContext<TabsLayoutContextType>({
   tabs: [],
   setTabs: () => {},
   add: () => {},

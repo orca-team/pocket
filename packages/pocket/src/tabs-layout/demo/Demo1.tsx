@@ -2,14 +2,14 @@
  * title: 基本用法
  */
 import React, { useContext } from 'react';
-import { TabsLayout, TabsLayoutContext } from '@orca-fe/pocket';
+import { TabsLayout } from '@orca-fe/pocket';
 import { Button, Space } from 'antd';
 
 let index = 0;
 
 /* 添加按钮 */
 const AddButton = () => {
-  const tab = useContext(TabsLayoutContext);
+  const tab = useContext(TabsLayout.TabsLayoutContext);
   return (
     <Button
       type="primary"
@@ -34,7 +34,7 @@ const AddButton = () => {
 
 /* 关闭按钮 */
 const CloseButton = () => {
-  const tab = useContext(TabsLayoutContext);
+  const tab = useContext(TabsLayout.TabsLayoutContext);
   return (
     <Button
       onClick={() => {
@@ -50,7 +50,7 @@ const CloseButton = () => {
 
 /* 切换按钮 */
 const SwitchButton = () => {
-  const tab = useContext(TabsLayoutContext);
+  const tab = useContext(TabsLayout.TabsLayoutContext);
   return (
     <Button
       onClick={() => {

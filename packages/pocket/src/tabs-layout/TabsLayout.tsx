@@ -9,6 +9,7 @@ import TabsLayoutContext, {
   TabCloseListener,
   TabConfigContext,
   TabConfigType,
+  useTabCloseListener,
 } from './TabsLayoutContext';
 
 const px = pc('orca-tabs-layout');
@@ -232,5 +233,9 @@ const TabsLayout = (props: TabsLayoutProps) => {
 };
 
 TabsLayout.View = TabView;
+
+TabsLayout.TabsLayoutContext = TabsLayoutContext;
+TabsLayout.TabConfigContext = TabConfigContext;
+TabsLayout.useTabCloseListener = useTabCloseListener;
 
 export default TabsLayout;

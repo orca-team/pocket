@@ -2,15 +2,11 @@
  * title: 标签自身的操作
  */
 import React, { useContext, useEffect } from 'react';
-import {
-  TabConfigContext,
-  TabsLayout,
-  TabsLayoutContext,
-} from '@orca-fe/pocket';
+import { TabsLayout } from '@orca-fe/pocket';
 import { Button, Space } from 'antd';
 
 const Content = () => {
-  const currentTab = useContext(TabConfigContext);
+  const currentTab = useContext(TabsLayout.TabConfigContext);
   return (
     <div>
       <div>{`${currentTab.params.text}`}</div>
@@ -41,7 +37,7 @@ const Content = () => {
 };
 
 const Demo = () => {
-  const tab = useContext(TabsLayoutContext);
+  const tab = useContext(TabsLayout.TabsLayoutContext);
   useEffect(() => {
     // 添加几个页签
     tab.add({
