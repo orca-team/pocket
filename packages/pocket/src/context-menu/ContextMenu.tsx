@@ -74,7 +74,13 @@ export const MenuItem = (props: MenuItemProps) => {
   const bounds = useMemo(() => {
     const { current: dom } = rootRef;
     if (hasChildren && dom) {
-      return dom.getBoundingClientRect();
+      const bounds = dom.getBoundingClientRect();
+      return {
+        top: bounds.top,
+        height: bounds.height,
+        width: bounds.width - 20,
+        left: bounds.left + 20,
+      };
     }
     return undefined;
   }, [showSubMenu]);
