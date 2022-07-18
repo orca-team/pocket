@@ -193,9 +193,15 @@ const TabsLayout = (props: TabsLayoutProps) => {
                   {...tabsProps}
                 >
                   {tabs.map((tabConfig, index) => {
-                    const { key, content, title, params } = tabConfig;
+                    const {
+                      key,
+                      content,
+                      title,
+                      params,
+                      closable = true,
+                    } = tabConfig;
                     return (
-                      <Tabs.TabPane key={key} tab={title} closable>
+                      <Tabs.TabPane key={key} tab={title} closable={closable}>
                         <TabConfigContext.Provider
                           value={{
                             active: active.bind(null, key),

@@ -12,6 +12,7 @@ export type TabConfigType = {
   content: React.ReactNode;
   params?: unknown;
   onClose?: () => void;
+  closable?: boolean;
   order?: number;
 };
 

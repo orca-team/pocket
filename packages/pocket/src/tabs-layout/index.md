@@ -58,6 +58,8 @@ type TabConfigType = {
   params?: unknown;
   // 关闭事件
   onClose?: () => void;
+  // 页签是否可手动关闭（默认为 true）
+  closable?: boolean;
   // 指定 Tab 的顺序，默认按照数组下标的顺序
   order?: number;
 };
