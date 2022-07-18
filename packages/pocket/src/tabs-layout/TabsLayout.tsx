@@ -39,9 +39,13 @@ const TabView = (
   );
 };
 
+const eArr = [];
+
 export interface TabsLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   emptyContent?: React.ReactElement;
   tabsProps?: TabsProps;
+  initialTabs?: TabConfigType[];
+  defaultActiveKey?: string;
 }
 
 const TabsLayout = (props: TabsLayoutProps) => {
@@ -50,14 +54,16 @@ const TabsLayout = (props: TabsLayoutProps) => {
     children = <TabView />,
     emptyContent = null,
     tabsProps,
+    initialTabs = eArr,
+    defaultActiveKey = '',
     ...otherProps
   } = props;
 
   const [root, setRoot] = useState<HTMLElement | null>(null);
 
-  const [activeKey, setActiveKey] = useState('');
+  const [activeKey, setActiveKey] = useState(defaultActiveKey);
 
-  const [tabs, setTabs] = useState<TabConfigType[]>([]);
+  const [tabs, setTabs] = useState<TabConfigType[]>(initialTabs);
 
   // const [extraContent, setExtraContent] = useState<TabsProps['tabBarExtraContent'] | undefined>(undefined);
   const extraRef = useRef<HTMLDivElement>(null);
