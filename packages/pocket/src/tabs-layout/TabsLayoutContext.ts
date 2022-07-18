@@ -46,7 +46,7 @@ export type TabConfigContextType = {
   isActive: boolean;
   active: () => void;
   close: () => void;
-  update: (tabConfig: Omit<TabConfigType, 'key'>) => void;
+  update: (tabConfig: Partial<Omit<TabConfigType, 'key'>>) => void;
   params: any;
   addCloseListener: (key: TabCloseListener) => void;
   removeCloseListener: (key: TabCloseListener) => void;
