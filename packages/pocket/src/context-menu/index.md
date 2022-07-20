@@ -37,11 +37,11 @@ group:
 
 菜单结构
 
-| 属性     | 说明               | 类型                                      | 默认值  |
-| -------- | ------------------ | ----------------------------------------- | ------- |
-| key      | 必填：菜单唯一标识 | `string`                                  | -       |
-| text     | 菜单内容           | `React.ReactElement` \| `string`          | ''      |
-| children | 子菜单             | `(ContextMenuItemType \| 'split-line')[]` | -       |
-| disabled | 是否禁用           | `boolean`                                 | `false` |
-| icon     | 菜单图标           | `React.ReactElement` \| `string`          | -       |
-| extra    | 菜单额外内容       | `React.ReactElement` \| `string`          | -       |
+| 属性     | 说明               | 类型                                     | 默认值  |
+| -------- | ------------------ | ---------------------------------------- | ------- |
+| key      | 必填：菜单唯一标识 | `string`                                 | -       |
+| text     | 菜单内容           | `React.ReactElement` / `string`          | ''      |
+| children | 子菜单             | `(ContextMenuItemType / 'split-line')[]` | -       |
+| disabled | 是否禁用           | `boolean`                                | `false` |
+| icon     | 菜单图标           | `React.ReactElement` / `string`          | -       |
+| extra    | 菜单额外内容       | `React.ReactElement` / `string`          | -       |
