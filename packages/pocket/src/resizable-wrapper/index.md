@@ -108,8 +108,8 @@ export default () => {
 
 | 属性               | 说明                     | 类型                       | 默认值     |
 | ------------------ | ------------------------ | -------------------------- | ---------- |
-| vertical           | 是否支持垂直调整(height) | `boolean`                  | false      |
-| horizontal         | 是否支持水平调整(width)  | `boolean`                  | false      |
+| vertical           | 是否支持垂直调整(height) | `boolean`                  | `false`    |
+| horizontal         | 是否支持水平调整(width)  | `boolean`                  | `false`    |
 | defaultWidth       | 默认宽度                 | `number`                   | -          |
 | defaultHeight      | 默认高度                 | `number`                   | -          |
 | width              | 宽度（受控模式）         | `number`                   | -          |
@@ -120,5 +120,6 @@ export default () => {
 | maxHeight          | 最大高度                 | `number`                   | -          |
 | onWidthChange      | 宽度变化的回调事件       | `(width: number) => void`  | -          |
 | onHeightChange     | 高度变化的回调事件       | `(height: number) => void` | -          |
-| verticalPosition   | 顶部/底部调整            | `'top'` \| `'bottom'`      | `'bottom'` |
-| horizontalPosition | 左侧/右侧调整            | `'left'` \| `'right'`      | `'right'`  |
+| verticalPosition   | 顶部/底部调整            | `'top'` / `'bottom'`       | `'bottom'` |
+| horizontalPosition | 左侧/右侧调整            | `'left'` / `'right'`       | `'right'`  |
+| triggerOnResize    | 当容器尺寸变化时触发事件 | `boolean`                  | `true`     |

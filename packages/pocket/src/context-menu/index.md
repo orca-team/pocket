@@ -24,24 +24,24 @@ group:
 
 ## API
 
-| 属性                   | 说明                  | 类型                                    | 默认值                |
-| ---------------------- | --------------------- | --------------------------------------- | --------------------- | ---- |
-| data                   | 菜单数据              | `(ContextMenuItemType \                 | 'split-line')[]`      | `[]` |
-| onMenuClick            | 菜单点击事件          | `(menu: ContextMenuItemType) => void`   | -                     |
-| getContainer           | 菜单弹出的位置        | `(element: HTMLElement) => HTMLElement` | `() => document.body` |
-| menuContainerClassName | 菜单容器的`className` | `string`                                | -                     |
-| mainMenuMinWidth       | 首层菜单的最小宽度    | `number`                                | `300`                 |
-| wrapperStyle           | 菜单容器的样式        | `CSSProperties`                         | -                     |
+| 属性                   | 说明                  | 类型                                     | 默认值                |
+| ---------------------- | --------------------- | ---------------------------------------- | --------------------- |
+| data                   | 菜单数据              | `(ContextMenuItemType / 'split-line')[]` | `[]`                  |
+| onMenuClick            | 菜单点击事件          | `(menu: ContextMenuItemType) => void`    | -                     |
+| getContainer           | 菜单弹出的位置        | `(element: HTMLElement) => HTMLElement`  | `() => document.body` |
+| menuContainerClassName | 菜单容器的`className` | `string`                                 | -                     |
+| mainMenuMinWidth       | 首层菜单的最小宽度    | `number`                                 | `300`                 |
+| wrapperStyle           | 菜单容器的样式        | `CSSProperties`                          | -                     |
 
 ### ContextMenuItemType
 
 菜单结构
 
-| 属性     | 说明               | 类型                                      | 默认值  |
-| -------- | ------------------ | ----------------------------------------- | ------- |
-| key      | 必填：菜单唯一标识 | `string`                                  | -       |
-| text     | 菜单内容           | `React.ReactElement` \| `string`          | ''      |
-| children | 子菜单             | `(ContextMenuItemType \| 'split-line')[]` | -       |
-| disabled | 是否禁用           | `boolean`                                 | `false` |
-| icon     | 菜单图标           | `React.ReactElement` \| `string`          | -       |
-| extra    | 菜单额外内容       | `React.ReactElement` \| `string`          | -       |
+| 属性     | 说明               | 类型                                     | 默认值  |
+| -------- | ------------------ | ---------------------------------------- | ------- |
+| key      | 必填：菜单唯一标识 | `string`                                 | -       |
+| text     | 菜单内容           | `React.ReactElement` / `string`          | ''      |
+| children | 子菜单             | `(ContextMenuItemType / 'split-line')[]` | -       |
+| disabled | 是否禁用           | `boolean`                                | `false` |
+| icon     | 菜单图标           | `React.ReactElement` / `string`          | -       |
+| extra    | 菜单额外内容       | `React.ReactElement` / `string`          | -       |

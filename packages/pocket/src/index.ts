@@ -20,6 +20,7 @@ import UcInput, { UcInputProps } from './uc-input';
 import SimpleNumberInput, {
   SimpleNumberInputProps,
 } from './simple-number-input';
+import TabsLayout, { TabConfigType, TabsLayoutProps } from './tabs-layout';
 import TextOverflow, { TextOverflowProps } from './text-overflow';
 
 export {
@@ -57,4 +58,7 @@ export {
   SimpleNumberInputProps,
   TextOverflow,
   TextOverflowProps,
+  TabsLayout,
+  TabsLayoutProps,
+  TabConfigType,
 };

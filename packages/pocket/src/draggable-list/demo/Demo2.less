@@ -1,0 +1,33 @@
+.item {
+  border-radius: 4px;
+  border: 1px solid #DDDDDD;
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 8px;
+
+  .handle {
+    cursor: move;
+    font-size: 1.2em;
+    margin-right: 4px;
+  }
+
+  &:hover {
+    background-color: rgba(18, 101, 210, 0.15);
+  }
+
+  &.checked {
+    color: #FFFFFF;
+    background-color: #1160aa;
+
+    &:hover {
+      background-color: #1877ce;
+    }
+  }
+
+  &.dragging {
+    opacity: 0.5;
+    background-color: #AAAAAA;
+    color: #000000;
+  }
+}

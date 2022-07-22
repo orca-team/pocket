@@ -39,6 +39,8 @@ export interface MenuLayoutProps
   /** 菜单数据 */
   menu?: MenuItemType[];
 
+  showHeader?: boolean;
+
   /** 顶栏的额外内容（最右侧） */
   headerExtra?: React.ReactNode;
 
@@ -105,6 +107,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
       toggleOnItemClick,
       collapsible = true,
       collapse: _collapse,
+      showHeader = true,
       mainMenuSide = 'left',
       themeHeader = 'dark',
       themeSide = 'dark',
@@ -141,7 +144,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
   const px = pc(`${classPrefix}-layout`);
 
   // 如果 collapsible 为 false，则一定不能收起
-  const collapse = collapsible ? _collapse : true;
+  const collapse = collapsible ? _collapse : false;
 
   const location = useLocation();
   // 判断取用哪个 pathname
@@ -289,7 +292,8 @@ const MenuLayout = (props: MenuLayoutProps) => {
 
   const center = (
     <div className={px('center')}>
-      {mainSideLeft ? header : sideMenuDiv}
+      {/* showHeader == true 时，才渲染 header */}
+      {mainSideLeft ? showHeader && header : sideMenuDiv}
       {content}
     </div>
   );

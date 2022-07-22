@@ -4,11 +4,11 @@
   &- {
     &root {
       position: relative;
-      flex-shrink: 0;
+      flex-shrink: 1000;
     }
 
     &drag-handle {
-
+      z-index: 1;
     }
 
     &handle-vertical,
@@ -19,12 +19,12 @@
       transition: opacity 500ms;
 
 
-
       &:hover, &.@{prefix}-dragging {
         transition-delay: 500ms;
         opacity: 1;
       }
-      &:active{
+
+      &:active {
         transition: opacity 100ms;
         transition-delay: 0ms;
       }

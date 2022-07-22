@@ -3,7 +3,7 @@
 .@{prefix} {
   &- {
 
-    &internal-style{
+    &internal-style {
 
       &:not(.@{prefix}-dragging) {
         .@{prefix}-item {
@@ -12,7 +12,7 @@
           }
 
           &:hover {
-            color: #FFFFFF;
+            //color: #FFFFFF;
             background-color: rgba(18, 101, 210, 0.15);
           }
         }
@@ -20,10 +20,10 @@
 
       .@{prefix}-checked:not(.@{prefix}-dragging-item) {
         color: #FFFFFF;
-        background-color: rgba(18, 101, 210, 0.5);
+        background-color: #1160aa;
 
         &:hover {
-          background-color: rgba(18, 101, 210, 0.3);
+          background-color: #1774cc;
         }
       }
 
@@ -33,6 +33,7 @@
       }
 
     }
+
 
     &root {
       user-select: none;

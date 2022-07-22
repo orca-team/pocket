@@ -1,6 +1,6 @@
 # Introduction
 
-This is a set of common `hooks` library that was precipitated during the development of our `React` project.
+This is an extend-lib to the `antd` component library.
 
 ## Installation
 
