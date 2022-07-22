@@ -20,6 +20,7 @@ import UcInput, { UcInputProps } from './uc-input';
 import SimpleNumberInput, {
   SimpleNumberInputProps,
 } from './simple-number-input';
+import TextOverflow, { TextOverflowProps } from './text-overflow';
 
 export {
   EqRatioBox,
@@ -54,4 +55,6 @@ export {
   UcInputProps,
   SimpleNumberInput,
   SimpleNumberInputProps,
+  TextOverflow,
+  TextOverflowProps,
 };

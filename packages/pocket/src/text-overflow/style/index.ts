@@ -1,0 +1,1 @@
+import '../TextOverflow.less';
