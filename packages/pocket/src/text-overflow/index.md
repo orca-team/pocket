@@ -10,7 +10,7 @@ group:
 
 # TextOverflow 溢出文本滚动
 
-`@orca-fe/pocket@1.14.0`
+`@orca-fe/pocket@1.16.0`
 
 填入内容，当容器无法完整显示内容时，进行来回滚动展示
 
