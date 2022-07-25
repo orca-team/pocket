@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/hooks",
-  "version": "0.7.4",
+  "version": "0.8.0",
   "description": "React Hooks Collections",
   "keywords": [
     "react",
@@ -31,15 +31,14 @@
     "clear": "rimraf lib"
   },
   "dependencies": {
+    "detect-browser": "^5.3.0",
     "events": "^3.3.0",
     "lodash-es": "^4.17.21",
     "resize-observer-polyfill": "^1.5.1",
-    "tslib": "^2.3.1",
-    "detect-browser": "^5.3.0"
+    "tslib": "^2.3.1"
   },
   "peerDependencies": {
-    "react": ">=16",
-    "ahooks": "^3.5.2"
-  },
-  "devDependencies": {}
+    "ahooks": "^3.5.2",
+    "react": ">=16"
+  }
 }
