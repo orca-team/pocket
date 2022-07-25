@@ -11,6 +11,14 @@ import usePromisifyModal, { usePromisifyDrawer } from './usePromisifyModal';
 import useEffectWithTarget, {
   useLayoutEffectWithTarget,
 } from './useEffectWithTarget';
+import useHotkeyListener, {
+  HotkeyDefsType,
+  HotkeyContext,
+  HotkeyProvider,
+  toHotkeyStr,
+  divOnlyFilter,
+  UseHotkeyListenerOptions,
+} from './useHotkeyListener';
 
 export {
   useWindowSize,
@@ -21,12 +29,27 @@ export {
   useObjHistoryMgr,
   useMemorizedFn,
   getHistoryModifiedKeys,
+
+  // events
   useEventEmitter,
   EventEmitterWithHook,
+
+  // size
   useSizeListener,
   useSizeUpdateListener,
   useEffectWithTarget,
   useLayoutEffectWithTarget,
+
+  // modal
   usePromisifyModal,
   usePromisifyDrawer,
+
+  // hotkey
+  useHotkeyListener,
+  HotkeyDefsType,
+  HotkeyContext,
+  HotkeyProvider,
+  toHotkeyStr,
+  divOnlyFilter,
+  UseHotkeyListenerOptions,
 };
