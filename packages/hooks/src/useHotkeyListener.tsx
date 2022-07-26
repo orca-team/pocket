@@ -68,7 +68,6 @@ function createHotkeyCache(hotkey: HotkeyDefsType) {
       });
     }
   });
-  console.log(hotkeyMapping, macHotkeyMapping);
   return { hotkeyMapping, macHotkeyMapping };
 }
 
@@ -202,7 +201,6 @@ export default function useHotkeyListener(
     'keydown',
     (e: KeyboardEvent) => {
       const hotkeyStr = toHotkeyStr(e);
-      console.debug(hotkeyStr);
       if (!hotkeyStr) return;
       if (filter(e) === false) {
         return;
