@@ -57,7 +57,7 @@ function createHotkeyCache(hotkey: HotkeyDefsType) {
     });
     // MacMode
     if (macKeys) {
-      smartForEach(commands[0], (hotKey) => {
+      smartForEach(macKeys, (hotKey) => {
         if (macHotkeyMapping.has(hotKey)) {
           console.warn(
             `Duplicate hot-key '${hotKey}' for command(Mac) [${hotkeyName}]`,
@@ -68,6 +68,7 @@ function createHotkeyCache(hotkey: HotkeyDefsType) {
       });
     }
   });
+  console.log(hotkeyMapping, macHotkeyMapping);
   return { hotkeyMapping, macHotkeyMapping };
 }
 
