@@ -48,11 +48,8 @@ export {
   useHotkeyListener,
   toHotkeyStr,
   divOnlyFilter,
+  HotkeyProvider,
+  HotkeyContext,
 };
 
-export type {
-  HotkeyDefsType,
-  HotkeyContext,
-  HotkeyProvider,
-  UseHotkeyListenerOptions,
-};
+export type { HotkeyDefsType, UseHotkeyListenerOptions };
