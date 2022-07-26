@@ -10,11 +10,12 @@ const defaultHotkeyDef: HotkeyDefsType = {
   paste: ['Ctrl+V', 'Command+V'],
   cut: ['Ctrl+X', 'Command+X'],
   undo: ['Ctrl+Z', 'Command+Z'],
+  save: ['Ctrl+S', 'Command+S'],
   redo: [
     ['Ctrl+Shift+Z', 'Ctrl+Y'],
     ['Command+Shift+Z', 'Command+Y'],
   ],
-  delete: ['Delete', ['Delete', 'BackSpace']],
+  delete: ['Delete', ['Delete', 'Backspace']],
 };
 
 function smartForEach<T>(
@@ -200,6 +201,7 @@ export default function useHotkeyListener(
     'keydown',
     (e: KeyboardEvent) => {
       const hotkeyStr = toHotkeyStr(e);
+      console.debug(hotkeyStr);
       if (!hotkeyStr) return;
       if (filter(e) === false) {
         return;

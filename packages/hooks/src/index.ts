@@ -46,10 +46,13 @@ export {
 
   // hotkey
   useHotkeyListener,
+  toHotkeyStr,
+  divOnlyFilter,
+};
+
+export type {
   HotkeyDefsType,
   HotkeyContext,
   HotkeyProvider,
-  toHotkeyStr,
-  divOnlyFilter,
   UseHotkeyListenerOptions,
 };
