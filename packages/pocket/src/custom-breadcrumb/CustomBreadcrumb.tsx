@@ -5,9 +5,9 @@ import BreadcrumbContext, {
   BreadCrumbProvider,
 } from './BreadcrumbContext';
 
-export interface BreadCrumbProps extends BaseMenuType {}
+export interface CustomBreadCrumbProps extends BaseMenuType {}
 
-const CustomBreadcrumb = (props: BreadCrumbProps) => {
+const CustomBreadcrumb = (props: CustomBreadCrumbProps) => {
   const { add, remove } = useContext(BreadcrumbContext);
 
   const { path, text, order } = props;

@@ -10,14 +10,14 @@ export type BaseMenuType = {
   order?: number;
 };
 
-export type MenuType = BaseMenuType & {
-  children?: MenuType[];
+export type BreadCrumbMenuType = BaseMenuType & {
+  children?: BreadCrumbMenuType[];
 };
 
 export type BreadCrumbContextType = {
-  menu: MenuType[];
-  add: (menu: MenuType) => void;
-  remove: (menu: MenuType) => void;
+  menu: BreadCrumbMenuType[];
+  add: (menu: BreadCrumbMenuType) => void;
+  remove: (menu: BreadCrumbMenuType) => void;
   customBreadcrumb: BaseMenuType[];
 };
 
@@ -30,7 +30,7 @@ const BreadcrumbContext = React.createContext<BreadCrumbContextType>({
 
 export const BreadCrumbProvider = (props: {
   children: React.ReactNode;
-  menu?: MenuType[];
+  menu?: BreadCrumbMenuType[];
   pathname?: string;
 }) => {
   const { menu = eArr, children, pathname = '' } = props;

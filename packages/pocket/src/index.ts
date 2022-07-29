@@ -3,7 +3,9 @@ import Img, { ImgProps } from './img';
 import MenuLayout, { MenuLayoutProps } from './menu-layout';
 import { MenuItemType } from './menu-layout/menuUtils';
 import OpenBox, { OpenBoxProps } from './open-box';
-import CustomBreadcrumb from './custom-breadcrumb';
+import CustomBreadcrumb, { CustomBreadCrumbProps } from './custom-breadcrumb';
+import { BreadCrumbProps } from './custom-breadcrumb/Breadcrumb';
+import { BreadCrumbMenuType } from './custom-breadcrumb/BreadcrumbContext';
 import ErrorCatcher, { ErrorCatcherProps } from './error-catcher';
 import ContextMenu, {
   ContextMenuItemWithSplitType,
@@ -40,6 +42,9 @@ export {
   ErrorCatcherProps,
   shouldUpdate,
   CustomBreadcrumb,
+  CustomBreadCrumbProps,
+  BreadCrumbMenuType,
+  BreadCrumbProps,
   EqRatioImg,
   EqRatioImgProps,
   loadScript,
