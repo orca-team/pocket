@@ -223,6 +223,7 @@ export interface ContextMenuProps<T extends ContextMenuItemType>
   menuContainerClassName?: string;
   mainMenuMinWidth?: number;
   wrapperStyle?: React.CSSProperties;
+  disabled?: boolean;
 }
 
 const ContextMenu = <T extends ContextMenuItemType>(
@@ -237,6 +238,7 @@ const ContextMenu = <T extends ContextMenuItemType>(
     menuContainerClassName = '',
     mainMenuMinWidth = 300,
     wrapperStyle,
+    disabled,
     ...otherProps
   } = props;
   const triggerTarget = useRef(document.body);
@@ -277,6 +279,7 @@ const ContextMenu = <T extends ContextMenuItemType>(
     }
     if (event.shiftKey) return;
     event.preventDefault();
+    if (disabled) return;
     if (event.target instanceof HTMLElement) {
       triggerTarget.current = event.target;
     }

@@ -32,6 +32,7 @@ group:
 | menuContainerClassName | 菜单容器的`className` | `string`                                 | -                     |
 | mainMenuMinWidth       | 首层菜单的最小宽度    | `number`                                 | `300`                 |
 | wrapperStyle           | 菜单容器的样式        | `CSSProperties`                          | -                     |
+| disabled               | 禁止弹出菜单          | `boolean`                                | -                     |
 
 ### ContextMenuItemType
 
