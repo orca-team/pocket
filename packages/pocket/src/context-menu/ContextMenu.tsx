@@ -277,9 +277,9 @@ const ContextMenu = <T extends ContextMenuItemType>(
       }
       return;
     }
+    if (disabled) return;
     if (event.shiftKey) return;
     event.preventDefault();
-    if (disabled) return;
     if (event.target instanceof HTMLElement) {
       triggerTarget.current = event.target;
     }
