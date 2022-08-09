@@ -196,3 +196,106 @@ export function findRev<T>(
 
   return rev(data);
 }
+
+export type AbstractTreeNodeType<
+  ChildKeyType extends string,
+  TreeNoteType extends Record<string, unknown>,
+> = TreeNoteType & {
+  [key in ChildKeyType]?: AbstractTreeNodeType<ChildKeyType, TreeNoteType>[];
+};
+
+export type TreeForOptions<ChildKeyType extends string> = {
+  childrenKey?: ChildKeyType;
+  parentPath?: number[];
+  parent?: Record<string, unknown>;
+};
+
+/**
+ * 递归遍历树
+ * @param arr
+ * @param callback
+ * @param options
+ */
+export function treeFor<
+  ChildKeyType extends string = 'children',
+  T extends AbstractTreeNodeType<
+    ChildKeyType,
+    Record<string, unknown>
+  > = AbstractTreeNodeType<ChildKeyType, Record<string, unknown>>,
+>(
+  arr: T[],
+  callback: (item: T | null, parent: T | undefined, path: number[]) => void,
+  options: TreeForOptions<ChildKeyType> = {},
+) {
+  const { childrenKey = 'children', parentPath = [], parent } = options;
+  arr.forEach((item, index) => {
+    const path = [...parentPath, index];
+    callback(item, parent as T, path);
+    if (item) {
+      const children = item[childrenKey];
+      if (Array.isArray(children)) {
+        treeFor(children as T[], callback, {
+          ...options,
+          parentPath: path,
+          parent: item,
+        });
+      }
+    }
+  });
+}
+
+export type TreeMapOptions<ChildKeyType extends string> =
+  TreeForOptions<ChildKeyType>;
+
+/**
+ * 递归遍历树，并依次替换节点获得全新的树
+ * @param arr
+ * @param callback
+ * @param options
+ */
+export function treeMap<
+  OutTreeNoteType extends Record<string, unknown>,
+  ChildKeyType extends string = 'children',
+  T extends AbstractTreeNodeType<
+    ChildKeyType,
+    Record<string, unknown>
+  > = AbstractTreeNodeType<ChildKeyType, Record<string, unknown>>,
+>(
+  arr: T[],
+  callback: (
+    item: T | null,
+    parent: AbstractTreeNodeType<ChildKeyType, OutTreeNoteType> | undefined,
+    path: number[],
+  ) => OutTreeNoteType | null,
+  options: TreeMapOptions<ChildKeyType> = {},
+) {
+  const { childrenKey = 'children', parentPath = [], parent } = options;
+  return arr.map<AbstractTreeNodeType<ChildKeyType, OutTreeNoteType> | null>(
+    (item, index) => {
+      const path = [...parentPath, index];
+      const newItem = callback(
+        item,
+        parent as
+          | AbstractTreeNodeType<ChildKeyType, OutTreeNoteType>
+          | undefined,
+        path,
+      );
+      if (item) {
+        const children = item[childrenKey] as T[];
+        if (Array.isArray(children)) {
+          const newChildren = treeMap(children, callback, {
+            ...options,
+            parentPath: path,
+            parent: item,
+          });
+          // @ts-expect-error
+          newItem[childrenKey] = newChildren;
+        }
+      }
+      return newItem as AbstractTreeNodeType<
+        ChildKeyType,
+        OutTreeNoteType
+      > | null;
+    },
+  );
+}
