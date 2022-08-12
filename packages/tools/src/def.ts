@@ -5,7 +5,7 @@ export type RevMapOptions<T> = {
   childKey?: string;
 
   /** 是否优先遍历子节点 */
-  childrenFirst?: boolean;
+  childFirst?: boolean;
 
   replaceChildren?: boolean;
   parent?: T;

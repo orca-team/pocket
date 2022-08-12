@@ -17,7 +17,7 @@ export function revMap<T extends Object, R extends Object>(
   options: RevMapOptions<T> = {},
 ): Nullable<R>[] {
   const {
-    childrenFirst,
+    childFirst,
     childKey = 'children',
     parent,
     replaceChildren,
@@ -26,7 +26,7 @@ export function revMap<T extends Object, R extends Object>(
     if (!datum) return datum; // error object
     const children = datum[childKey] as Nullable<T>[] | undefined;
     let newDatum: Nullable<R> | undefined;
-    if (childrenFirst) {
+    if (childFirst) {
       let newChildren: Nullable<R>[] = [];
       if (Array.isArray(children)) {
         newChildren = revMap(children, callback, { ...options, parent: datum });
@@ -65,7 +65,7 @@ export function revFlatMap<T extends Object>(
   callback: (d: T, parent: T | undefined, index: number) => T | undefined,
   options: RevMapOptions<T> = {},
 ): T[] {
-  const { childrenFirst, childKey = 'children', parent } = options;
+  const { childFirst, childKey = 'children', parent } = options;
   const res: T[] = [];
   data.forEach((datum, index) => {
     // error object
@@ -74,7 +74,7 @@ export function revFlatMap<T extends Object>(
     }
     let children = datum[childKey] as T[] | undefined;
     let newDatum: T | undefined;
-    if (childrenFirst) {
+    if (childFirst) {
       if (Array.isArray(children)) {
         children = revFlatMap(children, callback, {
           ...options,
@@ -89,6 +89,10 @@ export function revFlatMap<T extends Object>(
         parent,
         index,
       );
+      if (children) {
+        res.push(...children);
+      }
+      res.push(newDatum || datum);
     } else {
       newDatum = callback({ ...datum }, parent, index);
       if (newDatum && Array.isArray(children)) {
@@ -98,10 +102,10 @@ export function revFlatMap<T extends Object>(
         });
         newDatum['children'] = children;
       }
-    }
-    res.push(newDatum || datum);
-    if (children) {
-      res.push(...children);
+      res.push(newDatum || datum);
+      if (children) {
+        res.push(...children);
+      }
     }
   });
   return res;
