@@ -208,6 +208,7 @@ export type TreeForOptions<ChildKeyType extends string> = {
   childrenKey?: ChildKeyType;
   parentPath?: number[];
   parent?: Record<string, unknown>;
+  childFirst?: boolean;
 };
 
 /**
@@ -227,19 +228,38 @@ export function treeFor<
   callback: (item: T | null, parent: T | undefined, path: number[]) => void,
   options: TreeForOptions<ChildKeyType> = {},
 ) {
-  const { childrenKey = 'children', parentPath = [], parent } = options;
+  const {
+    childrenKey = 'children',
+    parentPath = [],
+    parent,
+    childFirst,
+  } = options;
   arr.forEach((item, index) => {
     const path = [...parentPath, index];
-    callback(item, parent as T, path);
-    if (item) {
-      const children = item[childrenKey];
-      if (Array.isArray(children)) {
-        treeFor(children as T[], callback, {
-          ...options,
-          parentPath: path,
-          parent: item,
-        });
+
+    function triggerCallback() {
+      callback(item, parent as T, path);
+    }
+
+    function revChildren() {
+      if (item) {
+        const children = item[childrenKey];
+        if (Array.isArray(children)) {
+          treeFor(children as T[], callback, {
+            ...options,
+            parentPath: path,
+            parent: item,
+          });
+        }
       }
+    }
+
+    if (childFirst) {
+      revChildren();
+      triggerCallback();
+    } else {
+      triggerCallback();
+      revChildren();
     }
   });
 }
@@ -269,28 +289,54 @@ export function treeMap<
   ) => OutTreeNoteType | null,
   options: TreeMapOptions<ChildKeyType> = {},
 ) {
-  const { childrenKey = 'children', parentPath = [], parent } = options;
+  const {
+    childrenKey = 'children',
+    parentPath = [],
+    parent,
+    childFirst,
+  } = options;
   return arr.map<AbstractTreeNodeType<ChildKeyType, OutTreeNoteType> | null>(
     (item, index) => {
       const path = [...parentPath, index];
-      const newItem = callback(
-        item,
-        parent as
-          | AbstractTreeNodeType<ChildKeyType, OutTreeNoteType>
-          | undefined,
-        path,
-      );
-      if (item) {
+      let newItem: OutTreeNoteType | null = null;
+
+      function triggerCallback() {
+        newItem = callback(
+          item,
+          parent as
+            | AbstractTreeNodeType<ChildKeyType, OutTreeNoteType>
+            | undefined,
+          path,
+        );
+      }
+
+      let newChildren: (AbstractTreeNodeType<
+        ChildKeyType,
+        OutTreeNoteType
+      > | null)[] = [];
+
+      function revChildren() {
         const children = item[childrenKey] as T[];
         if (Array.isArray(children)) {
-          const newChildren = treeMap(children, callback, {
+          newChildren = treeMap(children, callback, {
             ...options,
             parentPath: path,
             parent: item,
           });
-          // @ts-expect-error
-          newItem[childrenKey] = newChildren;
         }
+      }
+
+      if (childFirst) {
+        revChildren();
+        triggerCallback();
+      } else {
+        triggerCallback();
+        revChildren();
+      }
+
+      if (newItem) {
+        // @ts-expect-error
+        newItem[childrenKey] = newChildren;
       }
       return newItem as AbstractTreeNodeType<
         ChildKeyType,
