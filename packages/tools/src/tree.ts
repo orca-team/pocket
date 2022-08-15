@@ -60,23 +60,28 @@ export function revMap<T extends Object, R extends Object>(
  * @param callback 返回值处理
  * @param options 配置
  */
-export function revFlatMap<T extends Object>(
+export function revFlatMap<O extends Object, T extends Object>(
   data: T[],
-  callback: (d: T, parent: T | undefined, index: number) => T | undefined,
+  callback: (
+    d: T,
+    parent: T | undefined,
+    index: number,
+    arr: T[],
+  ) => O | undefined,
   options: RevMapOptions<T> = {},
-): T[] {
+): O[] {
   const { childFirst, childKey = 'children', parent } = options;
-  const res: T[] = [];
-  data.forEach((datum, index) => {
+  const res: O[] = [];
+  data.forEach((datum, index, arr) => {
     // error object
     if (!datum) {
       return;
     }
-    let children = datum[childKey] as T[] | undefined;
-    let newDatum: T | undefined;
+    let children = datum[childKey] as O[] | undefined;
+    let newDatum: O | undefined;
     if (childFirst) {
-      if (Array.isArray(children)) {
-        children = revFlatMap(children, callback, {
+      if (Array.isArray(datum[childKey])) {
+        children = revFlatMap(datum[childKey] as T[], callback, {
           ...options,
           parent: datum,
         });
@@ -88,21 +93,22 @@ export function revFlatMap<T extends Object>(
         },
         parent,
         index,
+        arr,
       );
       if (children) {
         res.push(...children);
       }
-      res.push(newDatum || datum);
+      res.push(newDatum!);
     } else {
-      newDatum = callback({ ...datum }, parent, index);
+      newDatum = callback({ ...datum }, parent, index, arr);
       if (newDatum && Array.isArray(children)) {
-        children = revFlatMap(children, callback, {
+        children = revFlatMap(datum[childKey], callback, {
           ...options,
-          parent: newDatum,
+          parent: datum,
         });
         newDatum['children'] = children;
       }
-      res.push(newDatum || datum);
+      res.push(newDatum!);
       if (children) {
         res.push(...children);
       }
