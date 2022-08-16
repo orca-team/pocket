@@ -42,6 +42,18 @@ export default () => {
 };
 ```
 
+## mix
+
+```ts | pure
+/**
+ * x * (1 - a) + y * a
+ * @param x
+ * @param y
+ * @param a
+ */
+export function mix(x: number, y: number, a: number): number;
+```
+
 ## toFixedNumber 保留小数
 
 ```ts | pure

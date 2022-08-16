@@ -51,3 +51,8 @@ export function clamp(_num: number, lower?: number, upper?: number) {
   }
   return num;
 }
+
+export function mix(x: number, y: number, _a: number) {
+  const a = clamp(_a, 0, 1);
+  return x * (1 - a) + y * a;
+}
