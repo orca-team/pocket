@@ -30,6 +30,7 @@ import ViewportSensor, {
   UseViewportType,
   Viewport,
 } from './viewport-sensor';
+import { RulerGroup, RulerGroupProps, RulerProps } from './ruler-group';
 
 export {
   EqRatioBox,
@@ -78,4 +79,7 @@ export {
   ViewportSensorProps,
   UseViewportType,
   Viewport,
+  RulerGroup,
+  RulerGroupProps,
+  RulerProps,
 };
