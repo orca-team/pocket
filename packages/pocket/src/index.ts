@@ -25,6 +25,11 @@ import SimpleNumberInput, {
 import TabsLayout, { TabConfigType, TabsLayoutProps } from './tabs-layout';
 import TextOverflow, { TextOverflowProps } from './text-overflow';
 import BorderSliceImg, { BorderSliceImgProps } from './border-slice-img';
+import ViewportSensor, {
+  ViewportSensorProps,
+  UseViewportType,
+  Viewport,
+} from './viewport-sensor';
 
 export {
   EqRatioBox,
@@ -69,4 +74,8 @@ export {
   TabConfigType,
   BorderSliceImg,
   BorderSliceImgProps,
+  ViewportSensor,
+  ViewportSensorProps,
+  UseViewportType,
+  Viewport,
 };
