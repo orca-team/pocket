@@ -24,6 +24,7 @@ import SimpleNumberInput, {
 } from './simple-number-input';
 import TabsLayout, { TabConfigType, TabsLayoutProps } from './tabs-layout';
 import TextOverflow, { TextOverflowProps } from './text-overflow';
+import BorderSliceImg, { BorderSliceImgProps } from './border-slice-img';
 
 export {
   EqRatioBox,
@@ -66,4 +67,6 @@ export {
   TabsLayout,
   TabsLayoutProps,
   TabConfigType,
+  BorderSliceImg,
+  BorderSliceImgProps,
 };
