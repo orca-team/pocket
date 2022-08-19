@@ -9,7 +9,9 @@ import { Input, InputProps, InputRef } from 'antd';
 import { useControllableValue } from 'ahooks';
 import { useMemorizedFn } from '@orca-fe/hooks';
 
-export interface UcInputProps extends InputProps {}
+export interface UcInputProps extends Omit<InputProps, 'onChange'> {
+  onChange: (value: string) => void;
+}
 
 const UcInput = (props: UcInputProps, pRef: ForwardedRef<InputRef>) => {
   const { onPressEnter } = props;
