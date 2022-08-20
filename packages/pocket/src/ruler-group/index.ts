@@ -1,7 +1,7 @@
 import Ruler from './Ruler';
 import RulerGroup from './RulerGroup';
 
-export default Ruler;
+export default RulerGroup;
 
 export * from './RulerGroup';
 
