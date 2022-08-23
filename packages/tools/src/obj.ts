@@ -37,3 +37,10 @@ export function objFilter<T extends Object>(
   });
   return result;
 }
+
+export function objOmitUndefined<T extends Object>(obj: T, omitNull = true) {
+  return objFilter(obj, (key, value) => {
+    if (omitNull && value === null) return false;
+    return value !== undefined;
+  });
+}
