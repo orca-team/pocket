@@ -43,9 +43,11 @@ const SimpleNumberInput = (props: SimpleNumberInputProps) => {
     triggerOnDrag = true,
     ...otherProps
   } = props;
-  const [value, setValue] = useControllableValue(props, {
+  const [_value, setValue] = useControllableValue(props, {
     defaultValue: 0,
   });
+
+  const value = clamp(_value, min, max);
 
   const rootRef = useRef<HTMLDivElement>(null);
   const [editing, setEditing] = useState(false);
