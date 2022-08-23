@@ -10,7 +10,7 @@ import { useControllableValue } from 'ahooks';
 import { useMemorizedFn } from '@orca-fe/hooks';
 
 export interface UcInputProps extends Omit<InputProps, 'onChange'> {
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
 }
 
 const UcInput = (props: UcInputProps, pRef: ForwardedRef<InputRef>) => {
