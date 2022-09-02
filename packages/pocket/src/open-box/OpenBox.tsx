@@ -6,11 +6,19 @@ const px = prefixClassnames('orca-open-box');
 
 export interface OpenBoxProps extends React.HTMLAttributes<HTMLDivElement> {
   open: boolean;
+  defaultHeight?: string | number;
   height?: number;
 }
 
 const OpenBox: React.FC<OpenBoxProps> = React.forwardRef((props, pRef) => {
-  const { className = '', open, height = 0, style, ...otherProps } = props;
+  const {
+    className = '',
+    open,
+    height = 'auto',
+    defaultHeight = 0,
+    style,
+    ...otherProps
+  } = props;
   const ref = useRef<HTMLDivElement>(null);
   useImperativeHandle(pRef, () => ref.current);
 
@@ -46,7 +54,7 @@ const OpenBox: React.FC<OpenBoxProps> = React.forwardRef((props, pRef) => {
       className={`${px()} ${className}`}
       onTransitionEnd={handleTransitionEnd}
       style={{
-        height: 0,
+        height: defaultHeight,
         ...style,
       }}
       {...otherProps}
