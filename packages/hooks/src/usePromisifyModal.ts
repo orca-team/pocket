@@ -75,7 +75,11 @@ export default function usePromisifyModal(
             return res
               .then((r) => {
                 hide();
-                resolve(args[0]);
+                if (r !== undefined) {
+                  resolve(r);
+                } else {
+                  resolve(args[0]);
+                }
                 return r;
               })
               .catch(() => {
