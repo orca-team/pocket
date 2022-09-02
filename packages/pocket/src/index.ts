@@ -31,6 +31,10 @@ import ViewportSensor, {
   Viewport,
 } from './viewport-sensor';
 import { RulerGroup, RulerGroupProps, RulerProps } from './ruler-group';
+import JsonSchemaEditor, {
+  JsonSchemaEditorProps,
+  JsonValueType,
+} from './json-schema-editor';
 
 export {
   EqRatioBox,
@@ -82,4 +86,7 @@ export {
   RulerGroup,
   RulerGroupProps,
   RulerProps,
+  JsonSchemaEditor,
+  JsonSchemaEditorProps,
+  JsonValueType,
 };

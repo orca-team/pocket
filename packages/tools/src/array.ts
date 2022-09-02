@@ -1,3 +1,9 @@
+export const insertArr = <T>(arr: T[], index: number, newItem: T) => {
+  const newArr = arr.slice();
+  newArr.splice(index, 0, newItem);
+  return newArr;
+};
+
 export const changeArr = <T>(arr: T[], index: number, newItem: T) => {
   const newArr = arr.map((item, i) => (index === i ? newItem : item));
   if (newArr.length <= index) {
