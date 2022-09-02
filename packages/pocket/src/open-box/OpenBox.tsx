@@ -14,8 +14,8 @@ const OpenBox: React.FC<OpenBoxProps> = React.forwardRef((props, pRef) => {
   const {
     className = '',
     open,
-    height = 'auto',
-    defaultHeight = 0,
+    height = 0,
+    defaultHeight = 'auto',
     style,
     ...otherProps
   } = props;
