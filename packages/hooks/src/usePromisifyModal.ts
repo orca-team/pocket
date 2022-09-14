@@ -62,6 +62,8 @@ export default function usePromisifyModal(
     destroyAfterClose.cancel();
     const key = new Date().getTime();
 
+    let ok: (value: T) => void = () => {};
+
     const handler = new Promise<T>((resolve, reject) => {
       const onOkHandler = (...args) => {
         if (typeof element.props[onOkField] === 'function') {
@@ -101,7 +103,7 @@ export default function usePromisifyModal(
 
         return undefined;
       };
-
+      ok = onOkHandler;
       const newElement = React.cloneElement(element, {
         key,
         [visibleField]: false,
@@ -126,7 +128,8 @@ export default function usePromisifyModal(
     });
 
     handler['hide'] = hide;
-    return handler as typeof handler & { hide: () => void };
+    handler['ok'] = ok;
+    return handler as typeof handler & { hide: () => void; ok: typeof ok };
   });
 
   return { show, hide, instance };
