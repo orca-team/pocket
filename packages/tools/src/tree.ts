@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { Nullable, RevMapOptions } from './def';
+import { RevMapOptions } from './def';
 
 /**
  * 遍历树状结构
@@ -8,14 +8,10 @@ import { Nullable, RevMapOptions } from './def';
  * @param options 配置
  */
 export function revMap<T extends Object, R extends Object>(
-  data: Nullable<T>[],
-  callback: (
-    d: T,
-    parent: T | undefined,
-    index: number,
-  ) => Nullable<R> | undefined,
+  data: T[],
+  callback: (d: T, parent: T | undefined, index: number) => R | undefined,
   options: RevMapOptions<T> = {},
-): Nullable<R>[] {
+): R[] {
   const {
     childFirst,
     childKey = 'children',
@@ -24,10 +20,10 @@ export function revMap<T extends Object, R extends Object>(
   } = options;
   return data.map((datum, index) => {
     if (!datum) return datum; // error object
-    const children = datum[childKey] as Nullable<T>[] | undefined;
-    let newDatum: Nullable<R> | undefined;
+    const children = datum[childKey] as T[] | undefined;
+    let newDatum: R | undefined;
     if (childFirst) {
-      let newChildren: Nullable<R>[] = [];
+      let newChildren: R[] = [];
       if (Array.isArray(children)) {
         newChildren = revMap(children, callback, { ...options, parent: datum });
       }
