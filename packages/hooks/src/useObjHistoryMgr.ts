@@ -88,7 +88,7 @@ export default function useObjHistoryMgr<T extends Object>(
 
   const reset = useMemoizedFn<UseObjHistoryMgrType<T>['reset']>((value) => {
     setHistory(() => {
-      const newValue = _defaultValue;
+      const newValue = { ..._defaultValue };
       if (value) {
         newValue.history = [value];
       }
