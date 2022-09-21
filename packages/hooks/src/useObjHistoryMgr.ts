@@ -46,7 +46,7 @@ export default function useObjHistoryMgr<T extends Object>(
           ...currentValue,
           ...value,
           [modifiedKeys]: [
-            ...currentValue[modifiedKeys],
+            ...(currentValue[modifiedKeys] ?? []),
             ...Object.keys(value),
           ],
         };
