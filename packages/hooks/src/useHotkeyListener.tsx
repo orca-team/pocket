@@ -191,8 +191,8 @@ export default function useHotkeyListener(
   options: UseHotkeyListenerOptions = {},
 ) {
   const {
-    stopPropagation = true,
-    preventDefault = true,
+    stopPropagation = false,
+    preventDefault = false,
     filter = divOnlyFilter,
   } = options;
 
