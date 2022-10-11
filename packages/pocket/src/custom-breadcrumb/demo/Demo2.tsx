@@ -9,7 +9,6 @@ import React, { useState } from 'react';
 import { CustomBreadcrumb, MenuItemType, MenuLayout } from '@orca-fe/pocket';
 import { ApiOutlined, HomeOutlined } from '@ant-design/icons';
 import { Button, Skeleton } from 'antd';
-import 'antd/dist/antd.css';
 
 // 菜单配置
 const menu: MenuItemType[] = [

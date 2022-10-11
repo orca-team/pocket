@@ -36,6 +36,16 @@ export default defineConfig({
         //   return false;
         // },
       },
+      'orca',
+    ],
+    [
+      'babel-plugin-import',
+      {
+        libraryName: 'antd',
+        libraryDirectory: 'es',
+        style: true,
+      },
+      'antd',
     ],
   ],
 });
