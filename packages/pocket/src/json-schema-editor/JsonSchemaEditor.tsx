@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import pc from 'prefix-classnames';
 import './JsonSchemaEditor.less';
 import { useControllableValue, useMemoizedFn } from 'ahooks';
-import { OpenBox, UcInput } from '@orca-fe/pocket';
 import {
   CaretRightFilled,
   CloseOutlined,
@@ -13,8 +12,10 @@ import { Checkbox, Dropdown, Menu, Select, Tooltip } from 'antd';
 import { insertArr, removeArrIndex } from '@orca-fe/tools';
 import DraggableList from './DraggableListNoKey';
 import IconButton from './IconButton';
-import { toTypeScriptDefinition } from './utils';
+import { defaultValueFromJsonSchema, toTypeScriptDefinition } from './utils';
 import { BaseType, JsonValueType } from './defs';
+import UcInput from '../uc-input/UcInput';
+import OpenBox from '../open-box/OpenBox';
 
 export type { JsonValueType };
 
@@ -49,6 +50,7 @@ export interface JsonSchemaItemProps
   onAddSiblings?: () => void;
   onDelete?: () => void;
   nameDisabled?: boolean;
+  defaultValueDisabled?: boolean;
   root?: boolean;
 }
 
@@ -65,6 +67,7 @@ const JsonSchemaItem = (props: JsonSchemaItemProps) => {
     onAddChild = ef,
     onAddSiblings = ef,
     nameDisabled,
+    defaultValueDisabled,
     root,
     onDelete = ef,
     addSiblings,
@@ -244,6 +247,15 @@ const JsonSchemaItem = (props: JsonSchemaItemProps) => {
             setValue({ ...value, description });
           }}
         />
+        <div style={{ minWidth: 4 }} />
+        <UcInput
+          placeholder="默认值"
+          disabled={defaultValueDisabled}
+          value={value.defaultValue ?? ''}
+          onChange={(defaultValue) => {
+            setValue({ ...value, defaultValue });
+          }}
+        />
         <div className={px('item-space', 'button')}>{buttons[0]}</div>
         <div className={px('item-space', 'button')}>{buttons[1]}</div>
       </div>
@@ -269,6 +281,7 @@ export interface JsonSchemaEditorProps
   onDrag?: () => void;
   onDelete?: () => void;
   nameDisabled?: boolean;
+  defaultValueDisabled?: boolean;
   root?: boolean;
 }
 
@@ -284,12 +297,16 @@ const JsonSchemaEditor = (props: JsonSchemaEditorProps) => {
     onDrag,
     onAddSiblings = ef,
     nameDisabled = true,
+    defaultValueDisabled: _defaultValueDisabled,
     root = true,
     onDelete,
     ...otherProps
   } = props;
   const [value = {} as JsonValueType, _setValue] =
     useControllableValue<JsonValueType>(props);
+  // 默认情况下，Object 和 null 类型无法编辑默认值
+  const defaultValueDisabled =
+    _defaultValueDisabled ?? (value.type === 'object' || value.type === 'null');
   const collapsable = value.type === 'array' || value.type === 'object';
   const [open, setOpen] = useState(true);
 
@@ -369,6 +386,7 @@ const JsonSchemaEditor = (props: JsonSchemaEditorProps) => {
         onAddChild={handleAddChild}
         onAddSiblings={onAddSiblings}
         nameDisabled={nameDisabled}
+        defaultValueDisabled={defaultValueDisabled}
         onDelete={onDelete}
         onChange={(v) => {
           setValue({
@@ -406,6 +424,11 @@ const JsonSchemaEditor = (props: JsonSchemaEditorProps) => {
                   handleAddSiblings(index);
                 }}
                 nameDisabled={value.type === 'array'}
+                defaultValueDisabled={
+                  _defaultValueDisabled || value.type === 'array'
+                    ? true
+                    : undefined
+                }
                 root={false}
                 onDelete={() => {
                   handleDelete(index);
@@ -420,5 +443,6 @@ const JsonSchemaEditor = (props: JsonSchemaEditorProps) => {
 };
 
 JsonSchemaEditor.toTypeScriptDefinition = toTypeScriptDefinition;
+JsonSchemaEditor.defaultValueFromJsonSchema = defaultValueFromJsonSchema;
 
 export default JsonSchemaEditor;

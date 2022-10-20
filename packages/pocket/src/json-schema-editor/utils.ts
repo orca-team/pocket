@@ -1,3 +1,4 @@
+import JSON5 from 'json5';
 import { JsonValueType } from './defs';
 
 function _tab(length = 1, tabSize = 2) {
@@ -54,4 +55,43 @@ export function toTypeScriptDefinition(
   }
 
   return `type ${rootName} = ${rev(value)}`;
+}
+
+export function defaultValueFromJsonSchema(schema: JsonValueType) {
+  switch (schema.type) {
+    case 'null':
+      return null;
+    case 'number': {
+      const value = Number(schema.defaultValue);
+      if (Number.isNaN(value)) {
+        return 0;
+      }
+      return value;
+    }
+    case 'string':
+      return schema.defaultValue;
+    case 'boolean': {
+      return schema.required ? !!schema.defaultValue : schema.defaultValue;
+    }
+    case 'array':
+      try {
+        if (schema.defaultValue) {
+          return JSON5.parse(schema.defaultValue);
+        }
+      } catch (error) {
+        console.warn('Error while parsing defaultValue');
+      }
+      if (schema.required) {
+        return [];
+      }
+      return undefined;
+    case 'object': {
+      const res = {};
+      schema.items.forEach((item) => {
+        res[item.name] = defaultValueFromJsonSchema(item);
+      });
+      return res;
+    }
+  }
+  return undefined;
 }
