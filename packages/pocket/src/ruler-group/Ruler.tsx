@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import pc from 'prefix-classnames';
-import { useMemoizedFn, useSize } from 'ahooks';
+import { useMemoizedFn, useUpdateEffect } from 'ahooks';
 import { isMac } from '@orca-fe/tools';
+import { useSizeListener } from '@orca-fe/hooks';
 
 const getStep = (n: number) =>
   Math.trunc(n / 10 ** Math.max(0, Math.trunc(Math.log10(n))));
@@ -52,17 +53,31 @@ const Ruler = (props: RulerProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const sizeRef = useRef<{ width: number; height: number }>({
+    width: 1000,
+    height: 1000,
+  });
+
   const isHorizon = orientation !== 'vertical';
 
-  const { width, height } = useSize(rootRef) ?? { width: 1000, height: 1000 };
-  const length = isHorizon ? width : height;
   const offset = isHorizon ? offsetX : offsetY;
 
   /* 重绘标尺 */
   const drawDeg = () => {
+    const { width, height } = sizeRef.current;
+    const length = isHorizon ? width : height;
+
     const { current: canvas } = canvasRef;
     if (canvas) {
       const ratio = 2 ** zoom;
+
+      if (isHorizon) {
+        canvas.width = width;
+        canvas.height = size;
+      } else {
+        canvas.width = size;
+        canvas.height = height;
+      }
 
       /* 先随意计算了一个标尺步进 */
       const step = Math.max(
@@ -134,9 +149,15 @@ const Ruler = (props: RulerProps) => {
     }
   };
 
-  useEffect(() => {
+  useSizeListener(({ width, height }) => {
+    sizeRef.current.width = width;
+    sizeRef.current.height = height;
     drawDeg();
-  }, [zoom, offsetY, offsetX, width, height]);
+  }, rootRef);
+
+  useUpdateEffect(() => {
+    drawDeg();
+  }, [zoom, offsetY, offsetX]);
 
   /* 根据鼠标事件，计算出鼠标位置对应的标尺值 */
   const getRulerValueByEvent = useMemoizedFn((e) => {
@@ -144,11 +165,11 @@ const Ruler = (props: RulerProps) => {
     if (div) {
       if (isHorizon) {
         const { left } = div.getBoundingClientRect();
-        const x = (e.pageX - left - offsetX) / 2 ** zoom;
+        const x = (e.clientX - left - offsetX) / 2 ** zoom;
         return Math.round(x);
       }
       const { top } = div.getBoundingClientRect();
-      const y = (e.pageY - top - offsetY) / 2 ** zoom;
+      const y = (e.clientY - top - offsetY) / 2 ** zoom;
       return Math.round(y);
     }
     return null;
@@ -175,15 +196,6 @@ const Ruler = (props: RulerProps) => {
     onMouseLeave(e);
   });
 
-  const directionSize = isHorizon ? { height: size } : { width: size };
-
-  /* 计算canvas尺寸 */
-  const canvasSize = {
-    width,
-    height,
-    ...directionSize,
-  };
-
   return (
     <div
       ref={rootRef}
@@ -207,16 +219,7 @@ const Ruler = (props: RulerProps) => {
             }),
       }}
     >
-      <canvas
-        ref={canvasRef}
-        {...canvasSize}
-        style={{
-          // ...canvasSize,
-          // ...(isHorizon ? { marginLeft: Math.round(offsetX) } : { marginTop: Math.round(offsetY) }),
-          width: '100%',
-          height: '100%',
-        }}
-      />
+      <canvas ref={canvasRef} />
     </div>
   );
 };
