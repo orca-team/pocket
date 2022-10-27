@@ -35,6 +35,7 @@ import JsonSchemaEditor, {
   JsonSchemaEditorProps,
   JsonValueType,
 } from './json-schema-editor';
+import IconButton, { IconButtonProps } from './icon-button';
 
 export {
   EqRatioBox,
@@ -89,4 +90,6 @@ export {
   JsonSchemaEditor,
   JsonSchemaEditorProps,
   JsonValueType,
+  IconButton,
+  IconButtonProps,
 };

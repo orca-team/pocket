@@ -1,0 +1,64 @@
+@prefix: orca-icon-button;
+
+.@{prefix} {
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+
+
+  &.checked,
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &- {
+    &disabled {
+      cursor: default;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    &dark {
+      color: #CCCCCC;
+
+      &.checked,
+      &:hover {
+        color: #ffffff;
+        background-color: rgba(200, 200, 200, 0.2);
+      }
+    }
+
+    &small {
+      font-size: 14px;
+      width: 25px;
+      height: 25px;
+    }
+
+    &x-small {
+      font-size: 12px;
+      width: 22px;
+      height: 22px;
+    }
+
+    &middle {
+      width: 32px;
+      height: 32px;
+      font-size: 18px;
+    }
+
+    &large {
+      width: 36px;
+      height: 36px;
+      padding: 0px 16px;
+      font-size: 22px;
+    }
+  }
+}
