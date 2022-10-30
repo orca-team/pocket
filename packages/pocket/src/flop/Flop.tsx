@@ -66,7 +66,7 @@ export interface FlopProps
       });
 }
 
-const Flop: React.FC<FlopProps> = (props) => {
+const Flop = React.forwardRef<HTMLSpanElement, FlopProps>((props, ref) => {
   const {
     value = 0,
     duration = 2,
@@ -97,7 +97,7 @@ const Flop: React.FC<FlopProps> = (props) => {
   }, [_value, convertUnit, convertUnitFn]);
 
   return (
-    <span className={`flop-root ${className}`} {...otherProps}>
+    <span ref={ref} className={`flop-root ${className}`} {...otherProps}>
       {prefix}
       <CountUp
         style={numStyle}
@@ -118,6 +118,6 @@ const Flop: React.FC<FlopProps> = (props) => {
       )}
     </span>
   );
-};
+});
 
 export default Flop;

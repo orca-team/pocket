@@ -14,35 +14,38 @@ export interface BorderSliceImgProps
   scale?: number;
 }
 
-const BorderSliceImg = (props: BorderSliceImgProps) => {
-  const {
-    className = '',
-    src,
-    style,
-    scale = 1,
-    fill = true,
-    sliceBottom = 0,
-    sliceLeft = 0,
-    sliceRight = 0,
-    sliceTop = 0,
-    ...otherProps
-  } = props;
-  return (
-    <div
-      className={`${px('root')} ${className}`}
-      style={{
-        ...style,
-        borderImageSource: `url(${src})`,
-        borderImageSlice: `${sliceTop} ${sliceRight} ${sliceBottom} ${sliceLeft} ${
-          fill ? 'fill' : ''
-        }`,
-        borderWidth: `${sliceTop * scale}px ${sliceRight * scale}px ${
-          sliceBottom * scale
-        }px ${sliceLeft * scale}px`,
-      }}
-      {...otherProps}
-    />
-  );
-};
+const BorderSliceImg = React.forwardRef<HTMLDivElement, BorderSliceImgProps>(
+  (props, ref) => {
+    const {
+      className = '',
+      src,
+      style,
+      scale = 1,
+      fill = true,
+      sliceBottom = 0,
+      sliceLeft = 0,
+      sliceRight = 0,
+      sliceTop = 0,
+      ...otherProps
+    } = props;
+    return (
+      <div
+        ref={ref}
+        className={`${px('root')} ${className}`}
+        style={{
+          ...style,
+          borderImageSource: `url(${src})`,
+          borderImageSlice: `${sliceTop} ${sliceRight} ${sliceBottom} ${sliceLeft} ${
+            fill ? 'fill' : ''
+          }`,
+          borderWidth: `${sliceTop * scale}px ${sliceRight * scale}px ${
+            sliceBottom * scale
+          }px ${sliceLeft * scale}px`,
+        }}
+        {...otherProps}
+      />
+    );
+  },
+);
 
 export default BorderSliceImg;
