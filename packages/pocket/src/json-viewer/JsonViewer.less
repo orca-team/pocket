@@ -1,0 +1,71 @@
+@prefix: orca-json-viewer;
+
+.@{prefix} {
+  &- {
+    &root {
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    &item {
+      display: flex;
+      align-items: center;
+      cursor: default;
+
+      * {
+        white-space: nowrap;
+      }
+    }
+
+    &indent {
+      height: 1em;
+    }
+
+    &arrow {
+      margin-top: 0.2em;
+
+      > * {
+        transform: rotate(0deg);
+        transition: transform 300ms;
+      }
+
+      &-open {
+        > * {
+          transform: rotate(90deg);
+        }
+      }
+    }
+
+    &key {
+      margin-right: 0.5em;
+      color: #792675;
+      font-weight: bold;
+
+      &:after {
+        content: ':'
+      }
+    }
+
+    &type-number {
+      color: #1a1aa6;
+    }
+
+    &type-boolean {
+      color: #1a1aa6;
+    }
+
+    &type-string {
+      color: #9e3379;
+    }
+
+    &type-null {
+      color: #717171;
+    }
+
+    &type-undefined {
+      color: #717171;
+    }
+
+    &type-object {
+    }
+  }
+}

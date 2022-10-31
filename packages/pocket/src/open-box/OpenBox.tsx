@@ -25,6 +25,12 @@ const OpenBox: React.FC<OpenBoxProps> = React.forwardRef((props, pRef) => {
   useMount(() => {
     if (ref.current) {
       if (open) {
+        if (
+          defaultHeight === 'auto' ||
+          ref.current.scrollHeight === defaultHeight
+        ) {
+          return;
+        }
         ref.current.style.height = `${ref.current.scrollHeight}px`;
       } else {
         ref.current.style.height = `${height}px`;

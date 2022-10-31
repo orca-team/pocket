@@ -24,7 +24,7 @@ group:
 
 ## API
 
-| 属性      | 说明                                  | 类型                                                                                                      | 默认值 |
-| --------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------ |
-| errorTips | 错误提示信息                          | `React.ReactNode` \| `(error: Error, errorInfo: React.ErrorInfo, reset: (() => void)) => React.ReactNode` | ''     |
-| onError   | 报错事件，参数来自`componentDidCatch` | `(error: Error, errorInfo: React.ErrorInfo) => void`                                                      | -      |
+| 属性      | 说明                                  | 类型                                                                                                     | 默认值 |
+| --------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------ |
+| errorTips | 错误提示信息                          | `React.ReactNode` / `(error: Error, errorInfo: React.ErrorInfo, reset: (() => void)) => React.ReactNode` | ''     |
+| onError   | 报错事件，参数来自`componentDidCatch` | `(error: Error, errorInfo: React.ErrorInfo) => void`                                                     | -      |
