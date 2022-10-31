@@ -16,7 +16,7 @@ const optimizedArrayRef = Symbol('optimizedArrayRef');
 
 export type ValueChangeType<T> = {
   value: T;
-  path: string[];
+  path: (string | number)[];
   modifiedValue: any;
 };
 
@@ -24,14 +24,18 @@ export interface JsonViewerProps<T>
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   value?: T;
   level?: number;
-  path?: string[];
+  path?: (string | number)[];
   fieldKey?: string | number;
-  suffix?: string;
   comma?: boolean;
   editable?: boolean;
-  rootDefaultOpen?: boolean;
-  defaultOpen?: number | boolean | ((node: T, path: string[]) => boolean);
+  defaultOpen?:
+    | number
+    | boolean
+    | ((node: T, path: (string | number)[]) => boolean);
   onChange?: (value: T, e: ValueChangeType<T>) => void;
+  _isRoot?: boolean;
+  _optimizedArrayIndex?: number;
+  _keyOnly?: boolean;
 }
 
 const JsonViewer = function <T>(props: JsonViewerProps<T>) {
@@ -41,12 +45,13 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
     level = 0,
     path = eArr,
     fieldKey,
-    suffix,
     comma,
+    _isRoot = true,
     onChange = ef,
-    rootDefaultOpen,
-    defaultOpen,
+    defaultOpen = 0,
     editable,
+    _optimizedArrayIndex,
+    _keyOnly,
     ...otherProps
   } = props;
   const valueType = typeof value;
@@ -58,9 +63,6 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
   const [defaultOpenValue] = useState(() => {
     if (!isObject) {
       return false;
-    }
-    if (rootDefaultOpen) {
-      return true;
     }
     if (defaultOpen === true) {
       return true;
@@ -91,12 +93,12 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
       if (!Number.isNaN(splitSize) && splitSize > 1) {
         optimizedArray[optimizedArraySplitSize] = splitSize;
         for (let i = 0; i * splitSize < value.length; i++) {
-          const arr = value.slice(i, splitSize);
-          arr[optimizedArrayRef] = value[optimizedArrayRef] || value;
-          if (arr.length === 1) {
-            optimizedArray.push(arr[0]);
+          const subArr = value.slice(i * splitSize, i * splitSize + splitSize);
+          subArr[optimizedArrayRef] = value[optimizedArrayRef] || value;
+          if (subArr.length === 1) {
+            optimizedArray.push(subArr[0]);
           } else {
-            optimizedArray.push(arr);
+            optimizedArray.push(subArr);
           }
         }
         return optimizedArray;
@@ -106,12 +108,10 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
     return value;
   }, [value, openedRef.current]);
 
-  const isOptimized = !!optimizedValue && optimizedValue !== value;
-
   if (isArray) {
-    previewValue = `Array(${length})`;
+    previewValue = `(${length})[...]`;
     if (open) {
-      previewValue = '[';
+      previewValue = `(${length})[`;
     }
   } else if (isObject) {
     previewValue = '{...}';
@@ -138,7 +138,9 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
         {/* 缩进 */}
         <div
           className={px('indent')}
-          style={{ width: `${2 * level + (isObject ? 0 : 1)}em` }}
+          style={{
+            width: `${1.0 * level + (isObject ? 0 : Math.sign(level))}em`,
+          }}
         />
         {/* 下拉箭头 */}
         {isObject && (
@@ -147,76 +149,118 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
           </div>
         )}
         {/* 如果存在 key，则添加 key */}
-        {fieldKey != null && <div className={px('key')}>{fieldKey}</div>}
-        {/* value */}
-        <EditableDiv
-          compact
-          value={previewValue}
-          editing={editing}
-          onEditChange={setEditing}
-          onChange={(valueStr) => {
-            if (previewValue !== valueStr) {
-              let newValue;
-              try {
-                if (valueStr && valueStr.trim() === 'undefined') {
-                  newValue = undefined;
-                } else {
-                  newValue = JSON5.parse<T>(valueStr);
+        {fieldKey != null && (
+          <div className={px('key', { 'key-only': _keyOnly })}>{fieldKey}</div>
+        )}
+
+        {!_keyOnly && (
+          <>
+            {/* value */}
+            <EditableDiv
+              compact
+              value={previewValue}
+              editing={editing}
+              onEditChange={setEditing}
+              onChange={(valueStr) => {
+                if (previewValue !== valueStr) {
+                  let newValue;
+                  try {
+                    if (valueStr && valueStr.trim() === 'undefined') {
+                      newValue = undefined;
+                    } else {
+                      newValue = JSON5.parse<T>(valueStr);
+                    }
+                  } catch (error) {
+                    // 解析失败
+                    console.error(error);
+                    return;
+                  }
+                  const e: ValueChangeType<T> = {
+                    value: newValue,
+                    modifiedValue: newValue,
+                    path,
+                  };
+                  onChange(newValue, e);
                 }
-              } catch (error) {
-                // 解析失败
-                console.error(error);
-                return;
-              }
-              const e: ValueChangeType<T> = {
-                value: newValue,
-                modifiedValue: newValue,
-                path,
-              };
-              onChange(newValue, e);
-            }
-          }}
-          className={px('value', `type-${isNull ? 'null' : valueType}`)}
-          onDoubleClick={() => {
-            if (!isObject && editable && !editing) {
-              setEditing(true);
-            }
-          }}
-        />
-        {comma && !open && ','}
-        {suffix}
+              }}
+              className={px('value', `type-${isNull ? 'null' : valueType}`)}
+              onDoubleClick={() => {
+                if (!isObject && editable && !editing) {
+                  setEditing(true);
+                }
+              }}
+            />
+            {comma && !open && ','}
+          </>
+        )}
       </div>
 
       {/* children */}
-      {isObject && openedRef.current && (
+      {isObject && openedRef.current && optimizedValue && (
         <OpenBox open={open} defaultHeight={defaultOpenValue ? 'auto' : 0}>
-          {!isOptimized &&
-            Object.entries(value).map(([key, subValue]) => (
+          {Object.entries(optimizedValue).map(([key, subValue], index) => {
+            const splitSize =
+              (optimizedValue[optimizedArraySplitSize] as number) || 1;
+            const currentIndexStart =
+              (_optimizedArrayIndex || 0) + index * splitSize;
+            const isOptimizedSubValue = !!subValue?.[optimizedArrayRef];
+            let fieldKey = key;
+            let _keyOnly = false;
+            if (isOptimizedSubValue) {
+              // 子元素也是优化过的数组，将呈现 [0 ... 99] 的形态
+              fieldKey = `[${currentIndexStart} ... ${
+                currentIndexStart + subValue.length - 1
+              }]`;
+              _keyOnly = true;
+            } else if (isArray && _optimizedArrayIndex != null) {
+              fieldKey = `${currentIndexStart}`;
+            }
+
+            return (
               <JsonViewer
+                _isRoot={false}
+                _keyOnly={_keyOnly}
+                _optimizedArrayIndex={
+                  isOptimizedSubValue ? currentIndexStart : 0
+                }
                 value={subValue}
                 key={key}
-                fieldKey={key}
+                fieldKey={fieldKey}
                 level={level + 1}
                 comma
                 editable={editable}
-                path={[...path, key]}
+                path={isOptimizedSubValue ? path : [...path, fieldKey]}
                 defaultOpen={defaultOpen}
                 onChange={(changedValue, e) => {
-                  const newValue = produce(value, (_value) => {
-                    // eslint-disable-next-line no-param-reassign
-                    _value[key] = changedValue;
-                  });
-                  onChange(newValue, {
-                    ...e,
-                    value: newValue,
-                  });
+                  // 检查是否优化过的项目
+                  if (_isRoot) {
+                    if (e.path.length > 0) {
+                      const newValue = produce(value, (_value) => {
+                        let _v = _value;
+                        e.path.slice(0, e.path.length - 1).forEach((key) => {
+                          _v = _v[key];
+                        });
+                        const finalKey = e.path[e.path.length - 1];
+                        // eslint-disable-next-line no-param-reassign
+                        _v[finalKey] = changedValue;
+                      });
+                      onChange(newValue, {
+                        ...e,
+                        value: newValue,
+                      });
+                    }
+                  } else {
+                    // 非 root，直接透传
+                    onChange(changedValue, e);
+                  }
                 }}
               />
-            ))}
+            );
+          })}
           <div className={px('item')}>
             <div
               className={px('indent')}
-              style={{ width: `${2 * level + 1}em` }}
+              style={{ width: `${1.0 * level + 1}em` }}
             />
             {isArray ? ']' : '}'}
           </div>
@@ -226,4 +270,4 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
   );
 };
 
-export default JsonViewer;
+export default React.memo(JsonViewer) as typeof JsonViewer;

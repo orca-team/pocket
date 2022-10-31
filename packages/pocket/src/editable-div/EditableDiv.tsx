@@ -25,7 +25,6 @@ export interface EditableDivProps
   defaultValue?: string;
   value?: string;
   onChange?: (value: string) => void;
-  triggerOnDrag?: boolean;
   editing?: boolean;
   onEditChange?: (editing: boolean) => void;
   compact?: boolean;

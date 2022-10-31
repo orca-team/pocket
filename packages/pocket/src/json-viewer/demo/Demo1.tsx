@@ -8,35 +8,26 @@
 
 import React, { useState } from 'react';
 import { JsonViewer } from '@orca-fe/pocket';
-import { useInterval } from 'ahooks';
 
 const Demo = () => {
   const [value, setValue] = useState({
-    abc: 1,
-    def: '2',
-    qqq: { lsd: 12314, bck: 'oqwiuheoqiwhr' },
-    cls: null,
-    und: undefined,
-    hello: false,
-    world: true,
-    arr: new Array(10000).fill(123),
+    number: 123,
+    key: 'value',
+    obj: {
+      a: 1,
+      b: 2,
+      c: 'def',
+    },
+    arr: [1, 2, 'a', 'b', true, false, undefined, null],
+    booleanValue: true,
+    emptyValue: undefined,
+    nullValue: null,
   });
-
-  useInterval(() => {
-    setValue({
-      ...value,
-      abc: Date.now(),
-    });
-  }, 1000);
 
   return (
     <div>
-      <JsonViewer
-        rootDefaultOpen
-        defaultOpen={0}
-        value={value}
-        onChange={setValue}
-      />
+      <JsonViewer editable value={value} onChange={setValue} />
+      <pre>{JSON.stringify(value, null, 2)}</pre>
     </div>
   );
 };
