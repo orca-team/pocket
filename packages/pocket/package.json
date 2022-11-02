@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/pocket",
-  "version": "1.19.1",
+  "version": "1.20.0",
   "description": "UI components by orca-team",
   "keywords": [
     "react",
@@ -39,11 +39,12 @@
   },
   "dependencies": {
     "@orca-fe/hooks": "^0.8.7",
-    "@orca-fe/pocket": "^1.19.1",
+    "@orca-fe/pocket": "^1.20.0",
     "@orca-fe/tools": "^0.7.0",
     "ahooks": "^3.5.0",
     "ahooks-v2": "^2.10.15",
     "classnames": "^2.3.1",
+    "immer": "^9.0.16",
     "json5": "^2.2.1",
     "lodash-es": "^4.17.21",
     "mjolnir.js": "^2.7.1",
