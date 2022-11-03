@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/pocket",
-  "version": "1.20.1",
+  "version": "1.20.2",
   "description": "UI components by orca-team",
   "keywords": [
     "react",
@@ -39,11 +39,12 @@
   },
   "dependencies": {
     "@orca-fe/hooks": "^0.8.7",
-    "@orca-fe/pocket": "^1.20.1",
+    "@orca-fe/pocket": "^1.20.2",
     "@orca-fe/tools": "^0.7.0",
     "ahooks": "^3.5.0",
     "ahooks-v2": "^2.10.15",
     "classnames": "^2.3.1",
+    "copy-to-clipboard": "^3.3.2",
     "immer": "^9.0.16",
     "json5": "^2.2.1",
     "lodash-es": "^4.17.21",
@@ -54,8 +55,7 @@
     "react-countup": "^6.3.0",
     "react-transition-group": "^4.4.2",
     "rfdc": "^1.3.0",
-    "tslib": "^2.4.0",
-    "copy-to-clipboard": "^3.3.2"
+    "tslib": "^2.4.0"
   },
   "peerDependencies": {
     "@ant-design/icons": "^4.7.0",
