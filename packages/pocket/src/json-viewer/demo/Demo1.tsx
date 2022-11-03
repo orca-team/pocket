@@ -8,6 +8,7 @@
 
 import React, { useState } from 'react';
 import { JsonViewer } from '@orca-fe/pocket';
+import { message } from 'antd';
 
 const Demo = () => {
   const [value, setValue] = useState({
@@ -26,7 +27,12 @@ const Demo = () => {
 
   return (
     <div>
-      <JsonViewer editable value={value} onChange={setValue} />
+      <JsonViewer
+        editable
+        value={value}
+        onChange={setValue}
+        onCopy={() => message.success('已复制到剪贴板')}
+      />
       <pre>{JSON.stringify(value, null, 2)}</pre>
     </div>
   );

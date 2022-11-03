@@ -1,9 +1,10 @@
 import React, { useMemo, useRef, useState } from 'react';
 import pc from 'prefix-classnames';
-import { CaretRightFilled } from '@ant-design/icons';
+import { CaretRightFilled, CopyOutlined } from '@ant-design/icons';
 import JSON5 from 'json5';
 import './JsonViewer.less';
 import produce from 'immer';
+import copy from 'copy-to-clipboard';
 import EditableDiv from '../editable-div';
 import OpenBox from '../open-box';
 
@@ -14,25 +15,25 @@ const ef = () => {};
 const optimizedArraySplitSize = Symbol('optimizedArraySplitSize');
 const optimizedArrayRef = Symbol('optimizedArrayRef');
 
+type PathType = string | number;
 export type ValueChangeType<T> = {
   value: T;
-  path: (string | number)[];
+  path: PathType[];
   modifiedValue: any;
 };
 
 export interface JsonViewerProps<T>
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onCopy'> {
   value?: T;
   level?: number;
-  path?: (string | number)[];
+  path?: PathType[];
   fieldKey?: string | number;
   comma?: boolean;
   editable?: boolean;
-  defaultOpen?:
-    | number
-    | boolean
-    | ((node: T, path: (string | number)[]) => boolean);
+  defaultOpen?: number | boolean | ((node: T, path: PathType[]) => boolean);
   onChange?: (value: T, e: ValueChangeType<T>) => void;
+  customCopy?: boolean;
+  onCopy?: (value: string, path: PathType[]) => void;
   _isRoot?: boolean;
   _optimizedArrayIndex?: number;
   _keyOnly?: boolean;
@@ -47,7 +48,9 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
     fieldKey,
     comma,
     _isRoot = true,
+    customCopy,
     onChange = ef,
+    onCopy = ef,
     defaultOpen = 0,
     editable,
     _optimizedArrayIndex,
@@ -191,6 +194,25 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
               }}
             />
             {comma && !open && ','}
+            <div
+              className={px('operator')}
+              onClick={(event) => {
+                event.stopPropagation();
+              }}
+            >
+              <CopyOutlined
+                title="复制 value 到剪贴板"
+                onClick={() => {
+                  const text = isObject
+                    ? JSON.stringify(value, null, 2)
+                    : String(value);
+                  if (!customCopy) {
+                    copy(text);
+                  }
+                  onCopy(text, path);
+                }}
+              />
+            </div>
           </>
         )}
       </div>

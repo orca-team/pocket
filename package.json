@@ -46,6 +46,7 @@
     "ahooks-v2": "^2.10.15",
     "antd": "^4.21.6",
     "babel-plugin-import": "^1.13.5",
+    "copy-to-clipboard": "^3.3.2",
     "copyfiles": "^2.4.1",
     "detect-browser": "^5.3.0",
     "dumi": "^1.1.45",

@@ -14,6 +14,12 @@
       * {
         white-space: nowrap;
       }
+
+      &:hover {
+        .@{prefix}-operator {
+          display: block;
+        }
+      }
     }
 
     &indent {
@@ -70,6 +76,16 @@
     }
 
     &type-object {
+    }
+
+    &operator {
+      display: none;
+      color: #1199ff;
+      margin-left: 8px;
+
+      > * {
+        cursor: pointer;
+      }
     }
   }
 }
