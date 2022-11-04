@@ -253,6 +253,7 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
                 editable={editable}
                 path={isOptimizedSubValue ? path : [...path, fieldKey]}
                 defaultOpen={defaultOpen}
+                onCopy={onCopy}
                 onChange={(changedValue, e) => {
                   // 检查是否优化过的项目
                   if (_isRoot) {
