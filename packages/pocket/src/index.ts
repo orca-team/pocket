@@ -38,6 +38,7 @@ import JsonSchemaEditor, {
 import IconButton, { IconButtonProps } from './icon-button';
 import JsonViewer, { JsonViewerProps } from './json-viewer';
 import EditableDiv, { EditableDivProps } from './editable-div';
+import Dialog, { DialogProps } from './dialog';
 
 export {
   EqRatioBox,
@@ -98,4 +99,6 @@ export {
   JsonViewerProps,
   EditableDiv,
   EditableDivProps,
+  Dialog,
+  DialogProps,
 };

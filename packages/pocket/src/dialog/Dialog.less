@@ -1,0 +1,48 @@
+@prefix: orca-dialog;
+
+.@{prefix} {
+  &- {
+    &root {
+      position: fixed;
+      top: 100px;
+      left: 100px;
+      max-width: calc(100vw - 32px);
+      max-height: calc(100vw - 32px);
+      background-color: #ffffff;
+      box-sizing: border-box;
+      padding: 0 0 24px;
+      color: #000000d9;
+      font-size: 14px;
+      box-shadow: 0 0 32px rgba(50, 50, 50, 0.5);
+      z-index: 10000;
+      border-radius: 4px;
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    &header {
+      padding: 0px 24px;
+      height: 52px;
+      flex-shrink: 0;
+      border-bottom: 1px solid #DDDDDD;
+      display: flex;
+      align-items: center;
+    }
+
+    &title {
+      font-size: large;
+      flex: 1;
+    }
+
+    &body {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    &footer {
+      flex-shrink: 0;
+      border-top: 1px solid #DDDDDD;
+    }
+  }
+}
