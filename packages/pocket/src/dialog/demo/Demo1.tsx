@@ -11,19 +11,26 @@ import { Button } from 'antd';
 import { Dialog } from '@orca-fe/pocket';
 
 const Demo = () => {
-  const [show, setShow] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <div>
       <Button
         type="primary"
         onClick={() => {
-          setShow(true);
+          setOpen(true);
         }}
       >
         Show
       </Button>
-      <Dialog show={show} />
+      <Dialog
+        open={open}
+        onClose={() => {
+          setOpen(false);
+        }}
+      >
+        <div>对话框内容</div>
+      </Dialog>
     </div>
   );
 };

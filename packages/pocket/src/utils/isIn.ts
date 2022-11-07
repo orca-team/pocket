@@ -27,3 +27,24 @@ export default function isIn(
   }
   return false;
 }
+
+/**
+ * check is `dom` inside something
+ * @param dom
+ * @param callback
+ * @param parent
+ */
+export function isInBy(
+  dom: HTMLElement,
+  callback: (node: HTMLElement) => boolean,
+  parent = document.body,
+) {
+  if (dom) {
+    if (dom === parent) {
+      return false;
+    }
+    if (callback(dom)) return true;
+    if (dom.parentElement) return isInBy(dom.parentElement, callback, parent);
+  }
+  return false;
+}
