@@ -6,7 +6,7 @@ import useMemorizedFn from './useMemorizedFn';
 // export type OnOkType<T> = (result: T) => (void | boolean | Promise<void | boolean>);
 
 export type UsePromisifyModalOptions = {
-  visibleField?: string;
+  openField?: string;
   onOkField?: string;
   onCloseField?: string;
   destroyDelay?: number;
@@ -16,15 +16,15 @@ export type UsePromisifyModalOptions = {
 const readyVisible = 'data-promisify-modal-ready';
 
 /**
- * 帮助你管理维护弹框的 visible 状态，适用于 antd-modal 及基于 modal 封装的自定义弹框
- * 通过 show 方法，直接弹出 modal 即可。工具会自动接管 onOk 和 onCancel 事件，并更新 visible
+ * 帮助你管理维护弹框的 open 状态，适用于 antd-modal 及基于 modal 封装的自定义弹框
+ * 通过 show 方法，直接弹出 modal 即可。工具会自动接管 onOk 和 onCancel 事件，并更新 open
  * @param options
  */
 export default function usePromisifyModal(
   options: UsePromisifyModalOptions = {},
 ) {
   const {
-    visibleField = 'visible',
+    openField = 'open',
     onOkField = 'onOk',
     onCloseField = 'onCancel',
     destroyDelay = 500,
@@ -37,7 +37,7 @@ export default function usePromisifyModal(
     if (instance?.props[readyVisible]) {
       setInstance(
         React.cloneElement(instance, {
-          [visibleField]: true,
+          [openField]: true,
           [readyVisible]: false,
         }),
       );
@@ -53,7 +53,7 @@ export default function usePromisifyModal(
 
   const hide = useMemorizedFn(() => {
     setInstance((instance) =>
-      instance ? React.cloneElement(instance, { [visibleField]: false }) : null,
+      instance ? React.cloneElement(instance, { [openField]: false }) : null,
     );
     destroyAfterClose.run();
   });
@@ -106,7 +106,7 @@ export default function usePromisifyModal(
       ok = onOkHandler;
       const newElement = React.cloneElement(element, {
         key,
-        [visibleField]: false,
+        [openField]: false,
         [readyVisible]: true,
         ...(onOkField
           ? {
