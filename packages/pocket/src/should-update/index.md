@@ -22,7 +22,7 @@ group:
 
 export default `shouldUpdate(MyComponent, shouldComponentUpdateFn)`;
 
-| 属性                    | 说明             | 类型                                                | 默认值 |
-| ----------------------- | ---------------- | --------------------------------------------------- | ------ |
-| component               | 函数组件本身     | `React.ComponentClass` \| `React.FunctionComponent` | -      |
-| shouldComponentUpdateFn | 渲染前的回调函数 | `(props, prevProps) => boolean`                     | -      |
+| 属性                    | 说明             | 类型                                               | 默认值 |
+| ----------------------- | ---------------- | -------------------------------------------------- | ------ |
+| component               | 函数组件本身     | `React.ComponentClass` / `React.FunctionComponent` | -      |
+| shouldComponentUpdateFn | 渲染前的回调函数 | `(props, prevProps) => boolean`                    | -      |

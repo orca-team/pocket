@@ -151,6 +151,7 @@ export function useViewport(options: UseViewportType) {
           pinchstart: handlePinchStart,
           pinchmove: handlePinchMove,
           pinchend: handlePinchEnd,
+          pan: handlePan,
         });
       };
     }

@@ -44,3 +44,15 @@ export function objOmitUndefined<T extends Object>(obj: T, omitNull = true) {
     return value !== undefined;
   });
 }
+
+export function omit<T extends Object, K extends keyof T>(
+  obj: T,
+  ...args: K[]
+): Omit<T, K> {
+  const result = { ...obj };
+  args.forEach((key) => {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+    delete result[key];
+  });
+  return result;
+}

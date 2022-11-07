@@ -26,15 +26,19 @@ import TabsLayout, { TabConfigType, TabsLayoutProps } from './tabs-layout';
 import TextOverflow, { TextOverflowProps } from './text-overflow';
 import BorderSliceImg, { BorderSliceImgProps } from './border-slice-img';
 import ViewportSensor, {
-  ViewportSensorProps,
   UseViewportType,
   Viewport,
+  ViewportSensorProps,
 } from './viewport-sensor';
 import { RulerGroup, RulerGroupProps, RulerProps } from './ruler-group';
 import JsonSchemaEditor, {
   JsonSchemaEditorProps,
   JsonValueType,
 } from './json-schema-editor';
+import IconButton, { IconButtonProps } from './icon-button';
+import JsonViewer, { JsonViewerProps } from './json-viewer';
+import EditableDiv, { EditableDivProps } from './editable-div';
+import Dialog, { DialogProps } from './dialog';
 
 export {
   EqRatioBox,
@@ -89,4 +93,12 @@ export {
   JsonSchemaEditor,
   JsonSchemaEditorProps,
   JsonValueType,
+  IconButton,
+  IconButtonProps,
+  JsonViewer,
+  JsonViewerProps,
+  EditableDiv,
+  EditableDivProps,
+  Dialog,
+  DialogProps,
 };
