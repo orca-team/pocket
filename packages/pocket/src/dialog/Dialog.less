@@ -26,6 +26,37 @@
       display: flex;
       flex-direction: column;
       opacity: 1;
+      border: 1px solid transparent;
+    }
+
+    &size-middle {
+      .@{prefix}-header {
+        padding: 0 20px;
+        height: 40px;
+      }
+
+      .@{prefix}-body {
+        padding: 16px 20px;
+      }
+    }
+
+    &size-small {
+      .@{prefix}-header {
+        padding: 0 16px;
+        height: 32px;
+
+        .@{prefix}-title {
+          font-size: 14px;
+        }
+      }
+
+      .@{prefix}-body {
+        padding: 12px 16px;
+      }
+
+      .@{prefix}-footer {
+        padding: 8px 12px;
+      }
     }
 
     &hidden {
@@ -45,10 +76,11 @@
       border-bottom: 1px solid #DDDDDD;
       display: flex;
       align-items: center;
+      transition: padding 300ms, height 300ms;
     }
 
     &title {
-      font-size: large;
+      font-size: 16px;
       flex: 1;
       user-select: none;
     }
@@ -58,6 +90,7 @@
       flex: 1;
       overflow: hidden;
       padding: 24px;
+      transition: padding 300ms, height 300ms;
 
       &.@{prefix}-scrollable {
         overflow: auto;
@@ -68,6 +101,7 @@
       flex-shrink: 0;
       border-top: 1px solid #DDDDDD;
       padding: 12px 16px;
+      transition: padding 300ms;
     }
 
     &buttons {
@@ -116,7 +150,7 @@
 
     &dragging {
       box-shadow: 0 0 #ffffff;
-      border: 1px solid #DDDDDD;
+      border-color: #DDDDDD;
     }
   }
 }

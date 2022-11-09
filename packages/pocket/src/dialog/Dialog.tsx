@@ -59,6 +59,12 @@ export interface DialogProps
 
   /** 对话框内容部分是否可滚动，你可以设置为不滚动，并自己实现滚动条 */
   scrollable?: boolean;
+
+  /** 弹框尺寸 */
+  size?: 'large' | 'middle' | 'small';
+
+  /** 弹框 z-index 高度 */
+  zIndex?: number;
 }
 
 const Dialog = (props: DialogProps) => {
@@ -82,6 +88,8 @@ const Dialog = (props: DialogProps) => {
     footerAlign = 'right',
     scrollable = true,
     destroyOnClose,
+    size = 'large',
+    zIndex,
     ...otherProps
   } = props;
 
@@ -155,8 +163,17 @@ const Dialog = (props: DialogProps) => {
 
   const defaultFooter = (
     <Space>
-      <Button onClick={triggerClose}>取消</Button>
-      <Button type="primary" onClick={triggerOk}>
+      <Button
+        size={size === 'small' ? 'small' : 'middle'}
+        onClick={triggerClose}
+      >
+        取消
+      </Button>
+      <Button
+        size={size === 'small' ? 'small' : 'middle'}
+        type="primary"
+        onClick={triggerOk}
+      >
         确定
       </Button>
     </Space>
@@ -165,10 +182,14 @@ const Dialog = (props: DialogProps) => {
   // eslint-disable-next-line react/jsx-no-useless-fragment
   if (!openRef.value) return <>{null}</>;
   return ReactDOM.createPortal(
-    <span className={px('wrapper', { hidden: !show })} {...rootProps}>
+    <span
+      className={px('wrapper', { hidden: !show })}
+      style={{ zIndex }}
+      {...rootProps}
+    >
       <div
         ref={rootRef}
-        className={`${px('root', { dragging })} ${className}`}
+        className={`${px('root', `size-${size}`, { dragging })} ${className}`}
         style={{
           ...style,
           width,
