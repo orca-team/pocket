@@ -32,7 +32,7 @@ export interface DialogProps
   width?: number;
 
   /** 对话框高度 */
-  height?: number;
+  height?: number | string;
 
   /** 默认居中显示 */
   getContainer?: () => HTMLElement;
@@ -65,6 +65,12 @@ export interface DialogProps
 
   /** 弹框 z-index 高度 */
   zIndex?: number;
+
+  /** 修改 body 的 classname */
+  bodyClassname?: string;
+
+  /** 修改 body 的 样式 */
+  bodyStyle?: React.CSSProperties;
 }
 
 const Dialog = (props: DialogProps) => {
@@ -90,6 +96,8 @@ const Dialog = (props: DialogProps) => {
     destroyOnClose,
     size = 'large',
     zIndex,
+    bodyStyle,
+    bodyClassname = '',
     ...otherProps
   } = props;
 
@@ -99,7 +107,9 @@ const Dialog = (props: DialogProps) => {
 
   const [{ centerLeft, centerTop }] = useState(() => ({
     centerLeft: Math.round(0.5 * (window.innerWidth - width)),
-    centerTop: Math.round(0.5 * (window.innerHeight - height)),
+    centerTop: Math.round(
+      0.5 * (window.innerHeight - (typeof height === 'string' ? 500 : height)),
+    ),
   }));
 
   const triggerAfterClose = useDebounceFn(
@@ -181,6 +191,7 @@ const Dialog = (props: DialogProps) => {
 
   // eslint-disable-next-line react/jsx-no-useless-fragment
   if (!openRef.value) return <>{null}</>;
+
   return ReactDOM.createPortal(
     <span
       className={px('wrapper', { hidden: !show })}
@@ -221,7 +232,12 @@ const Dialog = (props: DialogProps) => {
             </div>
           </div>
         </div>
-        <div className={px('body', { scrollable })}>{children}</div>
+        <div
+          className={`${px('body', { scrollable })} ${bodyClassname}`}
+          style={bodyStyle}
+        >
+          {children}
+        </div>
         <div className={px('footer')} style={{ textAlign: footerAlign }}>
           {footer !== undefined ? footer : defaultFooter}
         </div>
