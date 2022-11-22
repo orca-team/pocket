@@ -19,6 +19,9 @@ import useHotkeyListener, {
   divOnlyFilter,
   UseHotkeyListenerOptions,
 } from './useHotkeyListener';
+import useStaticClick from './useStaticClick';
+import useNextTick from './useNextTick';
+import usePan from './usePan';
 
 export {
   useWindowSize,
@@ -28,7 +31,10 @@ export {
   useAnimationFrame,
   useObjHistoryMgr,
   useMemorizedFn,
+  useStaticClick,
   getHistoryModifiedKeys,
+  useNextTick,
+  usePan,
 
   // events
   useEventEmitter,
