@@ -73,7 +73,7 @@ export default function usePromisifyModal(
   const show = useMemorizedFn(<T>(element: React.ReactElement = instance!) => {
     if (!element) return Promise.reject(new Error('Empty show'));
     destroyAfterClose.cancel();
-    const key = element.key ?? new Date().getTime();
+    const key = new Date().getTime();
 
     let ok: (value: T) => void = () => {};
 
