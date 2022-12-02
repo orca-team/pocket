@@ -2,6 +2,7 @@ import React, {
   useCallback,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -49,17 +50,27 @@ const Img = React.forwardRef<HTMLDivElement, ImgProps>((props, pRef) => {
   const [imgState, setImgState] = useState<'loading' | 'loaded' | 'error'>(
     'loading',
   );
-  useEffect(() => {
+
+  const [_this] = useState(() => ({
+    imgState,
+  }));
+
+  useMemo(() => {
     if (!src) {
-      setImgState('error');
+      _this.imgState = 'error';
     } else {
-      setImgState('loading');
+      _this.imgState = 'loading';
     }
   }, [src]);
+
+  useEffect(() => {
+    setImgState(_this.imgState);
+  }, [_this.imgState]);
 
   const handleLoad = useCallback<typeof onLoad>(
     (event) => {
       if (imgState !== 'loaded') {
+        _this.imgState = 'loaded';
         setImgState('loaded');
       }
       onLoad(event);
@@ -69,6 +80,7 @@ const Img = React.forwardRef<HTMLDivElement, ImgProps>((props, pRef) => {
   const handleError = useCallback<typeof onError>(
     (event) => {
       if (imgState !== 'error') {
+        _this.imgState = 'error';
         setImgState('error');
       }
       onError(event);

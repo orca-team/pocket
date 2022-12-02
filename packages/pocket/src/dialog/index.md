@@ -42,3 +42,5 @@ group:
 | scrollable     | 对话框内容部分是否可滚动，你可以设置为不滚动，并自己实现滚动条 | `boolean`                          | `true`                |
 | size           | 弹框尺寸                                                       | `'large'` / `'middle'` / `'small'` | `'large'`             |
 | zIndex         | 弹框 z-index 高度                                              | `number`                           | -                     |
+| bodyClassname  | 修改 body 的 classname                                         | `string`                           | -                     |
+| bodyStyle      | 修改 body 的 样式                                              | `React.CSSProperties`              | -                     |

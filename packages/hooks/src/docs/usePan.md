@@ -1,0 +1,66 @@
+---
+title: usePan 拖拽平移
+nav:
+  title: Hooks
+  path: /hooks
+group:
+  title: hooks
+  path: /base
+---
+
+# usePan 拖拽平移
+
+`@orca-fe/hooks@0.9.0`
+
+使用鼠标拖拽时，记录拖拽的距离
+
+## 示例
+
+```tsx
+import React, { useRef, useState } from 'react';
+import { usePan } from '@orca-fe/hooks';
+
+export default () => {
+  const [value, setValue] = useState('');
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  usePan((info) => {
+    const { offset, finish } = info;
+    setValue(`${offset[0]}px, ${offset[1]}px`);
+    if (finish) {
+      setValue('');
+    }
+  }, rootRef);
+  return (
+    <div ref={rootRef} style={{ height: 400, backgroundColor: '#ccf' }}>
+      请用鼠标拖拽我 {value}
+    </div>
+  );
+};
+```
+
+## API
+
+`usePan(callback: (info: UsePanCallbackParams) => void, target: Target)`
+
+| 属性   | 说明       | 类型                                          | 默认值 |
+| ------ | ---------- | --------------------------------------------- | ------ |
+| target | 拖拽的目标 | 同 `ahooks` 的 `useEventListener` 的 `target` | -      |
+
+### UsePanCallbackParams
+
+```ts | pure
+type PositionType = [number, number];
+
+type UsePanCallbackParams = {
+  offset: PositionType;
+  finish: boolean;
+  start: boolean;
+};
+```
+
+| 属性   | 说明            | 类型                 | 默认值 |
+| ------ | --------------- | -------------------- | ------ |
+| offset | 拖拽的距离(x,y) | [`number`, `number`] | -      |
+| finish | 是否拖拽结束    | `boolean`            | -      |
+| start  | 是否拖拽开始    | `boolean`            | -      |

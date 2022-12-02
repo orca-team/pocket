@@ -96,7 +96,17 @@ modal.show(<Modal title="title">content</Modal>);
 
 `modal.show` 返回一个 `Promise` 实例，当弹框点击确认时，`Promise` 的状态将由 `pending` 变为 `resolved`
 
-#### hide 隐藏
+#### hide 隐藏（关闭）
+
+使用 `modal.hide()` 即可隐藏弹框。
+
+#### minimize 最小化
+
+与隐藏功能相同，但是不会销毁实例，恢复时可以继续上次的工作。
+
+#### resume 恢复
+
+恢复被最小化的弹窗
 
 使用 `modal.hide()` 即可隐藏弹框。
 

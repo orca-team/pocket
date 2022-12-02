@@ -58,7 +58,20 @@ export default function usePromisifyModal(
     destroyAfterClose.run();
   });
 
-  const show = useMemorizedFn(<T>(element: React.ReactElement) => {
+  const minimize = useMemorizedFn(() => {
+    setInstance((instance) =>
+      instance ? React.cloneElement(instance, { [openField]: false }) : null,
+    );
+  });
+
+  const resume = useMemorizedFn(() => {
+    setInstance((instance) =>
+      instance ? React.cloneElement(instance, { [openField]: true }) : null,
+    );
+  });
+
+  const show = useMemorizedFn(<T>(element: React.ReactElement = instance!) => {
+    if (!element) return Promise.reject(new Error('Empty show'));
     destroyAfterClose.cancel();
     const key = new Date().getTime();
 
@@ -132,7 +145,7 @@ export default function usePromisifyModal(
     return handler as typeof handler & { hide: () => void; ok: typeof ok };
   });
 
-  return { show, hide, instance };
+  return { show, hide, instance, resume, minimize };
 }
 
 export const usePromisifyDrawer = (options: UsePromisifyModalOptions = {}) =>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import pc from 'prefix-classnames';
 import './EqRatioImg.less';
 import { useControllableProps, useMemorizedFn } from '@orca-fe/hooks';
@@ -72,11 +72,19 @@ const EqRatioImg = (props: EqRatioImgProps) => {
   const isFailed = status === 'failed';
   const isLoaded = status === 'loaded';
 
-  useEffect(() => {
+  const [_this] = useState(() => ({
+    status,
+  }));
+
+  useMemo(() => {
     if (src && status !== 'loading') {
-      setStatus('loading');
+      _this.status = 'loading';
     }
   }, [src]);
+
+  useEffect(() => {
+    setStatus(_this.status);
+  }, [_this.status]);
 
   return (
     <div
@@ -93,10 +101,12 @@ const EqRatioImg = (props: EqRatioImgProps) => {
         })}
         src={src}
         onLoad={(e) => {
+          _this.status = 'loaded';
           setStatus('loaded');
           onLoad(e);
         }}
         onError={(e) => {
+          _this.status = 'failed';
           setStatus('failed');
           console.error(e);
           onError(e);
