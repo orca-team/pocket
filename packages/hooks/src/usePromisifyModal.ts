@@ -27,7 +27,7 @@ export default function usePromisifyModal(
     openField = 'open',
     onOkField = 'onOk',
     onCloseField = 'onCancel',
-    destroyDelay = 400,
+    destroyDelay = 300,
     rejectOnClose,
   } = options;
 
