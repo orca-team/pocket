@@ -8,6 +8,7 @@ export type UsePanCallbackParams = {
   offset: PositionType;
   finish: boolean;
   start: boolean;
+  ev: MouseEvent;
 };
 
 export default function usePan<T extends Target = Target>(
@@ -25,6 +26,7 @@ export default function usePan<T extends Target = Target>(
         start: true,
         finish: false,
         offset: [0, 0],
+        ev: e,
       });
     },
     { target },
@@ -38,6 +40,7 @@ export default function usePan<T extends Target = Target>(
         start: false,
         finish: false,
         offset: [offsetX, offsetY],
+        ev: e,
       });
     }
   });
@@ -50,6 +53,7 @@ export default function usePan<T extends Target = Target>(
         start: false,
         finish: true,
         offset: [offsetX, offsetY],
+        ev: e,
       });
       _this.mousedownPosition = undefined;
     }
