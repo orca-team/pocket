@@ -48,7 +48,7 @@ export default class CommonStore<T extends Record<any, any>> {
   /**
    * 在函数组件中订阅状态变化
    */
-  useState<SubState>(callback: (state: T) => SubState = (v) => v) {
+  useState<SubState = T>(callback: (state: T) => SubState = (v) => v) {
     const [store, setStore] = useState<SubState>(() =>
       callback({ ...this.state }),
     );
