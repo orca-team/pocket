@@ -63,9 +63,15 @@ export default () => {
 
 <code title="自定义弹窗" description="自定义弹窗指的是，你可以基于`Modal`封装属于自己的弹框组件，将复杂的业务逻辑放在弹框组件内部实现，只要对外仍保留 visible/onOk/onCancel 属性即可。" src="../../demo/usePromisifyModal/custom.tsx" />
 
+### usePromisifyDrawer
+
+抽屉组件也可以用。但是默认情况下，抽屉组件不带 onOk 确认事件，如果你打算对抽屉组件进行二次封装，并需要 `onOk` 事件，也可以单独设置 `usePromisifyDrawer` 的 `onOkField`
+
 <code title="Drawer" description="我们对侧边抽屉组件 Drawer 也做了类似的封装。" src="../../demo/usePromisifyModal/drawer.tsx" />
 
 ## API
+
+### usePromisifyModal
 
 ```ts | pure
 // ts 定义
@@ -81,6 +87,22 @@ function usePromisifyModal(options: UsePromisifyModalOptions): Handler;
 | onCloseField  | 用于监听弹窗关闭的事件                                                                                                                                      | `string`  | `'onCancel'` |
 | destroyDelay  | 卸载延迟（在关闭弹窗时，给定一个延迟，用于弹框播放关闭动画）                                                                                                | `number`  | `500`        |
 | rejectOnClose | 当弹窗关闭时，是否抛出异常，默认情况下，弹框关闭时 Promise 不会触发 then 或 catch，永远处于`pending`状态。如需要监听关闭事件，直接在`jsx`中监听组件事件即可 | `boolean` | `false`      |
+
+### usePromisifyDrawer
+
+```ts | pure
+// ts 定义
+function usePromisifyDrawer(options: UsePromisifyDrawerOptions): Handler;
+```
+
+### UsePromisifyDrawerOptions 弹框属性
+
+属性和 `UsePromisifyModalOptions` 相同，只是默认值不同。
+
+| 属性         | 说明                   | 类型     | 默认值      |
+| ------------ | ---------------------- | -------- | ----------- |
+| onOkField    | 用于监听弹框确认的事件 | `string` | `''`        |
+| onCloseField | 用于监听弹窗关闭的事件 | `string` | `'onClose'` |
 
 ### Handler 弹框控制句柄
 

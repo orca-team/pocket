@@ -56,11 +56,13 @@ type UsePanCallbackParams = {
   offset: PositionType;
   finish: boolean;
   start: boolean;
+  ev: MouseEvent;
 };
 ```
 
-| 属性   | 说明            | 类型                 | 默认值 |
-| ------ | --------------- | -------------------- | ------ |
-| offset | 拖拽的距离(x,y) | [`number`, `number`] | -      |
-| finish | 是否拖拽结束    | `boolean`            | -      |
-| start  | 是否拖拽开始    | `boolean`            | -      |
+| 属性   | 说明                                                 | 类型                 |
+| ------ | ---------------------------------------------------- | -------------------- |
+| offset | 拖拽的距离(x,y)                                      | [`number`, `number`] |
+| finish | 是否拖拽结束                                         | `boolean`            |
+| start  | 是否拖拽开始                                         | `boolean`            |
+| ev     | 鼠标拖拽的事件（可能是 mousedown/mousemove/mouseup） | `MouseEvent`         |
