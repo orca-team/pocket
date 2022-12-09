@@ -22,6 +22,8 @@ import useHotkeyListener, {
 import useStaticClick from './useStaticClick';
 import useNextTick from './useNextTick';
 import usePan from './usePan';
+import useService from './useService';
+import useInterval from './useInterval';
 
 export {
   useWindowSize,
@@ -35,6 +37,8 @@ export {
   getHistoryModifiedKeys,
   useNextTick,
   usePan,
+  useService,
+  useInterval,
 
   // events
   useEventEmitter,
