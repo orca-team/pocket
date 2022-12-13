@@ -40,6 +40,8 @@ import JsonViewer, { JsonViewerProps } from './json-viewer';
 import EditableDiv, { EditableDivProps } from './editable-div';
 import Dialog, { DialogProps } from './dialog';
 import CommonStore from './common-store';
+import DialogForm, { DialogFormProps } from './dialog-form';
+import ModalForm, { ModalFormProps } from './modal-form';
 
 export {
   EqRatioBox,
@@ -102,5 +104,9 @@ export {
   EditableDivProps,
   Dialog,
   DialogProps,
+  ModalForm,
+  ModalFormProps,
+  DialogForm,
+  DialogFormProps,
   CommonStore,
 };
