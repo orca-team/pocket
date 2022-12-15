@@ -12,9 +12,9 @@ export interface ModalFormProps<T extends Record<string, unknown>>
   onOk?: (result: T) => void;
 }
 
-function ModalForm<T extends Record<string, unknown>>(
+const ModalForm = <T extends Record<string, unknown>>(
   props: ModalFormProps<T>,
-) {
+) => {
   const {
     className = '',
     children,
@@ -55,8 +55,6 @@ function ModalForm<T extends Record<string, unknown>>(
       </Form>
     </Modal>
   );
-}
-
-ModalForm['Item'] = Form.Item;
+};
 
 export default ModalForm;

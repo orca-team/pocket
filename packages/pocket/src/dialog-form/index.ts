@@ -1,7 +1,10 @@
+import { Form } from 'antd';
 import DialogForm from './DialogForm';
 
-export default DialogForm;
+DialogForm['Item'] = Form.Item;
 
-export { DialogForm };
+export default DialogForm as typeof DialogForm & {
+  Item: typeof Form.Item;
+};
 
 export * from './DialogForm';

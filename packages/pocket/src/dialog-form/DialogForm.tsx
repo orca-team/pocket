@@ -13,9 +13,9 @@ export interface DialogFormProps<T extends Record<string, unknown>>
   onOk?: (result: T) => void;
 }
 
-function DialogForm<T extends Record<string, unknown>>(
+const DialogForm = <T extends Record<string, unknown>>(
   props: DialogFormProps<T>,
-) {
+) => {
   const {
     className = '',
     children,
@@ -54,8 +54,6 @@ function DialogForm<T extends Record<string, unknown>>(
       </Form>
     </Dialog>
   );
-}
-
-DialogForm['Item'] = Form.Item;
+};
 
 export default DialogForm;
