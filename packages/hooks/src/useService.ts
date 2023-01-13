@@ -258,6 +258,8 @@ export function useService<
   });
 
   useEffect(() => {
+    _this.loading = false;
+    _this.unloaded = false;
     // 如果 manual === false，则需要主动加载一次
     if (!manual) {
       load(...defaultParams);
