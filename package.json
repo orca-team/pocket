@@ -3,7 +3,7 @@
   "name": "orca-pocket",
   "version": "1.0.0",
   "scripts": {
-    "start": "dumi dev",
+    "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider dumi dev",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d docs-dist -r git@github.com:NicoKam/orca-pocket-page.git",
     "docs:serve": "http-server docs-dist --spa",
@@ -77,6 +77,7 @@
   },
   "devDependencies": {
     "@orca-fe/eslint-config": "^2.2.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.27.0",
     "react-json-view": "^1.21.3"
   }

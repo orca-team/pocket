@@ -41,7 +41,26 @@ const OpenBox: React.FC<OpenBoxProps> = React.forwardRef((props, pRef) => {
   useUpdateEffect(() => {
     if (ref.current) {
       if (open) {
-        ref.current.style.height = `${ref.current.scrollHeight}px`;
+        let { scrollHeight } = ref.current;
+        if (
+          ref.current.clientHeight >= scrollHeight &&
+          height >= scrollHeight
+        ) {
+          // 如果展开高度和当前高度一样，则重新计算一次内部元素高度
+          let top = Infinity;
+          let bottom = -Infinity;
+          for (const child of ref.current.children) {
+            const bounds = child.getBoundingClientRect();
+            top = Math.min(top, bounds.top);
+            bottom = Math.max(bottom, bounds.top + bounds.height);
+          }
+          const contentHeight = bottom - top;
+          // 更新目标高度
+          if (contentHeight > 0 && contentHeight !== scrollHeight) {
+            scrollHeight = contentHeight;
+          }
+        }
+        ref.current.style.height = `${scrollHeight}px`;
       } else {
         ref.current.style.height = `${ref.current.clientHeight}px`;
         setTimeout(() => {
