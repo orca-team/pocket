@@ -30,6 +30,7 @@
     "url": "https://github.com/orca-team/pocket.git"
   },
   "scripts": {
+    "build": "father build",
     "test": "echo \"Error: run tests from root\" && exit 1"
   }
 }

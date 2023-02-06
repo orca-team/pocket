@@ -1,17 +1,20 @@
-export default {
-  esm: 'babel',
-  cjs: 'babel',
-  extraBabelPlugins: [
-    [
-      'babel-plugin-import',
-      {
-        libraryName: 'antd',
-        libraryDirectory: 'es',
-        style: true,
-      },
+import { defineConfig } from 'father';
+
+export default defineConfig({
+  esm: {
+    output: 'es',
+  },
+  cjs: {
+    output: 'lib',
+    transformer: 'babel',
+    extraBabelPlugins: [
+      [
+        'babel-plugin-import',
+        {
+          libraryName: 'antd',
+          style: true,
+        },
+      ],
     ],
-  ],
-  // pkgFilter: {
-  //   include: ['@orca-fe/hooks', '@orca-fe/tools'],
-  // },
-};
+  },
+});

@@ -27,7 +27,7 @@
     "url": "https://github.com/orca-team/pocket.git"
   },
   "scripts": {
-    "build": "echo \"build ok\"",
+    "build": "father build",
     "clear": "rimraf lib"
   },
   "dependencies": {

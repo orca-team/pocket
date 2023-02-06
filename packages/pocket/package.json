@@ -33,7 +33,7 @@
     "url": "https://github.com/orca-team/pocket.git"
   },
   "scripts": {
-    "build": "k-tools compile && node copyFile.js",
+    "build": "father build",
     "autod": "autod",
     "clear": "rimraf lib es"
   },
