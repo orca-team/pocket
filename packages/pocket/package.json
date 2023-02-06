@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/pocket",
-  "version": "1.23.4",
+  "version": "1.23.5-1",
   "description": "UI components by orca-team",
   "keywords": [
     "react",
@@ -18,7 +18,6 @@
   "license": "MIT",
   "types": "es/index.d.ts",
   "module": "es/index.js",
-  "main": "lib/index.js",
   "files": [
     "dist",
     "es",
