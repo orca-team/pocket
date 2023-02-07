@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/hooks",
-  "version": "0.10.4",
+  "version": "0.10.5",
   "description": "React Hooks Collections",
   "keywords": [
     "react",
@@ -41,5 +41,6 @@
   "peerDependencies": {
     "ahooks": "^3.5.2",
     "react": ">=16"
-  }
+  },
+  "gitHead": "0f38f477546c9603891bad4b0c847554147262df"
 }
