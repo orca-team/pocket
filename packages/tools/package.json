@@ -32,5 +32,8 @@
   "scripts": {
     "build": "father build",
     "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.20.13"
   }
 }
