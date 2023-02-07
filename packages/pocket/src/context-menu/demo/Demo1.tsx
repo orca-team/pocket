@@ -1,5 +1,6 @@
 import React from 'react';
-import { ContextMenu, ContextMenuItemWithSplitType } from '@orca-fe/pocket';
+import type { ContextMenuItemWithSplitType } from '@orca-fe/pocket';
+import { ContextMenu } from '@orca-fe/pocket';
 import {
   CopyOutlined,
   FileExcelOutlined,

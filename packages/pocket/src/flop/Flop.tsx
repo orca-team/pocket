@@ -1,11 +1,7 @@
 import React, { useMemo } from 'react';
 import CountUp from 'react-countup';
-import {
-  ConvertOptions,
-  ConvertRule,
-  createCovertUnitFn,
-  createUnitValue,
-} from '@orca-fe/tools';
+import type { ConvertOptions, ConvertRule } from '@orca-fe/tools';
+import { createCovertUnitFn, createUnitValue } from '@orca-fe/tools';
 
 function decimalLength(num: number, max = 10) {
   const s = String(num);

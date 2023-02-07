@@ -1,7 +1,9 @@
 import React from 'react';
 import pc from 'prefix-classnames';
-import { Form, FormInstance, FormProps } from 'antd';
-import Dialog, { DialogProps } from '../dialog';
+import type { FormInstance, FormProps } from 'antd';
+import { Form } from 'antd';
+import type { DialogProps } from '../dialog';
+import Dialog from '../dialog';
 
 const px = pc('dialog-form');
 

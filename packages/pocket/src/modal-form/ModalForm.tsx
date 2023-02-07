@@ -1,6 +1,7 @@
 import React from 'react';
 import pc from 'prefix-classnames';
-import { Form, FormInstance, FormProps, Modal, ModalProps } from 'antd';
+import type { FormInstance, FormProps, ModalProps } from 'antd';
+import { Form, Modal } from 'antd';
 
 const px = pc('modal-form');
 

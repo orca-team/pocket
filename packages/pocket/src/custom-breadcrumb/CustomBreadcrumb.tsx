@@ -1,9 +1,7 @@
 import { useContext, useEffect } from 'react';
 import Breadcrumb from './Breadcrumb';
-import BreadcrumbContext, {
-  BaseMenuType,
-  BreadCrumbProvider,
-} from './BreadcrumbContext';
+import type { BaseMenuType } from './BreadcrumbContext';
+import BreadcrumbContext, { BreadCrumbProvider } from './BreadcrumbContext';
 
 export interface CustomBreadCrumbProps extends BaseMenuType {}
 

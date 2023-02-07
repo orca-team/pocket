@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
-import { BasicTarget, getTargetElement } from './utils/domTarget';
+import type { BasicTarget } from './utils/domTarget';
+import { getTargetElement } from './utils/domTarget';
 import useMemorizedFn from './useMemorizedFn';
 import useEffectWithTarget from './useEffectWithTarget';
 

@@ -6,7 +6,8 @@
  * desc.zh-CN:
  */
 import React, { useState } from 'react';
-import { CustomBreadcrumb, MenuItemType, MenuLayout } from '@orca-fe/pocket';
+import type { MenuItemType } from '@orca-fe/pocket';
+import { CustomBreadcrumb, MenuLayout } from '@orca-fe/pocket';
 import {
   ApiOutlined,
   HomeOutlined,
@@ -93,7 +94,10 @@ export default () => {
             }}
           />
         </div>
-        <div style={{ padding: '0 16px' }}>current pathname: {pathname}</div>
+        <div style={{ padding: '0 16px' }}>
+          current pathname:
+          {pathname}
+        </div>
       </MenuLayout>
     </div>
   );

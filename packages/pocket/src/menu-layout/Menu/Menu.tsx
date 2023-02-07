@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
 import pc from 'prefix-classnames';
 import { useControllableProps } from '@orca-fe/hooks';
-import { MenuItemType } from '../menuUtils';
+import type { MenuItemType } from '../menuUtils';
 import MenuItem from './MenuItem';
-import { MenuContextBaseType, MenuProvider, OpenKeysType } from './MenuContext';
+import type { MenuContextBaseType, OpenKeysType } from './MenuContext';
+import { MenuProvider } from './MenuContext';
 
 export interface MenuProps extends React.HTMLAttributes<HTMLDivElement> {
   menu?: MenuItemType[];

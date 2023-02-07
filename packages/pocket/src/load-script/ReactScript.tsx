@@ -1,6 +1,7 @@
 import { usePrevious } from 'ahooks-v2';
 import { eq } from 'lodash-es';
-import React, { useEffect, useState } from 'react';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import { useMemorizedFn } from '@orca-fe/hooks';
 import loadScript from './LoadScript';
 

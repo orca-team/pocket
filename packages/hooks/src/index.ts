@@ -11,13 +11,15 @@ import usePromisifyModal, { usePromisifyDrawer } from './usePromisifyModal';
 import useEffectWithTarget, {
   useLayoutEffectWithTarget,
 } from './useEffectWithTarget';
-import useHotkeyListener, {
+import type {
   HotkeyDefsType,
+  UseHotkeyListenerOptions,
+} from './useHotkeyListener';
+import useHotkeyListener, {
   HotkeyContext,
   HotkeyProvider,
   toHotkeyStr,
   divOnlyFilter,
-  UseHotkeyListenerOptions,
 } from './useHotkeyListener';
 import useStaticClick from './useStaticClick';
 import useNextTick from './useNextTick';

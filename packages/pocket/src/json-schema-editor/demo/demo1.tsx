@@ -2,7 +2,8 @@
  * title: 基本用法
  */
 import React, { useMemo, useState } from 'react';
-import { JsonSchemaEditor, JsonValueType } from '@orca-fe/pocket';
+import type { JsonValueType } from '@orca-fe/pocket';
+import { JsonSchemaEditor } from '@orca-fe/pocket';
 
 const defaultValue: JsonValueType = {
   type: 'object',

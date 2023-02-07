@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useEventListener } from 'ahooks';
-import { Target } from 'ahooks/lib/useEventListener';
+import type { Target } from 'ahooks/lib/useEventListener';
 
 type PositionType = [number, number];
 

@@ -2,14 +2,12 @@ import React, { useMemo } from 'react';
 import pc from 'prefix-classnames';
 import { useLocation } from 'react-router';
 import { useControllableProps } from '@orca-fe/hooks';
-import Menu, { MenuProps } from './Menu';
-import {
-  findSelectedMenu,
-  findSelectedMenuIndexTraverse,
-  MenuItemType,
-} from './menuUtils';
+import type { MenuProps } from './Menu';
+import Menu from './Menu';
+import type { MenuItemType } from './menuUtils';
+import { findSelectedMenu, findSelectedMenuIndexTraverse } from './menuUtils';
 import { BreadCrumbProvider } from '../custom-breadcrumb/BreadcrumbContext';
-import { OpenKeysType } from './Menu/MenuContext';
+import type { OpenKeysType } from './Menu/MenuContext';
 
 // 菜单展开按钮
 const iconMenuPathExpand =

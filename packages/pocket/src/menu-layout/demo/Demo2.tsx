@@ -6,9 +6,15 @@
  * desc.zh-CN:
  */
 import React, { useState } from 'react';
-import { MenuItemType, MenuLayout } from '@orca-fe/pocket';
-import { ApiOutlined, HomeOutlined, QuestionOutlined, SettingOutlined } from '@ant-design/icons';
-import { Space, Switch } from 'antd';
+import type { MenuItemType } from '@orca-fe/pocket';
+import { MenuLayout } from '@orca-fe/pocket';
+import {
+  ApiOutlined,
+  HomeOutlined,
+  QuestionOutlined,
+  SettingOutlined,
+} from '@ant-design/icons';
+import { Switch } from 'antd';
 import 'antd/lib/switch/style';
 
 // 菜单配置
@@ -74,14 +80,18 @@ export default () => {
         <span>主菜单放在左侧：</span>
         <Switch
           checked={mainMenuSide === 'left'}
-          onClick={(checked) => { setMainMenuSide(checked ? 'left' : 'top'); }}
+          onClick={(checked) => {
+            setMainMenuSide(checked ? 'left' : 'top');
+          }}
         />
       </div>
       <div>
         <span>顶部显示一级菜单：</span>
         <Switch
           checked={useTopMenu}
-          onChange={(checked) => { setUseTopMenu(checked); }}
+          onChange={(checked) => {
+            setUseTopMenu(checked);
+          }}
         />
       </div>
       <div>
@@ -89,17 +99,20 @@ export default () => {
         <span>顶栏深色主题：</span>
         <Switch
           checked={themeHeader === 'dark'}
-          onChange={(checked) => { setThemeHeader(checked ? 'dark' : 'light'); }}
+          onChange={(checked) => {
+            setThemeHeader(checked ? 'dark' : 'light');
+          }}
         />
       </div>
       <div>
         <span>侧边栏深色主题：</span>
         <Switch
           checked={themeSide === 'dark'}
-          onChange={(checked) => { setThemeSide(checked ? 'dark' : 'light'); }}
+          onChange={(checked) => {
+            setThemeSide(checked ? 'dark' : 'light');
+          }}
         />
       </div>
-
 
       <MenuLayout
         title="标题"

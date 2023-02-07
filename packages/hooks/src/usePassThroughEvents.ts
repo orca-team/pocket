@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import useMemoizedFn from './useMemorizedFn';
 
 type EventAttributes = Required<

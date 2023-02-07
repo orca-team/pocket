@@ -3,12 +3,12 @@ import pc from 'prefix-classnames';
 import { useMap, useMemoizedFn } from 'ahooks';
 import './TabsLayout.less';
 import ReactDOM from 'react-dom';
-import { Tabs, TabsProps } from 'antd';
+import type { TabsProps } from 'antd';
+import { Tabs } from 'antd';
 import { changeArr, removeArrIndex } from '@orca-fe/tools';
+import type { TabCloseListener, TabConfigType } from './TabsLayoutContext';
 import TabsLayoutContext, {
-  TabCloseListener,
   TabConfigContext,
-  TabConfigType,
   useTabCloseListener,
 } from './TabsLayoutContext';
 

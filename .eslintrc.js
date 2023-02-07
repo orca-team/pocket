@@ -15,6 +15,11 @@ module.exports = {
   rules: {
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/consistent-type-imports': [
+      'error',
+      { prefer: 'type-imports' },
+    ],
+    '@typescript-eslint/consistent-type-exports': ['error'],
     'max-len': ['error', 160],
   },
 };

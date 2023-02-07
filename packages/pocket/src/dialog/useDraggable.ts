@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+import type React from 'react';
+import { useRef, useState } from 'react';
 import { useEventListener } from 'ahooks';
 import { useEffectWithTarget } from '@orca-fe/hooks';
 

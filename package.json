@@ -76,7 +76,7 @@
     "react": ">=16"
   },
   "devDependencies": {
-    "@orca-fe/eslint-config": "^2.2.0",
+    "@orca-fe/eslint-config": "^2.3.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.27.0",
     "react-json-view": "^1.21.3"

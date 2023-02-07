@@ -1,13 +1,9 @@
 // Copy from ahooks
-import {
-  DependencyList,
-  EffectCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-} from 'react';
+import type { DependencyList, EffectCallback, useLayoutEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import depsAreSame from './depsAreSame';
-import { BasicTarget, getTargetElement } from './domTarget';
+import type { BasicTarget } from './domTarget';
+import { getTargetElement } from './domTarget';
 
 const createEffectWithTarget = (
   useEffectType: typeof useEffect | typeof useLayoutEffect,

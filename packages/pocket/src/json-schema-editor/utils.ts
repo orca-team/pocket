@@ -1,5 +1,5 @@
 import JSON5 from 'json5';
-import { JsonValueType } from './defs';
+import type { JsonValueType } from './defs';
 
 function _tab(length = 1, tabSize = 2) {
   return ' '.repeat(length * tabSize);

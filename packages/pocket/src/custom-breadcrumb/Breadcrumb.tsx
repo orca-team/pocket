@@ -1,7 +1,8 @@
 import React, { useContext, useMemo } from 'react';
 import pc from 'prefix-classnames';
 import { Link } from 'react-router-dom';
-import BreadcrumbContext, { BaseMenuType } from './BreadcrumbContext';
+import type { BaseMenuType } from './BreadcrumbContext';
+import BreadcrumbContext from './BreadcrumbContext';
 
 const px = pc('custom-breadcrumb');
 

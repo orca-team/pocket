@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useMemorizedFn } from '@orca-fe/hooks';
-import { findSelectedMenuKey, MenuItemType } from '../menuUtils';
+import type { MenuItemType } from '../menuUtils';
+import { findSelectedMenuKey } from '../menuUtils';
 
 export type OpenKeysType = Record<string, boolean | undefined>;
 

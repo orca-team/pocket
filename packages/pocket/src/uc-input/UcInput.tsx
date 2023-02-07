@@ -1,11 +1,7 @@
-import React, {
-  ForwardedRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
-import { Input, InputProps, InputRef } from 'antd';
+import type { ForwardedRef } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
+import type { InputProps, InputRef } from 'antd';
+import { Input } from 'antd';
 import { useControllableValue } from 'ahooks';
 import { useMemorizedFn } from '@orca-fe/hooks';
 

@@ -1,7 +1,8 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useControllableProps } from '@orca-fe/hooks';
 import { useEventListener, useMemoizedFn } from 'ahooks';
-import useViewport, { UseViewportType, Viewport } from './useViewport';
+import type { UseViewportType, Viewport } from './useViewport';
+import useViewport from './useViewport';
 
 export const ViewportSensorContext = React.createContext<Viewport>({
   zoom: 0,

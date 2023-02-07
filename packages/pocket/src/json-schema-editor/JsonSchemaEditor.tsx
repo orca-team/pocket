@@ -13,7 +13,7 @@ import { insertArr, removeArrIndex } from '@orca-fe/tools';
 import DraggableList from './DraggableListNoKey';
 import IconButton from './IconButton';
 import { defaultValueFromJsonSchema, toTypeScriptDefinition } from './utils';
-import { BaseType, JsonValueType } from './defs';
+import type { BaseType, JsonValueType } from './defs';
 import UcInput from '../uc-input/UcInput';
 import OpenBox from '../open-box/OpenBox';
 

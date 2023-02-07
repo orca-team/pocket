@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { RevMapOptions } from './def';
+import type { RevMapOptions } from './def';
 
 /**
  * 遍历树状结构

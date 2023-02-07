@@ -1,9 +1,7 @@
-import { MutableRefObject, useEffect } from 'react';
-import {
-  EventManager,
-  MjolnirGestureEvent,
-  MjolnirPointerEvent,
-} from 'mjolnir.js';
+import type { MutableRefObject } from 'react';
+import { useEffect } from 'react';
+import type { MjolnirGestureEvent, MjolnirPointerEvent } from 'mjolnir.js';
+import { EventManager } from 'mjolnir.js';
 import { useEventListener, useMemoizedFn } from 'ahooks';
 import { useThis } from '@orca-fe/hooks';
 import { clamp } from '@orca-fe/tools';

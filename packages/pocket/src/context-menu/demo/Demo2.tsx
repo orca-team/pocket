@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ContextMenu, ContextMenuItemWithSplitType } from '@orca-fe/pocket';
+import type { ContextMenuItemWithSplitType } from '@orca-fe/pocket';
+import { ContextMenu } from '@orca-fe/pocket';
 import {
   DeleteOutlined,
   PlusCircleOutlined,

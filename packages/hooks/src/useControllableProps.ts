@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { isUndefined, omit, omitBy, pick } from 'lodash-es';
 import useMemoizedFn from './useMemorizedFn';
 
-type ControllableState<T, U> = { [P in keyof T]: T[P] } &
-  { [P in keyof U]-?: Exclude<U[P], undefined> } & { [key: string]: any };
+type ControllableState<T, U> = { [P in keyof T]: T[P] } & {
+  [P in keyof U]-?: Exclude<U[P], undefined>;
+} & Record<string, any>;
 
 export const upperFirstKey = (str = '') => {
   if (str.length > 0) {

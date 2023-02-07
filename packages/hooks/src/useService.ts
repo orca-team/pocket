@@ -1,13 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useDocumentVisibility, useMemoizedFn } from 'ahooks';
-import React, {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import useInterval from './useInterval';
 
 export type FetchResult<T = any> = {

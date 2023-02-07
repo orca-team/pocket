@@ -6,7 +6,8 @@
  * desc.zh-CN:
  */
 import React, { useState } from 'react';
-import { MenuItemType, MenuLayout } from '@orca-fe/pocket';
+import type { MenuItemType } from '@orca-fe/pocket';
+import { MenuLayout } from '@orca-fe/pocket';
 import {
   ApiOutlined,
   HomeOutlined,

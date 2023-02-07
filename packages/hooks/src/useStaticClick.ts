@@ -1,4 +1,4 @@
-import { Target } from 'ahooks/lib/useEventListener';
+import type { Target } from 'ahooks/lib/useEventListener';
 import { useEventListener } from 'ahooks';
 import { useRef } from 'react';
 import useMemorizedFn from './useMemorizedFn';

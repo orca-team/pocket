@@ -4,7 +4,7 @@ import pc from 'prefix-classnames';
 import Trigger from 'rc-trigger';
 import Animate from 'rc-animate';
 import OpenBox from '../../../open-box';
-import { MenuItemType } from '../../menuUtils';
+import type { MenuItemType } from '../../menuUtils';
 import Arrow from '../Arrow';
 import MenuContext from '../MenuContext';
 
