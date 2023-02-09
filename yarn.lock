@@ -3135,10 +3135,10 @@
   dependencies:
     "@octokit/openapi-types" "^12.7.0"
 
-"@orca-fe/eslint-config@2.3.0-0":
-  version "2.3.0-0"
-  resolved "https://registry.npmmirror.com/@orca-fe/eslint-config/-/eslint-config-2.3.0-0.tgz#3126d649a7562114b3be01edad2b7a6587778c52"
-  integrity sha512-nPfj0x5ydhBdG1WUSdrz8t7A7oEGEMvkeMWvhxowsCtR0dGYdmwicPYCoI9jpZ0GrHzWxofMFZ1Qnb3Dl5e9Mg==
+"@orca-fe/eslint-config@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.npmmirror.com/@orca-fe/eslint-config/-/eslint-config-2.3.0.tgz#210fcb20e35a652d8666f0aa974a505a0927c724"
+  integrity sha512-DQk7z9jQwQBS4nCzqaUWRzSfqNR8wmXkbnNPFPJaNjPVHUXxlVr9I9VGFY6NY2+dcuk7DT42ut7aMYfda2KMVA==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^5.51.0"
     "@typescript-eslint/parser" "^5.51.0"

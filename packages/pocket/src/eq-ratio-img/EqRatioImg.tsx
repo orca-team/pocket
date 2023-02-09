@@ -31,6 +31,9 @@ export interface EqRatioImgProps
 
   /** 拉伸模式 */
   mode?: 'normal' | 'scale' | 'cover' | 'contain' | string;
+
+  /** 图片的位置排布（backgroundPosition） */
+  imgPosition?: string;
 }
 
 function getRealBackgroundSize(mode: EqRatioImgProps['mode']) {
@@ -55,6 +58,7 @@ const EqRatioImg = (props: EqRatioImgProps) => {
       status,
       loadingSrc,
       errSrc = failedComponent,
+      imgPosition: backgroundPosition,
       ...otherProps
     },
     changeProps,
@@ -119,6 +123,7 @@ const EqRatioImg = (props: EqRatioImgProps) => {
         style={{
           backgroundImage: `url(${src})`,
           backgroundSize: getRealBackgroundSize(mode),
+          backgroundPosition,
         }}
       />
 
