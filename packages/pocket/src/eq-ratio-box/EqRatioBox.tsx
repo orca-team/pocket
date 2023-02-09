@@ -93,4 +93,6 @@ const EqRatioBox = (props: EqRatioBoxProps) => {
 
 EqRatioBox.useRatio = useRatio;
 
+EqRatioBox.EqRatioBoxContext = EqRatioBoxContext;
+
 export default EqRatioBox;
