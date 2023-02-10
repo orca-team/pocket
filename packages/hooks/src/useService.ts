@@ -73,6 +73,9 @@ export interface ServiceOptions<
   /** 请求成功时的回调事件 */
   onSuccess?: (data: Result, params: Args) => void;
 
+  /** 請求結束后的回調事件（不論數據處理是否正常） */
+  onFinish?: (data: ServiceResult, params: Args) => void;
+
   /** 请求失败时的回调事件 */
   onError?: (error: Error, params: Args) => void;
 
