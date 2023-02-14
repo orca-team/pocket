@@ -22,7 +22,7 @@ import useHotkeyListener, {
   divOnlyFilter,
 } from './useHotkeyListener';
 import useStaticClick from './useStaticClick';
-import useNextTick from './useNextTick';
+import useNextTick, { useLayoutNextTick } from './useNextTick';
 import usePan from './usePan';
 import useService from './useService';
 import useInterval from './useInterval';
@@ -38,6 +38,7 @@ export {
   useStaticClick,
   getHistoryModifiedKeys,
   useNextTick,
+  useLayoutNextTick,
   usePan,
   useService,
   useInterval,
