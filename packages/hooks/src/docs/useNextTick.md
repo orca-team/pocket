@@ -53,6 +53,12 @@ export default () => {
 };
 ```
 
+## useLayoutNextTick
+
+`@orca-fe/hooks@0.11.0`
+
+和 `useNextTick` 的使用方法完全一致，只是内部的 `useEffect` 替換成 `useLayoutEffect`。
+
 ## API
 
 `useNextTick(): (callback: () => void) => void`
