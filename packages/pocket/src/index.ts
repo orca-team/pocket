@@ -67,7 +67,7 @@ import DialogForm from './dialog-form';
 import type { ModalFormProps } from './modal-form';
 import ModalForm from './modal-form';
 import ReactScript from './react-script';
-import { ReactScriptProps } from './react-script/ReactScript';
+import type { ReactScriptProps } from './react-script/ReactScript';
 
 export type {
   EqRatioBoxProps,
@@ -105,7 +105,9 @@ export type {
   ModalFormProps,
   DialogFormProps,
   BreadCrumbProps,
+  ReactScriptProps,
 };
+
 export {
   EqRatioBox,
   OpenBox,
@@ -118,7 +120,6 @@ export {
   EqRatioImg,
   loadScript,
   ReactScript,
-  ReactScriptProps,
   Flop,
   DraggableList,
   Toast,
