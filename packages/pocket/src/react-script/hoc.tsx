@@ -3,14 +3,11 @@ import React from 'react';
 import ReactScript from './ReactScript';
 
 export default function withScript(src: string | string[]) {
-  return function <
-    T,
-    P,
-    E extends ComponentType<P> | ForwardRefRenderFunction<T, P>,
-  >(Element: E) {
-    const ComponentWithProps = React.forwardRef<T, P>((props, ref) => (
+  return function <E extends ComponentType | ForwardRefRenderFunction<any>>(
+    Element: E,
+  ) {
+    const ComponentWithProps = React.forwardRef<any, any>((props, ref) => (
       <ReactScript src={src}>
-        {/* @ts-expect-error */}
         <Element ref={ref} {...props} />
       </ReactScript>
     ));
