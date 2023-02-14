@@ -3,7 +3,7 @@ import { eq } from 'lodash-es';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 import { useMemorizedFn } from '@orca-fe/hooks';
-import loadScript from './LoadScript';
+import loadScript from '../load-script';
 
 export interface ReactScriptProps {
   src: string | string[];
