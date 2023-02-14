@@ -23,7 +23,7 @@ import EqRatioImg from './eq-ratio-img';
 import type { EqRatioImgProps } from './eq-ratio-img';
 import Flop from './flop';
 import type { FlopProps } from './flop';
-import loadScript from './load-script';
+import loadScript, { withScript } from './load-script';
 import type { ReactScript } from './load-script';
 import DraggableList from './draggable-list';
 import type { DraggableListProps } from './draggable-list';
@@ -136,4 +136,5 @@ export {
   ModalForm,
   DialogForm,
   CommonStore,
+  withScript,
 };
