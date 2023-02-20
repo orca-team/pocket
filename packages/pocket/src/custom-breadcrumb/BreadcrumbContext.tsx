@@ -8,6 +8,7 @@ export type BaseMenuType = {
   path?: string;
   text?: React.ReactNode;
   order?: number;
+  replace?: boolean;
 };
 
 export type BreadCrumbMenuType = BaseMenuType & {

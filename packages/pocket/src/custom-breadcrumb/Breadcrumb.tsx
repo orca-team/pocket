@@ -36,14 +36,21 @@ const Breadcrumb = (props: BreadCrumbProps) => {
     return menu;
   }, [menu, prefix]);
 
-  const finalMenu = useMemo(
-    () =>
-      [...menuWithPrefix, ...customBreadcrumb].map((item, index) => ({
+  const finalMenu = useMemo(() => {
+    let replaceFlag = false;
+    return [...menuWithPrefix, ...customBreadcrumb]
+      .map((item, index) => ({
         ...item,
         order: item.order != null ? item.order : index,
-      })),
-    [menuWithPrefix, customBreadcrumb],
-  );
+      }))
+      .reverse()
+      .filter((item) => {
+        const replace = !replaceFlag;
+        replaceFlag = !!item.replace;
+        return replace;
+      })
+      .reverse();
+  }, [menuWithPrefix, customBreadcrumb]);
 
   return (
     <div className={`${px('root')} ${className}`} {...otherProps}>
