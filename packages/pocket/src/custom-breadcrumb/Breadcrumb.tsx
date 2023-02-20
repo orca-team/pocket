@@ -59,6 +59,7 @@ const Breadcrumb = (props: BreadCrumbProps) => {
           {index > 0 && separator}
           {item.path && index < finalMenu.length - 1 ? (
             <Link
+              className={px('link-item')}
               to={item.path}
               onClick={(e) => {
                 onLinkClick(item, e);
@@ -67,7 +68,7 @@ const Breadcrumb = (props: BreadCrumbProps) => {
               {item.text}
             </Link>
           ) : (
-            <div>{item.text}</div>
+            <div className={px('link-item', 'current')}>{item.text}</div>
           )}
         </React.Fragment>
       ))}
