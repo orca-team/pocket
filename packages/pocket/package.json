@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/pocket",
-  "version": "1.25.7",
+  "version": "1.26.0",
   "description": "UI components by orca-team",
   "keywords": [
     "react",
@@ -39,8 +39,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.20.13",
-    "@orca-fe/hooks": "^0.11.0",
-    "@orca-fe/pocket": "^1.25.7",
+    "@orca-fe/hooks": "^0.11.1",
+    "@orca-fe/pocket": "^1.26.0",
     "@orca-fe/tools": "^0.7.8",
     "ahooks": "^3.7.4",
     "ahooks-v2": "^2.10.15",
