@@ -75,16 +75,26 @@ const HotkeyManager = (props: HotkeyManagerProps) => {
         // 匹配事件名称
         if (hotkeyName === action.hotkeyName) {
           const triggerTarget = e.target as HTMLElement;
-          if (!action.input) {
-            // 没有开启 input 选项，默认过滤掉输入框事件，忽略
-            if (isInput(triggerTarget)) continue;
+          if (action.input === false) {
+            // 不对 input 内的快捷键进行响应，不做处理，继续/退出
+            if (isInput(triggerTarget)) {
+              if (action.through ?? throughEvent) {
+                continue;
+              } else {
+                break;
+              }
+            }
           }
           // 事件监听有限制父节点
           const parentNode = action.target?.();
           if (parentNode) {
-            // 有指定父节点，但触发目标节点不在范围内，忽略
+            // 有指定父节点，但触发目标节点不在范围内，不做处理，继续/退出
             if (!parentNode.contains(e.target as HTMLElement)) {
-              continue;
+              if (action.through ?? throughEvent) {
+                continue;
+              } else {
+                break;
+              }
             }
           }
           const through = action.action(e) ?? action.through ?? throughEvent;
