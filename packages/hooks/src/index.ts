@@ -15,17 +15,14 @@ import type {
   HotkeyDefsType,
   UseHotkeyListenerOptions,
 } from './useHotkeyListener';
-import useHotkeyListener, {
-  HotkeyContext,
-  HotkeyProvider,
-  toHotkeyStr,
-  divOnlyFilter,
-} from './useHotkeyListener';
 import useStaticClick from './useStaticClick';
 import useNextTick, { useLayoutNextTick } from './useNextTick';
 import usePan from './usePan';
 import useService from './useService';
 import useInterval from './useInterval';
+import useHotkeyListener from './hotkey-manager/useHotkeyListener';
+import HotkeyManager from './hotkey-manager';
+import HotkeyManagerContext from './hotkey-manager/HotkeyManagerContext';
 
 export {
   useWindowSize,
@@ -59,10 +56,8 @@ export {
 
   // hotkey
   useHotkeyListener,
-  toHotkeyStr,
-  divOnlyFilter,
-  HotkeyProvider,
-  HotkeyContext,
+  HotkeyManager,
+  HotkeyManagerContext,
 };
 
 export type { HotkeyDefsType, UseHotkeyListenerOptions };

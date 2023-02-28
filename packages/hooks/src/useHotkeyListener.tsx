@@ -1,3 +1,4 @@
+// deprecated
 import { useEventListener, useSetState } from 'ahooks';
 import React, { useContext, useMemo } from 'react';
 import { detect } from 'detect-browser';
