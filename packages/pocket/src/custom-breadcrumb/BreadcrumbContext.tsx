@@ -44,11 +44,13 @@ export const BreadCrumbProvider = (props: {
   );
 
   const add = useMemorizedFn((menu: BaseMenuType) => {
-    setCustomBreadcrumb([...customBreadcrumb, menu]);
+    setCustomBreadcrumb((customBreadcrumb) => [...customBreadcrumb, menu]);
   });
 
   const remove = useMemorizedFn((menu: BaseMenuType) => {
-    setCustomBreadcrumb(customBreadcrumb.filter((item) => item !== menu));
+    setCustomBreadcrumb((customBreadcrumb) =>
+      customBreadcrumb.filter((item) => item !== menu),
+    );
   });
 
   return (
