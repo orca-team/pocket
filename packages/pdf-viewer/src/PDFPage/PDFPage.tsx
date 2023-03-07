@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useDebounceEffect, useMemoizedFn } from 'ahooks';
 import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
-import PDFViewerContext, { PageViewport } from '../context';
+import type { PageViewport } from '../context';
+import PDFViewerContext from '../context';
 import useStyle from './PDFPage.style';
 
 const outputScale = window.devicePixelRatio || 1;
@@ -47,7 +48,8 @@ const PDFPage = (props: PdfPageProps) => {
 
         // canvas.style.width = `${Math.floor(viewport.width)}px`;
         // canvas.style.height = `${Math.floor(viewport.height)}px`;
-        if (_this.task) _this.task.cancel();
+        if (_this.task && typeof _this.task.cancel === 'function')
+          _this.task.cancel();
         const task = page.render({
           canvasContext: context,
           transform,

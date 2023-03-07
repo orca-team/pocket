@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { clamp } from '@orca-fe/tools';
-import { useDebounceFn, useEventListener, useMemoizedFn } from 'ahooks';
+import {
+  useDebounceEffect,
+  useDebounceFn,
+  useEventListener,
+  useMemoizedFn,
+} from 'ahooks';
+import type { Dispatch, SetStateAction } from 'react';
 import React, {
   useEffect,
   useImperativeHandle,
@@ -19,6 +25,35 @@ import * as pdfjsWorker from './pdfjs-build/pdf.worker';
 const pdfJs: any = _pdfJS;
 
 const ef = () => undefined;
+
+type GetStateAction<S> = () => S;
+
+function useGetState<S>(
+  initialState: S | (() => S),
+): [S, Dispatch<SetStateAction<S>>, GetStateAction<S>] {
+  const [_this] = useState(() => ({
+    state: typeof initialState === 'function' ? initialState() : initialState,
+  }));
+
+  const getState = useMemoizedFn(() => _this.state);
+
+  const [state, _setState] = useState<S>(_this.state);
+
+  const setState = useMemoizedFn<Dispatch<SetStateAction<S>>>((state) => {
+    if (typeof state === 'function') {
+      _setState((originState) => {
+        const newState = state(originState);
+        _this.state = newState;
+        return newState;
+      });
+    } else {
+      _this.state = state;
+      _setState(state);
+    }
+  });
+
+  return [state, setState, getState];
+}
 
 function findSortedArr(
   arr: number[],
@@ -93,7 +128,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
 
     const [current, setCurrent] = useState(0);
 
-    const [zoom, setZoom] = useState(0);
+    const [zoom, setZoom, getZoom] = useGetState(0);
 
     const scale = 2 ** zoom;
 
@@ -101,11 +136,19 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       pages: any[];
       pdfDoc?: any;
       mousePositionBeforeWheel?: { x: number; y: number; zoom: number };
-      prevZoom: number;
+      zooming: boolean;
     }>({
       pages: [],
-      prevZoom: zoom,
+      zooming: false,
     });
+
+    useDebounceEffect(
+      () => {
+        _this.zooming = false;
+      },
+      [zoom],
+      { wait: 500 },
+    );
 
     const [renderRange, setRenderRange] = useState<[number, number]>([0, 0]);
 
@@ -167,7 +210,6 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
         }
       }
     });
-    const getZoom = useMemoizedFn<PDFViewerHandle['getZoom']>(() => zoom);
     const scrollTo = useMemoizedFn<PDFViewerHandle['scrollTo']>((...args) => {
       const dom = pageContainerRef.current;
       if (dom) dom.scrollTo(...args);
@@ -263,8 +305,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
 
     const updateRenderRangeDebounce = useDebounceFn(
       () => {
-        updateRenderRange();
         _this.mousePositionBeforeWheel = undefined;
+        updateRenderRange();
       },
       { wait: 280 },
     );
@@ -272,8 +314,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     useEventListener(
       'scroll',
       (ev) => {
-        if (_this.prevZoom !== zoom) {
-          _this.prevZoom = zoom;
+        if (_this.zooming) {
           updateRenderRangeDebounce.run();
         } else {
           updateRenderRangeDebounce.cancel();
@@ -291,6 +332,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     useEventListener(
       'wheel',
       (ev: WheelEvent) => {
+        const zoom = getZoom();
         const dom = pageContainerRef.current;
         if (ev.ctrlKey && dom) {
           const { left, top, width } = dom.getBoundingClientRect();
@@ -314,7 +356,9 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
             minZoom,
             maxZoom,
           );
+          _this.zooming = true;
           setZoom(newZoom);
+
           if (_this.mousePositionBeforeWheel) {
             // 更新滾動條高度
             const {
@@ -336,9 +380,19 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
             //
             // });
           }
+        } else {
+          _this.mousePositionBeforeWheel = undefined;
         }
       },
       { target: pageContainerRef, passive: true },
+    );
+
+    useEventListener(
+      'mousemove',
+      () => {
+        _this.mousePositionBeforeWheel = undefined;
+      },
+      { target: pageContainerRef },
     );
 
     useEventListener(
