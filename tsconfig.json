@@ -16,7 +16,8 @@
     "paths": {
       "@orca-fe/pocket": ["./packages/pocket/src"],
       "@orca-fe/tools": ["./packages/tools/src"],
-      "@orca-fe/hooks": ["./packages/hooks/src"]
+      "@orca-fe/hooks": ["./packages/hooks/src"],
+      "@orca-fe/pdf-viewer": ["./packages/pdf-viewer/src"]
     },
     "outDir": "./lib",
     "allowSyntheticDefaultImports": true
