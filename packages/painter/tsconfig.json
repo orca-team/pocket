@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "..",
+    "paths": {
+      "@orca-fe/pocket": ["../pocket/src"],
+      "@orca-fe/tools": ["../tools/src"],
+      "@orca-fe/hooks": ["../hooks/src"],
+      "@orca-fe/painter": ["./src"]
+    }
+  }
+}
