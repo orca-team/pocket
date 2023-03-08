@@ -1,14 +1,16 @@
 ---
-title: Painter 画布
+title: 画布 Painter
 nav:
   title: 重型组件
   path: /pro-component
 group:
-  title: Painter 画布
+  title: 画布 Painter
   path: /painter
 ---
 
-# Painter 画布
+# 画布 Painter
+
+![npm](https://img.shields.io/npm/v/@orca-fe/painter.svg)
 
 `npm i @orca-fe/painter***REMOVED***`
 

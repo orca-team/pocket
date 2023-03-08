@@ -1,3 +1,5 @@
+![npm](https://img.shields.io/npm/v/@orca-fe/tools.svg)
+
 # Introduction
 
 This is a collection of tools that are commonly used in projects. Contains operations on arrays, objects, dates, and units.

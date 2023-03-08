@@ -1,3 +1,5 @@
+![npm](https://img.shields.io/npm/v/@orca-fe/hooks.svg)
+
 # 介绍
 
 这是在当前 `React` 项目的研发过程中，沉淀的一套通用 `hooks` 库。

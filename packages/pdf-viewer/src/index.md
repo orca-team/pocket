@@ -10,6 +10,8 @@ group:
 
 # PDF 阅读器 PdfViewer
 
+![npm](https://img.shields.io/npm/v/@orca-fe/pdf-viewer.svg)
+
 `npm i @orca-fe/pdf-viewer***REMOVED***`
 
 `yarn add @orca-fe/pdf-viewer***REMOVED***`
