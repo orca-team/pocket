@@ -10,24 +10,24 @@ import { Button } from 'antd';
 
 const Demo1 = () => {
   const painterRef = usePainterRef();
+  const draw = (shapeType) => {
+    const painter = painterRef.current;
+    if (painter) {
+      painter.draw(shapeType);
+    }
+  };
   return (
     <div>
       <Button
         onClick={() => {
-          const painter = painterRef.current;
-          if (painter) {
-            painter.draw('ellipse');
-          }
+          draw('ellipse');
         }}
       >
         Draw Ellipse
       </Button>
       <Button
         onClick={() => {
-          const painter = painterRef.current;
-          if (painter) {
-            painter.draw('line');
-          }
+          draw('line');
         }}
       >
         Draw Line
