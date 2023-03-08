@@ -1,3 +1,5 @@
+![npm](https://img.shields.io/npm/v/@orca-fe/pocket.svg)
+
 # 介绍
 
 这是一个对 `antd` 组件库的扩展。

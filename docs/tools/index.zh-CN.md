@@ -1,3 +1,5 @@
+![npm](https://img.shields.io/npm/v/@orca-fe/tools.svg)
+
 # 介绍
 
 这是在项目中常用的工具集合。包含对数组、对象、日期、单位的操作。

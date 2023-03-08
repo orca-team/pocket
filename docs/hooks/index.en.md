@@ -1,3 +1,5 @@
+![npm](https://img.shields.io/npm/v/@orca-fe/hooks.svg)
+
 # Introduction
 
 This is a set of common `hooks` library that was precipitated during the development of our `React` project.
