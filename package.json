@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider dumi dev",
-    "docs:build": "dumi build",
+    "docs:build": "cross-env NODE_OPTIONS=--openssl-legacy-provider dumi build",
     "docs:deploy": "gh-pages -d docs-dist -r git@github.com:NicoKam/orca-pocket-page.git",
     "docs:serve": "http-server docs-dist --spa",
     "build-all": "lerna run build ",

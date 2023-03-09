@@ -20,6 +20,13 @@ const Demo1 = () => {
     <div>
       <Button
         onClick={() => {
+          draw('line');
+        }}
+      >
+        Draw Line
+      </Button>
+      <Button
+        onClick={() => {
           draw('ellipse');
         }}
       >
@@ -27,11 +34,12 @@ const Demo1 = () => {
       </Button>
       <Button
         onClick={() => {
-          draw('line');
+          draw('rectangle');
         }}
       >
-        Draw Line
+        Draw Rectangle
       </Button>
+
       <Painter ref={painterRef} />
     </div>
   );
