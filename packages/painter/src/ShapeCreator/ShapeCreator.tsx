@@ -10,6 +10,7 @@ export interface ShapeCreatorProps
   shapeType?: ShapeType;
   onDrawing?: (shape: ShapeDataType) => void;
   onCreate?: (shape: ShapeDataType) => void;
+  pointMapping?: (point: { x: number; y: number }) => { x: number; y: number };
 }
 
 const ShapeCreator = (props: ShapeCreatorProps) => {
@@ -18,6 +19,7 @@ const ShapeCreator = (props: ShapeCreatorProps) => {
     shapeType = 'line',
     onCreate = ef,
     onDrawing = ef,
+    pointMapping = (a) => a,
     ...otherProps
   } = props;
   const styles = useStyle();
@@ -26,10 +28,14 @@ const ShapeCreator = (props: ShapeCreatorProps) => {
 
   usePan(({ ev, startPosition, offset, start, finish }) => {
     let data: ShapeDataType;
-    const x1 = startPosition[0];
-    const y1 = startPosition[1];
-    const x2 = startPosition[0] + offset[0];
-    const y2 = startPosition[1] + offset[1];
+    const { x: x1, y: y1 } = pointMapping({
+      x: startPosition[0],
+      y: startPosition[1],
+    });
+    const { x: x2, y: y2 } = pointMapping({
+      x: startPosition[0] + offset[0],
+      y: startPosition[1] + offset[1],
+    });
     const x = Math.min(x1, x2);
     const y = Math.min(y1, y2);
     const width = Math.abs(x1 - x2);
