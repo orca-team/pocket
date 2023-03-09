@@ -6,10 +6,14 @@ export default createUseStyles(
   {
     root: {
       position: 'relative',
+      height: 200,
     },
     canvasContainer: {
       width: '100%',
       height: '100%',
+    },
+    move: {
+      cursor: 'move',
     },
   },
   {
