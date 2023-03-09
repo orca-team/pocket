@@ -1,6 +1,7 @@
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import Konva from 'konva';
 import { useMemoizedFn } from 'ahooks';
+import { useSizeListener } from '@orca-fe/hooks';
 import useStyle from './Painter.style';
 import ShapeCreator from './ShapeCreator';
 import { createOrUpdateShape, createShape, normalizeShape } from './utils';
@@ -78,11 +79,22 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
         const shape = createShape(shapeData);
         shape.fillEnabled(false);
         shape.draggable(true);
+        shape.setAttr('hitStrokeWidth', 4);
         shape.on('click', (ev) => {
           transformShape(shape);
         });
-        shape.on('mouseenter', () => {});
-        shape.on('mouseleave', () => {});
+        shape.on('mouseenter', () => {
+          rootRef.current?.classList.add(...styles.move.split(' '));
+        });
+        shape.on('mouseleave', () => {
+          rootRef.current?.classList.remove(...styles.move.split(' '));
+        });
+        shape.on('dragstart', () => {
+          rootRef.current?.classList.add(...styles.move.split(' '));
+        });
+        shape.on('dragend', () => {
+          rootRef.current?.classList.remove(...styles.move.split(' '));
+        });
         return shape;
       });
       _this.shapes.push(...newShapes);
@@ -97,13 +109,25 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
     draw,
   }));
 
+  const scalePainter = useMemoizedFn(() => {
+    if (_this.stage && _this.layer) {
+      const size = _this.stage.getSize();
+      const ratio = Math.max(size.width / width, size.height / height);
+      const x = 0.5 * (size.width - ratio * width);
+      const y = 0.5 * (size.height - ratio * height);
+      _this.layer.x(x);
+      _this.layer.y(y);
+      _this.layer.scale({ x: ratio, y: ratio });
+    }
+  });
+
   useEffect(() => {
     const container = canvasRef.current;
     if (container) {
       const stage = new Konva.Stage({
         container,
-        width,
-        height,
+        width: container.clientWidth,
+        height: container.clientHeight,
       });
 
       // then create layer
@@ -116,6 +140,7 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
       _this.layer = layer;
 
       // draw the image
+      scalePainter();
       layer.draw();
       onInit();
 
@@ -127,6 +152,11 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
     return undefined;
   }, []);
 
+  useSizeListener((size) => {
+    _this.stage?.setSize(size);
+    scalePainter();
+  }, rootRef);
+
   return (
     <div
       ref={rootRef}
@@ -137,6 +167,13 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
       {drawType && (
         <ShapeCreator
           shapeType={drawType}
+          pointMapping={(point) => {
+            if (_this.layer) {
+              // console.log(_this.layer.getTransform().decompose());
+              return _this.layer.getTransform().copy().invert().point(point);
+            }
+            return point;
+          }}
           onDrawing={(shape) => {
             if (_this.layer) {
               const newShape = createOrUpdateShape(shape, _this.drawingShape);
