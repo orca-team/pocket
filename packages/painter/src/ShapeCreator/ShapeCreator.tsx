@@ -1,7 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { usePan } from '@orca-fe/hooks';
 import useStyle from './ShapeCreator.style';
 import type { ShapeDataType, ShapeType } from '../def';
+import { simplify } from '../pathSimplify';
 
 const ef = () => {};
 
@@ -26,8 +27,14 @@ const ShapeCreator = (props: ShapeCreatorProps) => {
 
   const rootRef = useRef<HTMLDivElement>(null);
 
+  const [_this] = useState<{
+    data?: ShapeDataType;
+  }>({});
+
   usePan(({ ev, startPosition, offset, start, finish }) => {
-    let data: ShapeDataType;
+    if (start) {
+      _this.data = undefined;
+    }
     const { x: x1, y: y1 } = pointMapping({
       x: startPosition[0],
       y: startPosition[1],
@@ -43,11 +50,11 @@ const ShapeCreator = (props: ShapeCreatorProps) => {
 
     switch (shapeType) {
       case 'line':
-        data = { type: 'line', points: [x1, y1, x2, y2] };
+        _this.data = { type: 'line', points: [x1, y1, x2, y2] };
         break;
       // eslint-disable-next-line no-fallthrough
       case 'ellipse':
-        data = {
+        _this.data = {
           type: 'ellipse',
           x: x + 0.5 * width,
           y: y + 0.5 * height,
@@ -56,13 +63,28 @@ const ShapeCreator = (props: ShapeCreatorProps) => {
         };
         break;
       case 'rectangle':
-        data = { type: 'rectangle', x, y, width, height };
+        _this.data = { type: 'rectangle', x, y, width, height };
         break;
+      case 'line-path':
+        // 折线
+        _this.data = {
+          type: 'line-path',
+          points: [...(_this.data?.['points'] ?? []), x2, y2],
+        };
+        break;
+      default:
+        // 其他类型，不能通过 usePan 处理
+        return;
     }
     if (finish) {
-      onCreate(data);
+      if (_this.data.type === 'line-path') {
+        // 简化自由绘图
+        _this.data.points = simplify(_this.data.points);
+      }
+      onCreate(_this.data);
+      _this.data = undefined;
     } else {
-      onDrawing(data);
+      onDrawing(_this.data);
     }
   }, rootRef);
 

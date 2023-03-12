@@ -23,18 +23,18 @@ export function normalizeShape(shape: Konva.Shape) {
     });
   } else if (shape instanceof Konva.Line) {
     const { points } = shape.attrs;
-    const [x1, y1, x2, y2] = points;
 
-    const p1 = transform.point({
-      x: x1,
-      y: y1,
-    });
-    const p2 = transform.point({
-      x: x2,
-      y: y2,
-    });
+    const newPoints: number[] = [];
+    for (let i = 0; i < points.length; i += 2) {
+      const p = transform.point({
+        x: points[i],
+        y: points[i + 1],
+      });
+      newPoints.push(p.x, p.y);
+    }
+
     shape.setAttrs({
-      points: [p1.x, p1.y, p2.x, p2.y],
+      points: newPoints,
       scaleX: 1,
       scaleY: 1,
       x: 0,
@@ -53,6 +53,7 @@ function checkShapeType(shape: Konva.Shape, type: ShapeType) {
     case 'ellipse':
       return shape instanceof Konva.Ellipse;
     case 'line':
+    case 'line-path':
       return shape instanceof Konva.Line;
   }
   return false;
@@ -77,6 +78,7 @@ export function createShape(shapeData: ShapeDataType) {
         stroke: '#000',
       });
     case 'line':
+    case 'line-path':
       return new Konva.Line({
         points: shapeData.points,
         stroke: '#000',
