@@ -10,6 +10,16 @@ export default createUseStyles(
       flexDirection: 'column',
       overflow: 'hidden',
       border: '1px solid #DDD',
+
+      '& .pdf-viewer-default-empty-tips': {
+        pointerEvents: 'none',
+        userSelect: 'none',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#AAA',
+      },
     },
     toolbar: {
       flexShrink: 0,

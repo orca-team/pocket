@@ -15,6 +15,9 @@ export type PainterRef = {
   draw: (shapeType: ShapeType, attr?: Record<string, any>) => void;
   cancelDraw: () => void;
   addShapes: (shapeData: ShapeDataType | ShapeDataType[]) => void;
+  updateShape: (index: number, shapeData: Partial<ShapeDataType>) => void;
+  removeShape: (index: number) => void;
+  clearShapes: () => void;
   check: (index: number | number[]) => void;
   unCheck: () => void;
   getShapes: () => ShapeDataType[];
@@ -107,6 +110,15 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
     }
   });
 
+  const cursorMove = useMemoizedFn(() => {
+    rootRef.current?.classList.add(...styles.move.split(' '));
+    _this.hovering = true;
+  });
+  const cursorMoveEnd = useMemoizedFn(() => {
+    rootRef.current?.classList.remove(...styles.move.split(' '));
+    _this.hovering = false;
+  });
+
   /**
    * 添加图形
    */
@@ -123,20 +135,16 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
           onCheck(_this.shapes.findIndex((s) => s === shape));
         });
         shape.on('mouseenter', () => {
-          rootRef.current?.classList.add(...styles.move.split(' '));
-          _this.hovering = true;
+          cursorMove();
         });
         shape.on('mouseleave', () => {
-          rootRef.current?.classList.remove(...styles.move.split(' '));
-          _this.hovering = false;
+          cursorMoveEnd();
         });
         shape.on('dragstart', () => {
-          rootRef.current?.classList.add(...styles.move.split(' '));
-          _this.dragging = true;
+          cursorMove();
         });
         shape.on('dragend', () => {
-          rootRef.current?.classList.remove(...styles.move.split(' '));
-          _this.dragging = false;
+          cursorMoveEnd();
           normalizeShape(shape);
           onDataChange();
         });
@@ -158,6 +166,32 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
   const getShapes = useMemoizedFn<PainterRef['getShapes']>(() =>
     _this.shapes.map((shape) => shape.getAttrs()),
   );
+  const clearShapes = useMemoizedFn<PainterRef['clearShapes']>(() => {
+    _this.shapes.forEach((shape) => {
+      shape.destroy();
+    });
+    _this.shapes = [];
+    _this.dragging = false;
+    unCheck();
+    cursorMoveEnd();
+  });
+  const updateShape = useMemoizedFn<PainterRef['updateShape']>(
+    (index, shapeData) => {
+      if (index >= 0 && index < _this.shapes.length) {
+        _this.shapes[index].setAttrs(shapeData);
+      }
+    },
+  );
+  const removeShape = useMemoizedFn<PainterRef['removeShape']>((index) => {
+    if (index >= 0 && index < _this.shapes.length) {
+      const removed = _this.shapes.splice(index, 1);
+      removed.forEach((shape) => {
+        shape.destroy();
+      });
+      unCheck();
+      cursorMoveEnd();
+    }
+  });
   const isDrawing = useMemoizedFn<PainterRef['isDrawing']>(() => !!drawMode);
 
   useImperativeHandle(pRef, () => ({
@@ -168,6 +202,9 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
     check: checkIndex,
     getShapes,
     isDrawing,
+    clearShapes,
+    removeShape,
+    updateShape,
   }));
 
   useStaticClick(

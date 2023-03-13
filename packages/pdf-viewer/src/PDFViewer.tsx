@@ -14,7 +14,7 @@ import React, {
   useState,
 } from 'react';
 import { useGetState } from '@orca-fe/hooks';
-import type { PainterRef, ShapeType } from '@orca-fe/painter';
+import type { PainterRef, ShapeDataType, ShapeType } from '@orca-fe/painter';
 import Painter from '@orca-fe/painter';
 import type { PageViewport } from './context';
 import PDFViewerContext, { PDFToolbarContext } from './context';
@@ -30,6 +30,10 @@ const pdfJs: any = _pdfJS;
 
 const ef = () => undefined;
 
+const defaultEmptyTips = (
+  <div className="pdf-viewer-default-empty-tips">请打开一个 PDF 文件</div>
+);
+
 export type PDFViewerHandle = {
   load: (file: ArrayBuffer) => Promise<void>;
   setZoom: (zoom: number) => void;
@@ -42,17 +46,35 @@ export type PDFViewerHandle = {
     index: number,
     options?: { scale?: number },
   ) => Promise<Blob | null>;
+  getAllMarkData: () => ShapeDataType[][];
+  setMarkData: (page: number, markData: ShapeDataType[]) => void;
+  setAllMarkData: (markData: ShapeDataType[][]) => void;
 };
 
 export interface PDFViewerProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** 页面之间的间距 */
   pageGap?: number;
+
+  /** 最大缩放级别 */
   maxZoom?: number;
+
+  /** 最小缩放级别 */
   minZoom?: number;
+
+  /** 页面滚动事件 */
   onPageScroll?: React.UIEventHandler<HTMLDivElement>;
+
+  /** 渲染自定义页面覆盖物 */
   renderPageCover?: (
     pageIndex: number,
     options: { viewport: PageViewport },
   ) => React.ReactNode;
+
+  /** 空文件提示 */
+  emptyTips?: React.ReactElement;
+
+  /** 标注内容变化事件 */
+  onMarkChange?: (page: number, markData: ShapeDataType[]) => void;
 }
 
 const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
@@ -63,8 +85,11 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       maxZoom = 3,
       minZoom = -4,
       renderPageCover = ef,
+      onMarkChange = ef,
       style,
       onPageScroll,
+      children,
+      emptyTips = defaultEmptyTips,
       ...otherProps
     } = props;
 
@@ -210,17 +235,6 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
         return null;
       },
     );
-
-    useImperativeHandle(pRef, () => ({
-      load,
-      setZoom,
-      getZoom,
-      changePage,
-      getPageBlob,
-      getCurrentPage,
-      getPageCount,
-      scrollTo,
-    }));
 
     const updateRenderRange = useMemoizedFn(() => {
       const dom = pageContainerRef.current;
@@ -391,7 +405,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     const [_painter] = useState<{
       refs: (PainterRef | null)[];
       // 绘图数据
-      data: any[];
+      data: ShapeDataType[][];
     }>({
       refs: [],
       data: [],
@@ -407,6 +421,41 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
         }
       });
     }, [drawing, drawMode]);
+
+    const getAllMarkData = useMemoizedFn<PDFViewerHandle['getAllMarkData']>(
+      () => _painter.data,
+    );
+    const setMarkData = useMemoizedFn<PDFViewerHandle['setMarkData']>(
+      (pageIndex, data) => {
+        const ref = _painter.refs[pageIndex];
+        if (ref) {
+          ref.clearShapes();
+          ref.addShapes(data);
+        }
+        _painter.data[pageIndex] = data;
+      },
+    );
+    const setAllMarkData = useMemoizedFn<PDFViewerHandle['setAllMarkData']>(
+      (shapeDataList) => {
+        shapeDataList.forEach((shapeData, pageIndex) => {
+          setMarkData(pageIndex, shapeData);
+        });
+      },
+    );
+
+    useImperativeHandle(pRef, () => ({
+      load,
+      setZoom,
+      getZoom,
+      changePage,
+      getPageBlob,
+      getCurrentPage,
+      getPageCount,
+      scrollTo,
+      getAllMarkData,
+      setMarkData,
+      setAllMarkData,
+    }));
 
     return (
       <PDFViewerContext.Provider
@@ -447,12 +496,13 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                 '--scale-factor': scale,
               }}
             >
-              {viewports.map((viewport, index) => {
+              {viewports.length === 0 && emptyTips}
+              {viewports.map((viewport, pageIndex) => {
                 const shouldRender =
-                  index >= renderRange[0] && index <= renderRange[1];
+                  pageIndex >= renderRange[0] && pageIndex <= renderRange[1];
                 return (
                   <div
-                    key={index}
+                    key={pageIndex}
                     className={styles.pageContainer}
                     style={{
                       width: `calc(var(--scale-factor) * ${Math.floor(
@@ -467,7 +517,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                     {shouldRender && (
                       <>
                         <PDFPage
-                          index={index}
+                          index={pageIndex}
                           zoom={zoom}
                           render={shouldRender}
                           style={{ width: '100%', height: '100%' }}
@@ -475,14 +525,14 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                         {/* 绘图 */}
                         <div className={styles.pageCover}>
                           <Painter
-                            ref={(ref) => (_painter.refs[index] = ref)}
+                            ref={(ref) => (_painter.refs[pageIndex] = ref)}
                             width={viewport.width}
                             height={viewport.height}
                             style={{ height: '100%', zIndex: 10 }}
                             defaultDrawMode={drawing ? drawMode : false}
                             onInit={() => {
-                              const shapeData = _painter.data[index];
-                              const ref = _painter.refs[index];
+                              const shapeData = _painter.data[pageIndex];
+                              const ref = _painter.refs[pageIndex];
                               if (shapeData && ref) {
                                 ref.addShapes(shapeData);
                                 if (drawing) {
@@ -491,13 +541,17 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                               }
                             }}
                             onDataChange={() => {
-                              const ref = _painter.refs[index];
-                              _painter.data[index] = ref?.getShapes();
+                              const ref = _painter.refs[pageIndex];
+                              if (ref) {
+                                const shapes = ref.getShapes();
+                                _painter.data[pageIndex] = shapes;
+                                onMarkChange(pageIndex, shapes);
+                              }
                             }}
                           />
                         </div>
                         <div className={styles.pageCover}>
-                          {renderPageCover(index, { viewport })}
+                          {renderPageCover(pageIndex, { viewport })}
                         </div>
                       </>
                     )}
@@ -524,6 +578,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
               }}
             />
           </div>
+          {children}
         </PDFToolbarContext.Provider>
       </PDFViewerContext.Provider>
     );
