@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import Painter, { usePainterRef } from '@orca-fe/painter';
+import Painter, { ColorPicker, usePainterRef } from '@orca-fe/painter';
 import { Button } from 'antd';
 
 const Demo1 = () => {
@@ -18,12 +18,20 @@ const Demo1 = () => {
   };
   return (
     <div>
+      <ColorPicker />
       <Button
         onClick={() => {
           draw('line');
         }}
       >
         Draw Line
+      </Button>
+      <Button
+        onClick={() => {
+          draw('line-path');
+        }}
+      >
+        Draw LinePath
       </Button>
       <Button
         onClick={() => {
@@ -39,8 +47,7 @@ const Demo1 = () => {
       >
         Draw Rectangle
       </Button>
-
-      <Painter ref={painterRef} />
+      <Painter ref={painterRef} style={{ height: 400 }} />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import Konva from 'konva';
-import { useMemoizedFn } from 'ahooks';
-import { useSizeListener } from '@orca-fe/hooks';
+import { useEventListener, useMemoizedFn } from 'ahooks';
+import { useSizeListener, useStaticClick } from '@orca-fe/hooks';
 import useStyle from './Painter.style';
 import ShapeCreator from './ShapeCreator';
 import { createOrUpdateShape, createShape, normalizeShape } from './utils';
@@ -11,12 +11,19 @@ const ef = () => undefined;
 
 export type PainterRef = {
   draw: (shapeType: ShapeType) => void;
+  addShapes: (shapeData: ShapeDataType | ShapeDataType[]) => void;
+  check: (index: number | number[]) => void;
+  unCheck: () => void;
+  getShapes: () => ShapeDataType[];
 };
 
 export interface PainterProps extends React.HTMLAttributes<HTMLDivElement> {
   width?: number;
   height?: number;
   onInit?: () => void;
+  onDestroyed?: () => void;
+  onCheck?: (index: number) => void;
+  onCancelCheck?: () => void;
 }
 
 const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
@@ -25,6 +32,9 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
     width = 800,
     height = 300,
     onInit = ef,
+    onDestroyed = ef,
+    onCheck = ef,
+    onCancelCheck = ef,
     ...otherProps
   } = props;
   const styles = useStyle();
@@ -40,6 +50,9 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
     drawingShape?: Konva.Shape;
     shapes: Konva.Shape[];
     transformer?: Konva.Transformer;
+    dragging?: boolean;
+    hovering?: boolean;
+    transforming?: boolean;
   }>({
     shapes: [],
   });
@@ -48,26 +61,30 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
     setDrawType(type);
   });
 
-  const transformShape = useMemoizedFn(
-    (_shapes: Konva.Shape | Konva.Shape[]) => {
-      const shapes = Array.isArray(_shapes) ? _shapes : [_shapes];
-      if (_this.layer) {
-        if (_this.transformer) _this.transformer.destroy();
-        const transformer = new Konva.Transformer({
-          nodes: shapes,
-          keepRatio: false,
+  const unCheck = useMemoizedFn(() => {
+    if (_this.transformer) _this.transformer.destroy();
+    _this.transforming = false;
+  });
+
+  const check = useMemoizedFn((_shapes: Konva.Shape | Konva.Shape[]) => {
+    const shapes = Array.isArray(_shapes) ? _shapes : [_shapes];
+    if (_this.layer) {
+      unCheck();
+      _this.transforming = true;
+      const transformer = new Konva.Transformer({
+        nodes: shapes,
+        keepRatio: false,
+      });
+      transformer.on('transformend', () => {
+        shapes.forEach((shape) => {
+          normalizeShape(shape);
+          shape.draw();
         });
-        transformer.on('transformend', () => {
-          shapes.forEach((shape) => {
-            normalizeShape(shape);
-            shape.draw();
-          });
-        });
-        _this.layer.add(transformer);
-        _this.transformer = transformer;
-      }
-    },
-  );
+      });
+      _this.layer.add(transformer);
+      _this.transformer = transformer;
+    }
+  });
 
   /**
    * 添加图形
@@ -79,14 +96,26 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
         const shape = createShape(shapeData);
         shape.fillEnabled(false);
         shape.draggable(true);
+        shape.setAttr('hitStrokeWidth', 4);
         shape.on('click', (ev) => {
-          transformShape(shape);
+          check(shape);
+          onCheck(_this.shapes.findIndex((s) => s === shape));
         });
         shape.on('mouseenter', () => {
           rootRef.current?.classList.add(...styles.move.split(' '));
+          _this.hovering = true;
         });
         shape.on('mouseleave', () => {
           rootRef.current?.classList.remove(...styles.move.split(' '));
+          _this.hovering = false;
+        });
+        shape.on('dragstart', () => {
+          rootRef.current?.classList.add(...styles.move.split(' '));
+          _this.dragging = true;
+        });
+        shape.on('dragend', () => {
+          rootRef.current?.classList.remove(...styles.move.split(' '));
+          _this.dragging = false;
         });
         return shape;
       });
@@ -98,26 +127,61 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
     },
   );
 
+  const checkIndex = useMemoizedFn<PainterRef['check']>((_index) => {
+    const index = Array.isArray(_index) ? _index : [_index];
+    check(index.map((i) => _this.shapes[i]));
+  });
+
+  const getShapes = useMemoizedFn<PainterRef['getShapes']>(() =>
+    _this.shapes.map((shape) => shape.getAttrs()),
+  );
+
   useImperativeHandle(pRef, () => ({
     draw,
+    addShapes,
+    unCheck,
+    check: checkIndex,
+    getShapes,
   }));
 
-  const resizeLayer = useMemoizedFn(
-    (realSize: { width: number; height: number }) => {
-      const ratioX = realSize.width / width;
-      const ratioY = realSize.height / height;
-      const ratio = Math.min(ratioY, ratioX);
-      const x = 0.5 * (realSize.width - width * ratio);
-      const y = 0.5 * (realSize.height - height * ratio);
-      console.log(x, y);
-      if (_this.layer) {
-        _this.layer.x(x);
-        _this.layer.y(y);
-        _this.layer.scale({ x: ratio, y: ratio });
-        _this.layer.draw();
+  useStaticClick(
+    (ev) => {
+      if (!_this.dragging && !_this.hovering) {
+        // 点击空白区域，取消选中
+        unCheck();
+        onCancelCheck();
       }
     },
+    {
+      target: rootRef,
+    },
   );
+
+  useEventListener('keydown', (ev) => {
+    if (
+      ev.key === 'Escape' &&
+      !ev.altKey &&
+      !ev.shiftKey &&
+      !ev.metaKey &&
+      !ev.ctrlKey
+    ) {
+      // 按下 Escape 快捷键 取消选中
+      unCheck();
+      onCancelCheck();
+    }
+  });
+
+  const scalePainter = useMemoizedFn(() => {
+    if (_this.stage && _this.layer) {
+      const size = _this.stage.getSize();
+      const ratio = Math.max(size.width / width, size.height / height);
+      const x = 0.5 * (size.width - ratio * width);
+      const y = 0.5 * (size.height - ratio * height);
+      _this.layer.x(x);
+      _this.layer.y(y);
+      _this.layer.scale({ x: ratio, y: ratio });
+    }
+  });
 
   useEffect(() => {
     const container = canvasRef.current;
@@ -137,34 +201,28 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
       _this.stage = stage;
       _this.layer = layer;
 
-      resizeLayer({
-        width: container.clientWidth,
-        height: container.clientHeight,
-      });
+      // draw the image
+      scalePainter();
+      layer.draw();
       onInit();
 
       return () => {
         _this.stage = undefined;
         stage.destroy();
+        onDestroyed();
       };
     }
     return undefined;
   }, []);
 
-  useSizeListener(({ width, height }) => {
-    if (width > 0 && height > 0) {
-      if (_this.stage) {
-        _this.stage.setSize({
-          width,
-          height,
-        });
-      }
-      resizeLayer({ width, height });
-    }
+  useSizeListener((size) => {
+    _this.stage?.setSize(size);
+    scalePainter();
   }, rootRef);
 
   return (
     <div
+      tabIndex={-1}
       ref={rootRef}
       className={`${styles.root} ${className}`}
       {...otherProps}
@@ -173,6 +231,13 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
       {drawType && (
         <ShapeCreator
           shapeType={drawType}
+          pointMapping={(point) => {
+            if (_this.layer) {
+              // console.log(_this.layer.getTransform().decompose());
+              return _this.layer.getTransform().copy().invert().point(point);
+            }
+            return point;
+          }}
           onDrawing={(shape) => {
             if (_this.layer) {
               const newShape = createOrUpdateShape(shape, _this.drawingShape);

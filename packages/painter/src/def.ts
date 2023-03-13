@@ -1,4 +1,4 @@
-export type ShapeType = 'line' | 'ellipse' | 'rectangle';
+export type ShapeType = 'line' | 'ellipse' | 'rectangle' | 'line-path';
 
 export type LineShapeType = {
   type: 'line';
@@ -21,4 +21,13 @@ export type RectangleType = {
   height: number;
 };
 
-export type ShapeDataType = LineShapeType | EllipseType | RectangleType;
+export type LinePathType = {
+  type: 'line-path';
+  points: number[];
+};
+
+export type ShapeDataType =
+  | LineShapeType
+  | EllipseType
+  | RectangleType
+  | LinePathType;
