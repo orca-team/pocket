@@ -21,7 +21,7 @@ const colorDef = [
   '#cccccc',
   '#eeeeee',
   '#ffffff',
-  '#eb2f96',
+  '#cc0000',
   '#722ed1',
   '#2f54eb',
   '#1890ff',
@@ -37,6 +37,7 @@ export interface ColorPickerProps extends Omit<InputProps, 'onChange'> {
   value?: string;
   onChange?: (color: string) => void;
   localStorageKey?: string;
+  size?: number;
 }
 
 const ColorPicker = (props: ColorPickerProps) => {
@@ -47,6 +48,7 @@ const ColorPicker = (props: ColorPickerProps) => {
     value: nouse,
     onChange,
     defaultValue,
+    size,
     ...otherProps
   } = props;
 
@@ -227,6 +229,7 @@ const ColorPicker = (props: ColorPickerProps) => {
           className={styles.prefixPreviewColor}
           color={color}
           border="1px solid #999"
+          size={size}
         />
       </div>
     </Trigger>

@@ -60,32 +60,32 @@ function checkShapeType(shape: Konva.Shape, type: ShapeType) {
 }
 
 export function createShape(shapeData: ShapeDataType) {
+  let shape: Konva.Shape;
   switch (shapeData.type) {
     case 'rectangle':
-      return new Konva.Rect({
-        x: shapeData.x,
-        y: shapeData.y,
-        width: shapeData.width,
-        height: shapeData.height,
+      shape = new Konva.Rect({
         stroke: '#000',
+        ...shapeData,
       });
+      break;
     case 'ellipse':
-      return new Konva.Ellipse({
-        x: shapeData.x,
-        y: shapeData.y,
-        radiusX: shapeData.radiusX,
-        radiusY: shapeData.radiusY,
+      shape = new Konva.Ellipse({
         stroke: '#000',
+        ...shapeData,
       });
+      break;
     case 'line':
     case 'line-path':
-      return new Konva.Line({
-        points: shapeData.points,
+      shape = new Konva.Line({
         stroke: '#000',
+        ...shapeData,
       });
+      break;
     default:
+      throw new Error(`invalid shape type: '${shapeData['type']}'`);
   }
-  throw new Error(`invalid shape type: '${shapeData['type']}'`);
+  shape.setAttr('type', shapeData.type);
+  return shape;
 }
 
 export function createOrUpdateShape(

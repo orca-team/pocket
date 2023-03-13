@@ -7,14 +7,18 @@ import ShapeCreator from './ShapeCreator';
 import { createOrUpdateShape, createShape, normalizeShape } from './utils';
 import type { ShapeDataType, ShapeType } from './def';
 
+export type { ShapeDataType, ShapeType };
+
 const ef = () => undefined;
 
 export type PainterRef = {
-  draw: (shapeType: ShapeType) => void;
+  draw: (shapeType: ShapeType, attr?: Record<string, any>) => void;
+  cancelDraw: () => void;
   addShapes: (shapeData: ShapeDataType | ShapeDataType[]) => void;
   check: (index: number | number[]) => void;
   unCheck: () => void;
   getShapes: () => ShapeDataType[];
+  isDrawing: () => boolean;
 };
 
 export interface PainterProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -24,8 +28,13 @@ export interface PainterProps extends React.HTMLAttributes<HTMLDivElement> {
   onDestroyed?: () => void;
   onCheck?: (index: number) => void;
   onCancelCheck?: () => void;
+  defaultDrawMode?: DrawMode | false;
+  onDraw?: () => void;
+  onDataChange?: () => void;
+  drawOnce?: boolean;
 }
 
+export type DrawMode = { shapeType: ShapeType; attr?: Record<string, any> };
 const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
   const {
     className = '',
@@ -35,6 +44,10 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
     onDestroyed = ef,
     onCheck = ef,
     onCancelCheck = ef,
+    onDraw = ef,
+    onDataChange = ef,
+    defaultDrawMode = false,
+    drawOnce,
     ...otherProps
   } = props;
   const styles = useStyle();
@@ -42,7 +55,7 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
   const canvasRef = useRef<HTMLDivElement>(null);
 
   // 绘画模式
-  const [drawType, setDrawType] = useState<ShapeType | false>(false);
+  const [drawMode, setDrawMode] = useState<DrawMode | false>(defaultDrawMode);
 
   const [_this] = useState<{
     stage?: Konva.Stage;
@@ -57,8 +70,15 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
     shapes: [],
   });
 
-  const draw = useMemoizedFn<PainterRef['draw']>((type) => {
-    setDrawType(type);
+  const draw = useMemoizedFn<PainterRef['draw']>((type, attr) => {
+    setDrawMode({
+      attr,
+      shapeType: type,
+    });
+  });
+
+  const cancelDraw = useMemoizedFn<PainterRef['cancelDraw']>(() => {
+    setDrawMode(false);
   });
 
   const unCheck = useMemoizedFn(() => {
@@ -80,6 +100,7 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
           normalizeShape(shape);
           shape.draw();
         });
+        onDataChange();
       });
       _this.layer.add(transformer);
       _this.transformer = transformer;
@@ -116,6 +137,8 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
         shape.on('dragend', () => {
           rootRef.current?.classList.remove(...styles.move.split(' '));
           _this.dragging = false;
+          normalizeShape(shape);
+          onDataChange();
         });
         return shape;
       });
@@ -135,13 +158,16 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
   const getShapes = useMemoizedFn<PainterRef['getShapes']>(() =>
     _this.shapes.map((shape) => shape.getAttrs()),
   );
+  const isDrawing = useMemoizedFn<PainterRef['isDrawing']>(() => !!drawMode);
 
   useImperativeHandle(pRef, () => ({
     draw,
+    cancelDraw,
     addShapes,
     unCheck,
     check: checkIndex,
     getShapes,
+    isDrawing,
   }));
 
   useStaticClick(
@@ -228,9 +254,9 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
       {...otherProps}
     >
       <div ref={canvasRef} className={styles.canvasContainer} />
-      {drawType && (
+      {drawMode && (
         <ShapeCreator
-          shapeType={drawType}
+          shapeType={drawMode.shapeType}
           pointMapping={(point) => {
             if (_this.layer) {
               // console.log(_this.layer.getTransform().decompose());
@@ -240,8 +266,13 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
           }}
           onDrawing={(shape) => {
             if (_this.layer) {
-              const newShape = createOrUpdateShape(shape, _this.drawingShape);
-
+              const newShape = createOrUpdateShape(
+                {
+                  ...shape,
+                  ...drawMode.attr,
+                },
+                _this.drawingShape,
+              );
               if (newShape) {
                 if (_this.drawingShape) {
                   _this.drawingShape.destroy();
@@ -256,8 +287,15 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
             if (_this.layer) {
               _this.drawingShape?.destroy();
               _this.drawingShape = undefined;
-              addShapes(shape);
-              setDrawType(false);
+              addShapes({
+                ...shape,
+                ...drawMode.attr,
+              });
+              if (drawOnce) {
+                setDrawMode(false);
+              }
+              onDraw();
+              onDataChange();
             }
           }}
         />

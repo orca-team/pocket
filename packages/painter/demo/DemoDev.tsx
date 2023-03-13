@@ -47,7 +47,12 @@ const Demo1 = () => {
       >
         Draw Rectangle
       </Button>
-      <Painter ref={painterRef} style={{ height: 400 }} />
+      <Painter
+        ref={painterRef}
+        style={{ height: 400 }}
+        height={5000}
+        width={5000}
+      />
     </div>
   );
 };
