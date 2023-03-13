@@ -42,8 +42,12 @@ export default createUseStyles(
     },
     prefixPreview: {
       position: 'relative',
-      width: '1.2em',
-      height: '1.2em',
+      cursor: 'pointer',
+      padding: 4,
+      '&:active': {
+        filter: 'brightness(0.95)',
+        backgroundColor: 'rgba(0, 0, 0, 0.15)',
+      },
     },
     prefixPreviewColor: {
       height: '100%',

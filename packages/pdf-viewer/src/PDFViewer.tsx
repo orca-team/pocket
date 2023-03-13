@@ -6,7 +6,6 @@ import {
   useEventListener,
   useMemoizedFn,
 } from 'ahooks';
-import type { Dispatch, SetStateAction } from 'react';
 import React, {
   useEffect,
   useImperativeHandle,
@@ -14,74 +13,27 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { useGetState } from '@orca-fe/hooks';
+import type { PainterRef, ShapeType } from '@orca-fe/painter';
+import Painter from '@orca-fe/painter';
 import type { PageViewport } from './context';
-import PDFViewerContext from './context';
+import PDFViewerContext, { PDFToolbarContext } from './context';
 import PDFPage from './PDFPage';
 import PDFToolbar from './PDFToolbar';
 import useStyle from './PDFViewer.style';
 import * as _pdfJS from './pdfjs-build/pdf';
 import * as pdfjsWorker from './pdfjs-build/pdf.worker';
+import { findSortedArr } from './utils';
+import PainterToolbar from './PainterToolbar';
 
 const pdfJs: any = _pdfJS;
 
 const ef = () => undefined;
 
-type GetStateAction<S> = () => S;
-
-function useGetState<S>(
-  initialState: S | (() => S),
-): [S, Dispatch<SetStateAction<S>>, GetStateAction<S>] {
-  const [_this] = useState(() => ({
-    state: typeof initialState === 'function' ? initialState() : initialState,
-  }));
-
-  const getState = useMemoizedFn(() => _this.state);
-
-  const [state, _setState] = useState<S>(_this.state);
-
-  const setState = useMemoizedFn<Dispatch<SetStateAction<S>>>((state) => {
-    if (typeof state === 'function') {
-      _setState((originState) => {
-        const newState = state(originState);
-        _this.state = newState;
-        return newState;
-      });
-    } else {
-      _this.state = state;
-      _setState(state);
-    }
-  });
-
-  return [state, setState, getState];
-}
-
-function findSortedArr(
-  arr: number[],
-  value: number,
-  start = 0,
-  end = arr.length,
-) {
-  const index = Math.floor((start + end) / 2);
-  if (arr[end - 1] < value) return end;
-  if (index === start) {
-    return index;
-  }
-  if (arr[index] === value) {
-    return index;
-  }
-  if (arr[index] < value) {
-    const res = findSortedArr(arr, value, index + 1, end);
-    if (res >= 0) return res;
-  }
-  if (index === 0) return 0;
-  if (arr[index - 1] < value) return index;
-  return findSortedArr(arr, value, start, index);
-}
-
 export type PDFViewerHandle = {
   load: (file: ArrayBuffer) => Promise<void>;
   setZoom: (zoom: number) => void;
-  getZoom: () => void;
+  getZoom: () => number;
   changePage: (pageIndex: number, anim?: boolean) => void;
   scrollTo: Element['scrollTo'];
   getCurrentPage: () => number;
@@ -133,12 +85,10 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     const scale = 2 ** zoom;
 
     const [_this] = useState<{
-      pages: any[];
       pdfDoc?: any;
       mousePositionBeforeWheel?: { x: number; y: number; zoom: number };
       zooming: boolean;
     }>({
-      pages: [],
       zooming: false,
     });
 
@@ -152,7 +102,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
 
     const [renderRange, setRenderRange] = useState<[number, number]>([0, 0]);
 
-    const [pages, setPages] = useState<any[]>([]);
+    const [pages, setPages, getPages] = useGetState<any[]>([]);
 
     const viewports = useMemo(
       () =>
@@ -201,7 +151,6 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
               return page;
             }),
           );
-          _this.pages = allPages;
           setPages(allPages);
           const dom = pageContainerRef.current;
           if (dom) {
@@ -218,14 +167,14 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       () => current,
     );
     const getPageCount = useMemoizedFn<PDFViewerHandle['getPageCount']>(
-      () => _this.pages.length,
+      () => getPages().length,
     );
 
     // 獲取頁面的圖片
     const getPageBlob = useMemoizedFn<PDFViewerHandle['getPageBlob']>(
       async (index, options = {}) => {
         const { scale = 2 } = options;
-        const { pages } = _this;
+        const pages = getPages();
         if (index < 0 || index >= pages.length) return null;
         const canvas = document.createElement('canvas');
         document.body.append(canvas);
@@ -422,6 +371,43 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       }
     });
 
+    /* 工具栏 */
+    const toolbarLeftRef = useRef<HTMLDivElement>(null);
+    const toolbarRightRef = useRef<HTMLDivElement>(null);
+
+    const getToolbarLeftDom = useMemoizedFn(() => toolbarLeftRef.current);
+    const getToolbarRightDom = useMemoizedFn(() => toolbarRightRef.current);
+
+    /* 绘图功能 */
+    const [drawing, setDrawing] = useState(false);
+
+    const [drawMode, setDrawMode] = useState<{
+      shapeType: ShapeType;
+      attr?: Record<string, any>;
+    }>({
+      shapeType: 'rectangle',
+    });
+
+    const [_painter] = useState<{
+      refs: (PainterRef | null)[];
+      // 绘图数据
+      data: any[];
+    }>({
+      refs: [],
+      data: [],
+    });
+    useEffect(() => {
+      _painter.refs.forEach((painter) => {
+        if (painter) {
+          if (drawing) {
+            painter.draw(drawMode.shapeType, drawMode.attr);
+          } else {
+            painter.cancelDraw();
+          }
+        }
+      });
+    }, [drawing, drawMode]);
+
     return (
       <PDFViewerContext.Provider
         value={useMemo(
@@ -435,69 +421,114 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
           [pages, zoom, current],
         )}
       >
-        <div
-          className={`${styles.root} ${className}`}
-          style={{
-            ...style,
-          }}
-          {...otherProps}
+        <PDFToolbarContext.Provider
+          value={useMemo(() => ({ getToolbarLeftDom, getToolbarRightDom }), [])}
         >
-          {pages.length > 0 && (
+          <div
+            className={`${styles.root} ${className}`}
+            style={{
+              ...style,
+            }}
+            {...otherProps}
+          >
             <PDFToolbar
               className={styles.toolbar}
               max={2 ** maxZoom}
               min={2 ** minZoom}
+              leftRef={toolbarLeftRef}
+              rightRef={toolbarRightRef}
             />
-          )}
-          <div
-            ref={pageContainerRef}
-            className={styles.pages}
-            onScroll={onPageScroll}
-            style={{
-              // @ts-expect-error
-              '--scale-factor': scale,
-            }}
-          >
-            {viewports.map((viewport, index) => {
-              const shouldRender =
-                index >= renderRange[0] && index <= renderRange[1];
-              return (
-                <div
-                  key={index}
-                  className={styles.pageContainer}
-                  style={{
-                    width: `calc(var(--scale-factor) * ${Math.floor(
-                      viewport.width,
-                    )}px)`,
-                    height: `calc(var(--scale-factor) * ${Math.floor(
-                      viewport.height,
-                    )}px)`,
-                    marginBottom: `calc(var(--scale-factor) * ${pageGap}px)`,
-                  }}
-                >
-                  {shouldRender && (
-                    <>
-                      <PDFPage
-                        index={index}
-                        zoom={zoom}
-                        render={shouldRender}
-                        style={{ width: '100%', height: '100%' }}
-                      />
-                      <div className={styles.pageCover}>
-                        {renderPageCover(index, { viewport })}
-                      </div>
-                    </>
-                  )}
-                </div>
-              );
-            })}
+            <div
+              ref={pageContainerRef}
+              className={styles.pages}
+              onScroll={onPageScroll}
+              style={{
+                // @ts-expect-error
+                '--scale-factor': scale,
+              }}
+            >
+              {viewports.map((viewport, index) => {
+                const shouldRender =
+                  index >= renderRange[0] && index <= renderRange[1];
+                return (
+                  <div
+                    key={index}
+                    className={styles.pageContainer}
+                    style={{
+                      width: `calc(var(--scale-factor) * ${Math.floor(
+                        viewport.width,
+                      )}px)`,
+                      height: `calc(var(--scale-factor) * ${Math.floor(
+                        viewport.height,
+                      )}px)`,
+                      marginBottom: `calc(var(--scale-factor) * ${pageGap}px)`,
+                    }}
+                  >
+                    {shouldRender && (
+                      <>
+                        <PDFPage
+                          index={index}
+                          zoom={zoom}
+                          render={shouldRender}
+                          style={{ width: '100%', height: '100%' }}
+                        />
+                        {/* 绘图 */}
+                        <div className={styles.pageCover}>
+                          <Painter
+                            ref={(ref) => (_painter.refs[index] = ref)}
+                            width={viewport.width}
+                            height={viewport.height}
+                            style={{ height: '100%', zIndex: 10 }}
+                            defaultDrawMode={drawing ? drawMode : false}
+                            onInit={() => {
+                              const shapeData = _painter.data[index];
+                              const ref = _painter.refs[index];
+                              if (shapeData && ref) {
+                                ref.addShapes(shapeData);
+                                if (drawing) {
+                                  ref.draw(drawMode.shapeType, drawMode.attr);
+                                }
+                              }
+                            }}
+                            onDataChange={() => {
+                              const ref = _painter.refs[index];
+                              _painter.data[index] = ref?.getShapes();
+                            }}
+                          />
+                        </div>
+                        <div className={styles.pageCover}>
+                          {renderPageCover(index, { viewport })}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* 工具栏渲染 */}
+            <PainterToolbar
+              drawing={drawing}
+              drawMode={drawMode}
+              onDrawModeChange={(shapeType, attr) => {
+                setDrawMode({
+                  attr,
+                  shapeType,
+                });
+                if (!drawing) {
+                  setDrawing(true);
+                }
+              }}
+              onDrawCancel={() => {
+                setDrawing(false);
+              }}
+            />
           </div>
-        </div>
+        </PDFToolbarContext.Provider>
       </PDFViewerContext.Provider>
     );
   },
 );
-
 PDFViewer.displayName = 'PDFViewer';
 
 export const usePdfViewerRef = () => useRef<PDFViewerHandle>(null);

@@ -23,6 +23,7 @@ import useInterval from './useInterval';
 import useHotkeyListener from './hotkey-manager/useHotkeyListener';
 import HotkeyManager from './hotkey-manager';
 import HotkeyManagerContext from './hotkey-manager/HotkeyManagerContext';
+import useGetState from './useGetState';
 
 export {
   useWindowSize,
@@ -39,6 +40,7 @@ export {
   usePan,
   useService,
   useInterval,
+  useGetState,
 
   // events
   useEventEmitter,

@@ -1,5 +1,4 @@
-import { MenuOutlined } from '@ant-design/icons';
-import { IconButton, UcInput } from '@orca-fe/pocket';
+import { UcInput } from '@orca-fe/pocket';
 import { Space } from 'antd';
 import React, { useContext } from 'react';
 import PDFViewerContext from '../context';
@@ -10,10 +9,12 @@ export interface PdfToolbarProps extends React.HTMLAttributes<HTMLDivElement> {
   value?: string;
   max?: number;
   min?: number;
+  leftRef?: React.Ref<HTMLDivElement>;
+  rightRef?: React.Ref<HTMLDivElement>;
 }
 
 const PDFToolbar = (props: PdfToolbarProps) => {
-  const { className = '', max, min, ...otherProps } = props;
+  const { className = '', max, min, rightRef, leftRef, ...otherProps } = props;
   const styles = useStyle();
 
   const { changePage, pages, zoom, setZoom, current } =
@@ -21,10 +22,10 @@ const PDFToolbar = (props: PdfToolbarProps) => {
 
   return (
     <div className={`${styles.root} ${className}`} {...otherProps}>
-      <div className={styles.left}>
-        <IconButton>
-          <MenuOutlined />
-        </IconButton>
+      <div ref={leftRef} className={styles.left}>
+        {/* <IconButton>*/}
+        {/*  <MenuOutlined />*/}
+        {/* </IconButton>*/}
       </div>
       <div className={styles.center}>
         <Space>
@@ -68,7 +69,7 @@ const PDFToolbar = (props: PdfToolbarProps) => {
           />
         </Space>
       </div>
-      <div className={styles.right} />
+      <div ref={rightRef} className={styles.right} />
     </div>
   );
 };
