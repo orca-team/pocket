@@ -7,6 +7,8 @@ module.exports = {
           ['@orca-fe/hooks', './packages/hooks/src'],
           ['@orca-fe/pocket', './packages/pocket/src'],
           ['@orca-fe/tools', './packages/tools/src'],
+          ['@orca-fe/pdf-viewer', './packages/pdf-viewer/src'],
+          ['@orca-fe/painter', './packages/painter/src'],
         ],
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
       },
