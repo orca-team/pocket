@@ -34,11 +34,34 @@ export default () => {
 };
 ```
 
+## useSizeDebounceListener
+
+`1.2.0`
+
+```ts
+function useSizeDebounceListener(
+  callback: (
+    size: { width: number; height: number },
+    scale?: { x: number; y: number },
+  ) => void,
+  target: BasicTarget,
+  debounceInterval = 300,
+): void;
+```
+
+由于 `useSizeListener` 可能会频繁触发（例如拖动窗口，触摸板缩放，动画缩放等），我们通常需要添加防抖，防止过度触发 `resize` 事件。
+
+但添加防抖后，虽然减少了计算，提升了渲染性能，但在防抖期间的过度效果，就可能出现明显的卡顿，效果不佳。
+
+`useSizeDebounceListener` 内置了防抖功能，并在缩放过程中，不会改变 `size` 的尺寸，只会传回 `scale`，表示在这期间缩放比例的变化。 触发防抖时，`scale` 的值为 `undefined`，此时的 `size` 才是真实尺寸。
+
 ## API
 
 ### Props
 
-| 属性   | 说明 | 类型     | 默认值 |
-| ------ | ---- | -------- | ------ |
-| width  | 宽度 | `number` | -      |
-| height | 高度 | `number` | -      |
+| 属性             | 说明                                               | 类型              | 默认值 |
+| ---------------- | -------------------------------------------------- | ----------------- | ------ |
+| width            | 宽度                                               | `number`          | -      |
+| height           | 高度                                               | `number`          | -      |
+| target           | 监听尺寸的对象                                     | `Ref/HTMLElement` | -      |
+| debounceInterval | 防抖延迟触发的时间(`useSizeDebounceListener` 可用) | `number`          | `300`  |

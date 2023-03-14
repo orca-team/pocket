@@ -9,10 +9,8 @@ export interface ToolbarPortalProps {
 
 const ToolbarPortal = (props: ToolbarPortalProps) => {
   const { placement = 'right', children } = props;
-  const { getToolbarLeftDom, getToolbarRightDom } =
-    useContext(PDFToolbarContext);
-  const toolbarDom =
-    placement === 'right' ? getToolbarRightDom() : getToolbarLeftDom();
+  const { toolbarRightDom, toolbarLeftDom } = useContext(PDFToolbarContext);
+  const toolbarDom = placement === 'right' ? toolbarRightDom : toolbarLeftDom;
   return <>{toolbarDom ? ReactDOM.createPortal(children, toolbarDom) : null}</>;
 };
 

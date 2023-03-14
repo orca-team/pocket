@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useDebounceEffect, useMemoizedFn } from 'ahooks';
+import { useDebounceFn, useMemoizedFn, useUpdateEffect } from 'ahooks';
 import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
 import type { PageViewport } from '../context';
 import PDFViewerContext from '../context';
@@ -34,22 +34,23 @@ const PDFPage = (props: PdfPageProps) => {
   //   return null;
   // }, [page, scale]);
 
-  const renderPdf = useMemoizedFn(async () => {
+  const renderPdf = useMemoizedFn(async (twice = false) => {
     const canvas = canvasRef.current;
     if (!render) return;
     if (canvas && page) {
       const viewport = page.getViewport({ scale }) as PageViewport;
+      canvas.width = Math.ceil(viewport.width * outputScale);
+      canvas.height = Math.ceil(viewport.height * outputScale);
       const context = canvas.getContext('2d');
       if (context) {
-        canvas.width = Math.floor(viewport.width * outputScale);
-        canvas.height = Math.floor(viewport.height * outputScale);
         const transform =
           outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
 
         // canvas.style.width = `${Math.floor(viewport.width)}px`;
         // canvas.style.height = `${Math.floor(viewport.height)}px`;
-        if (_this.task && typeof _this.task.cancel === 'function')
+        if (_this.task && typeof _this.task.cancel === 'function') {
           _this.task.cancel();
+        }
         const task = page.render({
           canvasContext: context,
           transform,
@@ -65,31 +66,27 @@ const PDFPage = (props: PdfPageProps) => {
         task.promise
           .then(() => {
             _this.task = undefined;
-            setTimeout(() => {
-              if (!_this.task) {
-                _this.task = page
-                  .render({
-                    canvasContext: context,
-                    transform,
-                    viewport,
-                  })
-                  .promise.then(() => {
-                    _this.task = undefined;
-                  });
-              }
-            }, 0);
+            if (twice) {
+              setTimeout(() => {
+                if (!_this.task) {
+                  _this.task = page
+                    .render({
+                      canvasContext: context,
+                      transform,
+                      viewport,
+                    })
+                    .promise.then(() => {
+                      _this.task = undefined;
+                    });
+                }
+              }, 0);
+            }
           })
           .catch((err) => {
             if (err.name !== 'RenderingCancelledException') {
               console.error(err);
             }
           });
-        // task.promise.then(() => {
-        //   _this.task = page.render({
-        //     canvasContext: context,
-        //     viewport,
-        //   });
-        // });
       }
     }
   });
@@ -98,22 +95,14 @@ const PDFPage = (props: PdfPageProps) => {
     renderPdf();
   }, [render, page]);
 
-  useDebounceEffect(
-    () => {
-      renderPdf();
-    },
-    [scale],
-    { wait: 300 },
-  );
+  const renderPdfDebounce = useDebounceFn(renderPdf, { wait: 300 });
+
+  useUpdateEffect(() => {
+    renderPdfDebounce.run(true);
+  }, [scale]);
 
   return (
-    <div
-      className={`${styles.root} ${className}`}
-      onClick={() => {
-        renderPdf();
-      }}
-      {...otherProps}
-    >
+    <div className={`${styles.root} ${className}`} {...otherProps}>
       <canvas className={styles.canvas} ref={canvasRef} />
     </div>
   );

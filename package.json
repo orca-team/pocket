@@ -86,8 +86,10 @@
     "@orca-fe/eslint-config": "^2.3.3",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
     "@orca-fe/simple-jss": "^0.0.1",
+    "@types/file-saver": "^2.0.5",
     "cross-env": "^7.0.3",
     "eslint": "^8.27.0",
+    "file-saver": "^2.0.5",
     "react-json-view": "^1.21.3"
   }
 }

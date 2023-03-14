@@ -35,7 +35,7 @@ const defaultEmptyTips = (
 );
 
 export type PDFViewerHandle = {
-  load: (file: ArrayBuffer) => Promise<void>;
+  load: (file: string | URL | File | ArrayBuffer) => Promise<void>;
   setZoom: (zoom: number) => void;
   getZoom: () => number;
   changePage: (pageIndex: number, anim?: boolean) => void;
@@ -49,6 +49,7 @@ export type PDFViewerHandle = {
   getAllMarkData: () => ShapeDataType[][];
   setMarkData: (page: number, markData: ShapeDataType[]) => void;
   setAllMarkData: (markData: ShapeDataType[][]) => void;
+  clearAllMarkData: () => void;
 };
 
 export interface PDFViewerProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -163,8 +164,12 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     });
 
     const load = useMemoizedFn<PDFViewerHandle['load']>(async (file) => {
+      let pdfContent = file;
+      if (pdfContent instanceof File) {
+        pdfContent = await pdfContent.arrayBuffer();
+      }
       if (pdfJs) {
-        const pdfDoc = await pdfJs.getDocument(file).promise;
+        const pdfDoc = await pdfJs.getDocument(pdfContent).promise;
         // 總頁數
         if (pdfDoc) {
           _this.pdfDoc = pdfDoc;
@@ -386,11 +391,11 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     });
 
     /* 工具栏 */
-    const toolbarLeftRef = useRef<HTMLDivElement>(null);
-    const toolbarRightRef = useRef<HTMLDivElement>(null);
-
-    const getToolbarLeftDom = useMemoizedFn(() => toolbarLeftRef.current);
-    const getToolbarRightDom = useMemoizedFn(() => toolbarRightRef.current);
+    const [toolbarLeftDom, setToolbarLeftDom] = useState<HTMLDivElement | null>(
+      null,
+    );
+    const [toolbarRightDom, setToolbarRightDom] =
+      useState<HTMLDivElement | null>(null);
 
     /* 绘图功能 */
     const [drawing, setDrawing] = useState(false);
@@ -435,8 +440,18 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
         _painter.data[pageIndex] = data;
       },
     );
+    const clearAllMarkData = useMemoizedFn<PDFViewerHandle['clearAllMarkData']>(
+      () => {
+        _painter.refs.forEach((ref, pageIndex) => {
+          if (ref) {
+            ref.clearShapes();
+          }
+        });
+      },
+    );
     const setAllMarkData = useMemoizedFn<PDFViewerHandle['setAllMarkData']>(
       (shapeDataList) => {
+        clearAllMarkData();
         shapeDataList.forEach((shapeData, pageIndex) => {
           setMarkData(pageIndex, shapeData);
         });
@@ -455,6 +470,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       getAllMarkData,
       setMarkData,
       setAllMarkData,
+      clearAllMarkData,
     }));
 
     return (
@@ -471,7 +487,10 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
         )}
       >
         <PDFToolbarContext.Provider
-          value={useMemo(() => ({ getToolbarLeftDom, getToolbarRightDom }), [])}
+          value={useMemo(
+            () => ({ toolbarRightDom, toolbarLeftDom }),
+            [toolbarRightDom, toolbarLeftDom],
+          )}
         >
           <div
             className={`${styles.root} ${className}`}
@@ -484,8 +503,12 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
               className={styles.toolbar}
               max={2 ** maxZoom}
               min={2 ** minZoom}
-              leftRef={toolbarLeftRef}
-              rightRef={toolbarRightRef}
+              leftRef={(dom) => {
+                setToolbarLeftDom(dom);
+              }}
+              rightRef={(dom) => {
+                setToolbarRightDom(dom);
+              }}
             />
             <div
               ref={pageContainerRef}
@@ -577,8 +600,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                 setDrawing(false);
               }}
             />
+            {children}
           </div>
-          {children}
         </PDFToolbarContext.Provider>
       </PDFViewerContext.Provider>
     );

@@ -37,11 +37,11 @@ const PDFViewerContext = React.createContext<PDFViewerContextType>({
 export default PDFViewerContext;
 
 export type PDFToolbarContextType = {
-  getToolbarLeftDom: () => HTMLDivElement | null;
-  getToolbarRightDom: () => HTMLDivElement | null;
+  toolbarLeftDom: HTMLDivElement | null;
+  toolbarRightDom: HTMLDivElement | null;
 };
 
 export const PDFToolbarContext = React.createContext<PDFToolbarContextType>({
-  getToolbarLeftDom: () => null,
-  getToolbarRightDom: () => null,
+  toolbarLeftDom: null,
+  toolbarRightDom: null,
 });
