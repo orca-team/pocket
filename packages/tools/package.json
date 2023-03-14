@@ -34,7 +34,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@babel/runtime": "^7.20.13"
+    "@babel/runtime": "^7.21.0"
   },
   "gitHead": "0f38f477546c9603891bad4b0c847554147262df"
 }
