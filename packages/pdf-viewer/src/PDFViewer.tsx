@@ -549,11 +549,9 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                         <div className={styles.pageCover}>
                           <Painter
                             ref={(ref) => (_painter.refs[pageIndex] = ref)}
-                            className={
-                              styles.painter +
-                              ' ' +
-                              (drawMode ? styles.drawing : '')
-                            }
+                            className={`${styles.painter} ${
+                              drawing ? styles.drawing : ''
+                            }`}
                             width={viewport.width}
                             height={viewport.height}
                             style={{ height: '100%' }}
