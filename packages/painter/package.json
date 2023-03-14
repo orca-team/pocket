@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/painter",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Konva Painter",
   "keywords": [
     "react",
@@ -39,19 +39,19 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0",
-    "@orca-fe/hooks": "^1.1.1",
+    "@orca-fe/hooks": "^1.2.0",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
-    "@orca-fe/pocket": "^1.26.7",
+    "@orca-fe/pocket": "^1.26.8",
     "@orca-fe/simple-jss": "^0.0.1",
-    "@orca-fe/tools": "^0.7.8",
+    "@orca-fe/tools": "^0.7.9",
     "ahooks": "^3.7.5",
     "classnames": "^2.3.2",
-    "tslib": "^2.5.0",
     "color": "^4.2.3",
     "konva": "^8.4.2",
     "rc-tooltip": "^5.3.1",
     "rc-trigger": "^5.3.4",
-    "react-colorful": "^5.6.1"
+    "react-colorful": "^5.6.1",
+    "tslib": "^2.5.0"
   },
   "peerDependencies": {
     "@ant-design/icons": "^4.7.0",
