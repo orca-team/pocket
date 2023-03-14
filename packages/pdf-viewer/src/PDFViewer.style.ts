@@ -22,7 +22,7 @@ export default createUseStyles(
       },
     },
     painter: {
-      '&.$drawing': {
+      '&$drawing': {
         zIndex: 10,
       },
     },
