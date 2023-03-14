@@ -1,7 +1,7 @@
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import Konva from 'konva';
 import { useEventListener, useMemoizedFn } from 'ahooks';
-import { useSizeListener, useStaticClick } from '@orca-fe/hooks';
+import { useSizeDebounceListener, useStaticClick } from '@orca-fe/hooks';
 import useStyle from './Painter.style';
 import ShapeCreator from './ShapeCreator';
 import { createOrUpdateShape, createShape, normalizeShape } from './utils';
@@ -237,7 +237,7 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
   const scalePainter = useMemoizedFn(() => {
     if (_this.stage && _this.layer) {
       const size = _this.stage.getSize();
-      const ratio = Math.max(size.width / width, size.height / height);
+      const ratio = Math.min(size.width / width, size.height / height);
       const x = 0.5 * (size.width - ratio * width);
       const y = 0.5 * (size.height - ratio * height);
       _this.layer.x(x);
@@ -278,10 +278,23 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
     return undefined;
   }, []);
 
-  useSizeListener((size) => {
-    _this.stage?.setSize(size);
-    scalePainter();
-  }, rootRef);
+  useSizeDebounceListener((size, scale) => {
+    const dom = canvasRef.current;
+    if (scale) {
+      if (dom) {
+        dom.style.transformOrigin = 'top left';
+        dom.style.transform = `scale(${scale.x},${scale.y})`;
+      }
+      // console.log('scale', size, scale);
+    } else {
+      if (dom) {
+        dom.style.transformOrigin = '';
+        dom.style.transform = '';
+      }
+      _this.stage?.setSize(size);
+      scalePainter();
+    }
+  }, canvasRef);
 
   return (
     <div

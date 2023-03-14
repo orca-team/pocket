@@ -1,1 +1,0 @@
-import '../IconButton.less';

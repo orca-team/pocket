@@ -6,22 +6,20 @@
 import React from 'react';
 import PdfViewer, { usePdfViewerRef } from '@orca-fe/pdf-viewer';
 
-const Demo1 = () => {
+const Page = () => {
   const pdfViewerRef = usePdfViewerRef();
   return (
     <div>
       <input
-        type={'file'}
+        type="file"
         onChange={(e) => {
-          const files = (e.target as HTMLInputElement).files;
+          const { files } = e.target as HTMLInputElement;
           if (files?.length) {
             const file = files[0];
             const pdfViewer = pdfViewerRef.current;
-            file.arrayBuffer().then((buffer) => {
-              if (pdfViewer) {
-                pdfViewer.load(buffer);
-              }
-            });
+            if (pdfViewer) {
+              pdfViewer.load(file);
+            }
           }
         }}
       />
@@ -30,4 +28,4 @@ const Demo1 = () => {
   );
 };
 
-export default Demo1;
+export default Page;

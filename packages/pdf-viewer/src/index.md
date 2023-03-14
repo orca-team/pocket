@@ -28,6 +28,10 @@ group:
 
 <code src="../demo/Demo1.tsx" ></code>
 
+<code src="../demo/Demo2.tsx" ></code>
+
+<code src="../demo/Demo3.tsx" ></code>
+
 ## API
 
 ### 属性
@@ -65,16 +69,17 @@ export default () => {
 };
 ```
 
-| 方法名称       | 描述                             | 类型                                                              | 版本    |
-| -------------- | -------------------------------- | ----------------------------------------------------------------- | ------- |
-| load           | 加载文件                         | `(file: ArrayBuffer) => Promise<void>`                            |         |
-| setZoom        | 设置缩放级别                     | `(zoom: number) => void`                                          |         |
-| getZoom        | 取得当前缩放级别                 | `() => number`                                                    |         |
-| changePage     | 翻页（从 0 开始）                | `(pageIndex: number, anim?: boolean) => void`                     |         |
-| scrollTo       | 控制页面滚动到特定未知           | 同 `HTMLElement.scrollTo`                                         |         |
-| getCurrentPage | 获取当前窗口中的页码，从 0 开始  | `() => number`                                                    |         |
-| getPageCount   | 获取当前页面数量                 | `() => number`                                                    |         |
-| getPageBlob    | 获取页面的渲染信息（图片二进制） | `(index: number, options?: { scale?: number },) => Promise<Blob>` |         |
-| getAllMarkData | 获取当前页面中所有的标注数据     | `() => ShapeDataType[][]`                                         | `0.0.5` |
-| setMarkData    | 更新某一页的标注数据             | `(page: number, markData: ShapeDataType[]) => void`               | `0.0.5` |
-| setAllMarkData | 更新所有页面的标注数据           | `(markData: ShapeDataType[][]) => void`                           | `0.0.5` |
+| 方法名称         | 描述                             | 类型                                                              | 版本    |
+| ---------------- | -------------------------------- | ----------------------------------------------------------------- | ------- |
+| load             | 加载文件                         | `(file: ArrayBuffer) => Promise<void>`                            |         |
+| setZoom          | 设置缩放级别                     | `(zoom: number) => void`                                          |         |
+| getZoom          | 取得当前缩放级别                 | `() => number`                                                    |         |
+| changePage       | 翻页（从 0 开始）                | `(pageIndex: number, anim?: boolean) => void`                     |         |
+| scrollTo         | 控制页面滚动到特定未知           | 同 `HTMLElement.scrollTo`                                         |         |
+| getCurrentPage   | 获取当前窗口中的页码，从 0 开始  | `() => number`                                                    |         |
+| getPageCount     | 获取当前页面数量                 | `() => number`                                                    |         |
+| getPageBlob      | 获取页面的渲染信息（图片二进制） | `(index: number, options?: { scale?: number },) => Promise<Blob>` |         |
+| getAllMarkData   | 获取当前页面中所有的标注数据     | `() => ShapeDataType[][]`                                         | `0.0.5` |
+| setMarkData      | 更新某一页的标注数据             | `(page: number, markData: ShapeDataType[]) => void`               | `0.0.5` |
+| setAllMarkData   | 更新所有页面的标注数据           | `(markData: ShapeDataType[][]) => void`                           | `0.0.5` |
+| clearAllMarkData | 清除所有页面的标注数据           | `() => void`                                                      | `0.0.6` |

@@ -12,17 +12,15 @@ const Demo1 = () => {
   return (
     <div>
       <input
-        type={'file'}
+        type="file"
         onChange={(e) => {
-          const files = (e.target as HTMLInputElement).files;
+          const { files } = e.target as HTMLInputElement;
           if (files?.length) {
             const file = files[0];
             const pdfViewer = pdfViewerRef.current;
-            file.arrayBuffer().then((buffer) => {
-              if (pdfViewer) {
-                pdfViewer.load(buffer);
-              }
-            });
+            if (pdfViewer) {
+              pdfViewer.load(file);
+            }
           }
         }}
       />

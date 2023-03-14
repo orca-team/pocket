@@ -6,7 +6,10 @@ import useAnimationFrame from './useAnimationFrame';
 import useObjHistoryMgr, { getHistoryModifiedKeys } from './useObjHistoryMgr';
 import useMemorizedFn from './useMemorizedFn';
 import useEventEmitter, { EventEmitterWithHook } from './useEventEmitter';
-import useSizeListener, { useSizeUpdateListener } from './useSizeListener';
+import useSizeListener, {
+  useSizeDebounceListener,
+  useSizeUpdateListener,
+} from './useSizeListener';
 import usePromisifyModal, { usePromisifyDrawer } from './usePromisifyModal';
 import useEffectWithTarget, {
   useLayoutEffectWithTarget,
@@ -49,6 +52,7 @@ export {
   // size
   useSizeListener,
   useSizeUpdateListener,
+  useSizeDebounceListener,
   useEffectWithTarget,
   useLayoutEffectWithTarget,
 
