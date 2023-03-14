@@ -44,10 +44,12 @@
     "@orca-fe/pocket": "^1.26.7",
     "@orca-fe/simple-jss": "^0.0.1",
     "@orca-fe/tools": "^0.7.8",
-    "ahooks": "^3.7.4",
+    "ahooks": "^3.7.5",
     "classnames": "^2.3.2",
     "prefix-classnames": "^0.0.7",
-    "tslib": "^2.5.0"
+    "tslib": "^2.5.0",
+    "@orca-fe/painter": "^0.0.3",
+    "rc-trigger": "^5.3.4"
   },
   "peerDependencies": {
     "@ant-design/icons": "^4.7.0",
