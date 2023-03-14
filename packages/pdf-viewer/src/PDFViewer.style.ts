@@ -21,6 +21,12 @@ export default createUseStyles(
         color: '#AAA',
       },
     },
+    painter: {
+      '&.$drawing': {
+        zIndex: 10,
+      },
+    },
+    drawing: {},
     toolbar: {
       flexShrink: 0,
     },
