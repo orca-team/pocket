@@ -21,6 +21,7 @@
   "main": "lib/index.js",
   "files": [
     "dist",
+    "pdfjs-build",
     "es",
     "lib"
   ],
