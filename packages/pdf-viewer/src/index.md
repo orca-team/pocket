@@ -36,15 +36,15 @@ group:
 
 ### 属性
 
-| 属性名称        | 描述                     | 类型                                                                          | 默认值 | 版本    |
-| --------------- | ------------------------ | ----------------------------------------------------------------------------- | ------ | ------- |
-| pageGap         | 页面间距                 | `number`                                                                      | `24`   |         |
-| maxZoom         | 最大缩放级别             | `number`                                                                      | `3`    |         |
-| minZoom         | 最小缩放级别             | `number`                                                                      | `-4`   |         |
-| renderPageCover | 渲染自定义的页面覆盖内容 | `(pageIndex: number, options: { viewport: PageViewport }) => React.ReactNode` | `-`    |         |
-| onPageScroll    | 页面渲染事件             | `typeof onScroll`                                                             | `-`    |         |
-| emptyTips       | 未打开文件时的提示       | `ReactElement`                                                                | `-`    | `0.0.4` |
-| onMarkChange    | 标注内容变化事件         | `(page: number, markData: ShapeDataType[]) => void`                           | `-`    | `0.0.5` |
+| 属性名称        | 描述                     | 类型                                                                                        | 默认值 | 版本    |
+| --------------- | ------------------------ | ------------------------------------------------------------------------------------------- | ------ | ------- |
+| pageGap         | 页面间距                 | `number`                                                                                    | `24`   |         |
+| maxZoom         | 最大缩放级别             | `number`                                                                                    | `3`    |         |
+| minZoom         | 最小缩放级别             | `number`                                                                                    | `-4`   |         |
+| renderPageCover | 渲染自定义的页面覆盖内容 | `(pageIndex: number, options: { viewport: PageViewport, zoom: number }) => React.ReactNode` | `-`    |         |
+| onPageScroll    | 页面渲染事件             | `typeof onScroll`                                                                           | `-`    |         |
+| emptyTips       | 未打开文件时的提示       | `ReactElement`                                                                              | `-`    | `0.0.4` |
+| onMarkChange    | 标注内容变化事件         | `(page: number, markData: ShapeDataType[]) => void`                                         | `-`    | `0.0.5` |
 
 ### PDFViewerHandle
 

@@ -11,6 +11,7 @@ export interface ShapeCreatorProps
   shapeType?: ShapeType;
   onDrawing?: (shape: ShapeDataType) => void;
   onCreate?: (shape: ShapeDataType) => void;
+  onCancel?: () => void;
   pointMapping?: (point: { x: number; y: number }) => { x: number; y: number };
 }
 
@@ -20,6 +21,7 @@ const ShapeCreator = (props: ShapeCreatorProps) => {
     shapeType = 'line',
     onCreate = ef,
     onDrawing = ef,
+    onCancel = ef,
     pointMapping = (a) => a,
     ...otherProps
   } = props;
@@ -77,6 +79,12 @@ const ShapeCreator = (props: ShapeCreatorProps) => {
         return;
     }
     if (finish) {
+      // 如果距离太近，则取消
+      if (offset[0] ** 2 + offset[1] ** 2 < 4) {
+        onCancel();
+        _this.data = undefined;
+        return;
+      }
       if (_this.data.type === 'line-path') {
         // 简化自由绘图
         _this.data.points = simplify(_this.data.points);
