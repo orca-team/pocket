@@ -9,14 +9,6 @@ export default createUseStyles(
       position: 'relative',
       display: 'flex',
       alignItems: 'center',
-      '& .orca-icon-button-checked': {
-        backgroundColor: '#CCC',
-      },
-    },
-    wrapper: {
-      '& .orca-icon-button-checked': {
-        backgroundColor: '#CCC',
-      },
     },
     toolbar: {
       backgroundColor: '#eeeeee',

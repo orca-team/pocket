@@ -23,7 +23,7 @@ export default createUseStyles(
       transition: 'background-color 300ms',
 
       '&:hover': defaultCheckedStyle,
-      '&.$checked': defaultCheckedStyle,
+      '&$checked': defaultCheckedStyle,
       '&:active': {
         transform: 'translateY(1px)',
       },
