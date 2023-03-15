@@ -440,7 +440,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       },
     );
 
-    const pdfViewerRef = useMemo<PDFViewerHandle>(
+    const pdfViewerHandle = useMemo<PDFViewerHandle>(
       () => ({
         load,
         setZoom,
@@ -457,7 +457,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       }),
       [],
     );
-    useImperativeHandle(pRef, () => pdfViewerRef);
+    useImperativeHandle(pRef, () => pdfViewerHandle);
 
     return (
       <PDFViewerContext.Provider
@@ -468,6 +468,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
             current,
             changePage,
             setZoom: setZoomForToolbar,
+            pdfViewer: pdfViewerHandle,
           }),
           [pages, zoom, current],
         )}
