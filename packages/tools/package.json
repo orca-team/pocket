@@ -31,7 +31,7 @@
   },
   "scripts": {
     "build": "father build",
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0"

@@ -35,6 +35,7 @@
   },
   "scripts": {
     "build": "father build",
+    "prepublishOnly": "npm run build",
     "autod": "autod",
     "clear": "rimraf lib es"
   },
