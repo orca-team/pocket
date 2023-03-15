@@ -21,8 +21,8 @@ import PDFViewerContext, { PDFToolbarContext } from './context';
 import PDFPage from './PDFPage';
 import PDFToolbar from './PDFToolbar';
 import useStyle from './PDFViewer.style';
-import * as _pdfJS from './pdfjs-build/pdf';
-import * as pdfjsWorker from './pdfjs-build/pdf.worker';
+import * as _pdfJS from '../pdfjs-build/pdf';
+import * as pdfjsWorker from '../pdfjs-build/pdf.worker';
 import { findSortedArr } from './utils';
 import PainterToolbar from './PainterToolbar';
 
