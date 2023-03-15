@@ -396,6 +396,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     const [toolbarLeftDom, setToolbarLeftDom] = useState<HTMLDivElement | null>(
       null,
     );
+    const [toolbarCenterDom, setToolbarCenterDom] =
+      useState<HTMLDivElement | null>(null);
     const [toolbarRightDom, setToolbarRightDom] =
       useState<HTMLDivElement | null>(null);
 
@@ -514,6 +516,9 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
               leftRef={(dom) => {
                 setToolbarLeftDom(dom);
               }}
+              centerRef={(dom) => {
+                setToolbarCenterDom(dom);
+              }}
               rightRef={(dom) => {
                 setToolbarRightDom(dom);
               }}
@@ -525,6 +530,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
               style={{
                 // @ts-expect-error
                 '--scale-factor': scale,
+                '--pdf-viewer-page-scale': scale,
               }}
             >
               {viewports.length === 0 && emptyTips}
