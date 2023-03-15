@@ -16,7 +16,7 @@ import React, {
 import { useGetState } from '@orca-fe/hooks';
 import type { PainterRef, ShapeDataType, ShapeType } from '@orca-fe/painter';
 import Painter from '@orca-fe/painter';
-import type { PageViewport } from './context';
+import type { PageViewport, PDFViewerHandle } from './context';
 import PDFViewerContext, { PDFToolbarContext } from './context';
 import PDFPage from './PDFPage';
 import PDFToolbar from './PDFToolbar';
@@ -33,24 +33,6 @@ const ef = () => undefined;
 const defaultEmptyTips = (
   <div className="pdf-viewer-default-empty-tips">请打开一个 PDF 文件</div>
 );
-
-export type PDFViewerHandle = {
-  load: (file: string | URL | File | ArrayBuffer) => Promise<void>;
-  setZoom: (zoom: number) => void;
-  getZoom: () => number;
-  changePage: (pageIndex: number, anim?: boolean) => void;
-  scrollTo: Element['scrollTo'];
-  getCurrentPage: () => number;
-  getPageCount: () => number;
-  getPageBlob: (
-    index: number,
-    options?: { scale?: number },
-  ) => Promise<Blob | null>;
-  getAllMarkData: () => ShapeDataType[][];
-  setMarkData: (page: number, markData: ShapeDataType[]) => void;
-  setAllMarkData: (markData: ShapeDataType[][]) => void;
-  clearAllMarkData: () => void;
-};
 
 export interface PDFViewerProps extends React.HTMLAttributes<HTMLDivElement> {
   /** 页面之间的间距 */
@@ -458,20 +440,24 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       },
     );
 
-    useImperativeHandle(pRef, () => ({
-      load,
-      setZoom,
-      getZoom,
-      changePage,
-      getPageBlob,
-      getCurrentPage,
-      getPageCount,
-      scrollTo,
-      getAllMarkData,
-      setMarkData,
-      setAllMarkData,
-      clearAllMarkData,
-    }));
+    const pdfViewerRef = useMemo<PDFViewerHandle>(
+      () => ({
+        load,
+        setZoom,
+        getZoom,
+        changePage,
+        getPageBlob,
+        getCurrentPage,
+        getPageCount,
+        scrollTo,
+        getAllMarkData,
+        setMarkData,
+        setAllMarkData,
+        clearAllMarkData,
+      }),
+      [],
+    );
+    useImperativeHandle(pRef, () => pdfViewerRef);
 
     return (
       <PDFViewerContext.Provider

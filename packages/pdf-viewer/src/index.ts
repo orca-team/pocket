@@ -1,3 +1,5 @@
+import type { PDFViewerContextType } from './context';
+import PDFViewerContext from './context';
 import OpenFileButton from './OpenFileButton';
 import PDFViewer from './PDFViewer';
 import ToolbarPortal from './ToolbarPortal';
@@ -11,3 +13,6 @@ export * from './ToolbarPortal';
 
 export { OpenFileButton };
 export * from './OpenFileButton';
+
+export { PDFViewerContext };
+export type { PDFViewerContextType };
