@@ -68,7 +68,7 @@ export interface PDFViewerProps extends React.HTMLAttributes<HTMLDivElement> {
   /** 渲染自定义页面覆盖物 */
   renderPageCover?: (
     pageIndex: number,
-    options: { viewport: PageViewport },
+    options: { viewport: PageViewport; zoom: number },
   ) => React.ReactNode;
 
   /** 空文件提示 */
@@ -577,7 +577,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                           />
                         </div>
                         <div className={styles.pageCover}>
-                          {renderPageCover(pageIndex, { viewport })}
+                          {renderPageCover(pageIndex, { viewport, zoom })}
                         </div>
                       </>
                     )}
