@@ -28,6 +28,7 @@
   },
   "scripts": {
     "build": "father build",
+    "prepublishOnly": "npm run build",
     "clear": "rimraf lib"
   },
   "dependencies": {
