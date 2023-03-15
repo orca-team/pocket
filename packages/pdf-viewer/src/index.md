@@ -72,6 +72,7 @@ export default () => {
 | 方法名称         | 描述                             | 类型                                                              | 版本    |
 | ---------------- | -------------------------------- | ----------------------------------------------------------------- | ------- |
 | load             | 加载文件                         | `(file: ArrayBuffer) => Promise<void>`                            |         |
+| close            | 关闭文件                         | `() => void`                                                      | `0.1.0` |
 | setZoom          | 设置缩放级别                     | `(zoom: number) => void`                                          |         |
 | getZoom          | 取得当前缩放级别                 | `() => number`                                                    |         |
 | changePage       | 翻页（从 0 开始）                | `(pageIndex: number, anim?: boolean) => void`                     |         |

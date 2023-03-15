@@ -9,7 +9,7 @@ export default createUseStyles(
       height: 40,
       display: 'flex',
       alignItems: 'center',
-      backgroundColor: '#EEE',
+      backgroundColor: '#fff',
       borderBottom: '1px solid #DDD',
     },
     left: {

@@ -26,7 +26,11 @@ export default createUseStyles(
         zIndex: 10,
       },
     },
-    drawing: {},
+    drawing: {
+      '&:hover': {
+        outline: '2px solid #19f',
+      },
+    },
     toolbar: {
       flexShrink: 0,
     },
@@ -36,12 +40,19 @@ export default createUseStyles(
       overflow: 'auto',
       padding: '24px 0',
       flex: 1,
+      backgroundColor: '#f0f2f5',
+      paddingBottom: 48,
     },
     pageContainer: {
       position: 'relative',
       backgroundColor: '#fff',
       marginLeft: 'auto',
       marginRight: 'auto',
+      boxShadow: [0, 0, 12, 'rgba(0, 0, 0, 0.3)'],
+    },
+    page: {
+      width: '100%',
+      height: '100%',
     },
     pageCover: {
       position: 'absolute',
@@ -53,6 +64,12 @@ export default createUseStyles(
       '& > *': {
         pointerEvents: 'initial',
       },
+    },
+    pageController: {
+      position: 'absolute',
+      bottom: 24,
+      left: '50%',
+      transform: 'translateX(-50%)',
     },
   },
   {

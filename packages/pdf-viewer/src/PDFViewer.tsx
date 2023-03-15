@@ -5,6 +5,7 @@ import {
   useDebounceFn,
   useEventListener,
   useMemoizedFn,
+  useSet,
 } from 'ahooks';
 import React, {
   useEffect,
@@ -16,7 +17,11 @@ import React, {
 import { useGetState } from '@orca-fe/hooks';
 import type { PainterRef, ShapeDataType, ShapeType } from '@orca-fe/painter';
 import Painter from '@orca-fe/painter';
-import type { PageViewport, PDFViewerHandle } from './context';
+import type {
+  PageViewport,
+  PDFViewerHandle,
+  RenderPageCoverFnType,
+} from './context';
 import PDFViewerContext, { PDFToolbarContext } from './context';
 import PDFPage from './PDFPage';
 import PDFToolbar from './PDFToolbar';
@@ -25,6 +30,7 @@ import * as _pdfJS from '../pdfjs-build/pdf';
 import * as pdfjsWorker from '../pdfjs-build/pdf.worker';
 import { findSortedArr } from './utils';
 import PainterToolbar from './PainterToolbar';
+import ZoomAndPageController from './ZoomAndPageController';
 
 const pdfJs: any = _pdfJS;
 
@@ -48,10 +54,7 @@ export interface PDFViewerProps extends React.HTMLAttributes<HTMLDivElement> {
   onPageScroll?: React.UIEventHandler<HTMLDivElement>;
 
   /** 渲染自定义页面覆盖物 */
-  renderPageCover?: (
-    pageIndex: number,
-    options: { viewport: PageViewport; zoom: number },
-  ) => React.ReactNode;
+  renderPageCover?: RenderPageCoverFnType;
 
   /** 空文件提示 */
   emptyTips?: React.ReactElement;
@@ -112,6 +115,10 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
 
     const [pages, setPages, getPages] = useGetState<any[]>([]);
 
+    const [renderPageCoverFnList, renderPageCoverFnHandle] =
+      useSet<RenderPageCoverFnType>();
+
+    // 获取每一页的 viewport 信息
     const viewports = useMemo(
       () =>
         pages.map((page) => {
@@ -121,6 +128,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       [pages],
     );
 
+    // 根据 viewport 信息生成每一页的实际位置信息
     const { topArr: pageTopArr, maxWidth } = useMemo(() => {
       let top = 0;
       let maxWidth = 0;
@@ -145,6 +153,17 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       }
     });
 
+    const close = useMemoizedFn<PDFViewerHandle['close']>(async () => {
+      if (_this.pdfDoc) {
+        try {
+          await _this.pdfDoc.destroy();
+        } catch (err) {
+          console.error('pdfDoc destory failed');
+        }
+      }
+      _this.pdfDoc = undefined;
+      setPages([]);
+    });
     const load = useMemoizedFn<PDFViewerHandle['load']>(async (file) => {
       let pdfContent = file;
       if (pdfContent instanceof File) {
@@ -261,10 +280,12 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       { wait: 280 },
     );
 
+    // 监听滚动事件，并更新需要展示的页面范围（虚拟列表）
     useEventListener(
       'scroll',
       (ev) => {
         if (_this.zooming) {
+          // 如果是因为正在缩放导致的滚动，则需要添加防抖
           updateRenderRangeDebounce.run();
         } else {
           updateRenderRangeDebounce.cancel();
@@ -326,9 +347,6 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
             }
             dom.scrollTop = newScrollTop;
             dom.scrollLeft = newScrollLeft;
-            // nextTick(() => {
-            //
-            // });
           }
         } else {
           _this.mousePositionBeforeWheel = undefined;
@@ -337,6 +355,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       { target: pageContainerRef, passive: true },
     );
 
+    // 鼠标发生移动，则清空 position 信息，避免后续缩放时出现异常
     useEventListener(
       'mousemove',
       () => {
@@ -345,6 +364,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       { target: pageContainerRef },
     );
 
+    // 禁用默认的滚轮缩放（缩放页面）
     useEventListener(
       'wheel',
       (ev: WheelEvent) => {
@@ -443,6 +463,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     const pdfViewerHandle = useMemo<PDFViewerHandle>(
       () => ({
         load,
+        close,
         setZoom,
         getZoom,
         changePage,
@@ -469,6 +490,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
             changePage,
             setZoom: setZoomForToolbar,
             pdfViewer: pdfViewerHandle,
+            addRenderPageCoverFn: renderPageCoverFnHandle.add,
+            removeRenderPageCoverFn: renderPageCoverFnHandle.remove,
           }),
           [pages, zoom, current],
         )}
@@ -488,8 +511,6 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
           >
             <PDFToolbar
               className={styles.toolbar}
-              max={2 ** maxZoom}
-              min={2 ** minZoom}
               leftRef={(dom) => {
                 setToolbarLeftDom(dom);
               }}
@@ -527,10 +548,10 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                     {shouldRender && (
                       <>
                         <PDFPage
+                          className={styles.page}
                           index={pageIndex}
                           zoom={zoom}
                           render={shouldRender}
-                          style={{ width: '100%', height: '100%' }}
                         />
                         {/* 绘图 */}
                         <div className={styles.pageCover}>
@@ -564,6 +585,13 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                           />
                         </div>
                         <div className={styles.pageCover}>
+                          {[...renderPageCoverFnList].map((fn, index) => (
+                            <React.Fragment key={index}>
+                              {fn(pageIndex, { viewport, zoom })}
+                            </React.Fragment>
+                          ))}
+                        </div>
+                        <div className={styles.pageCover}>
                           {renderPageCover(pageIndex, { viewport, zoom })}
                         </div>
                       </>
@@ -573,23 +601,34 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
               })}
             </div>
 
-            {/* 工具栏渲染 */}
-            <PainterToolbar
-              drawing={drawing}
-              drawMode={drawMode}
-              onDrawModeChange={(shapeType, attr) => {
-                setDrawMode({
-                  attr,
-                  shapeType,
-                });
-                if (!drawing) {
-                  setDrawing(true);
-                }
-              }}
-              onDrawCancel={() => {
-                setDrawing(false);
-              }}
-            />
+            {/* 页码 */}
+            {pages.length > 0 && (
+              <ZoomAndPageController
+                className={styles.pageController}
+                max={2 ** maxZoom}
+                min={2 ** minZoom}
+              />
+            )}
+
+            {/* 绘图的工具栏渲染 */}
+            {pages.length > 0 && (
+              <PainterToolbar
+                drawing={drawing}
+                drawMode={drawMode}
+                onDrawModeChange={(shapeType, attr) => {
+                  setDrawMode({
+                    attr,
+                    shapeType,
+                  });
+                  if (!drawing) {
+                    setDrawing(true);
+                  }
+                }}
+                onDrawCancel={() => {
+                  setDrawing(false);
+                }}
+              />
+            )}
             {children}
           </div>
         </PDFToolbarContext.Provider>
