@@ -333,6 +333,10 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
               _this.layer.draw();
             }
           }}
+          onCancel={() => {
+            _this.drawingShape?.destroy();
+            _this.drawingShape = undefined;
+          }}
           onCreate={(shape) => {
             if (_this.layer) {
               _this.drawingShape?.destroy();
