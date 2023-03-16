@@ -1,5 +1,12 @@
 # @orca-fe/pdf-viewer
 
+## 0.2.1
+
+### Patch Changes
+
+- 修复翻页的 bug
+  将标注编辑抽离为插
+
 ## 0.2.0
 
 ### Minor Changes

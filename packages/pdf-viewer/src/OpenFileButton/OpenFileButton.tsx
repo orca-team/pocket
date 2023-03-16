@@ -30,7 +30,7 @@ const OpenFileButton = (props: OpenFileButtonProps) => {
     { target: buttonRef },
   );
   return (
-    <>
+    <span>
       <input
         ref={inputRef}
         type="file"
@@ -47,7 +47,7 @@ const OpenFileButton = (props: OpenFileButtonProps) => {
         }}
       />
       <ToolbarButton ref={buttonRef} icon={children} {...otherProps} />
-    </>
+    </span>
   );
 };
 

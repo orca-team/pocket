@@ -1,12 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/no-empty-function */
-import React from 'react';
-import type { ShapeDataType } from '@orca-fe/painter';
+import React, { useContext, useEffect } from 'react';
+import { useMemoizedFn } from 'ahooks';
+import type { PDFPainterHandle } from './PDFPainter';
 
 /**
  * PDF 控制器
  * 用于控制 PDF 阅读器，进行基础操作
  */
-export type PDFViewerHandle = {
+export type PDFViewerHandle = PDFPainterHandle & {
   /** 加载文件，支持 url / 文件 / ArrayBuffer */
   load: (
     file: string | URL | File | ArrayBuffer,
@@ -39,18 +39,6 @@ export type PDFViewerHandle = {
     index: number,
     options?: { scale?: number },
   ) => Promise<Blob | null>;
-
-  /** 获取所有标注内容 */
-  getAllMarkData: () => ShapeDataType[][];
-
-  /** 设置某一页的标注内容 */
-  setMarkData: (page: number, markData: ShapeDataType[]) => void;
-
-  /** 设置所有页面的标注内容 */
-  setAllMarkData: (markData: ShapeDataType[][]) => void;
-
-  /** 清除所有页面的标注内容 */
-  clearAllMarkData: () => void;
 
   setTitle: (title: React.ReactNode) => void;
 };
@@ -137,3 +125,15 @@ export const PDFToolbarContext = React.createContext<PDFToolbarContextType>({
   removeCenterToolbarId: () => undefined,
   centerToolbarIds: [],
 });
+
+export function usePageCoverRenderer(callback: RenderPageCoverFnType) {
+  const renderFn = useMemoizedFn(callback);
+  const { addRenderPageCoverFn, removeRenderPageCoverFn } =
+    useContext(PDFViewerContext);
+  useEffect(() => {
+    addRenderPageCoverFn(renderFn);
+    return () => {
+      removeRenderPageCoverFn(renderFn);
+    };
+  }, []);
+}
