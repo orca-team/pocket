@@ -10,6 +10,7 @@ export default createUseStyles(
     },
     text: {
       fontSize: 14,
+      whiteSpace: 'nowrap',
     },
   },
   {

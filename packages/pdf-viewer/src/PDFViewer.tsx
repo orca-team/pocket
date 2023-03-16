@@ -35,6 +35,10 @@ const pdfJs: any = _pdfJS;
 
 const ef = () => undefined;
 
+const defaultLoadingTips = (
+  <div className="pdf-viewer-default-empty-tips">正在打开文件...</div>
+);
+
 const defaultEmptyTips = (
   <div className="pdf-viewer-default-empty-tips">请打开一个 PDF 文件</div>
 );
@@ -81,7 +85,6 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       minZoom = -4,
       renderPageCover = ef,
       onMarkChange = ef,
-      style,
       onPageScroll,
       children,
       emptyTips = defaultEmptyTips,
@@ -130,6 +133,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     const [renderRange, setRenderRange] = useState<[number, number]>([0, 0]);
 
     const [pages, setPages, getPages] = useGetState<any[]>([]);
+
+    const [loading, setLoading] = useState(false);
 
     const [renderPageCoverFnList, renderPageCoverFnHandle] =
       useSet<RenderPageCoverFnType>();
@@ -186,24 +191,29 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
         pdfContent = await pdfContent.arrayBuffer();
       }
       if (pdfJs) {
-        const pdfDoc = await pdfJs.getDocument(pdfContent).promise;
-        // 總頁數
-        if (pdfDoc) {
-          _this.pdfDoc = pdfDoc;
-          const pageLength = pdfDoc.numPages;
-          const allPages = await Promise.all(
-            new Array(pageLength).fill(0).map(async (_, index) => {
-              const pageNum = index + 1;
-              const page = await pdfDoc.getPage(pageNum);
-              return page;
-            }),
-          );
-          setPages(allPages);
-          const dom = pageContainerRef.current;
-          if (dom) {
-            dom.scrollTop = 0;
+        setLoading(true);
+        try {
+          const pdfDoc = await pdfJs.getDocument(pdfContent).promise;
+          if (pdfDoc) {
+            _this.pdfDoc = pdfDoc;
+            const pageLength = pdfDoc.numPages;
+            const allPages = await Promise.all(
+              new Array(pageLength).fill(0).map(async (_, index) => {
+                const pageNum = index + 1;
+                const page = await pdfDoc.getPage(pageNum);
+                return page;
+              }),
+            );
+            setPages(allPages);
+            const dom = pageContainerRef.current;
+            if (dom) {
+              dom.scrollTop = 0;
+            }
           }
+        } finally {
+          setLoading(false);
         }
+        // 總頁數
       }
     });
     const scrollTo = useMemoizedFn<PDFViewerHandle['scrollTo']>((...args) => {
@@ -424,6 +434,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       setCenterToolbarIds((ids) => ids.filter((_id) => _id !== id));
     });
 
+    // 绘图功能
     const pdfPainterHandle = useRef<PDFPainterHandle>(null);
 
     const getAllMarkData = useMemoizedFn<PDFPainterHandle['getAllMarkData']>(
@@ -500,13 +511,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
             [toolbarRightDom, toolbarLeftDom, centerToolbarIds],
           )}
         >
-          <div
-            className={`${styles.root} ${className}`}
-            style={{
-              ...style,
-            }}
-            {...otherProps}
-          >
+          <div className={`${styles.root} ${className}`} {...otherProps}>
             <PDFToolbar
               hide={hideToolbar}
               title={title}
@@ -529,23 +534,23 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                 '--pdf-viewer-page-scale': scale,
               }}
             >
-              {viewports.length === 0 && emptyTips}
+              {viewports.length === 0 &&
+                (loading ? defaultLoadingTips : emptyTips)}
               {viewports.map((viewport, pageIndex) => {
                 const shouldRender =
                   pageIndex >= renderRange[0] && pageIndex <= renderRange[1];
+                const width = `calc(var(--scale-factor) * ${Math.floor(
+                  viewport.width,
+                )}px)`;
+                const height = `calc(var(--scale-factor) * ${Math.floor(
+                  viewport.height,
+                )}px)`;
+                const gap = `calc(var(--scale-factor) * ${pageGap}px)`;
                 return (
                   <div
                     key={pageIndex}
                     className={styles.pageContainer}
-                    style={{
-                      width: `calc(var(--scale-factor) * ${Math.floor(
-                        viewport.width,
-                      )}px)`,
-                      height: `calc(var(--scale-factor) * ${Math.floor(
-                        viewport.height,
-                      )}px)`,
-                      marginBottom: `calc(var(--scale-factor) * ${pageGap}px)`,
-                    }}
+                    style={{ width, height, marginBottom: gap }}
                   >
                     {shouldRender && (
                       <>
