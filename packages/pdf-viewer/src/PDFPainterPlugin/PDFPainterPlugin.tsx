@@ -1,7 +1,7 @@
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { IconButton, SimpleNumberInput, Trigger } from '@orca-fe/pocket';
-import { CloseOutlined, EditOutlined } from '@ant-design/icons';
-import type { ShapeType, PainterRef, ShapeDataType } from '@orca-fe/painter';
+import { CloseOutlined } from '@ant-design/icons';
+import type { PainterRef, ShapeDataType, ShapeType } from '@orca-fe/painter';
 import Painter, { ColorPicker } from '@orca-fe/painter';
 import { useMemoizedFn } from 'ahooks';
 import useStyle from './PDFPainterPlugin.style';
@@ -9,6 +9,7 @@ import ToolbarPortal from '../ToolbarPortal';
 import {
   IconEllipse,
   IconLine,
+  IconMarkEdit,
   IconRectangle,
   IconSmoothLine,
 } from '../icon/icon';
@@ -221,6 +222,7 @@ const PDFPainterPlugin = React.forwardRef<
         style={{ width: 32, textAlign: 'center' }}
       />
       <IconButton
+        size="x-small"
         onClick={() => {
           setDrawing(false);
         }}
@@ -258,7 +260,7 @@ const PDFPainterPlugin = React.forwardRef<
                   );
                 }
               }}
-              icon={<EditOutlined />}
+              icon={<IconMarkEdit />}
             >
               编辑标注
             </ToolbarButton>

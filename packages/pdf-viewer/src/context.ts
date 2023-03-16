@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useMemoizedFn } from 'ahooks';
-import type { PDFPainterHandle } from './PDFPainter';
+import type { PDFPainterHandle } from './PDFPainterPlugin';
 
 /**
  * PDF 控制器
