@@ -15,8 +15,6 @@ import React, {
   useState,
 } from 'react';
 import { useGetState } from '@orca-fe/hooks';
-import type { PainterRef, ShapeDataType, ShapeType } from '@orca-fe/painter';
-import Painter from '@orca-fe/painter';
 import type {
   PageViewport,
   PDFViewerHandle,
@@ -29,7 +27,8 @@ import useStyle from './PDFViewer.style';
 import * as _pdfJS from '../pdfjs-build/pdf';
 import * as pdfjsWorker from '../pdfjs-build/pdf.worker';
 import { findSortedArr } from './utils';
-import PainterToolbar from './PainterToolbar';
+import type { PainterToolbarProps, PDFPainterHandle } from './PDFPainterPlugin';
+import PDFPainter from './PDFPainterPlugin';
 import ZoomAndPageController from './ZoomAndPageController';
 
 const pdfJs: any = _pdfJS;
@@ -67,7 +66,7 @@ export interface PDFViewerProps
   emptyTips?: React.ReactElement;
 
   /** 标注内容变化事件 */
-  onMarkChange?: (page: number, markData: ShapeDataType[]) => void;
+  onMarkChange?: PainterToolbarProps['onMarkChange'];
 
   /** 隐藏工具栏 */
   hideToolbar?: boolean;
@@ -425,66 +424,32 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       setCenterToolbarIds((ids) => ids.filter((_id) => _id !== id));
     });
 
-    /* 绘图功能 */
-    const [drawing, setDrawing] = useState(false);
+    const pdfPainterHandle = useRef<PDFPainterHandle>(null);
 
-    const [drawMode, setDrawMode] = useState<{
-      shapeType: ShapeType;
-      attr?: Record<string, any>;
-    }>({
-      shapeType: 'rectangle',
-    });
-
-    const [_painter] = useState<{
-      refs: (PainterRef | null)[];
-      // 绘图数据
-      data: ShapeDataType[][];
-    }>({
-      refs: [],
-      data: [],
-    });
-    useEffect(() => {
-      _painter.refs.forEach((painter) => {
-        if (painter) {
-          if (drawing) {
-            painter.draw(drawMode.shapeType, drawMode.attr);
-          } else {
-            painter.cancelDraw();
-          }
+    const getAllMarkData = useMemoizedFn<PDFPainterHandle['getAllMarkData']>(
+      (...args) => {
+        const pdfPainter = pdfPainterHandle.current;
+        if (pdfPainter) {
+          return pdfPainter.getAllMarkData(...args);
         }
-      });
-    }, [drawing, drawMode]);
-
-    const getAllMarkData = useMemoizedFn<PDFViewerHandle['getAllMarkData']>(
-      () => _painter.data,
-    );
-    const setMarkData = useMemoizedFn<PDFViewerHandle['setMarkData']>(
-      (pageIndex, data) => {
-        const ref = _painter.refs[pageIndex];
-        if (ref) {
-          ref.clearShapes();
-          ref.addShapes(data);
-        }
-        _painter.data[pageIndex] = data;
+        return [];
       },
     );
-    const clearAllMarkData = useMemoizedFn<PDFViewerHandle['clearAllMarkData']>(
-      () => {
-        _painter.refs.forEach((ref, pageIndex) => {
-          if (ref) {
-            ref.clearShapes();
-          }
-        });
+    const setMarkData = useMemoizedFn<PDFPainterHandle['setMarkData']>(
+      (...args) => {
+        pdfPainterHandle.current?.setMarkData(...args);
       },
     );
-    const setAllMarkData = useMemoizedFn<PDFViewerHandle['setAllMarkData']>(
-      (shapeDataList) => {
-        clearAllMarkData();
-        shapeDataList.forEach((shapeData, pageIndex) => {
-          setMarkData(pageIndex, shapeData);
-        });
+    const setAllMarkData = useMemoizedFn<PDFPainterHandle['setAllMarkData']>(
+      (...args) => {
+        pdfPainterHandle.current?.setAllMarkData(...args);
       },
     );
+    const clearAllMarkData = useMemoizedFn<
+      PDFPainterHandle['clearAllMarkData']
+    >((...args) => {
+      pdfPainterHandle.current?.clearAllMarkData(...args);
+    });
 
     const pdfViewerHandle = useMemo<PDFViewerHandle>(
       () => ({
@@ -590,37 +555,6 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                           zoom={zoom}
                           render={shouldRender}
                         />
-                        {/* 绘图 */}
-                        <div className={styles.pageCover}>
-                          <Painter
-                            ref={(ref) => (_painter.refs[pageIndex] = ref)}
-                            className={`${styles.painter} ${
-                              drawing ? styles.drawing : ''
-                            }`}
-                            width={viewport.width}
-                            height={viewport.height}
-                            style={{ height: '100%' }}
-                            defaultDrawMode={drawing ? drawMode : false}
-                            onInit={() => {
-                              const shapeData = _painter.data[pageIndex];
-                              const ref = _painter.refs[pageIndex];
-                              if (shapeData && ref) {
-                                ref.addShapes(shapeData);
-                                if (drawing) {
-                                  ref.draw(drawMode.shapeType, drawMode.attr);
-                                }
-                              }
-                            }}
-                            onDataChange={() => {
-                              const ref = _painter.refs[pageIndex];
-                              if (ref) {
-                                const shapes = ref.getShapes();
-                                _painter.data[pageIndex] = shapes;
-                                onMarkChange(pageIndex, shapes);
-                              }
-                            }}
-                          />
-                        </div>
                         <div className={styles.pageCover}>
                           {[...renderPageCoverFnList].map((fn, index) => (
                             <React.Fragment key={index}>
@@ -649,22 +583,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
 
             {/* 绘图的工具栏渲染 */}
             {pages.length > 0 && (
-              <PainterToolbar
-                drawing={drawing}
-                drawMode={drawMode}
-                onDrawModeChange={(shapeType, attr) => {
-                  setDrawMode({
-                    attr,
-                    shapeType,
-                  });
-                  if (!drawing) {
-                    setDrawing(true);
-                  }
-                }}
-                onDrawCancel={() => {
-                  setDrawing(false);
-                }}
-              />
+              <PDFPainter ref={pdfPainterHandle} onMarkChange={onMarkChange} />
             )}
             {children}
           </div>

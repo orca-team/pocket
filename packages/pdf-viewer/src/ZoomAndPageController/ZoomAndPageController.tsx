@@ -13,8 +13,7 @@ export interface ZoomAndPageControllerProps
 const ZoomAndPageController = (props: ZoomAndPageControllerProps) => {
   const { className = '', max, min, ...otherProps } = props;
   const styles = useStyles();
-  const { changePage, pages, zoom, setZoom, current } =
-    useContext(PDFViewerContext);
+  const { pdfViewer, pages, zoom, current } = useContext(PDFViewerContext);
   return (
     <div className={`${styles.root} ${className}`} {...otherProps}>
       <UcInput
@@ -27,20 +26,20 @@ const ZoomAndPageController = (props: ZoomAndPageControllerProps) => {
             if (e.key === 'ArrowUp') {
               e.preventDefault();
               if (current > 0) {
-                changePage(current - 1);
+                pdfViewer.changePage(current - 1);
               }
             }
             if (e.key === 'ArrowDown') {
               e.preventDefault();
               if (current < pages.length) {
-                changePage(current + 1);
+                pdfViewer.changePage(current + 1);
               }
             }
           }
         }}
         onChange={(value) => {
-          if (!Number.isNaN(Number(value))) {
-            changePage(Number(value));
+          if (!Number.isNaN(Number(value - 1))) {
+            pdfViewer.changePage(Number(value - 1));
           }
         }}
       />
@@ -54,7 +53,7 @@ const ZoomAndPageController = (props: ZoomAndPageControllerProps) => {
         min={min}
         value={2 ** zoom}
         onChange={(zoomVal) => {
-          setZoom(Math.log2(zoomVal));
+          pdfViewer.setZoom(Math.log2(zoomVal));
         }}
       />
     </div>

@@ -15,6 +15,10 @@ export default createUseStyles(
       height: 40,
       color: '#fff',
 
+      '& .ant-input': {
+        color: '#fff',
+      },
+
       '& .simple-number-input-editable': {
         color: '#fff',
         textDecoration: 'none',

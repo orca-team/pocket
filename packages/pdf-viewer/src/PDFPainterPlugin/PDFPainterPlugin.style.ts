@@ -1,7 +1,7 @@
 import { createUseStyles } from '@orca-fe/simple-jss';
 import jssAutoPrefix from '@orca-fe/jss-plugin-auto-prefix';
 
-const prefix = 'painter-toolbar';
+const prefix = 'pdf-painter-plugin';
 
 export default createUseStyles(
   {
