@@ -1,12 +1,12 @@
 import React, { useContext, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import pc from 'prefix-classnames';
-import Trigger from 'rc-trigger';
 import Animate from 'rc-animate';
 import OpenBox from '../../../open-box';
 import type { MenuItemType } from '../../menuUtils';
 import Arrow from '../Arrow';
 import MenuContext from '../MenuContext';
+import Trigger from '../../../trigger';
 
 const Span = ({
   visible,
@@ -188,7 +188,9 @@ const MenuItem = (props: MenuItemProps) => {
         popupClassName={px(`theme-${theme}`)}
         action={collapsed ? ['hover'] : []}
         popup={<SubMenu menu={children} level={level} open isInPopup />}
-        popupAnimation="anim"
+        popupMotion={{
+          motionName: px('popup-anim'),
+        }}
         mouseLeaveDelay={0.3}
         popupAlign={{
           points: ['tl', 'tr'],

@@ -39,8 +39,10 @@ function mergeClasses<T extends Classes>(sheet: T, dynamic?: T) {
   }
   for (const dynamicKey in dynamic) {
     if (dynamicKey in sheet) {
+      // @ts-expect-error
       classes[dynamicKey] += ` ${dynamic[dynamicKey]}`;
     } else {
+      // @ts-expect-error
       classes[dynamicKey] = ` ${dynamic[dynamicKey]}`;
     }
   }
@@ -115,7 +117,7 @@ export default function createUseStyles<C extends string = string, Props = any>(
       // if (sheet && dynamicRules && !isFirstMount.current) {
       //   updateDynamicRules(data, sheet, dynamicRules);
       // }
-      if (dynamicSheet) {
+      if (dynamicSheet && data) {
         dynamicSheet.update(data);
       }
     }, [data, dynamicSheet]);

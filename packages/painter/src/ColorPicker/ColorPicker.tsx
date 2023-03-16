@@ -2,16 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Color from 'color';
 import type { InputProps } from 'antd/es/input';
 import { RgbaStringColorPicker } from 'react-colorful';
-import Tooltip from 'rc-tooltip';
-import Trigger from 'rc-trigger';
 import { useControllableValue, useLocalStorageState } from 'ahooks';
-import { ContextMenu } from '@orca-fe/pocket';
 import { CloseOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { catcher, removeArrIndex } from '@orca-fe/tools';
+import { ContextMenu, Tooltip, Trigger } from '@orca-fe/pocket';
 import ColorPreview from '../ColorPreview';
 import useStyle from './ColorPicker.style';
-import useRcTooltipStyle from './RcTooltip.style';
-import useRcPickerStyle from './RcPicker.style';
 
 const colorDef = [
   '#000000',
@@ -32,7 +28,8 @@ const colorDef = [
   '#fa541c',
 ];
 
-export interface ColorPickerProps extends Omit<InputProps, 'onChange'> {
+export interface ColorPickerProps
+  extends Omit<InputProps, 'onChange' | 'size'> {
   defaultValue?: string;
   value?: string;
   onChange?: (color: string) => void;
@@ -53,8 +50,6 @@ const ColorPicker = (props: ColorPickerProps) => {
   } = props;
 
   const styles = useStyle();
-  useRcPickerStyle();
-  useRcTooltipStyle();
 
   const [visible, setVisible] = useState(false);
 
@@ -139,14 +134,7 @@ const ColorPicker = (props: ColorPickerProps) => {
             }}
           >
             {savedColor.map((color, index) => (
-              <Tooltip
-                key={`${color}${index}`}
-                placement="top"
-                mouseEnterDelay={0}
-                mouseLeaveDelay={0.1}
-                motion={{ motionName: 'rc-tooltip-zoom' }}
-                overlay={color}
-              >
+              <Tooltip key={`${color}${index}`} placement="top" overlay={color}>
                 <ContextMenu
                   mainMenuMinWidth={80}
                   data={[
@@ -175,13 +163,7 @@ const ColorPicker = (props: ColorPickerProps) => {
               </Tooltip>
             ))}
             {/* 添加按钮 */}
-            <Tooltip
-              placement="top"
-              mouseEnterDelay={0}
-              mouseLeaveDelay={0.1}
-              motion={{ motionName: 'rc-tooltip-zoom' }}
-              overlay="保存为自定义颜色"
-            >
+            <Tooltip placement="top" overlay="保存为自定义颜色">
               <div
                 className={styles.colorDef}
                 style={{
@@ -206,15 +188,13 @@ const ColorPicker = (props: ColorPickerProps) => {
 
   return (
     <Trigger
-      action={['click']}
+      action="click"
       popupVisible={visible}
       onPopupVisibleChange={setVisible}
-      destroyPopupOnHide
       popupAlign={{
         points: ['tl', 'bl'],
         offset: [0, 3],
       }}
-      popupTransitionName="rc-trigger-popup-zoom"
       {...otherProps}
       popupClassName={styles.wrapper}
       popup={renderColorPicker()}

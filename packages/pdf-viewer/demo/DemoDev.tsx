@@ -24,7 +24,7 @@ const Demo1 = () => {
           }
         }}
       />
-      <PdfViewer ref={pdfViewerRef} style={{ height: 600 }} />
+      <PdfViewer ref={pdfViewerRef} title="标题" style={{ height: 600 }} />
     </div>
   );
 };

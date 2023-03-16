@@ -21,16 +21,18 @@ export default createUseStyles(
       border: 'none',
       backgroundColor: 'transparent',
       transition: 'background-color 300ms',
+      gap: 4,
 
       '&:hover': defaultCheckedStyle,
       '&$checked': defaultCheckedStyle,
       '&:active': {
         transform: 'translateY(1px)',
       },
+      '&$autoWidth': {
+        width: 'auto',
+      },
     },
-    autoWidth: {
-      width: 'auto',
-    },
+    autoWidth: {},
     checked: {},
     disabled: {
       cursor: 'default',
@@ -45,21 +47,25 @@ export default createUseStyles(
     small: {
       fontSize: '14px',
       width: '25px',
+      minWidth: '25px',
       height: '25px',
     },
     'x-small': {
       fontSize: '12px',
       width: '22px',
+      minWidth: '22px',
       height: '22px',
     },
 
     middle: {
       width: '32px',
+      minWidth: '32px',
       height: '32px',
       fontSize: '18px',
     },
     large: {
       width: '36px',
+      minWidth: '36px',
       height: '36px',
       padding: '0px 16px',
       fontSize: '22px',

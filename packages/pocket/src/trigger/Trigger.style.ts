@@ -1,39 +1,41 @@
-import createUseStaticCss from '../createUseStaticCss';
+import { createUseStaticCss } from '@orca-fe/tools';
+
+const prefixCls = 'orca-trigger';
 
 export default createUseStaticCss(`
-.rc-trigger-popup {
+.${prefixCls} {
   position: absolute;
   top: -9999px;
   left: -9999px;
   z-index: 1050;
 }
-.rc-trigger-popup-hidden {
+.${prefixCls}-hidden {
   display: none;
 }
-.rc-trigger-popup-zoom-enter,
-.rc-trigger-popup-zoom-appear {
+.${prefixCls}-zoom-enter,
+.${prefixCls}-zoom-appear {
   opacity: 0;
   animation-play-state: paused;
   animation-timing-function: cubic-bezier(0.2, 0.89, 0.32, 1.28);
   animation-duration: 0.3s;
   animation-fill-mode: both;
 }
-.rc-trigger-popup-zoom-leave {
+.${prefixCls}-zoom-leave {
   animation-duration: 0.3s;
   animation-fill-mode: both;
   animation-play-state: paused;
   animation-timing-function: cubic-bezier(0.6, -0.3, 0.74, 0.05);
 }
-.rc-trigger-popup-zoom-enter.rc-trigger-popup-zoom-enter-active,
-.rc-trigger-popup-zoom-appear.rc-trigger-popup-zoom-appear-active {
+.${prefixCls}-zoom-enter.${prefixCls}-zoom-enter-active,
+.${prefixCls}-zoom-appear.${prefixCls}-zoom-appear-active {
   animation-name: rcTriggerZoomIn;
   animation-play-state: running;
 }
-.rc-trigger-popup-zoom-leave.rc-trigger-popup-zoom-leave-active {
+.${prefixCls}-zoom-leave.${prefixCls}-zoom-leave-active {
   animation-name: rcTriggerZoomOut;
   animation-play-state: running;
 }
-.rc-trigger-popup-arrow {
+.${prefixCls}-arrow {
   width: 0px;
   height: 0px;
   background: #000;

@@ -68,6 +68,10 @@ import type { ModalFormProps } from './modal-form';
 import ModalForm from './modal-form';
 import ReactScript from './react-script';
 import type { ReactScriptProps } from './react-script/ReactScript';
+import type { TriggerProps } from './trigger';
+import Trigger from './trigger';
+import type { TooltipProps } from './tooltip';
+import Tooltip from './tooltip';
 
 export type {
   EqRatioBoxProps,
@@ -106,6 +110,8 @@ export type {
   DialogFormProps,
   BreadCrumbProps,
   ReactScriptProps,
+  TriggerProps,
+  TooltipProps,
 };
 
 export {
@@ -139,4 +145,6 @@ export {
   ModalForm,
   DialogForm,
   CommonStore,
+  Trigger,
+  Tooltip,
 };

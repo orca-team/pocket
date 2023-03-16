@@ -40,7 +40,14 @@ const defaultEmptyTips = (
   <div className="pdf-viewer-default-empty-tips">请打开一个 PDF 文件</div>
 );
 
-export interface PDFViewerProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface PDFViewerProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  /** 默认文件标题（非受控） */
+  defaultTitle?: React.ReactNode;
+
+  /** 文件标题（受控） */
+  title?: React.ReactNode;
+
   /** 页面之间的间距 */
   pageGap?: number;
 
@@ -61,6 +68,9 @@ export interface PDFViewerProps extends React.HTMLAttributes<HTMLDivElement> {
 
   /** 标注内容变化事件 */
   onMarkChange?: (page: number, markData: ShapeDataType[]) => void;
+
+  /** 隐藏工具栏 */
+  hideToolbar?: boolean;
 }
 
 const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
@@ -76,6 +86,9 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       onPageScroll,
       children,
       emptyTips = defaultEmptyTips,
+      title: _title,
+      hideToolbar,
+      defaultTitle,
       ...otherProps
     } = props;
 
@@ -92,6 +105,10 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     const [current, setCurrent] = useState(0);
 
     const [zoom, setZoom, getZoom] = useGetState(0);
+
+    const [__title, setTitle] = useState<React.ReactNode>(defaultTitle);
+
+    const title = _title ?? __title;
 
     const scale = 2 ** zoom;
 
@@ -396,10 +413,17 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     const [toolbarLeftDom, setToolbarLeftDom] = useState<HTMLDivElement | null>(
       null,
     );
-    const [toolbarCenterDom, setToolbarCenterDom] =
-      useState<HTMLDivElement | null>(null);
     const [toolbarRightDom, setToolbarRightDom] =
       useState<HTMLDivElement | null>(null);
+    const [centerToolbarIds, setCenterToolbarIds] = useState<string[]>([]);
+
+    const addCenterToolbarId = useMemoizedFn((id: string) => {
+      setCenterToolbarIds((ids) => [...new Set([...ids, id])]);
+    });
+
+    const removeCenterToolbarId = useMemoizedFn((id: string) => {
+      setCenterToolbarIds((ids) => ids.filter((_id) => _id !== id));
+    });
 
     /* 绘图功能 */
     const [drawing, setDrawing] = useState(false);
@@ -477,6 +501,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
         setMarkData,
         setAllMarkData,
         clearAllMarkData,
+        setTitle,
       }),
       [],
     );
@@ -500,8 +525,14 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       >
         <PDFToolbarContext.Provider
           value={useMemo(
-            () => ({ toolbarRightDom, toolbarLeftDom }),
-            [toolbarRightDom, toolbarLeftDom],
+            () => ({
+              toolbarRightDom,
+              toolbarLeftDom,
+              removeCenterToolbarId,
+              centerToolbarIds,
+              addCenterToolbarId,
+            }),
+            [toolbarRightDom, toolbarLeftDom, centerToolbarIds],
           )}
         >
           <div
@@ -512,13 +543,13 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
             {...otherProps}
           >
             <PDFToolbar
+              hide={hideToolbar}
+              title={title}
               className={styles.toolbar}
               leftRef={(dom) => {
                 setToolbarLeftDom(dom);
               }}
-              centerRef={(dom) => {
-                setToolbarCenterDom(dom);
-              }}
+              centerIds={centerToolbarIds}
               rightRef={(dom) => {
                 setToolbarRightDom(dom);
               }}

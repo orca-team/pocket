@@ -6,10 +6,10 @@
 import React from 'react';
 import PdfViewer, {
   OpenFileButton,
+  ToolbarButton,
   ToolbarPortal,
   usePdfViewerRef,
 } from '@orca-fe/pdf-viewer';
-import { IconButton } from '@orca-fe/pocket';
 import { Tooltip } from 'antd';
 import { ClearOutlined, ImportOutlined, SaveOutlined } from '@ant-design/icons';
 import saveAs from 'file-saver';
@@ -56,27 +56,25 @@ const Page = () => {
         </ToolbarPortal>
         <ToolbarPortal>
           <Tooltip title="加载绘图数据">
-            <IconButton>
-              <OpenFileButton
-                onOpenFile={(file) => {
-                  file.text().then((content) => {
-                    loadMarks(content);
-                  });
-                }}
-              >
-                <ImportOutlined />
-              </OpenFileButton>
-            </IconButton>
+            <OpenFileButton
+              onOpenFile={(file) => {
+                file.text().then((content) => {
+                  loadMarks(content);
+                });
+              }}
+            >
+              <ImportOutlined />
+            </OpenFileButton>
           </Tooltip>
+        </ToolbarPortal>
+        <ToolbarPortal>
           <Tooltip title="获取并保存绘图数据">
-            <IconButton onClick={saveMarks}>
-              <SaveOutlined />
-            </IconButton>
+            <ToolbarButton icon={<SaveOutlined />} onClick={saveMarks} />
           </Tooltip>
+        </ToolbarPortal>
+        <ToolbarPortal>
           <Tooltip title="获取并保存绘图数据">
-            <IconButton onClick={clearMarks}>
-              <ClearOutlined />
-            </IconButton>
+            <ToolbarButton icon={<ClearOutlined />} onClick={clearMarks} />
           </Tooltip>
         </ToolbarPortal>
       </PdfViewer>
