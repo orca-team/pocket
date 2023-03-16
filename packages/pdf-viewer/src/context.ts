@@ -8,7 +8,10 @@ import type { ShapeDataType } from '@orca-fe/painter';
  */
 export type PDFViewerHandle = {
   /** 加载文件，支持 url / 文件 / ArrayBuffer */
-  load: (file: string | URL | File | ArrayBuffer) => Promise<void>;
+  load: (
+    file: string | URL | File | ArrayBuffer,
+    title?: string,
+  ) => Promise<void>;
 
   /** 关闭文件，恢复初始状态 */
   close: () => Promise<void>;
@@ -48,6 +51,8 @@ export type PDFViewerHandle = {
 
   /** 清除所有页面的标注内容 */
   clearAllMarkData: () => void;
+
+  setTitle: (title: React.ReactNode) => void;
 };
 
 export type PageViewport = {
@@ -71,12 +76,11 @@ export type RenderPageCoverFnType = (
   pageIndex: number,
   options: { viewport: PageViewport; zoom: number },
 ) => React.ReactNode;
+
 export type PDFViewerContextType = {
   pages: any[];
   current: number;
   zoom: number;
-  setZoom: (zoom: number) => void;
-  changePage: (page: number, anim?: boolean) => void;
   pdfViewer: PDFViewerHandle;
   addRenderPageCoverFn: (fn: RenderPageCoverFnType) => void;
   removeRenderPageCoverFn: (fn: RenderPageCoverFnType) => void;
@@ -86,8 +90,6 @@ const PDFViewerContext = React.createContext<PDFViewerContextType>({
   pages: [],
   current: 1,
   zoom: 0,
-  setZoom: () => {},
-  changePage: () => {},
   pdfViewer: {
     async load() {},
     async close() {},
@@ -112,6 +114,7 @@ const PDFViewerContext = React.createContext<PDFViewerContextType>({
     setAllMarkData() {},
     setMarkData() {},
     setZoom() {},
+    setTitle() {},
   },
   addRenderPageCoverFn() {},
   removeRenderPageCoverFn() {},
@@ -122,9 +125,15 @@ export default PDFViewerContext;
 export type PDFToolbarContextType = {
   toolbarLeftDom: HTMLDivElement | null;
   toolbarRightDom: HTMLDivElement | null;
+  addCenterToolbarId: (id: string, order?: number) => void;
+  removeCenterToolbarId: (id: string) => void;
+  centerToolbarIds: string[];
 };
 
 export const PDFToolbarContext = React.createContext<PDFToolbarContextType>({
   toolbarLeftDom: null,
   toolbarRightDom: null,
+  addCenterToolbarId: () => undefined,
+  removeCenterToolbarId: () => undefined,
+  centerToolbarIds: [],
 });

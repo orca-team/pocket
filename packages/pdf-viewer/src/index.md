@@ -34,17 +34,26 @@ group:
 
 ## API
 
+### 重要更新
+
+- `0.2.0`
+  - 支持通过属性 `defaultTitle`, `title`，设置文件标题。
+  - `PDFViewerHandle.setTitle` 可以设置文件标题。
+  - `PDFViewerHandle` 中，`load` 加载文件时，可以传入 `title` 来设置文件标题。
+
 ### 属性
 
-| 属性名称        | 描述                     | 类型                                                                                        | 默认值 | 版本    |
-| --------------- | ------------------------ | ------------------------------------------------------------------------------------------- | ------ | ------- |
-| pageGap         | 页面间距                 | `number`                                                                                    | `24`   |         |
-| maxZoom         | 最大缩放级别             | `number`                                                                                    | `3`    |         |
-| minZoom         | 最小缩放级别             | `number`                                                                                    | `-4`   |         |
-| renderPageCover | 渲染自定义的页面覆盖内容 | `(pageIndex: number, options: { viewport: PageViewport, zoom: number }) => React.ReactNode` | `-`    |         |
-| onPageScroll    | 页面渲染事件             | `typeof onScroll`                                                                           | `-`    |         |
-| emptyTips       | 未打开文件时的提示       | `ReactElement`                                                                              | `-`    | `0.0.4` |
-| onMarkChange    | 标注内容变化事件         | `(page: number, markData: ShapeDataType[]) => void`                                         | `-`    | `0.0.5` |
+| 属性名称        | 描述                                                                                                                    | 类型                                                                                        | 默认值 | 版本    |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------ | ------- |
+| pageGap         | 页面间距                                                                                                                | `number`                                                                                    | `24`   |         |
+| maxZoom         | 最大缩放级别                                                                                                            | `number`                                                                                    | `3`    |         |
+| minZoom         | 最小缩放级别                                                                                                            | `number`                                                                                    | `-4`   |         |
+| renderPageCover | 渲染自定义的页面覆盖内容                                                                                                | `(pageIndex: number, options: { viewport: PageViewport, zoom: number }) => React.ReactNode` | `-`    |         |
+| onPageScroll    | 页面渲染事件                                                                                                            | `typeof onScroll`                                                                           | `-`    |         |
+| emptyTips       | 未打开文件时的提示                                                                                                      | `ReactElement`                                                                              | `-`    | `0.0.4` |
+| onMarkChange    | 标注内容变化事件                                                                                                        | `(page: number, markData: ShapeDataType[]) => void`                                         | `-`    | `0.0.5` |
+| defaultTitle    | 默认展示的文件标题                                                                                                      | `string`                                                                                    | `-`    | `0.2.0` |
+| title           | 文件标题，当传入该属性时，`defaultTitle` 以及 `PDFViewerHandle.load` 和 `PDFViewerHandle.setTitle` 的设置标题都不生效。 | `string`                                                                                    | `-`    | `0.2.0` |
 
 ### PDFViewerHandle
 
@@ -69,18 +78,19 @@ export default () => {
 };
 ```
 
-| 方法名称         | 描述                             | 类型                                                              | 版本    |
-| ---------------- | -------------------------------- | ----------------------------------------------------------------- | ------- |
-| load             | 加载文件                         | `(file: ArrayBuffer) => Promise<void>`                            |         |
-| close            | 关闭文件                         | `() => void`                                                      | `0.1.0` |
-| setZoom          | 设置缩放级别                     | `(zoom: number) => void`                                          |         |
-| getZoom          | 取得当前缩放级别                 | `() => number`                                                    |         |
-| changePage       | 翻页（从 0 开始）                | `(pageIndex: number, anim?: boolean) => void`                     |         |
-| scrollTo         | 控制页面滚动到特定未知           | 同 `HTMLElement.scrollTo`                                         |         |
-| getCurrentPage   | 获取当前窗口中的页码，从 0 开始  | `() => number`                                                    |         |
-| getPageCount     | 获取当前页面数量                 | `() => number`                                                    |         |
-| getPageBlob      | 获取页面的渲染信息（图片二进制） | `(index: number, options?: { scale?: number },) => Promise<Blob>` |         |
-| getAllMarkData   | 获取当前页面中所有的标注数据     | `() => ShapeDataType[][]`                                         | `0.0.5` |
-| setMarkData      | 更新某一页的标注数据             | `(page: number, markData: ShapeDataType[]) => void`               | `0.0.5` |
-| setAllMarkData   | 更新所有页面的标注数据           | `(markData: ShapeDataType[][]) => void`                           | `0.0.5` |
-| clearAllMarkData | 清除所有页面的标注数据           | `() => void`                                                      | `0.0.6` |
+| 方法名称         | 描述                             | 类型                                                              | 版本                      |
+| ---------------- | -------------------------------- | ----------------------------------------------------------------- | ------------------------- |
+| load             | 加载文件                         | `(file: ArrayBuffer, title?:string) => Promise<void>`             | `0.2.0` 增加 `title` 属性 |
+| close            | 关闭文件                         | `() => void`                                                      | `0.1.0`                   |
+| setZoom          | 设置缩放级别                     | `(zoom: number) => void`                                          |                           |
+| getZoom          | 取得当前缩放级别                 | `() => number`                                                    |                           |
+| changePage       | 翻页（从 0 开始）                | `(pageIndex: number, anim?: boolean) => void`                     |                           |
+| scrollTo         | 控制页面滚动到特定未知           | 同 `HTMLElement.scrollTo`                                         |                           |
+| getCurrentPage   | 获取当前窗口中的页码，从 0 开始  | `() => number`                                                    |                           |
+| getPageCount     | 获取当前页面数量                 | `() => number`                                                    |                           |
+| getPageBlob      | 获取页面的渲染信息（图片二进制） | `(index: number, options?: { scale?: number },) => Promise<Blob>` |                           |
+| getAllMarkData   | 获取当前页面中所有的标注数据     | `() => ShapeDataType[][]`                                         | `0.0.5`                   |
+| setMarkData      | 更新某一页的标注数据             | `(page: number, markData: ShapeDataType[]) => void`               | `0.0.5`                   |
+| setAllMarkData   | 更新所有页面的标注数据           | `(markData: ShapeDataType[][]) => void`                           | `0.0.5`                   |
+| clearAllMarkData | 清除所有页面的标注数据           | `() => void`                                                      | `0.0.6`                   |
+| setTitle         | 设置文件标题                     | `(title: string) => void`                                         | `0.2.0`                   |

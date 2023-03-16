@@ -1,7 +1,6 @@
 import React from 'react';
-import { IconButton, SimpleNumberInput } from '@orca-fe/pocket';
+import { IconButton, SimpleNumberInput, Trigger } from '@orca-fe/pocket';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
-import Trigger from 'rc-trigger';
 import type { ShapeType } from '@orca-fe/painter';
 import { ColorPicker } from '@orca-fe/painter';
 import useStyle from './PainterToolbar.style';
@@ -12,6 +11,7 @@ import {
   IconRectangle,
   IconSmoothLine,
 } from '../icon/icon';
+import ToolbarButton from '../ToolbarButton';
 
 const ef = () => undefined;
 
@@ -120,19 +120,16 @@ const PainterToolbar = (props: PainterToolbarProps) => {
     <ToolbarPortal>
       <div className={styles.root}>
         <Trigger
-          action={['click']}
+          action="click"
           popupVisible={drawing}
-          destroyPopupOnHide
           popupAlign={{
-            points: ['tr', 'br'],
+            points: ['tc', 'bc'],
             offset: [0, 3],
           }}
-          popupTransitionName="rc-trigger-popup-zoom"
-          popupClassName={styles.wrapper}
           popup={renderPainterToolbar()}
         >
           <span className={styles.root}>
-            <IconButton
+            <ToolbarButton
               checked={drawing}
               onClick={(e) => {
                 if (drawing) {
@@ -147,9 +144,10 @@ const PainterToolbar = (props: PainterToolbarProps) => {
                   );
                 }
               }}
+              icon={<EditOutlined />}
             >
-              <EditOutlined />
-            </IconButton>
+              编辑标注
+            </ToolbarButton>
           </span>
         </Trigger>
       </div>

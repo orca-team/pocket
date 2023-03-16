@@ -6,18 +6,28 @@ export default createUseStyles(
   {
     root: {
       position: 'relative',
-      height: 40,
+      height: 48,
       display: 'flex',
       alignItems: 'center',
       backgroundColor: '#fff',
       borderBottom: '1px solid #DDD',
+    },
+    title: {
+      flex: 1,
+      display: 'flex',
+      alignItems: 'center',
+      height: '100%',
+      fontWeight: 'bold',
+      fontSize: 16,
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
     left: {
       padding: '0 12px',
       display: 'flex',
       alignItems: 'center',
       height: '100%',
-      flex: 1,
     },
     center: {
       padding: '0 12px',
@@ -32,6 +42,14 @@ export default createUseStyles(
       justifyContent: 'end',
       height: '100%',
       flex: 1,
+    },
+    hide: {
+      display: 'none',
+    },
+    separator: {
+      margin: [0, 16],
+      borderLeft: '1px solid #DDD',
+      height: 24,
     },
   },
   {

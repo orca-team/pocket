@@ -176,37 +176,34 @@ div.orca-menu-item-link {
       position: absolute !important;
       min-width: 180px;
       background-color: #262931;
-      transition: opacity 100ms, transform 100ms;
       transform-origin: top left;
 
+
       &-anim {
+        &-enter,
         &-appear {
           opacity: 0;
-          transform: scale(0.8);
+          animation-play-state: paused;
+          //animation-timing-function: cubic-bezier(0.2, 0.89, 0.32, 1.28);
+          animation-duration: 0.2s;
+          animation-fill-mode: both;
 
           &-active {
-            opacity: 1;
-            transform: scale(1);
+            animation-name: orcaMenuTriggerZoomIn;
+            animation-play-state: running;
           }
         }
 
-        &-enter {
-          opacity: 0;
-          transform: scale(0.8);
-
-          &-active {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
 
         &-leave {
-          opacity: 1;
-          transform: scale(1);
+          animation-play-state: paused;
+          //animation-timing-function: cubic-bezier(0.2, 0.89, 0.32, 1.28);
+          animation-duration: 0.2s;
+          animation-fill-mode: both;
 
           &-active {
-            opacity: 0;
-            transform: scale(0.8);
+            animation-name: orcaMenuTriggerZoomOut;
+            animation-play-state: running;
           }
         }
       }
@@ -279,5 +276,26 @@ div.orca-menu-item-link {
         box-shadow: inset 0 3px 3px rgba(10, 10, 10, 0.1);
       }
     }
+  }
+}
+
+@keyframes orcaMenuTriggerZoomIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+}
+@keyframes orcaMenuTriggerZoomOut {
+  0% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0;
   }
 }
