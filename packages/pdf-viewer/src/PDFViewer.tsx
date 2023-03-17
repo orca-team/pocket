@@ -5,7 +5,6 @@ import {
   useDebounceFn,
   useEventListener,
   useMemoizedFn,
-  useSet,
 } from 'ahooks';
 import React, {
   useEffect,
@@ -122,6 +121,11 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       zooming: false,
     });
 
+    const [, setForceUpdateCount] = useState(0);
+    const forceUpdate = useMemoizedFn(() => {
+      setForceUpdateCount((count) => count + 1);
+    });
+
     useDebounceEffect(
       () => {
         _this.zooming = false;
@@ -135,9 +139,6 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     const [pages, setPages, getPages] = useGetState<any[]>([]);
 
     const [loading, setLoading] = useState(false);
-
-    const [renderPageCoverFnList, renderPageCoverFnHandle] =
-      useSet<RenderPageCoverFnType>();
 
     // 获取每一页的 viewport 信息
     const viewports = useMemo(
@@ -466,7 +467,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
       () => ({
         load,
         close,
-        setZoom,
+        setZoom: setZoomForToolbar,
         getZoom,
         changePage,
         getPageBlob,
@@ -483,20 +484,27 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     );
     useImperativeHandle(pRef, () => pdfViewerHandle);
 
+    const [pageCoverRefs, setPageCoverRefs] = useState<
+      (HTMLDivElement | null)[]
+    >([]);
+    useEffect(() => {
+      setPageCoverRefs((l) => l.slice());
+    }, [renderRange[0], renderRange[1]]);
+
     return (
       <PDFViewerContext.Provider
         value={useMemo(
           () => ({
             pages,
+            viewports,
             zoom,
             current,
             changePage,
-            setZoom: setZoomForToolbar,
+            forceUpdate,
+            pageCoverRefs,
             pdfViewer: pdfViewerHandle,
-            addRenderPageCoverFn: renderPageCoverFnHandle.add,
-            removeRenderPageCoverFn: renderPageCoverFnHandle.remove,
           }),
-          [pages, zoom, current],
+          [pages, viewports, zoom, current, pageCoverRefs],
         )}
       >
         <PDFToolbarContext.Provider
@@ -560,13 +568,10 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                           zoom={zoom}
                           render={shouldRender}
                         />
-                        <div className={styles.pageCover}>
-                          {[...renderPageCoverFnList].map((fn, index) => (
-                            <React.Fragment key={index}>
-                              {fn(pageIndex, { viewport, zoom })}
-                            </React.Fragment>
-                          ))}
-                        </div>
+                        <div
+                          ref={(node) => (pageCoverRefs[pageIndex] = node)}
+                          className={styles.pageCover}
+                        />
                         <div className={styles.pageCover}>
                           {renderPageCover(pageIndex, { viewport, zoom })}
                         </div>
@@ -575,6 +580,15 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                   </div>
                 );
               })}
+
+              {/* 绘图的工具栏渲染 */}
+              {pages.length > 0 && (
+                <PDFPainter
+                  ref={pdfPainterHandle}
+                  onMarkChange={onMarkChange}
+                />
+              )}
+              {children}
             </div>
 
             {/* 页码 */}
@@ -585,12 +599,6 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                 min={2 ** minZoom}
               />
             )}
-
-            {/* 绘图的工具栏渲染 */}
-            {pages.length > 0 && (
-              <PDFPainter ref={pdfPainterHandle} onMarkChange={onMarkChange} />
-            )}
-            {children}
           </div>
         </PDFToolbarContext.Provider>
       </PDFViewerContext.Provider>

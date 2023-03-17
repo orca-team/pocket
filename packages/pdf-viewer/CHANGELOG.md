@@ -1,5 +1,16 @@
 # @orca-fe/pdf-viewer
 
+## 0.3.0
+
+### Minor Changes
+
+- 更新 pdf-viewer 的插件机制
+
+### Patch Changes
+
+- 5b6a11e: PDFViewer 增加 loading 状态
+- 5b6a11e: 更新绘图的图标
+
 ## 0.2.1
 
 ### Patch Changes

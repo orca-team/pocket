@@ -21,16 +21,6 @@ export default createUseStyles(
         color: '#AAA',
       },
     },
-    painter: {
-      '&$drawing': {
-        zIndex: 10,
-      },
-    },
-    drawing: {
-      '&:hover': {
-        outline: '2px solid #19f',
-      },
-    },
     toolbar: {
       flexShrink: 0,
     },

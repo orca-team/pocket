@@ -19,6 +19,16 @@ export default createUseStyles(
       display: 'flex',
       alignItems: 'center',
     },
+    painter: {
+      '&$drawing': {
+        zIndex: 10,
+      },
+    },
+    drawing: {
+      '&:hover': {
+        outline: '2px solid #19f',
+      },
+    },
   },
   {
     classNamePrefix: prefix,

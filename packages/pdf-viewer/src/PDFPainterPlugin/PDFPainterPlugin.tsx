@@ -113,34 +113,7 @@ const PDFPainterPlugin = React.forwardRef<
     setAllMarkData,
   }));
 
-  usePageCoverRenderer((pageIndex, { viewport }) => (
-    <Painter
-      ref={(ref) => (_painter.refs[pageIndex] = ref)}
-      className={`${styles.painter} ${drawing ? styles.drawing : ''}`}
-      width={viewport.width}
-      height={viewport.height}
-      style={{ height: '100%' }}
-      defaultDrawMode={drawing ? drawMode : false}
-      onInit={() => {
-        const shapeData = _painter.data[pageIndex];
-        const ref = _painter.refs[pageIndex];
-        if (shapeData && ref) {
-          ref.addShapes(shapeData);
-          if (drawing) {
-            ref.draw(drawMode.shapeType, drawMode.attr);
-          }
-        }
-      }}
-      onDataChange={() => {
-        const ref = _painter.refs[pageIndex];
-        if (ref) {
-          const shapes = ref.getShapes();
-          _painter.data[pageIndex] = shapes;
-          onMarkChange(pageIndex, shapes);
-        }
-      }}
-    />
-  ));
+  const renderPageCover = usePageCoverRenderer();
 
   const changeDrawMode = (shapeType: ShapeType, attr: Record<string, any>) => {
     setDrawMode({
@@ -233,41 +206,71 @@ const PDFPainterPlugin = React.forwardRef<
   );
 
   return (
-    <ToolbarPortal>
-      <div className={styles.root}>
-        <Trigger
-          action="click"
-          popupVisible={drawing}
-          popupAlign={{
-            points: ['tc', 'bc'],
-            offset: [0, 3],
+    <>
+      <ToolbarPortal>
+        <div className={styles.root}>
+          <Trigger
+            action="click"
+            popupVisible={drawing}
+            popupAlign={{
+              points: ['tc', 'bc'],
+              offset: [0, 3],
+            }}
+            popup={renderPainterToolbar()}
+          >
+            <span className={styles.root}>
+              <ToolbarButton
+                checked={drawing}
+                onClick={(e) => {
+                  if (drawing) {
+                    setDrawing(false);
+                  } else {
+                    changeDrawMode(
+                      drawMode.shapeType || 'rectangle',
+                      drawMode.attr || {
+                        strokeWidth: 1,
+                        stroke: '#CC0000',
+                      },
+                    );
+                  }
+                }}
+                icon={<IconMarkEdit />}
+              >
+                编辑标注
+              </ToolbarButton>
+            </span>
+          </Trigger>
+        </div>
+      </ToolbarPortal>
+      {renderPageCover((pageIndex, { viewport }) => (
+        <Painter
+          ref={(ref) => (_painter.refs[pageIndex] = ref)}
+          className={`${styles.painter} ${drawing ? styles.drawing : ''}`}
+          width={viewport.width}
+          height={viewport.height}
+          style={{ height: '100%' }}
+          defaultDrawMode={drawing ? drawMode : false}
+          onInit={() => {
+            const shapeData = _painter.data[pageIndex];
+            const ref = _painter.refs[pageIndex];
+            if (shapeData && ref) {
+              ref.addShapes(shapeData);
+              if (drawing) {
+                ref.draw(drawMode.shapeType, drawMode.attr);
+              }
+            }
           }}
-          popup={renderPainterToolbar()}
-        >
-          <span className={styles.root}>
-            <ToolbarButton
-              checked={drawing}
-              onClick={(e) => {
-                if (drawing) {
-                  setDrawing(false);
-                } else {
-                  changeDrawMode(
-                    drawMode.shapeType || 'rectangle',
-                    drawMode.attr || {
-                      strokeWidth: 1,
-                      stroke: '#CC0000',
-                    },
-                  );
-                }
-              }}
-              icon={<IconMarkEdit />}
-            >
-              编辑标注
-            </ToolbarButton>
-          </span>
-        </Trigger>
-      </div>
-    </ToolbarPortal>
+          onDataChange={() => {
+            const ref = _painter.refs[pageIndex];
+            if (ref) {
+              const shapes = ref.getShapes();
+              _painter.data[pageIndex] = shapes;
+              onMarkChange(pageIndex, shapes);
+            }
+          }}
+        />
+      ))}
+    </>
   );
 });
 
