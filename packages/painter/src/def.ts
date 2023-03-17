@@ -1,4 +1,4 @@
-export type ShapeType = 'line' | 'ellipse' | 'rectangle' | 'line-path';
+export type ShapeType = 'line' | 'ellipse' | 'rectangle' | 'line-path' | string;
 
 export type LineShapeType = {
   type: 'line';
