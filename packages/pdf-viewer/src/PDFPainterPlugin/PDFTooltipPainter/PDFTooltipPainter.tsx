@@ -58,6 +58,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
     <div
       tabIndex={-1}
       className={`${styles.root} ${className}`}
+      draggable={false}
       onBlur={() => {
         check(-1);
       }}

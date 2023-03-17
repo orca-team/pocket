@@ -17,28 +17,29 @@ const PDFPage = (props: PdfPageProps) => {
   const { className = '', index, render, zoom = 0, ...otherProps } = props;
   const styles = useStyle();
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const scale = 2 ** zoom;
 
   const [_this] = useState<{
     task?: any;
-  }>({});
+    canvasList: HTMLCanvasElement[];
+  }>({
+    canvasList: [],
+  });
 
   const { pages } = useContext(PDFViewerContext);
   const page = pages[index];
-  // const viewport = useMemo(() => {
-  //   if (page) {
-  //     return page.getViewport({ scale }) as PageViewport;
-  //   }
-  //   return null;
-  // }, [page, scale]);
 
   const renderPdf = useMemoizedFn(async (twice = false) => {
-    const canvas = canvasRef.current;
+    const canvas = document.createElement('canvas');
+    canvas.classList.add(...styles.canvas.split(' '));
+
     if (!render) return;
     if (canvas && page) {
-      const viewport = page.getViewport({ scale }) as PageViewport;
+      const viewport = page.getViewport({
+        scale: Math.min(2 * outputScale, scale),
+      }) as PageViewport;
       canvas.width = Math.ceil(viewport.width * outputScale);
       canvas.height = Math.ceil(viewport.height * outputScale);
       const context = canvas.getContext('2d');
@@ -66,6 +67,14 @@ const PDFPage = (props: PdfPageProps) => {
         task.promise
           .then(() => {
             _this.task = undefined;
+            const root = rootRef.current;
+            if (root) {
+              root.appendChild(canvas);
+              _this.canvasList.forEach((node) => {
+                root.removeChild(node);
+              });
+              _this.canvasList = [canvas];
+            }
             if (twice) {
               setTimeout(() => {
                 if (!_this.task) {
@@ -98,13 +107,15 @@ const PDFPage = (props: PdfPageProps) => {
   const renderPdfDebounce = useDebounceFn(renderPdf, { wait: 300 });
 
   useUpdateEffect(() => {
-    renderPdfDebounce.run(true);
+    renderPdfDebounce.run(false);
   }, [scale]);
 
   return (
-    <div className={`${styles.root} ${className}`} {...otherProps}>
-      <canvas className={styles.canvas} ref={canvasRef} />
-    </div>
+    <div
+      ref={rootRef}
+      className={`${styles.root} ${className}`}
+      {...otherProps}
+    />
   );
 };
 

@@ -265,6 +265,7 @@ const PDFPainterPlugin = React.forwardRef<
         <>
           <Painter
             ref={ref => (_painter.refs[pageIndex] = ref)}
+            draggable={false}
             className={`${styles.painter} ${
               isKonvaDrawing ? styles.drawing : ''
             }`}

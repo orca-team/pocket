@@ -26,6 +26,7 @@ importers:
       file-saver: ^2.0.5
       gh-pages: ^3.2.3
       husky: ^8.0.1
+      jss: ^10.10.0
       lint-staged: ^13.0.3
       moment: ^2.29.4
       prettier: ^2.7.1
@@ -59,12 +60,13 @@ importers:
       typescript: 4.9.5
     devDependencies:
       '@orca-fe/eslint-config': 2.3.3_vgl77cfdswitgr47lm5swmv43m
-      '@orca-fe/jss-plugin-auto-prefix': 0.0.1_react@16.14.0
+      '@orca-fe/jss-plugin-auto-prefix': 0.0.1_jss@10.10.0+react@16.14.0
       '@orca-fe/simple-jss': 0.0.1_react@16.14.0
       '@types/file-saver': 2.0.5
       cross-env: 7.0.3
       eslint: 8.36.0
       file-saver: 2.0.5
+      jss: 10.10.0
       react-json-view: 1.21.3_ugrpyuvudjf6jbttetu7vnqf5m
 
   packages/hooks:
@@ -172,7 +174,6 @@ importers:
       immer: ^9.0.19
       is-in-browser: ^1.1.3
       json5: ^2.2.3
-      jss: ^10.10.0
       jss-preset-default: ^10.10.0
       lodash-es: ^4.17.21
       mjolnir.js: ^2.7.1
@@ -185,7 +186,7 @@ importers:
       tslib: ^2.5.0
     dependencies:
       '@orca-fe/hooks': link:../hooks
-      '@orca-fe/jss-plugin-auto-prefix': 0.0.1_jss@10.10.0
+      '@orca-fe/jss-plugin-auto-prefix': 0.0.1
       '@orca-fe/pocket': 'link:'
       '@orca-fe/tools': link:../tools
       '@rc-component/trigger': 1.5.7
@@ -197,7 +198,6 @@ importers:
       immer: 9.0.19
       is-in-browser: 1.1.3
       json5: 2.2.3
-      jss: 10.10.0
       jss-preset-default: 10.10.0
       lodash-es: 4.17.21
       mjolnir.js: 2.7.1
@@ -1310,12 +1310,13 @@ packages:
       prefix-classnames: 0.0.7
     dev: false
 
-  /@orca-fe/jss-plugin-auto-prefix/0.0.1_react@16.14.0:
+  /@orca-fe/jss-plugin-auto-prefix/0.0.1_jss@10.10.0+react@16.14.0:
     resolution: {integrity: sha512-zVM1xVPmEOfsKw5HYgM2XUXnN4hvocjvQ4fchPf8/KV93Pl3sWwnTBR/m7UGub0u2MuSQ5GVm/N1sMgC0dE0Dw==}
     peerDependencies:
       jss: '>=10.0.0'
       react: '>=16.8.0'
     dependencies:
+      jss: 10.10.0
       param-case: 3.0.4
       prefix-classnames: 0.0.7
       react: 16.14.0
