@@ -129,10 +129,11 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
         const shape = createShape(shapeData);
         shape.fillEnabled(false);
         shape.draggable(true);
-        shape.setAttr('hitStrokeWidth', 4);
+        const strokeWidth = shapeData['strokeWidth'] || 1;
+        shape.setAttr('hitStrokeWidth', strokeWidth + 3);
         shape.on('click', (ev) => {
           check(shape);
-          onCheck(_this.shapes.findIndex((s) => s === shape));
+          onCheck(_this.shapes.findIndex(s => s === shape));
         });
         shape.on('mouseenter', () => {
           cursorMove();
@@ -160,11 +161,11 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
 
   const checkIndex = useMemoizedFn<PainterRef['check']>((_index) => {
     const index = Array.isArray(_index) ? _index : [_index];
-    check(index.map((i) => _this.shapes[i]));
+    check(index.map(i => _this.shapes[i]));
   });
 
   const getShapes = useMemoizedFn<PainterRef['getShapes']>(() =>
-    _this.shapes.map((shape) => shape.getAttrs()),
+    _this.shapes.map(shape => shape.getAttrs()),
   );
   const clearShapes = useMemoizedFn<PainterRef['clearShapes']>(() => {
     _this.shapes.forEach((shape) => {
@@ -310,7 +311,9 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
           pointMapping={(point) => {
             if (_this.layer) {
               // console.log(_this.layer.getTransform().decompose());
-              return _this.layer.getTransform().copy().invert().point(point);
+              return _this.layer.getTransform().copy()
+                .invert()
+                .point(point);
             }
             return point;
           }}

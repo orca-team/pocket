@@ -4,19 +4,33 @@
   &- {
     &root {
       min-width: 0.6em;
-    }
 
-    &editing {
+      pre {
+        overflow: hidden;
+        white-space: break-spaces;
+        word-wrap: normal;
+        margin-bottom: 0;
+
+        &:focus {
+          outline: none;
+          border: none;
+        }
+      }
+    }
+    &editing:not(.@{prefix}-transparent){
       background-color: #ffffff;
       color: #333333;
+    }
+    &editing {
       border: 2px solid #1199ff;
       border-radius: 4px;
       padding-left: 2px;
       padding-right: 2px;
       text-overflow: initial !important;
+      cursor: initial;
     }
 
-    &compact{
+    &compact {
       border-radius: 2px;
       line-height: 1.2em;
     }

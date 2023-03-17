@@ -27,6 +27,7 @@ import useHotkeyListener from './hotkey-manager/useHotkeyListener';
 import HotkeyManager from './hotkey-manager';
 import HotkeyManagerContext from './hotkey-manager/HotkeyManagerContext';
 import useGetState from './useGetState';
+import useMergedRefs from './useMergedRefs';
 
 export {
   useWindowSize,
@@ -44,6 +45,7 @@ export {
   useService,
   useInterval,
   useGetState,
+  useMergedRefs,
 
   // events
   useEventEmitter,

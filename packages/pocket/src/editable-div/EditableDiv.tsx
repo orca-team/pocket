@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import pc from 'prefix-classnames';
 import './EditableDiv.less';
 import { useControllableValue, useEventListener } from 'ahooks';
+import { useMergedRefs } from '@orca-fe/hooks';
 
 const px = pc('editable-div');
 
@@ -28,98 +29,125 @@ export interface EditableDivProps
   editing?: boolean;
   onEditChange?: (editing: boolean) => void;
   compact?: boolean;
+  trigger?: 'dblclick' | 'click' | 'mouseup' | 'mousedown' | 'focus';
+  transparent?: boolean;
 }
 
-const EditableDiv = (props: EditableDivProps) => {
-  const {
-    className = '',
-    value: nouse,
-    defaultValue,
-    onEditChange,
-    editing: nouse2,
-    onChange,
-    compact,
-    ...otherProps
-  } = props;
-  const [value, setValue] = useControllableValue(props);
-  const [editing, setEditing] = useControllableValue(props, {
-    defaultValue: false,
-    trigger: 'onEditChange',
-    defaultValuePropName: 'noDefaultValue',
-    valuePropName: 'editing',
-  });
+const EditableDiv = React.forwardRef<HTMLDivElement, EditableDivProps>(
+  (props, pRef) => {
+    const {
+      className = '',
+      value: nouse,
+      defaultValue,
+      onEditChange,
+      editing: nouse2,
+      onChange,
+      compact,
+      trigger = 'dblclick',
+      transparent,
+      ...otherProps
+    } = props;
+    const [value, setValue] = useControllableValue(props);
+    const [editing, setEditing] = useControllableValue(props, {
+      defaultValue: false,
+      trigger: 'onEditChange',
+      defaultValuePropName: 'noDefaultValue',
+      valuePropName: 'editing',
+    });
 
-  const rootRef = useRef<HTMLDivElement>(null);
+    const rootRef = useRef<HTMLDivElement>(null);
+    const preRef = useRef<HTMLPreElement>(null);
 
-  const [_this] = useState({
-    lastValue: '',
-    lastEditing: editing,
-  });
+    const mergedRootRef = useMergedRefs(rootRef, pRef);
 
-  const confirm = () => {
-    if (rootRef.current) {
-      const editingValue = rootRef.current.innerText;
-      setValue(editingValue);
-      setEditing(false);
-    }
-  };
+    const [_this] = useState({
+      lastValue: '',
+      lastEditing: editing,
+    });
 
-  useEventListener(
-    'blur',
-    (e) => {
-      confirm();
-    },
-    { target: rootRef },
-  );
-
-  useEventListener(
-    'keydown',
-    (e) => {
-      const { key } = e;
-
-      if (key === 'Escape') {
-        // 取消本次编辑
+    const confirm = () => {
+      if (preRef.current) {
+        const editingValue = preRef.current.innerText;
+        setValue(editingValue);
         setEditing(false);
       }
-      if (key === 'Enter') {
-        // 确认本次编辑
-        e.preventDefault();
+    };
+
+    useEventListener(
+      'blur',
+      (e) => {
         confirm();
-      }
-    },
-    { target: rootRef },
-  );
+      },
+      { target: preRef },
+    );
 
-  useEffect(() => {
-    if (rootRef.current) {
-      if (editing) {
-        rootRef.current.focus();
-        selectDom(rootRef.current);
-      }
-    }
-  }, [editing]);
-
-  useEffect(() => {
-    if (rootRef.current) {
-      if (_this.lastValue !== value || _this.lastEditing !== editing) {
+    useEventListener(
+      trigger,
+      (e) => {
         if (!editing) {
-          rootRef.current.innerText = value;
+          setEditing(true);
         }
-        _this.lastValue = value;
-        _this.lastEditing = editing;
-      }
-    }
-  });
+      },
+      { target: rootRef },
+    );
 
-  return (
-    <div
-      ref={rootRef}
-      className={`${px('root', { editing, compact })} ${className}`}
-      {...otherProps}
-      // @ts-expect-error
-      contentEditable={editing ? 'plaintext-only' : 'false'}
-    />
-  );
-};
+    useEventListener(
+      'keydown',
+      (e: KeyboardEvent) => {
+        const { key, ctrlKey, altKey, shiftKey } = e;
+
+        if (key === 'Escape') {
+          // 取消本次编辑
+          setEditing(false);
+        }
+        if (key === 'Enter' && !ctrlKey && !altKey && !shiftKey) {
+          // 确认本次编辑
+          e.preventDefault();
+          confirm();
+        }
+      },
+      { target: preRef },
+    );
+
+    useEffect(() => {
+      if (preRef.current) {
+        if (editing) {
+          preRef.current.focus();
+          selectDom(preRef.current);
+        }
+      }
+    }, [editing]);
+
+    useEffect(() => {
+      if (preRef.current) {
+        if (_this.lastValue !== value || _this.lastEditing !== editing) {
+          if (!editing) {
+            preRef.current.innerText = value;
+          }
+          _this.lastValue = value;
+          _this.lastEditing = editing;
+        }
+      }
+    });
+
+    return (
+      <div
+        ref={mergedRootRef}
+        className={`${px('root', {
+          editing,
+          compact,
+          transparent,
+        })} ${className}`}
+        {...otherProps}
+      >
+        <pre
+          ref={preRef}
+          // @ts-expect-error
+          contentEditable={editing ? 'plaintext-only' : 'false'}
+        />
+      </div>
+    );
+  },
+);
 
 export default EditableDiv;
