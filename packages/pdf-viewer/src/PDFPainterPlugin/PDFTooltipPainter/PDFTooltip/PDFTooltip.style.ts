@@ -14,7 +14,11 @@ export default createUseStyles(
       cursor: 'default',
       userSelect: 'none',
       '&:hover': {
+        outline: '1px solid var(--pdf-tooltip-color)',
         filter: 'brightness(1.1)',
+      },
+      '&:focus-within': {
+        outline: '1px solid var(--pdf-tooltip-color)',
       },
     },
     box: {
@@ -22,6 +26,13 @@ export default createUseStyles(
       padding: [4, 8],
     },
     editable: {
+      outline: '2px solid var(--pdf-tooltip-color)',
+      '&:hover': {
+        outline: '2px solid var(--pdf-tooltip-color)',
+      },
+      '&:focus-within': {
+        outline: '2px solid var(--pdf-tooltip-color)',
+      },
       zIndex: 1,
       '& $box': {
         cursor: 'move',

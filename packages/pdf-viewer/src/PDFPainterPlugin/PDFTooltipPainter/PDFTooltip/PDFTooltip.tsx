@@ -123,6 +123,7 @@ const PDFTooltip = (props: PDFTooltipProps) => {
   return (
     <div
       className={cn(styles.root, { [styles.editable]: editable }, className)}
+      draggable={false}
       style={{
         ...style,
         left: `calc(var(--scale-factor) * ${data.x}px)`,
@@ -142,8 +143,8 @@ const PDFTooltip = (props: PDFTooltipProps) => {
       >
         <path
           d={(isLeft
-            ? ['M 0 10', 'l -8 0', `L ${pointX} ${pointY}`]
-            : [`M ${data.width} 10`, 'l 8 0', `L ${pointX} ${pointY}`]
+            ? ['M 0 10', 'l -16 0', `L ${pointX} ${pointY}`]
+            : [`M ${data.width} 10`, 'l 16 0', `L ${pointX} ${pointY}`]
           ).join(' ')}
           style={{
             fill: 'none',

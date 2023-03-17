@@ -18,7 +18,7 @@ const TooltipCreator = (props: ShapeCreatorProps) => {
     className = '',
     onCreate = ef,
     onDrawing = ef,
-    onCancel = ef,
+    onCancel,
     pointMapping = a => a,
     ...otherProps
   } = props;
@@ -46,19 +46,13 @@ const TooltipCreator = (props: ShapeCreatorProps) => {
       type: 'tooltip',
       width: 160,
       x: x2 + 16,
-      y: y2 - 8,
+      y: y2 - 16,
       pointX: x1,
       pointY: y1,
       value: '请输入内容',
     };
 
     if (finish) {
-      // 如果距离太近，则取消
-      if (offset[0] ** 2 + offset[1] ** 2 < 4) {
-        onCancel();
-        _this.data = undefined;
-        return;
-      }
       onCreate(_this.data);
       _this.data = undefined;
     } else {

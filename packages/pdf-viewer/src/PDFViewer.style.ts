@@ -10,6 +10,7 @@ export default createUseStyles(
       flexDirection: 'column',
       overflow: 'hidden',
       border: '1px solid #DDD',
+      userSelect: 'none',
 
       '& .pdf-viewer-default-empty-tips': {
         pointerEvents: 'none',
