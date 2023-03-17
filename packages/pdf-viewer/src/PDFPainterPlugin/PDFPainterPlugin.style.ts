@@ -12,12 +12,10 @@ export default createUseStyles(
     },
     toolbar: {
       backgroundColor: '#eeeeee',
-      padding: '0 4px',
+      padding: '4px 4px',
       border: '1px solid #DDD',
-      minWidth: 200,
-      height: 40,
       display: 'flex',
-      alignItems: 'center',
+      flexDirection: 'column',
     },
     painter: {
       position: 'absolute',

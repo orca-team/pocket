@@ -8,7 +8,7 @@ export default createUseStyles(
     root: {
       position: 'absolute',
       minHeight: 32,
-      '--pdf-tooltip-color': '#19f',
+      '--pdf-tooltip-color': '#c00',
       color: 'var(--pdf-tooltip-color)',
       transformOrigin: 'left top',
       cursor: 'default',
@@ -19,6 +19,9 @@ export default createUseStyles(
       },
       '&:focus-within': {
         outline: '1px solid var(--pdf-tooltip-color)',
+      },
+      '& .editable-div-editing': {
+        border: 'none',
       },
     },
     box: {
