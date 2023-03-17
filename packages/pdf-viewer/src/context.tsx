@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react';
-import { useMemoizedFn } from 'ahooks';
+import React, { useContext } from 'react';
+import ReactDOM from 'react-dom';
 import type { PDFPainterHandle } from './PDFPainterPlugin';
 
 /**
@@ -70,14 +70,18 @@ export type PDFViewerContextType = {
   current: number;
   zoom: number;
   pdfViewer: PDFViewerHandle;
-  addRenderPageCoverFn: (fn: RenderPageCoverFnType) => void;
-  removeRenderPageCoverFn: (fn: RenderPageCoverFnType) => void;
+  forceUpdate: () => void;
+  pageCoverRefs: (HTMLDivElement | null)[];
+  viewports: PageViewport[];
 };
 
 const PDFViewerContext = React.createContext<PDFViewerContextType>({
   pages: [],
+  viewports: [],
   current: 1,
   zoom: 0,
+  forceUpdate: () => {},
+  pageCoverRefs: [],
   pdfViewer: {
     async load() {},
     async close() {},
@@ -104,8 +108,6 @@ const PDFViewerContext = React.createContext<PDFViewerContextType>({
     setZoom() {},
     setTitle() {},
   },
-  addRenderPageCoverFn() {},
-  removeRenderPageCoverFn() {},
 });
 
 export default PDFViewerContext;
@@ -126,14 +128,20 @@ export const PDFToolbarContext = React.createContext<PDFToolbarContextType>({
   centerToolbarIds: [],
 });
 
-export function usePageCoverRenderer(callback: RenderPageCoverFnType) {
-  const renderFn = useMemoizedFn(callback);
-  const { addRenderPageCoverFn, removeRenderPageCoverFn } =
-    useContext(PDFViewerContext);
-  useEffect(() => {
-    addRenderPageCoverFn(renderFn);
-    return () => {
-      removeRenderPageCoverFn(renderFn);
-    };
-  }, []);
+export function usePageCoverRenderer() {
+  const { pageCoverRefs, viewports, zoom } = useContext(PDFViewerContext);
+
+  return (callback: RenderPageCoverFnType) =>
+    pageCoverRefs.map((dom, pageIndex) => {
+      const node = callback(pageIndex, {
+        viewport: viewports[pageIndex],
+        zoom,
+      });
+      if (!dom) return null;
+      return (
+        <React.Fragment key={pageIndex}>
+          {ReactDOM.createPortal(node, dom)}
+        </React.Fragment>
+      );
+    });
 }
