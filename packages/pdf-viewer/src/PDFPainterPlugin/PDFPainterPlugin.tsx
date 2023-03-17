@@ -1,8 +1,8 @@
 import React, { useEffect, useImperativeHandle, useState } from 'react';
-import { IconButton, SimpleNumberInput, Trigger } from '@orca-fe/pocket';
-import { CloseOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { IconButton, Trigger } from '@orca-fe/pocket';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import type { PainterRef, ShapeDataType, ShapeType } from '@orca-fe/painter';
-import Painter, { ColorPicker } from '@orca-fe/painter';
+import Painter from '@orca-fe/painter';
 import { useMemoizedFn } from 'ahooks';
 import useStyle from './PDFPainterPlugin.style';
 import ToolbarPortal from '../ToolbarPortal';
@@ -133,15 +133,15 @@ const PDFPainterPlugin = React.forwardRef<
     }
   };
 
-  let stroke = '#cc0000';
-  let strokeWidth = 2;
+  // let stroke = '#cc0000';
+  // let strokeWidth = 2;
   let shapeType: PainterShapeType = 'rectangle';
-  if (drawMode.attr?.['stroke']) {
-    ({ stroke } = drawMode.attr);
-  }
-  if (drawMode.attr?.['strokeWidth']) {
-    strokeWidth = Number(drawMode.attr.strokeWidth) || 2;
-  }
+  // if (drawMode.attr?.['stroke']) {
+  //   ({ stroke } = drawMode.attr);
+  // }
+  // if (drawMode.attr?.['strokeWidth']) {
+  //   strokeWidth = Number(drawMode.attr.strokeWidth) || 2;
+  // }
   ({ shapeType } = drawMode);
 
   const renderPainterToolbar = () => (
@@ -186,7 +186,7 @@ const PDFPainterPlugin = React.forwardRef<
       >
         <InfoCircleOutlined />
       </IconButton>
-      <ColorPicker
+      {/* <ColorPicker
         value={stroke}
         onChange={(stroke) => {
           changeDrawMode(drawMode.shapeType, {
@@ -195,8 +195,8 @@ const PDFPainterPlugin = React.forwardRef<
           });
         }}
         size={20}
-      />
-      <SimpleNumberInput
+      />*/}
+      {/* <SimpleNumberInput
         triggerOnDrag={false}
         value={strokeWidth}
         onChange={(strokeWidth) => {
@@ -209,15 +209,15 @@ const PDFPainterPlugin = React.forwardRef<
         max={20}
         step={0.1}
         style={{ width: 32, textAlign: 'center' }}
-      />
-      <IconButton
+      />*/}
+      {/* <IconButton
         size="x-small"
         onClick={() => {
           setDrawing(false);
         }}
       >
         <CloseOutlined />
-      </IconButton>
+      </IconButton>*/}
     </div>
   );
 
@@ -232,7 +232,7 @@ const PDFPainterPlugin = React.forwardRef<
             action="click"
             popupVisible={drawing}
             popupAlign={{
-              points: ['tc', 'bc'],
+              points: ['tr', 'br'],
               offset: [0, 3],
             }}
             popup={renderPainterToolbar()}
@@ -293,6 +293,9 @@ const PDFPainterPlugin = React.forwardRef<
                 _painter.data[pageIndex] = shapes;
                 onMarkChange(pageIndex, shapes);
               }
+            }}
+            onDraw={() => {
+              setDrawing(false);
             }}
           />
           <PDFTooltipPainter

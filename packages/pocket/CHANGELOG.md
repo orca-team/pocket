@@ -1,5 +1,13 @@
 # @orca-fe/pocket
 
+## 1.27.1
+
+### Patch Changes
+
+- 优化 pdf-viewer 的渲染逻辑和渲染效果；调整 pdf-viewer 的 tooltip 的默认效果
+- Updated dependencies
+  - @orca-fe/pocket@1.27.1
+
 ## 1.27.0
 
 ### Minor Changes
