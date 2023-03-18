@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useControllableValue } from 'ahooks';
 import { changeArr } from '@orca-fe/tools';
 import useStyles from './PDFTooltipPainter.style';
-import PDFTooltip from './PDFTooltip';
-import TooltipCreator from './TooltipCreator';
-import type { TooltipDataType } from './def';
+import type { TooltipDataType } from '../def';
+import PDFTooltip from '../PDFTooltip';
+import TooltipCreator from '../TooltipCreator';
 
 const eArr = [];
 
@@ -72,7 +72,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
             x: point.x / 2 ** zoom,
             y: point.y / 2 ** zoom,
           })}
-          onClick={() => {
+          onMouseDown={() => {
             if (checked !== index) {
               check(index);
             }

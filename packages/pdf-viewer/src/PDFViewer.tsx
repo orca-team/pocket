@@ -26,9 +26,13 @@ import useStyle from './PDFViewer.style';
 import * as _pdfJS from '../pdfjs-build/pdf';
 import * as pdfjsWorker from '../pdfjs-build/pdf.worker';
 import { findSortedArr } from './utils';
-import type { PainterToolbarProps, PDFPainterHandle } from './PDFPainterPlugin';
-import PDFPainter from './PDFPainterPlugin';
+import type {
+  PainterToolbarProps,
+  PDFPainterHandle,
+} from './plugins/PDFPainterPlugin';
+import PDFPainterPlugin from './plugins/PDFPainterPlugin';
 import ZoomAndPageController from './ZoomAndPageController';
+import PDFTooltipPlugin from './plugins/PDFTooltipPlugin';
 
 const pdfJs: any = _pdfJS;
 
@@ -44,6 +48,7 @@ const defaultEmptyTips = (
 
 export interface PDFViewerProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+
   /** 默认文件标题（非受控） */
   defaultTitle?: React.ReactNode;
 
@@ -123,7 +128,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
 
     const [, setForceUpdateCount] = useState(0);
     const forceUpdate = useMemoizedFn(() => {
-      setForceUpdateCount((count) => count + 1);
+      setForceUpdateCount(count => count + 1);
     });
 
     useDebounceEffect(
@@ -199,11 +204,12 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
             _this.pdfDoc = pdfDoc;
             const pageLength = pdfDoc.numPages;
             const allPages = await Promise.all(
-              new Array(pageLength).fill(0).map(async (_, index) => {
-                const pageNum = index + 1;
-                const page = await pdfDoc.getPage(pageNum);
-                return page;
-              }),
+              new Array(pageLength).fill(0)
+                .map(async (_, index) => {
+                  const pageNum = index + 1;
+                  const page = await pdfDoc.getPage(pageNum);
+                  return page;
+                }),
             );
             setPages(allPages);
             const dom = pageContainerRef.current;
@@ -428,11 +434,11 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     const [centerToolbarIds, setCenterToolbarIds] = useState<string[]>([]);
 
     const addCenterToolbarId = useMemoizedFn((id: string) => {
-      setCenterToolbarIds((ids) => [...new Set([...ids, id])]);
+      setCenterToolbarIds(ids => [...new Set([...ids, id])]);
     });
 
     const removeCenterToolbarId = useMemoizedFn((id: string) => {
-      setCenterToolbarIds((ids) => ids.filter((_id) => _id !== id));
+      setCenterToolbarIds(ids => ids.filter(_id => _id !== id));
     });
 
     // 绘图功能
@@ -462,6 +468,14 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     >((...args) => {
       pdfPainterHandle.current?.clearAllMarkData(...args);
     });
+    const drawMark = useMemoizedFn<PDFPainterHandle['drawMark']>((...args) => {
+      pdfPainterHandle.current?.drawMark(...args);
+    });
+    const cancelDraw = useMemoizedFn<PDFPainterHandle['cancelDraw']>(
+      (...args) => {
+        pdfPainterHandle.current?.cancelDraw(...args);
+      },
+    );
 
     const pdfViewerHandle = useMemo<PDFViewerHandle>(
       () => ({
@@ -479,6 +493,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
         setAllMarkData,
         clearAllMarkData,
         setTitle,
+        drawMark,
+        cancelDraw,
       }),
       [],
     );
@@ -486,9 +502,9 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
 
     const [pageCoverRefs, setPageCoverRefs] = useState<
       (HTMLDivElement | null)[]
-    >([]);
+        >([]);
     useEffect(() => {
-      setPageCoverRefs((l) => l.slice());
+      setPageCoverRefs(l => l.slice());
     }, [renderRange[0], renderRange[1]]);
 
     return (
@@ -569,7 +585,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                           render={shouldRender}
                         />
                         <div
-                          ref={(node) => (pageCoverRefs[pageIndex] = node)}
+                          ref={node => (pageCoverRefs[pageIndex] = node)}
                           className={styles.pageCover}
                         />
                         <div className={styles.pageCover}>
@@ -583,10 +599,13 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
 
               {/* 绘图的工具栏渲染 */}
               {pages.length > 0 && (
-                <PDFPainter
-                  ref={pdfPainterHandle}
-                  onMarkChange={onMarkChange}
-                />
+                <>
+                  <PDFPainterPlugin
+                    ref={pdfPainterHandle}
+                    onMarkChange={onMarkChange}
+                  />
+                  <PDFTooltipPlugin />
+                </>
               )}
               {children}
             </div>
