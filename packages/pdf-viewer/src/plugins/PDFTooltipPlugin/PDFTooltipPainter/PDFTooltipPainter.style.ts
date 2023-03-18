@@ -7,8 +7,9 @@ export default createUseStyles(
   {
     root: {
       position: 'relative',
+      height: '100%',
       pointerEvents: 'none',
-      '& *': {
+      '& > *': {
         pointerEvents: 'initial',
       },
     },

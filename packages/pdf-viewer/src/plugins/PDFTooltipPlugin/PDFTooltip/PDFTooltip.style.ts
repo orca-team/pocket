@@ -11,7 +11,6 @@ export default createUseStyles(
       '--pdf-tooltip-color': '#c00',
       color: 'var(--pdf-tooltip-color)',
       transformOrigin: 'left top',
-      cursor: 'default',
       userSelect: 'none',
       '&:hover': {
         outline: '1px solid var(--pdf-tooltip-color)',
@@ -25,6 +24,7 @@ export default createUseStyles(
       },
     },
     box: {
+      cursor: 'move',
       border: '1px solid var(--pdf-tooltip-color)',
       padding: [4, 8],
     },

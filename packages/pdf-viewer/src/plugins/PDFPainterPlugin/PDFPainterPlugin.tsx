@@ -1,23 +1,19 @@
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { IconButton, Trigger } from '@orca-fe/pocket';
-import { InfoCircleOutlined } from '@ant-design/icons';
 import type { PainterRef, ShapeDataType, ShapeType } from '@orca-fe/painter';
 import Painter from '@orca-fe/painter';
 import { useMemoizedFn } from 'ahooks';
 import useStyle from './PDFPainterPlugin.style';
-import ToolbarPortal from '../ToolbarPortal';
+import ToolbarPortal from '../../ToolbarPortal';
 import {
   IconEllipse,
   IconLine,
   IconMarkEdit,
   IconRectangle,
   IconSmoothLine,
-} from '../icon/icon';
-import ToolbarButton from '../ToolbarButton';
-import { usePageCoverRenderer } from '../context';
-import PDFTooltipPainter from './PDFTooltipPainter';
-
-type PainterShapeType = ShapeType | 'tooltip';
+} from '../../icon/icon';
+import ToolbarButton from '../../ToolbarButton';
+import { usePageCoverRenderer } from '../../context';
 
 export type PDFPainterHandle = {
 
@@ -32,6 +28,12 @@ export type PDFPainterHandle = {
 
   /** 清除所有页面的标注内容 */
   clearAllMarkData: () => void;
+
+  /** 开始绘图 */
+  drawMark: (shapeType: ShapeType, attr: Record<string, any>) => void;
+
+  /** 取消绘图 */
+  cancelDraw: () => void;
 };
 
 const ef = () => undefined;
@@ -53,7 +55,7 @@ const PDFPainterPlugin = React.forwardRef<
   const [drawing, setDrawing] = useState(false);
 
   const [drawMode, setDrawMode] = useState<{
-    shapeType: PainterShapeType;
+    shapeType: ShapeType;
     attr?: Record<string, any>;
   }>({
     shapeType: 'rectangle',
@@ -111,31 +113,35 @@ const PDFPainterPlugin = React.forwardRef<
     },
   );
 
+  const renderPageCover = usePageCoverRenderer();
+
+  const drawMark = useMemoizedFn<PDFPainterHandle['drawMark']>(
+    (shapeType, attr) => {
+      setDrawMode({
+        attr,
+        shapeType,
+      });
+      if (!drawing) {
+        setDrawing(true);
+      }
+    },
+  );
+  const cancelDraw = useMemoizedFn<PDFPainterHandle['cancelDraw']>(() => {
+    setDrawing(false);
+  });
+
   useImperativeHandle(pRef, () => ({
     clearAllMarkData,
     getAllMarkData,
     setMarkData,
     setAllMarkData,
+    drawMark,
+    cancelDraw,
   }));
-
-  const renderPageCover = usePageCoverRenderer();
-
-  const changeDrawMode = (
-    shapeType: PainterShapeType,
-    attr: Record<string, any>,
-  ) => {
-    setDrawMode({
-      attr,
-      shapeType,
-    });
-    if (!drawing) {
-      setDrawing(true);
-    }
-  };
 
   // let stroke = '#cc0000';
   // let strokeWidth = 2;
-  let shapeType: PainterShapeType = 'rectangle';
+  let shapeType: ShapeType = 'rectangle';
   // if (drawMode.attr?.['stroke']) {
   //   ({ stroke } = drawMode.attr);
   // }
@@ -149,7 +155,7 @@ const PDFPainterPlugin = React.forwardRef<
       <IconButton
         checked={shapeType === 'line'}
         onClick={() => {
-          changeDrawMode('line', drawMode.attr || {});
+          drawMark('line', drawMode.attr || {});
         }}
       >
         <IconLine />
@@ -157,7 +163,7 @@ const PDFPainterPlugin = React.forwardRef<
       <IconButton
         checked={shapeType === 'line-path'}
         onClick={() => {
-          changeDrawMode('line-path', drawMode.attr || {});
+          drawMark('line-path', drawMode.attr || {});
         }}
       >
         <IconSmoothLine />
@@ -165,7 +171,7 @@ const PDFPainterPlugin = React.forwardRef<
       <IconButton
         checked={shapeType === 'rectangle'}
         onClick={() => {
-          changeDrawMode('rectangle', drawMode.attr || {});
+          drawMark('rectangle', drawMode.attr || {});
         }}
       >
         <IconRectangle />
@@ -173,19 +179,12 @@ const PDFPainterPlugin = React.forwardRef<
       <IconButton
         checked={shapeType === 'ellipse'}
         onClick={() => {
-          changeDrawMode('ellipse', drawMode.attr || {});
+          drawMark('ellipse', drawMode.attr || {});
         }}
       >
         <IconEllipse />
       </IconButton>
-      <IconButton
-        checked={shapeType === 'tooltip'}
-        onClick={() => {
-          changeDrawMode('tooltip', drawMode.attr || {});
-        }}
-      >
-        <InfoCircleOutlined />
-      </IconButton>
+
       {/* <ColorPicker
         value={stroke}
         onChange={(stroke) => {
@@ -221,9 +220,6 @@ const PDFPainterPlugin = React.forwardRef<
     </div>
   );
 
-  const isKonvaDrawing = drawing && drawMode.shapeType !== 'tooltip';
-  const isTooltipDrawing = drawing && drawMode.shapeType === 'tooltip';
-
   return (
     <>
       <ToolbarPortal>
@@ -244,7 +240,7 @@ const PDFPainterPlugin = React.forwardRef<
                   if (drawing) {
                     setDrawing(false);
                   } else {
-                    changeDrawMode(
+                    drawMark(
                       drawMode.shapeType || 'rectangle',
                       drawMode.attr || {
                         strokeWidth: 1,
@@ -255,57 +251,46 @@ const PDFPainterPlugin = React.forwardRef<
                 }}
                 icon={<IconMarkEdit />}
               >
-                编辑标注
+                添加标注
               </ToolbarButton>
             </span>
           </Trigger>
         </div>
       </ToolbarPortal>
       {renderPageCover((pageIndex, { viewport, zoom }) => (
-        <>
-          <Painter
-            ref={ref => (_painter.refs[pageIndex] = ref)}
-            draggable={false}
-            className={`${styles.painter} ${
-              isKonvaDrawing ? styles.drawing : ''
-            }`}
-            width={viewport.width}
-            height={viewport.height}
-            style={{ height: '100%' }}
-            defaultDrawMode={isKonvaDrawing ? drawMode : false}
-            onInit={() => {
-              const shapeData = _painter.data[pageIndex];
-              const ref = _painter.refs[pageIndex];
-              if (shapeData && ref) {
-                // 恢复数据
-                ref.addShapes(shapeData);
+        <Painter
+          ref={ref => (_painter.refs[pageIndex] = ref)}
+          draggable={false}
+          className={`${styles.painter} ${drawing ? styles.drawing : ''}`}
+          width={viewport.width}
+          height={viewport.height}
+          style={{ height: '100%' }}
+          defaultDrawMode={drawing ? drawMode : false}
+          onInit={() => {
+            const shapeData = _painter.data[pageIndex];
+            const ref = _painter.refs[pageIndex];
+            if (shapeData && ref) {
+              // 恢复数据
+              ref.addShapes(shapeData);
 
-                if (isKonvaDrawing) {
-                  // 进入绘图模式
-                  ref.draw(drawMode.shapeType, drawMode.attr);
-                }
+              if (drawing) {
+                // 进入绘图模式
+                ref.draw(drawMode.shapeType, drawMode.attr);
               }
-            }}
-            onDataChange={() => {
-              const ref = _painter.refs[pageIndex];
-              if (ref) {
-                const shapes = ref.getShapes();
-                _painter.data[pageIndex] = shapes;
-                onMarkChange(pageIndex, shapes);
-              }
-            }}
-            onDraw={() => {
-              setDrawing(false);
-            }}
-          />
-          <PDFTooltipPainter
-            className={`${styles.painter} ${
-              isTooltipDrawing ? styles.drawing : ''
-            }`}
-            zoom={zoom}
-            drawing={isTooltipDrawing}
-          />
-        </>
+            }
+          }}
+          onDataChange={() => {
+            const ref = _painter.refs[pageIndex];
+            if (ref) {
+              const shapes = ref.getShapes();
+              _painter.data[pageIndex] = shapes;
+              onMarkChange(pageIndex, shapes);
+            }
+          }}
+          onDraw={() => {
+            setDrawing(false);
+          }}
+        />
       ))}
     </>
   );
