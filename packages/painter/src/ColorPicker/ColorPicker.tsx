@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Color from 'color';
-import type { InputProps } from 'antd/es/input';
 import { RgbaStringColorPicker } from 'react-colorful';
 import { useControllableValue, useLocalStorageState } from 'ahooks';
 import { CloseOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
@@ -29,7 +28,7 @@ const colorDef = [
 ];
 
 export interface ColorPickerProps
-  extends Omit<InputProps, 'onChange' | 'size'> {
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'size'> {
   defaultValue?: string;
   value?: string;
   onChange?: (color: string) => void;
@@ -111,7 +110,7 @@ const ColorPicker = (props: ColorPickerProps) => {
               width: 200,
             }}
           >
-            {colorDef.map((color) => (
+            {colorDef.map(color => (
               <ColorPreview
                 key={color}
                 className={styles.colorDef}
@@ -195,7 +194,6 @@ const ColorPicker = (props: ColorPickerProps) => {
         points: ['tl', 'bl'],
         offset: [0, 3],
       }}
-      {...otherProps}
       popupClassName={styles.wrapper}
       popup={renderColorPicker()}
     >
@@ -204,6 +202,7 @@ const ColorPicker = (props: ColorPickerProps) => {
         onClick={() => {
           setVisible(true);
         }}
+        {...otherProps}
       >
         <ColorPreview
           className={styles.prefixPreviewColor}

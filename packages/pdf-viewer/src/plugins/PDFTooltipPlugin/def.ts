@@ -1,5 +1,3 @@
-import type React from 'react';
-
 export type TooltipDataType = {
   type: 'tooltip';
   pointX: number;
@@ -8,5 +6,6 @@ export type TooltipDataType = {
   y: number;
   width: number;
   value: string;
-  style?: React.CSSProperties;
+  color?: string;
+  fontSize?: number;
 };
