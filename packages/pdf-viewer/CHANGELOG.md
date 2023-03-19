@@ -1,5 +1,13 @@
 # @orca-fe/pdf-viewer
 
+## 0.3.2
+
+### Patch Changes
+
+- 更新 pdf-painter 的属性编辑器
+- Updated dependencies
+  - @orca-fe/painter@0.0.7
+
 ## 0.3.1
 
 ### Patch Changes

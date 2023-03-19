@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.0.7
+
+### Patch Changes
+
+- 更新 pdf-painter 的属性编辑器
+
 ## 0.0.6
 
 ### Patch Changes
