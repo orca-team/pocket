@@ -72,6 +72,8 @@ import type { TriggerProps } from './trigger';
 import Trigger from './trigger';
 import type { TooltipProps } from './tooltip';
 import Tooltip from './tooltip';
+import type { SliderProps } from './slider';
+import Slider from './slider';
 
 export type {
   EqRatioBoxProps,
@@ -112,6 +114,7 @@ export type {
   ReactScriptProps,
   TriggerProps,
   TooltipProps,
+  SliderProps,
 };
 
 export {
@@ -147,4 +150,5 @@ export {
   CommonStore,
   Trigger,
   Tooltip,
+  Slider,
 };

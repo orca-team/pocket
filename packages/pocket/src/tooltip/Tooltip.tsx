@@ -5,11 +5,12 @@ import useStyles from './Tooltip.style';
 
 export interface TooltipProps extends RcTooltipProps {}
 
-const Tooltip: React.FC<TooltipProps> = (props) => {
+const Tooltip = React.forwardRef<any, TooltipProps>((props, pRef) => {
   const { motion, ...otherProps } = props;
   useStyles();
   return (
     <RcTooltip
+      ref={pRef}
       mouseEnterDelay={0}
       mouseLeaveDelay={0.1}
       prefixCls="orca-tooltip"
@@ -17,6 +18,6 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
       {...otherProps}
     />
   );
-};
+});
 
 export default Tooltip;

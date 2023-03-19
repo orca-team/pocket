@@ -7,14 +7,13 @@ export default createUseStyles(
   {
     root: {
       position: 'absolute',
-      minHeight: 32,
+      minHeight: 24,
       '--pdf-tooltip-color': '#c00',
       color: 'var(--pdf-tooltip-color)',
       transformOrigin: 'left top',
       userSelect: 'none',
       '&:hover': {
         outline: '1px solid var(--pdf-tooltip-color)',
-        filter: 'brightness(1.1)',
       },
       '&:focus-within': {
         outline: '1px solid var(--pdf-tooltip-color)',

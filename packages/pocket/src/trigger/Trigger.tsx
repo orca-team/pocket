@@ -6,7 +6,7 @@ import useStyles from './Trigger.style';
 export interface TriggerProps extends RcTriggerProps {}
 
 const Trigger: React.FC<TriggerProps> = (props) => {
-  const { popupMotion, ...otherProps } = props;
+  const { popupMotion, popupAlign, ...otherProps } = props;
   useStyles();
   return (
     <RcTrigger
@@ -14,6 +14,13 @@ const Trigger: React.FC<TriggerProps> = (props) => {
       popupAlign={{
         points: ['tl', 'bl'],
         offset: [0, 3],
+        autoArrow: true,
+        ignoreShake: true,
+        overflow: {
+          adjustX: true,
+          adjustY: true,
+        },
+        ...popupAlign,
       }}
       prefixCls="orca-trigger"
       popupMotion={{

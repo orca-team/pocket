@@ -7,22 +7,28 @@ import type { TooltipDataType } from '../def';
 
 const ef = () => {};
 
+const { round } = Math;
+
 export interface PDFTooltipProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   data: TooltipDataType;
   onChange?: (data: TooltipDataType) => void;
+  onChangeStart?: () => void;
   editable?: boolean;
   pointMapping?: (point: { x: number; y: number }) => { x: number; y: number };
+  color?: string;
 }
 
 const PDFTooltip = (props: PDFTooltipProps) => {
   const {
     className = '',
     onChange = ef,
+    onChangeStart = ef,
     data: _data,
     style,
     editable = false,
     pointMapping = a => a,
+    color = '#C00',
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -49,6 +55,7 @@ const PDFTooltip = (props: PDFTooltipProps) => {
       if (boxRef.current?.contains(target) && editing) {
         return false;
       }
+      onChangeStart();
     }
     const realOffset = pointMapping({
       x: offset[0],
@@ -58,43 +65,49 @@ const PDFTooltip = (props: PDFTooltipProps) => {
       setTmpData(null);
       onChange({
         ..._data,
-        x: _data.x + realOffset.x,
-        y: _data.y + realOffset.y,
+        x: round(_data.x + realOffset.x),
+        y: round(_data.y + realOffset.y),
       });
     } else {
       setTmpData({
-        x: _data.x + realOffset.x,
-        y: _data.y + realOffset.y,
+        x: round(_data.x + realOffset.x),
+        y: round(_data.y + realOffset.y),
       });
     }
     return true;
   }, boxRef);
 
-  usePan(({ offset, finish }) => {
+  usePan(({ offset, finish, start }) => {
     const realOffset = pointMapping({
       x: offset[0],
       y: offset[1],
     });
+    if (start) {
+      onChangeStart();
+    }
     if (finish) {
       setTmpData(null);
       onChange({
         ..._data,
-        pointX: _data.pointX + realOffset.x,
-        pointY: _data.pointY + realOffset.y,
+        pointX: round(_data.pointX + realOffset.x),
+        pointY: round(_data.pointY + realOffset.y),
       });
     } else {
       setTmpData({
-        pointX: _data.pointX + realOffset.x,
-        pointY: _data.pointY + realOffset.y,
+        pointX: round(_data.pointX + realOffset.x),
+        pointY: round(_data.pointY + realOffset.y),
       });
     }
   }, moveHandlerRef);
 
-  usePan(({ offset, finish }) => {
+  usePan(({ offset, finish, start }) => {
     const realOffset = pointMapping({
       x: offset[0],
       y: offset[1],
     });
+    if (start) {
+      onChangeStart();
+    }
     let widthOffset = realOffset.x;
     if (isLeft) {
       widthOffset = Math.max(-_data.width + 40, widthOffset);
@@ -131,6 +144,8 @@ const PDFTooltip = (props: PDFTooltipProps) => {
         width: data.width,
         transform: 'scale(var(--scale-factor))',
         transformOrigin: '0 0',
+        // @ts-expect-error
+        '--pdf-tooltip-color': color,
       }}
       {...otherProps}
     >
