@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Color from 'color';
 import { RgbaStringColorPicker } from 'react-colorful';
-import { useControllableValue, useLocalStorageState } from 'ahooks';
+import {
+  useControllableValue,
+  useEventListener,
+  useLocalStorageState,
+} from 'ahooks';
 import { CloseOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { catcher, removeArrIndex } from '@orca-fe/tools';
+import type { TriggerProps } from '@orca-fe/pocket';
 import { ContextMenu, Tooltip, Trigger } from '@orca-fe/pocket';
 import ColorPreview from '../ColorPreview';
 import useStyle from './ColorPicker.style';
@@ -34,6 +39,7 @@ export interface ColorPickerProps
   onChange?: (color: string) => void;
   localStorageKey?: string;
   size?: number;
+  triggerProps?: Omit<TriggerProps, 'children' | 'popup'>;
 }
 
 const ColorPicker = (props: ColorPickerProps) => {
@@ -45,6 +51,7 @@ const ColorPicker = (props: ColorPickerProps) => {
     onChange,
     defaultValue,
     size,
+    triggerProps,
     ...otherProps
   } = props;
 
@@ -63,6 +70,15 @@ const ColorPicker = (props: ColorPickerProps) => {
   useEffect(() => {
     setColor(value);
   }, [value]);
+
+  const pickerRef = useRef<HTMLDivElement>(null);
+  useEventListener(
+    'click',
+    (e) => {
+      // e.stopPropagation();
+    },
+    { target: pickerRef },
+  );
   // 校验颜色是否合法
   // const confirmColor = () => {
   //   if (!color) return;
@@ -83,10 +99,13 @@ const ColorPicker = (props: ColorPickerProps) => {
     return (
       <span>
         <div
+          ref={pickerRef}
           className={styles.colorPickerContainer}
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
+          // onClick={(e) => {
+          //   e.stopPropagation();
+          //   e.nativeEvent.stopPropagation();
+          //   console.log('click', 'stopPropagation');
+          // }}
         >
           <RgbaStringColorPicker
             color={color}
@@ -190,17 +209,20 @@ const ColorPicker = (props: ColorPickerProps) => {
       action="click"
       popupVisible={visible}
       onPopupVisibleChange={setVisible}
+      popupClassName={styles.wrapper}
+      popup={renderColorPicker()}
+      {...triggerProps}
       popupAlign={{
         points: ['tl', 'bl'],
         offset: [0, 3],
+        ...triggerProps?.popupAlign,
       }}
-      popupClassName={styles.wrapper}
-      popup={renderColorPicker()}
     >
       <div
         className={`${className} ${styles.prefixPreview}`}
-        onClick={() => {
+        onClick={(e) => {
           setVisible(true);
+          e.stopPropagation();
         }}
         {...otherProps}
       >

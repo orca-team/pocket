@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useControllableValue } from 'ahooks';
-import { changeArr } from '@orca-fe/tools';
+import { changeArr, removeArrIndex } from '@orca-fe/tools';
 import { IconButton, Trigger } from '@orca-fe/pocket';
 import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
 import useStyles from './PDFTooltipPainter.style';
@@ -58,6 +58,9 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
     ...otherProps
   } = props;
   const styles = useStyles();
+
+  const [changing, setChanging] = useState(false);
+
   const [data = eArr, setData] = useControllableValue<TooltipDataType[]>(
     props,
     {
@@ -81,7 +84,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
       className={`${styles.root} ${className}`}
       draggable={false}
       onBlur={() => {
-        // check(-1);
+        check(-1);
       }}
       {...otherProps}
     >
@@ -95,7 +98,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
               points: ['bl', 'tl'],
               offset: [0, -5],
             }}
-            popupVisible={checked === index}
+            popupVisible={!changing && checked === index}
             getPopupContainer={node => node ?? document.body}
             popup={(
               <PopupBox>
@@ -115,10 +118,27 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
                     justifyContent: 'flex-end',
                   }}
                 >
-                  <IconButton size="small" style={{ color: '#333' }}>
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      setData(data => [
+                        ...data,
+                        { ...item, x: item.x + 10, y: item.y + 40 },
+                      ]);
+                      check(data.length);
+                    }}
+                    style={{ color: '#333' }}
+                  >
                     <CopyOutlined />
                   </IconButton>
-                  <IconButton size="small">
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      check(-1);
+                      setData(data => removeArrIndex(data, index));
+                    }}
+                    style={{ color: '#C00' }}
+                  >
                     <DeleteOutlined />
                   </IconButton>
                 </div>
@@ -137,8 +157,12 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
                 }
               }}
               data={item}
+              onChangeStart={() => {
+                setChanging(true);
+              }}
               onChange={(item) => {
                 setData(arr => changeArr(arr, index, item));
+                setChanging(false);
               }}
               color={color}
               style={{ fontSize }}
@@ -159,6 +183,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
           onCreate={(tooltip) => {
             setData(d => [...(d || []), tooltip]);
             setTmpTooltip(null);
+            check(data.length);
           }}
           onCancel={() => {
             setTmpTooltip(null);

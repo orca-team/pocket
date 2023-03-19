@@ -28,10 +28,11 @@ import * as pdfjsWorker from '../pdfjs-build/pdf.worker';
 import { findSortedArr } from './utils';
 import type {
   PainterToolbarProps,
-  PDFPainterHandle,
+  PDFPainterPluginHandle,
 } from './plugins/PDFPainterPlugin';
 import PDFPainterPlugin from './plugins/PDFPainterPlugin';
 import ZoomAndPageController from './ZoomAndPageController';
+import type { PDFTooltipPluginHandle } from './plugins/PDFTooltipPlugin';
 import PDFTooltipPlugin from './plugins/PDFTooltipPlugin';
 
 const pdfJs: any = _pdfJS;
@@ -442,38 +443,49 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
     });
 
     // 绘图功能
-    const pdfPainterHandle = useRef<PDFPainterHandle>(null);
+    const pdfPainterHandle = useRef<PDFPainterPluginHandle>(null);
+    const pdfTooltipHandle = useRef<PDFTooltipPluginHandle>(null);
 
-    const getAllMarkData = useMemoizedFn<PDFPainterHandle['getAllMarkData']>(
-      (...args) => {
-        const pdfPainter = pdfPainterHandle.current;
-        if (pdfPainter) {
-          return pdfPainter.getAllMarkData(...args);
-        }
-        return [];
-      },
-    );
-    const setMarkData = useMemoizedFn<PDFPainterHandle['setMarkData']>(
+    // TODO 合并 pdfPainterHandle 与 pdfTooltipHandle 的接口
+
+    const getAllMarkData = useMemoizedFn<
+      PDFPainterPluginHandle['getAllMarkData']
+    >((...args) => {
+      const pdfPainter = pdfPainterHandle.current;
+      if (pdfPainter) {
+        return pdfPainter.getAllMarkData(...args);
+      }
+      return [];
+    });
+    const setMarkData = useMemoizedFn<PDFPainterPluginHandle['setMarkData']>(
       (...args) => {
         pdfPainterHandle.current?.setMarkData(...args);
       },
     );
-    const setAllMarkData = useMemoizedFn<PDFPainterHandle['setAllMarkData']>(
-      (...args) => {
-        pdfPainterHandle.current?.setAllMarkData(...args);
-      },
-    );
+    const setAllMarkData = useMemoizedFn<
+      PDFPainterPluginHandle['setAllMarkData']
+    >((...args) => {
+      pdfPainterHandle.current?.setAllMarkData(...args);
+    });
     const clearAllMarkData = useMemoizedFn<
-      PDFPainterHandle['clearAllMarkData']
+      PDFPainterPluginHandle['clearAllMarkData']
     >((...args) => {
       pdfPainterHandle.current?.clearAllMarkData(...args);
     });
-    const drawMark = useMemoizedFn<PDFPainterHandle['drawMark']>((...args) => {
-      pdfPainterHandle.current?.drawMark(...args);
-    });
-    const cancelDraw = useMemoizedFn<PDFPainterHandle['cancelDraw']>(
+    const drawMark = useMemoizedFn<PDFPainterPluginHandle['drawMark']>(
+      (...args) => {
+        pdfPainterHandle.current?.drawMark(...args);
+      },
+    );
+    const cancelDraw = useMemoizedFn<PDFPainterPluginHandle['cancelDraw']>(
       (...args) => {
         pdfPainterHandle.current?.cancelDraw(...args);
+      },
+    );
+    const cancelCheck = useMemoizedFn<PDFPainterPluginHandle['cancelCheck']>(
+      (...args) => {
+        pdfPainterHandle.current?.cancelCheck();
+        pdfTooltipHandle.current?.cancelCheck();
       },
     );
 
@@ -495,6 +507,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
         setTitle,
         drawMark,
         cancelDraw,
+        cancelCheck,
       }),
       [],
     );
@@ -604,7 +617,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>(
                     ref={pdfPainterHandle}
                     onMarkChange={onMarkChange}
                   />
-                  <PDFTooltipPlugin />
+                  <PDFTooltipPlugin ref={pdfTooltipHandle} />
                 </>
               )}
               {children}

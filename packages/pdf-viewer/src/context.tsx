@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import ReactDOM from 'react-dom';
-import type { PDFPainterHandle } from './plugins/PDFPainterPlugin';
+import type { PDFPainterPluginHandle } from './plugins/PDFPainterPlugin';
 
 /**
  * PDF 控制器
  * 用于控制 PDF 阅读器，进行基础操作
  */
-export type PDFViewerHandle = PDFPainterHandle & {
+export type PDFViewerHandle = PDFPainterPluginHandle & {
 
   /** 加载文件，支持 url / 文件 / ArrayBuffer */
   load: (

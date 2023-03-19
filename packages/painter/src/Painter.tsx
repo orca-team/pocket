@@ -1,7 +1,7 @@
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import Konva from 'konva';
-import { useEventListener, useMemoizedFn } from 'ahooks';
-import { useSizeDebounceListener, useStaticClick } from '@orca-fe/hooks';
+import { useClickAway, useEventListener, useMemoizedFn } from 'ahooks';
+import { useSizeDebounceListener } from '@orca-fe/hooks';
 import useStyle from './Painter.style';
 import ShapeCreator from './ShapeCreator';
 import { createOrUpdateShape, createShape, normalizeShape } from './utils';
@@ -22,6 +22,7 @@ export type PainterRef = {
   unCheck: () => void;
   getShapes: () => ShapeDataType[];
   isDrawing: () => boolean;
+  getRoot: () => HTMLDivElement | null;
 };
 
 export interface PainterProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -35,6 +36,11 @@ export interface PainterProps extends React.HTMLAttributes<HTMLDivElement> {
   onDraw?: () => void;
   onDataChange?: () => void;
   drawOnce?: boolean;
+  renderTransformingRect?: (
+    index: number[],
+    shapeData: ShapeDataType[],
+    painter: PainterRef,
+  ) => React.ReactNode;
 }
 
 export type DrawMode = { shapeType: ShapeType; attr?: Record<string, any> };
@@ -51,11 +57,18 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
     onDataChange = ef,
     defaultDrawMode = false,
     drawOnce,
+    renderTransformingRect = () => null,
     ...otherProps
   } = props;
   const styles = useStyle();
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
+
+  // 选中时添加的临时 DOM，用于渲染工具栏之类的
+  const [transformingRect, setTransformingRect] = useState<{
+    index: number[];
+    rect: { x: number; y: number; width: number; height: number };
+  } | null>(null);
 
   // 绘画模式
   const [drawMode, setDrawMode] = useState<DrawMode | false>(defaultDrawMode);
@@ -87,10 +100,12 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
   const unCheck = useMemoizedFn(() => {
     if (_this.transformer) _this.transformer.destroy();
     _this.transforming = false;
+    setTransformingRect(null);
   });
 
-  const check = useMemoizedFn((_shapes: Konva.Shape | Konva.Shape[]) => {
-    const shapes = Array.isArray(_shapes) ? _shapes : [_shapes];
+  const check = useMemoizedFn((_index: number | number[]) => {
+    const index = Array.isArray(_index) ? _index : [_index];
+    const shapes = index.map(i => _this.shapes[i]);
     if (_this.layer) {
       unCheck();
       _this.transforming = true;
@@ -98,15 +113,26 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
         nodes: shapes,
         keepRatio: false,
       });
+      transformer.on('transformstart', () => {
+        setTransformingRect(null);
+      });
       transformer.on('transformend', () => {
         shapes.forEach((shape) => {
           normalizeShape(shape);
           shape.draw();
         });
         onDataChange();
+        setTransformingRect({
+          index,
+          rect: transformer.getClientRect(),
+        });
       });
       _this.layer.add(transformer);
       _this.transformer = transformer;
+      setTransformingRect({
+        index,
+        rect: transformer.getClientRect(),
+      });
     }
   });
 
@@ -130,10 +156,11 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
         shape.fillEnabled(false);
         shape.draggable(true);
         const strokeWidth = shapeData['strokeWidth'] || 1;
-        shape.setAttr('hitStrokeWidth', strokeWidth + 3);
+        shape.setAttr('hitStrokeWidth', Math.max(strokeWidth, 5) + 3);
         shape.on('click', (ev) => {
-          check(shape);
-          onCheck(_this.shapes.findIndex(s => s === shape));
+          const index = _this.shapes.findIndex(s => s === shape);
+          check(index);
+          onCheck(index);
         });
         shape.on('mouseenter', () => {
           cursorMove();
@@ -142,6 +169,7 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
           cursorMoveEnd();
         });
         shape.on('dragstart', () => {
+          setTransformingRect(null);
           cursorMove();
         });
         shape.on('dragend', () => {
@@ -158,11 +186,6 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
       }
     },
   );
-
-  const checkIndex = useMemoizedFn<PainterRef['check']>((_index) => {
-    const index = Array.isArray(_index) ? _index : [_index];
-    check(index.map(i => _this.shapes[i]));
-  });
 
   const getShapes = useMemoizedFn<PainterRef['getShapes']>(() =>
     _this.shapes.map(shape => shape.getAttrs()),
@@ -194,32 +217,43 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
     }
   });
   const isDrawing = useMemoizedFn<PainterRef['isDrawing']>(() => !!drawMode);
+  const getRoot = useMemoizedFn<PainterRef['getRoot']>(() => rootRef.current);
 
-  useImperativeHandle(pRef, () => ({
+  const painterRefInstance = {
     draw,
     cancelDraw,
     addShapes,
     unCheck,
-    check: checkIndex,
+    check,
     getShapes,
     isDrawing,
     clearShapes,
     removeShape,
     updateShape,
-  }));
+    getRoot,
+  };
+  useImperativeHandle(pRef, () => painterRefInstance);
 
-  useStaticClick(
-    (ev) => {
-      if (!_this.dragging && !_this.hovering) {
-        // 点击空白区域，取消选中
-        unCheck();
-        onCancelCheck();
-      }
-    },
-    {
-      target: rootRef,
-    },
-  );
+  useClickAway((ev) => {
+    if (!_this.dragging && !_this.hovering) {
+      // 点击空白区域，取消选中
+      unCheck();
+      onCancelCheck();
+    }
+  }, rootRef);
+
+  // useStaticClick(
+  //   (ev) => {
+  //     if (!_this.dragging && !_this.hovering) {
+  //       // 点击空白区域，取消选中
+  //       unCheck();
+  //       onCancelCheck();
+  //     }
+  //   },
+  //   {
+  //     target: rootRef,
+  //   },
+  // );
 
   useEventListener('keydown', (ev) => {
     if (
@@ -302,6 +336,7 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
       tabIndex={-1}
       ref={rootRef}
       className={`${styles.root} ${className}`}
+      // onBlur={() => { unCheck(); }}
       {...otherProps}
     >
       <div ref={canvasRef} className={styles.canvasContainer} />
@@ -356,6 +391,23 @@ const Painter = React.forwardRef<PainterRef, PainterProps>((props, pRef) => {
             }
           }}
         />
+      )}
+      {transformingRect && (
+        <div
+          className={styles.transformingRect}
+          style={{
+            left: Math.round(transformingRect.rect.x),
+            top: Math.round(transformingRect.rect.y),
+            width: Math.round(transformingRect.rect.width),
+            height: Math.round(transformingRect.rect.height),
+          }}
+        >
+          {renderTransformingRect(
+            transformingRect.index,
+            transformingRect.index.map(i => _this.shapes[i].getAttrs()),
+            painterRefInstance,
+          )}
+        </div>
       )}
     </div>
   );
