@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form } from 'antd';
 import { Slider } from '@orca-fe/pocket';
+import type { ColorPickerProps } from '@orca-fe/painter';
 import { ColorPicker } from '@orca-fe/painter';
 import useStyles from './SimplePropsEditor.style';
 import type { PropsType } from './def';
@@ -12,6 +13,7 @@ export interface SimplePropsEditorProps
   propsDef?: PropsType[];
   value?: Record<string, any>;
   onChange?: (value: Record<string, any>) => void;
+  colorTriggerProps?: ColorPickerProps['triggerProps'];
 }
 
 /**
@@ -26,6 +28,7 @@ const SimplePropsEditor = (props: SimplePropsEditorProps) => {
     propsDef = [],
     value,
     onChange = ef,
+    colorTriggerProps,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -69,7 +72,13 @@ const SimplePropsEditor = (props: SimplePropsEditorProps) => {
                     case 'font':
                       return 'fontEditor';
                     case 'color':
-                      return <ColorPicker size={24} {...otherProps} />;
+                      return (
+                        <ColorPicker
+                          size={24}
+                          triggerProps={colorTriggerProps}
+                          {...otherProps}
+                        />
+                      );
                     default:
                       return 'Unknown Editor';
                   }

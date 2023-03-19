@@ -1,8 +1,14 @@
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { IconButton, Trigger } from '@orca-fe/pocket';
-import type { PainterRef, ShapeDataType, ShapeType } from '@orca-fe/painter';
+import type {
+  PainterProps,
+  PainterRef,
+  ShapeDataType,
+  ShapeType,
+} from '@orca-fe/painter';
 import Painter from '@orca-fe/painter';
 import { useMemoizedFn } from 'ahooks';
+import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
 import useStyle from './PDFPainterPlugin.style';
 import ToolbarPortal from '../../ToolbarPortal';
 import {
@@ -14,8 +20,11 @@ import {
 } from '../../icon/icon';
 import ToolbarButton from '../../ToolbarButton';
 import { usePageCoverRenderer } from '../../context';
+import SimplePropsEditor from '../SimplePropsEditor';
+import PopupBox from '../PopupBox';
+import type { PropsType } from '../SimplePropsEditor/def';
 
-export type PDFPainterHandle = {
+export type PDFPainterPluginHandle = {
 
   /** 获取所有标注内容 */
   getAllMarkData: () => ShapeDataType[][];
@@ -34,21 +43,47 @@ export type PDFPainterHandle = {
 
   /** 取消绘图 */
   cancelDraw: () => void;
+
+  /** 取消所有选中 */
+  cancelCheck: () => void;
 };
 
 const ef = () => undefined;
+
+const propsDef: PropsType[] = [
+  {
+    key: 'stroke',
+    type: 'color',
+    name: '颜色',
+  },
+  {
+    key: 'strokeWidth',
+    type: 'number',
+    min: 0.1,
+    max: 20,
+    step: 0.1,
+    name: '边框',
+  },
+];
 
 export interface PainterToolbarProps {
 
   /** 标注内容变化事件 */
   onMarkChange?: (page: number, markData: ShapeDataType[]) => void;
+
+  onCheck?: PainterProps['onCheck'];
 }
 
+type PainterRefType = {
+  refs: (PainterRef | null)[];
+  // 绘图数据
+  data: ShapeDataType[][];
+};
 const PDFPainterPlugin = React.forwardRef<
-  PDFPainterHandle,
+  PDFPainterPluginHandle,
   PainterToolbarProps
 >((props, pRef) => {
-  const { onMarkChange = ef } = props;
+  const { onMarkChange = ef, onCheck } = props;
   const styles = useStyle();
 
   /* 绘图功能 */
@@ -61,14 +96,10 @@ const PDFPainterPlugin = React.forwardRef<
     shapeType: 'rectangle',
   });
 
-  const [_painter] = useState<{
-    refs: (PainterRef | null)[];
-    // 绘图数据
-    data: ShapeDataType[][];
-      }>({
-        refs: [],
-        data: [],
-      });
+  const [_painter] = useState<PainterRefType>({
+    refs: [],
+    data: [],
+  });
 
   useEffect(() => {
     _painter.refs.forEach((painter) => {
@@ -82,10 +113,10 @@ const PDFPainterPlugin = React.forwardRef<
     });
   }, [drawing, drawMode]);
 
-  const getAllMarkData = useMemoizedFn<PDFPainterHandle['getAllMarkData']>(
-    () => _painter.data,
-  );
-  const setMarkData = useMemoizedFn<PDFPainterHandle['setMarkData']>(
+  const getAllMarkData = useMemoizedFn<
+    PDFPainterPluginHandle['getAllMarkData']
+  >(() => _painter.data);
+  const setMarkData = useMemoizedFn<PDFPainterPluginHandle['setMarkData']>(
     (pageIndex, data) => {
       const ref = _painter.refs[pageIndex];
       if (ref) {
@@ -95,27 +126,27 @@ const PDFPainterPlugin = React.forwardRef<
       _painter.data[pageIndex] = data;
     },
   );
-  const clearAllMarkData = useMemoizedFn<PDFPainterHandle['clearAllMarkData']>(
-    () => {
-      _painter.refs.forEach((ref, pageIndex) => {
-        if (ref) {
-          ref.clearShapes();
-        }
-      });
-    },
-  );
-  const setAllMarkData = useMemoizedFn<PDFPainterHandle['setAllMarkData']>(
-    (shapeDataList) => {
-      clearAllMarkData();
-      shapeDataList.forEach((shapeData, pageIndex) => {
-        setMarkData(pageIndex, shapeData);
-      });
-    },
-  );
+  const clearAllMarkData = useMemoizedFn<
+    PDFPainterPluginHandle['clearAllMarkData']
+  >(() => {
+    _painter.refs.forEach((ref, pageIndex) => {
+      if (ref) {
+        ref.clearShapes();
+      }
+    });
+  });
+  const setAllMarkData = useMemoizedFn<
+    PDFPainterPluginHandle['setAllMarkData']
+  >((shapeDataList) => {
+    clearAllMarkData();
+    shapeDataList.forEach((shapeData, pageIndex) => {
+      setMarkData(pageIndex, shapeData);
+    });
+  });
 
   const renderPageCover = usePageCoverRenderer();
 
-  const drawMark = useMemoizedFn<PDFPainterHandle['drawMark']>(
+  const drawMark = useMemoizedFn<PDFPainterPluginHandle['drawMark']>(
     (shapeType, attr) => {
       setDrawMode({
         attr,
@@ -126,9 +157,18 @@ const PDFPainterPlugin = React.forwardRef<
       }
     },
   );
-  const cancelDraw = useMemoizedFn<PDFPainterHandle['cancelDraw']>(() => {
+  const cancelDraw = useMemoizedFn<PDFPainterPluginHandle['cancelDraw']>(() => {
     setDrawing(false);
   });
+  const cancelCheck = useMemoizedFn<PDFPainterPluginHandle['cancelCheck']>(
+    () => {
+      _painter.refs.forEach((painter) => {
+        if (painter) {
+          painter.unCheck();
+        }
+      });
+    },
+  );
 
   useImperativeHandle(pRef, () => ({
     clearAllMarkData,
@@ -137,6 +177,7 @@ const PDFPainterPlugin = React.forwardRef<
     setAllMarkData,
     drawMark,
     cancelDraw,
+    cancelCheck,
   }));
 
   // let stroke = '#cc0000';
@@ -184,39 +225,6 @@ const PDFPainterPlugin = React.forwardRef<
       >
         <IconEllipse />
       </IconButton>
-
-      {/* <ColorPicker
-        value={stroke}
-        onChange={(stroke) => {
-          changeDrawMode(drawMode.shapeType, {
-            ...drawMode.attr,
-            stroke,
-          });
-        }}
-        size={20}
-      />*/}
-      {/* <SimpleNumberInput
-        triggerOnDrag={false}
-        value={strokeWidth}
-        onChange={(strokeWidth) => {
-          changeDrawMode(drawMode.shapeType, {
-            ...drawMode.attr,
-            strokeWidth,
-          });
-        }}
-        min={0.1}
-        max={20}
-        step={0.1}
-        style={{ width: 32, textAlign: 'center' }}
-      />*/}
-      {/* <IconButton
-        size="x-small"
-        onClick={() => {
-          setDrawing(false);
-        }}
-      >
-        <CloseOutlined />
-      </IconButton>*/}
     </div>
   );
 
@@ -251,7 +259,7 @@ const PDFPainterPlugin = React.forwardRef<
                 }}
                 icon={<IconMarkEdit />}
               >
-                添加标注
+                绘图
               </ToolbarButton>
             </span>
           </Trigger>
@@ -290,6 +298,75 @@ const PDFPainterPlugin = React.forwardRef<
           onDraw={() => {
             setDrawing(false);
           }}
+          onCheck={onCheck}
+          renderTransformingRect={(indexList, shapes, painter) => (
+            <Trigger
+              popupVisible
+              getPopupContainer={dom => dom}
+              popupAlign={{
+                points: ['bl', 'tl'],
+                offset: [0, -5],
+              }}
+              popup={(
+                <PopupBox style={{ pointerEvents: 'initial' }}>
+                  <SimplePropsEditor
+                    value={{
+                      stroke: shapes[0]['stroke'],
+                      strokeWidth: shapes[0]['strokeWidth'],
+                    }}
+                    propsDef={propsDef}
+                    onChange={(newProps) => {
+                      indexList.forEach((i) => {
+                        painter.updateShape(i, newProps);
+                      });
+                    }}
+                    colorTriggerProps={{
+                      getPopupContainer: () =>
+                        _painter.refs[pageIndex]?.getRoot() ?? document.body,
+                      popupAlign: {
+                        overflow: {
+                          adjustY: false,
+                        },
+                      },
+                    }}
+                  />
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'flex-end',
+                    }}
+                  >
+                    <IconButton
+                      size="small"
+                      onClick={() => {
+                        painter.addShapes(shapes);
+                      }}
+                      style={{ color: '#333' }}
+                    >
+                      <CopyOutlined />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      onClick={() => {
+                        indexList
+                          .slice()
+                          .sort((a, b) => b - a)
+                          .forEach((i) => {
+                            painter.removeShape(i);
+                          });
+                      }}
+                      style={{ color: '#C00' }}
+                    >
+                      <DeleteOutlined />
+                    </IconButton>
+                  </div>
+                </PopupBox>
+              )}
+            >
+              <div style={{ width: '100%', height: '100%' }} />
+            </Trigger>
+          )}
         />
       ))}
     </>

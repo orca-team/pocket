@@ -15,6 +15,10 @@ export default createUseStyles(
     move: {
       cursor: 'move',
     },
+    transformingRect: {
+      position: 'absolute',
+      pointerEvents: 'none',
+    },
   },
   {
     classNamePrefix: prefix,
