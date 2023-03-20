@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 0.4.0
+
+### Minor Changes
+
+- autoWidth & autoHeight
+
 ## 0.3.2
 
 ### Patch Changes
