@@ -1,5 +1,5 @@
-import type { PDFViewerContextType, usePageCoverRenderer } from './context';
-import PDFViewerContext from './context';
+import type { PDFViewerContextType } from './context';
+import PDFViewerContext, { usePageCoverRenderer } from './context';
 import OpenFileButton from './OpenFileButton';
 import PDFViewer from './PDFViewer';
 import type { ToolbarButtonProps } from './ToolbarButton';
