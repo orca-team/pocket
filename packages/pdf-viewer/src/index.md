@@ -36,6 +36,11 @@ group:
 
 ### 重要更新
 
+- `0.4.0`
+  - 支持自动宽度/高度
+- `0.3.0`
+  - 重构了插件机制，提升了插件的独立性
+  - 增加了批注组件以及组件的属性编辑功能
 - `0.2.0`
   - 支持通过属性 `defaultTitle`, `title`，设置文件标题。
   - `PDFViewerHandle.setTitle` 可以设置文件标题。
@@ -43,17 +48,18 @@ group:
 
 ### 属性
 
-| 属性名称        | 描述                                                                                                                    | 类型                                                                                        | 默认值 | 版本    |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------ | ------- |
-| pageGap         | 页面间距                                                                                                                | `number`                                                                                    | `24`   |         |
-| maxZoom         | 最大缩放级别                                                                                                            | `number`                                                                                    | `3`    |         |
-| minZoom         | 最小缩放级别                                                                                                            | `number`                                                                                    | `-4`   |         |
-| renderPageCover | 渲染自定义的页面覆盖内容                                                                                                | `(pageIndex: number, options: { viewport: PageViewport, zoom: number }) => React.ReactNode` | `-`    |         |
-| onPageScroll    | 页面渲染事件                                                                                                            | `typeof onScroll`                                                                           | `-`    |         |
-| emptyTips       | 未打开文件时的提示                                                                                                      | `ReactElement`                                                                              | `-`    | `0.0.4` |
-| onMarkChange    | 标注内容变化事件                                                                                                        | `(page: number, markData: ShapeDataType[]) => void`                                         | `-`    | `0.0.5` |
-| defaultTitle    | 默认展示的文件标题                                                                                                      | `string`                                                                                    | `-`    | `0.2.0` |
-| title           | 文件标题，当传入该属性时，`defaultTitle` 以及 `PDFViewerHandle.load` 和 `PDFViewerHandle.setTitle` 的设置标题都不生效。 | `string`                                                                                    | `-`    | `0.2.0` |
+| 属性名称        | 描述                                                                                                                    | 类型                                                                                        | 默认值        | 版本    |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------- | ------- |
+| pageGap         | 页面间距                                                                                                                | `number`                                                                                    | `24`          |         |
+| maxZoom         | 最大缩放级别                                                                                                            | `number`                                                                                    | `3`           |         |
+| minZoom         | 最小缩放级别                                                                                                            | `number`                                                                                    | `-4`          |         |
+| renderPageCover | 渲染自定义的页面覆盖内容                                                                                                | `(pageIndex: number, options: { viewport: PageViewport, zoom: number }) => React.ReactNode` | `-`           |         |
+| onPageScroll    | 页面渲染事件                                                                                                            | `typeof onScroll`                                                                           | `-`           |         |
+| emptyTips       | 未打开文件时的提示                                                                                                      | `ReactElement`                                                                              | `-`           | `0.0.4` |
+| onMarkChange    | 标注内容变化事件                                                                                                        | `(page: number, markData: ShapeDataType[]) => void`                                         | `-`           | `0.0.5` |
+| defaultTitle    | 默认展示的文件标题                                                                                                      | `string`                                                                                    | `-`           | `0.2.0` |
+| title           | 文件标题，当传入该属性时，`defaultTitle` 以及 `PDFViewerHandle.load` 和 `PDFViewerHandle.setTitle` 的设置标题都不生效。 | `string`                                                                                    | `-`           | `0.2.0` |
+| defaultZoom     | 默认缩放级别                                                                                                            | `number` / `'autoWidth'` / `'authHeight'`                                                   | `'autoWidth'` | `0.4.0` |
 
 ### PDFViewerHandle
 

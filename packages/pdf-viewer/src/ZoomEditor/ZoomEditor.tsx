@@ -8,13 +8,16 @@ import './ZoomEditor.less';
 
 const px = pc('zoom-editor');
 
-export interface ZoomEditorProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+const ef = () => {};
+
+export interface ZoomEditorProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   defaultValue?: number;
   value?: number;
   onChange?: (value: number) => void;
   max?: number;
   min?: number;
+  zoomMode?: false | 'autoWidth' | 'autoHeight';
+  onZoomModeChange?: (zoomMode: false | 'autoWidth' | 'autoHeight') => void;
 }
 
 const ZoomEditor = (props: ZoomEditorProps) => {
@@ -25,6 +28,8 @@ const ZoomEditor = (props: ZoomEditorProps) => {
     onChange,
     min = 2 ** -4,
     max = 2 ** 3,
+    zoomMode = false,
+    onZoomModeChange = ef,
     ...otherProps
   } = props;
   const [value = 1, setValue] = useControllableValue(props);
@@ -32,10 +37,11 @@ const ZoomEditor = (props: ZoomEditorProps) => {
   return (
     <div className={`${px('root')} ${className}`} {...otherProps}>
       <Dropdown
-        overlay={
+        overlay={(
           <Menu>
             <Menu.Item
               onClick={() => {
+                onZoomModeChange(false);
                 setValue(25 / 100);
               }}
             >
@@ -43,6 +49,7 @@ const ZoomEditor = (props: ZoomEditorProps) => {
             </Menu.Item>
             <Menu.Item
               onClick={() => {
+                onZoomModeChange(false);
                 setValue(50 / 100);
               }}
             >
@@ -50,6 +57,7 @@ const ZoomEditor = (props: ZoomEditorProps) => {
             </Menu.Item>
             <Menu.Item
               onClick={() => {
+                onZoomModeChange(false);
                 setValue(75 / 100);
               }}
             >
@@ -57,6 +65,7 @@ const ZoomEditor = (props: ZoomEditorProps) => {
             </Menu.Item>
             <Menu.Item
               onClick={() => {
+                onZoomModeChange(false);
                 setValue(100 / 100);
               }}
             >
@@ -64,6 +73,7 @@ const ZoomEditor = (props: ZoomEditorProps) => {
             </Menu.Item>
             <Menu.Item
               onClick={() => {
+                onZoomModeChange(false);
                 setValue(125 / 100);
               }}
             >
@@ -71,6 +81,7 @@ const ZoomEditor = (props: ZoomEditorProps) => {
             </Menu.Item>
             <Menu.Item
               onClick={() => {
+                onZoomModeChange(false);
                 setValue(150 / 100);
               }}
             >
@@ -78,6 +89,7 @@ const ZoomEditor = (props: ZoomEditorProps) => {
             </Menu.Item>
             <Menu.Item
               onClick={() => {
+                onZoomModeChange(false);
                 setValue(200 / 100);
               }}
             >
@@ -85,25 +97,50 @@ const ZoomEditor = (props: ZoomEditorProps) => {
             </Menu.Item>
             <Menu.Item
               onClick={() => {
+                onZoomModeChange(false);
                 setValue(400 / 100);
               }}
             >
               400%
             </Menu.Item>
+            <Menu.Item
+              onClick={() => {
+                onZoomModeChange('autoWidth');
+              }}
+            >
+              自动宽度
+            </Menu.Item>
+            <Menu.Item
+              onClick={() => {
+                onZoomModeChange('autoHeight');
+              }}
+            >
+              自动高度
+            </Menu.Item>
           </Menu>
-        }
+        )}
       >
         <div className={px('zoom-control')}>
-          <SimpleNumberInput
-            className={px('text')}
-            min={min * 100}
-            max={max * 100}
-            value={Math.trunc(value * 100)}
-            onChange={(value) => {
-              setValue(value / 100);
-            }}
-          />
-          %
+          {zoomMode ? (
+            {
+              autoWidth: '自动宽度',
+              autoHeight: '自动高度',
+            }[zoomMode]
+          ) : (
+            <>
+              <SimpleNumberInput
+                className={px('text')}
+                min={min * 100}
+                max={max * 100}
+                value={Math.trunc(value * 100)}
+                onChange={(value) => {
+                  onZoomModeChange(false);
+                  setValue(value / 100);
+                }}
+              />
+              %
+            </>
+          )}
           <CaretDownOutlined className={px('icon')} />
         </div>
       </Dropdown>

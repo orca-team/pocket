@@ -1,17 +1,19 @@
 import React, { useContext } from 'react';
 import { UcInput } from '@orca-fe/pocket';
 import useStyles from './ZoomAndPageController.style';
+import type { ZoomEditorProps } from '../ZoomEditor';
 import ZoomEditor from '../ZoomEditor';
 import PDFViewerContext from '../context';
 
-export interface ZoomAndPageControllerProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface ZoomAndPageControllerProps extends React.HTMLAttributes<HTMLDivElement> {
   max?: number;
   min?: number;
+  zoomMode?: ZoomEditorProps['zoomMode'];
+  onZoomModeChange?: ZoomEditorProps['onZoomModeChange'];
 }
 
 const ZoomAndPageController = (props: ZoomAndPageControllerProps) => {
-  const { className = '', max, min, ...otherProps } = props;
+  const { className = '', max, min, zoomMode, onZoomModeChange, ...otherProps } = props;
   const styles = useStyles();
   const { pdfViewer, pages, zoom, current } = useContext(PDFViewerContext);
   return (
@@ -55,6 +57,8 @@ const ZoomAndPageController = (props: ZoomAndPageControllerProps) => {
         onChange={(zoomVal) => {
           pdfViewer.setZoom(Math.log2(zoomVal));
         }}
+        zoomMode={zoomMode}
+        onZoomModeChange={onZoomModeChange}
       />
     </div>
   );
