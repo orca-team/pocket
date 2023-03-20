@@ -1,25 +1,14 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react';
+import React, { useContext, useEffect, useImperativeHandle, useState } from 'react';
 import { IconButton, Trigger } from '@orca-fe/pocket';
-import type {
-  PainterProps,
-  PainterRef,
-  ShapeDataType,
-  ShapeType,
-} from '@orca-fe/painter';
+import type { PainterProps, PainterRef, ShapeDataType, ShapeType } from '@orca-fe/painter';
 import Painter from '@orca-fe/painter';
 import { useMemoizedFn } from 'ahooks';
 import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
 import useStyle from './PDFPainterPlugin.style';
 import ToolbarPortal from '../../ToolbarPortal';
-import {
-  IconEllipse,
-  IconLine,
-  IconMarkEdit,
-  IconRectangle,
-  IconSmoothLine,
-} from '../../icon/icon';
+import { IconAddShape, IconEllipse, IconFreedom, IconLine, IconRectangle } from '../../icon/icon';
 import ToolbarButton from '../../ToolbarButton';
-import { usePageCoverRenderer } from '../../context';
+import PDFViewerContext, { usePageCoverRenderer } from '../../context';
 import SimplePropsEditor from '../SimplePropsEditor';
 import PopupBox from '../PopupBox';
 import type { PropsType } from '../SimplePropsEditor/def';
@@ -79,10 +68,7 @@ type PainterRefType = {
   // 绘图数据
   data: ShapeDataType[][];
 };
-const PDFPainterPlugin = React.forwardRef<
-  PDFPainterPluginHandle,
-  PainterToolbarProps
->((props, pRef) => {
+const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PainterToolbarProps>((props, pRef) => {
   const { onMarkChange = ef, onCheck } = props;
   const styles = useStyle();
 
@@ -113,31 +99,23 @@ const PDFPainterPlugin = React.forwardRef<
     });
   }, [drawing, drawMode]);
 
-  const getAllMarkData = useMemoizedFn<
-    PDFPainterPluginHandle['getAllMarkData']
-  >(() => _painter.data);
-  const setMarkData = useMemoizedFn<PDFPainterPluginHandle['setMarkData']>(
-    (pageIndex, data) => {
-      const ref = _painter.refs[pageIndex];
-      if (ref) {
-        ref.clearShapes();
-        ref.addShapes(data);
-      }
-      _painter.data[pageIndex] = data;
-    },
-  );
-  const clearAllMarkData = useMemoizedFn<
-    PDFPainterPluginHandle['clearAllMarkData']
-  >(() => {
+  const getAllMarkData = useMemoizedFn<PDFPainterPluginHandle['getAllMarkData']>(() => _painter.data);
+  const setMarkData = useMemoizedFn<PDFPainterPluginHandle['setMarkData']>((pageIndex, data) => {
+    const ref = _painter.refs[pageIndex];
+    if (ref) {
+      ref.clearShapes();
+      ref.addShapes(data);
+    }
+    _painter.data[pageIndex] = data;
+  });
+  const clearAllMarkData = useMemoizedFn<PDFPainterPluginHandle['clearAllMarkData']>(() => {
     _painter.refs.forEach((ref, pageIndex) => {
       if (ref) {
         ref.clearShapes();
       }
     });
   });
-  const setAllMarkData = useMemoizedFn<
-    PDFPainterPluginHandle['setAllMarkData']
-  >((shapeDataList) => {
+  const setAllMarkData = useMemoizedFn<PDFPainterPluginHandle['setAllMarkData']>((shapeDataList) => {
     clearAllMarkData();
     shapeDataList.forEach((shapeData, pageIndex) => {
       setMarkData(pageIndex, shapeData);
@@ -146,29 +124,28 @@ const PDFPainterPlugin = React.forwardRef<
 
   const renderPageCover = usePageCoverRenderer();
 
-  const drawMark = useMemoizedFn<PDFPainterPluginHandle['drawMark']>(
-    (shapeType, attr) => {
-      setDrawMode({
-        attr,
-        shapeType,
-      });
-      if (!drawing) {
-        setDrawing(true);
-      }
-    },
-  );
+  const { pdfViewer } = useContext(PDFViewerContext);
+
+  const drawMark = useMemoizedFn<PDFPainterPluginHandle['drawMark']>((shapeType, attr) => {
+    setDrawMode({
+      attr,
+      shapeType,
+    });
+    if (!drawing) {
+      pdfViewer.cancelDraw();
+      setDrawing(true);
+    }
+  });
   const cancelDraw = useMemoizedFn<PDFPainterPluginHandle['cancelDraw']>(() => {
     setDrawing(false);
   });
-  const cancelCheck = useMemoizedFn<PDFPainterPluginHandle['cancelCheck']>(
-    () => {
-      _painter.refs.forEach((painter) => {
-        if (painter) {
-          painter.unCheck();
-        }
-      });
-    },
-  );
+  const cancelCheck = useMemoizedFn<PDFPainterPluginHandle['cancelCheck']>(() => {
+    _painter.refs.forEach((painter) => {
+      if (painter) {
+        painter.unCheck();
+      }
+    });
+  });
 
   useImperativeHandle(pRef, () => ({
     clearAllMarkData,
@@ -207,7 +184,7 @@ const PDFPainterPlugin = React.forwardRef<
           drawMark('line-path', drawMode.attr || {});
         }}
       >
-        <IconSmoothLine />
+        <IconFreedom />
       </IconButton>
       <IconButton
         checked={shapeType === 'rectangle'}
@@ -257,7 +234,7 @@ const PDFPainterPlugin = React.forwardRef<
                     );
                   }
                 }}
-                icon={<IconMarkEdit />}
+                icon={<IconAddShape />}
               >
                 绘图
               </ToolbarButton>
@@ -321,8 +298,7 @@ const PDFPainterPlugin = React.forwardRef<
                       });
                     }}
                     colorTriggerProps={{
-                      getPopupContainer: () =>
-                        _painter.refs[pageIndex]?.getRoot() ?? document.body,
+                      getPopupContainer: () => _painter.refs[pageIndex]?.getRoot() ?? document.body,
                       popupAlign: {
                         overflow: {
                           adjustY: false,

@@ -7,23 +7,16 @@ export interface ToolbarButtonProps extends IconButtonProps {
   icon?: React.ReactNode;
 }
 
-const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonProps>(
-  (props, ref) => {
-    const { className = '', icon, children, ...otherProps } = props;
-    const styles = useStyles();
-    return (
-      <IconButton
-        ref={ref}
-        autoWidth
-        className={`${styles.root} ${className}`}
-        {...otherProps}
-      >
-        {icon}
-        {children && <span className={styles.text}>{children}</span>}
-      </IconButton>
-    );
-  },
-);
+const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonProps>((props, ref) => {
+  const { className = '', icon, children, ...otherProps } = props;
+  const styles = useStyles();
+  return (
+    <IconButton ref={ref} autoWidth className={`${styles.root} ${className}`} {...otherProps}>
+      <div className={styles.icon}>{icon}</div>
+      {children && <span className={styles.text}>{children}</span>}
+    </IconButton>
+  );
+});
 
 ToolbarButton.displayName = 'ToolbarButton';
 

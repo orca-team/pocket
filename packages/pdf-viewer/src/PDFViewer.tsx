@@ -4,7 +4,7 @@ import { useDebounceEffect, useDebounceFn, useEventListener, useMemoizedFn } fro
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useGetState, useSizeListener } from '@orca-fe/hooks';
 import type { PageViewport, PDFViewerHandle, RenderPageCoverFnType } from './context';
-import PDFViewerContext, { PDFToolbarContext } from './context';
+import PDFViewerContext, { isShapeData, isTooltipData, PDFToolbarContext } from './context';
 import PDFPage from './PDFPage';
 import PDFToolbar from './PDFToolbar';
 import useStyle from './PDFViewer.style';
@@ -20,6 +20,15 @@ import PDFTooltipPlugin from './plugins/PDFTooltipPlugin';
 const pdfJs: any = _pdfJS;
 
 const ef = () => undefined;
+
+function mergeArrays<T, U>(arr1: T[][], arr2: U[][]): (T | U)[][] {
+  const maxLength = Math.max(arr1.length, arr2.length);
+  const result: (T | U)[][] = [];
+  for (let i = 0; i < maxLength; i++) {
+    result.push([...arr1[i], ...arr2[i]]);
+  }
+  return result;
+}
 
 const defaultLoadingTips = <div className="pdf-viewer-default-empty-tips">正在打开文件...</div>;
 
@@ -434,45 +443,66 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   /* 工具栏 */
   const [toolbarLeftDom, setToolbarLeftDom] = useState<HTMLDivElement | null>(null);
   const [toolbarRightDom, setToolbarRightDom] = useState<HTMLDivElement | null>(null);
-  const [centerToolbarIds, setCenterToolbarIds] = useState<string[]>([]);
+  const [_centerToolbarIds, setCenterToolbarIds] = useState<[string, number][]>([]);
 
-  const addCenterToolbarId = useMemoizedFn((id: string) => {
-    setCenterToolbarIds(ids => [...new Set([...ids, id])]);
+  const centerToolbarIds = useMemo(() => _centerToolbarIds.map(([id]) => id), [_centerToolbarIds]);
+  const addCenterToolbarId = useMemoizedFn((id: string, order = 0) => {
+    // 插入 toolbar id 并排序
+    setCenterToolbarIds(ids =>
+      ids
+        .filter(([_id]) => _id !== id)
+        .concat([[id, order]])
+        .sort((a, b) => a[1] - b[1]),
+    );
   });
 
   const removeCenterToolbarId = useMemoizedFn((id: string) => {
-    setCenterToolbarIds(ids => ids.filter(_id => _id !== id));
+    setCenterToolbarIds(ids => ids.filter(([_id]) => _id !== id));
   });
 
   // 绘图功能
   const pdfPainterHandle = useRef<PDFPainterPluginHandle>(null);
+  // 批注功能
   const pdfTooltipHandle = useRef<PDFTooltipPluginHandle>(null);
 
   // TODO 合并 pdfPainterHandle 与 pdfTooltipHandle 的接口
 
-  const getAllMarkData = useMemoizedFn<PDFPainterPluginHandle['getAllMarkData']>((...args) => {
+  const getAllMarkData = useMemoizedFn<PDFViewerHandle['getAllMarkData']>(() => {
     const pdfPainter = pdfPainterHandle.current;
-    if (pdfPainter) {
-      return pdfPainter.getAllMarkData(...args);
+    const pdfTooltip = pdfTooltipHandle.current;
+    if (pdfPainter && pdfTooltip) {
+      const shapeData = pdfPainter.getAllMarkData();
+      const tooltipData = pdfTooltip.getAllTooltipData();
+      return mergeArrays(shapeData, tooltipData);
     }
     return [];
   });
-  const setMarkData = useMemoizedFn<PDFPainterPluginHandle['setMarkData']>((...args) => {
-    pdfPainterHandle.current?.setMarkData(...args);
+  const setMarkData = useMemoizedFn<PDFViewerHandle['setMarkData']>((page, markData) => {
+    const shapeData = markData.filter(isShapeData);
+    const tooltipData = markData.filter(isTooltipData);
+
+    pdfPainterHandle.current?.setMarkData(page, shapeData);
+    pdfTooltipHandle.current?.setTooltipData(page, tooltipData);
   });
-  const setAllMarkData = useMemoizedFn<PDFPainterPluginHandle['setAllMarkData']>((...args) => {
-    pdfPainterHandle.current?.setAllMarkData(...args);
+  const setAllMarkData = useMemoizedFn<PDFViewerHandle['setAllMarkData']>((data) => {
+    pdfPainterHandle.current?.setAllMarkData(data.map(pageData => pageData.filter(isShapeData)));
+    pdfTooltipHandle.current?.setAllTooltipData(data.map(pageData => pageData.filter(isTooltipData)));
   });
-  const clearAllMarkData = useMemoizedFn<PDFPainterPluginHandle['clearAllMarkData']>((...args) => {
-    pdfPainterHandle.current?.clearAllMarkData(...args);
+  const clearAllMarkData = useMemoizedFn<PDFViewerHandle['clearAllMarkData']>((...args) => {
+    pdfPainterHandle.current?.clearAllMarkData();
+    pdfTooltipHandle.current?.clearAllTooltipData();
   });
-  const drawMark = useMemoizedFn<PDFPainterPluginHandle['drawMark']>((...args) => {
+  const drawMark = useMemoizedFn<PDFViewerHandle['drawMark']>((...args) => {
     pdfPainterHandle.current?.drawMark(...args);
   });
-  const cancelDraw = useMemoizedFn<PDFPainterPluginHandle['cancelDraw']>((...args) => {
-    pdfPainterHandle.current?.cancelDraw(...args);
+  const drawTooltip = useMemoizedFn<PDFViewerHandle['drawTooltip']>((...args) => {
+    pdfTooltipHandle.current?.drawTooltip();
   });
-  const cancelCheck = useMemoizedFn<PDFPainterPluginHandle['cancelCheck']>((...args) => {
+  const cancelDraw = useMemoizedFn<PDFViewerHandle['cancelDraw']>((...args) => {
+    pdfPainterHandle.current?.cancelDraw();
+    pdfTooltipHandle.current?.cancelDraw();
+  });
+  const cancelCheck = useMemoizedFn<PDFViewerHandle['cancelCheck']>((...args) => {
     pdfPainterHandle.current?.cancelCheck();
     pdfTooltipHandle.current?.cancelCheck();
   });
@@ -494,6 +524,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       clearAllMarkData,
       setTitle,
       drawMark,
+      drawTooltip,
       cancelDraw,
       cancelCheck,
     }),

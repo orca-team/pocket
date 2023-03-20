@@ -1,18 +1,33 @@
 import React, { useContext } from 'react';
 import ReactDOM from 'react-dom';
-import type { PDFPainterPluginHandle } from './plugins/PDFPainterPlugin';
+import type { ShapeDataType, ShapeType } from '@orca-fe/painter';
+import type { TooltipDataType } from './plugins/PDFTooltipPlugin/def';
+
+export type MarkDataType = TooltipDataType | ShapeDataType;
+
+export function isShapeData(value: any): value is ShapeDataType {
+  // 这里暂时使用了简易的判断，不是 tooltip 类型，我就归为 ShapeDataType
+  if (!!value && typeof value === 'object' && 'type' in value && value['type'] !== 'tooltip') {
+    return true;
+  }
+  return false;
+}
+
+export function isTooltipData(value: any): value is TooltipDataType {
+  if (!!value && typeof value === 'object' && value['type'] === 'tooltip') {
+    return true;
+  }
+  return false;
+}
 
 /**
  * PDF 控制器
  * 用于控制 PDF 阅读器，进行基础操作
  */
-export type PDFViewerHandle = PDFPainterPluginHandle & {
+export type PDFViewerHandle = {
 
   /** 加载文件，支持 url / 文件 / ArrayBuffer */
-  load: (
-    file: string | URL | File | ArrayBuffer,
-    title?: string,
-  ) => Promise<void>;
+  load: (file: string | URL | File | ArrayBuffer, title?: string) => Promise<void>;
 
   /** 关闭文件，恢复初始状态 */
   close: () => Promise<void>;
@@ -36,12 +51,36 @@ export type PDFViewerHandle = PDFPainterPluginHandle & {
   getPageCount: () => number;
 
   /** 获取某一页的 PDF 图像内容（Blob） */
-  getPageBlob: (
-    index: number,
-    options?: { scale?: number },
-  ) => Promise<Blob | null>;
+  getPageBlob: (index: number, options?: { scale?: number }) => Promise<Blob | null>;
 
   setTitle: (title: React.ReactNode) => void;
+
+  // 以下方法原本来自 PDFPainterPlugin，但后来抽离了内置插件 PDFTooltipPlugin
+  // 我仍希望保留一套接口，所以在这里调整了接口数据类型，合并了两者
+
+  /** 获取所有标注内容 */
+  getAllMarkData: () => MarkDataType[][];
+
+  /** 设置某一页的标注内容 */
+  setMarkData: (page: number, markData: MarkDataType[]) => void;
+
+  /** 设置所有页面的标注内容 */
+  setAllMarkData: (markData: MarkDataType[][]) => void;
+
+  /** 清除所有页面的标注内容 */
+  clearAllMarkData: () => void;
+
+  /** 开始绘图 */
+  drawMark: (shapeType: ShapeType, attr: Record<string, any>) => void;
+
+  /** 开始添加（批注） */
+  drawTooltip: () => void;
+
+  /** 取消绘图 */
+  cancelDraw: () => void;
+
+  /** 取消所有选中 */
+  cancelCheck: () => void;
 };
 
 export type PageViewport = {
@@ -61,10 +100,7 @@ export type PageViewport = {
   };
 };
 
-export type RenderPageCoverFnType = (
-  pageIndex: number,
-  options: { viewport: PageViewport; zoom: number },
-) => React.ReactNode;
+export type RenderPageCoverFnType = (pageIndex: number, options: { viewport: PageViewport; zoom: number }) => React.ReactNode;
 
 export type PDFViewerContextType = {
   pages: any[];
@@ -108,6 +144,10 @@ const PDFViewerContext = React.createContext<PDFViewerContextType>({
     setMarkData() {},
     setZoom() {},
     setTitle() {},
+    cancelCheck() {},
+    drawTooltip() {},
+    drawMark() {},
+    cancelDraw() {},
   },
 });
 
@@ -139,10 +179,6 @@ export function usePageCoverRenderer() {
         zoom,
       });
       if (!dom) return null;
-      return (
-        <React.Fragment key={pageIndex}>
-          {ReactDOM.createPortal(node, dom)}
-        </React.Fragment>
-      );
+      return <React.Fragment key={pageIndex}>{ReactDOM.createPortal(node, dom)}</React.Fragment>;
     });
 }

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { useControllableValue } from 'ahooks';
+import React, { useRef, useState } from 'react';
+import { useClickAway, useControllableValue } from 'ahooks';
 import { changeArr, removeArrIndex } from '@orca-fe/tools';
 import { IconButton, Trigger } from '@orca-fe/pocket';
 import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
+import cn from 'classnames';
 import useStyles from './PDFTooltipPainter.style';
 import type { TooltipDataType } from '../def';
 import PDFTooltip from '../PDFTooltip';
@@ -29,11 +30,7 @@ const propsDef: PropsType[] = [
   },
 ];
 
-export interface PDFTooltipPainterProps
-  extends Omit<
-    React.HTMLAttributes<HTMLDivElement>,
-    'defaultChecked' | 'onChange'
-  > {
+export interface PDFTooltipPainterProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultChecked' | 'onChange'> {
   drawing?: boolean;
   defaultData?: TooltipDataType[];
   data?: TooltipDataType[];
@@ -61,15 +58,13 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
 
   const [changing, setChanging] = useState(false);
 
-  const [data = eArr, setData] = useControllableValue<TooltipDataType[]>(
-    props,
-    {
-      defaultValue: [],
-      trigger: 'onChange',
-      valuePropName: 'data',
-      defaultValuePropName: 'defaultData',
-    },
-  );
+  const [data = eArr, setData] = useControllableValue<TooltipDataType[]>(props, {
+    defaultValue: [],
+    trigger: 'onChange',
+    valuePropName: 'data',
+    defaultValuePropName: 'defaultData',
+  });
+
   const [checked = -1, check] = useControllableValue<number>(props, {
     defaultValue: -1,
     trigger: 'onCheck',
@@ -78,16 +73,12 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
   });
   const [tmpTooltip, setTmpTooltip] = useState<TooltipDataType | null>(null);
 
+  const rootRef = useRef<HTMLDivElement>(null);
+  useClickAway(() => {
+    check(-1);
+  }, rootRef);
   return (
-    <div
-      tabIndex={-1}
-      className={`${styles.root} ${className}`}
-      draggable={false}
-      onBlur={() => {
-        check(-1);
-      }}
-      {...otherProps}
-    >
+    <div ref={rootRef} tabIndex={-1} className={cn(styles.root, { [styles.drawing]: drawing }, className)} draggable={false} {...otherProps}>
       {data.map((item, index) => {
         const fontSize = item.fontSize || 16;
         const color = item.color || '#C00';
@@ -106,9 +97,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
                   value={{ fontSize, color }}
                   propsDef={propsDef}
                   onChange={(newProps) => {
-                    setData(arr =>
-                      changeArr(arr, index, { ...item, ...newProps }),
-                    );
+                    setData(arr => changeArr(arr, index, { ...item, ...newProps }));
                   }}
                 />
                 <div
@@ -121,10 +110,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
                   <IconButton
                     size="small"
                     onClick={() => {
-                      setData(data => [
-                        ...data,
-                        { ...item, x: item.x + 10, y: item.y + 40 },
-                      ]);
+                      setData(data => [...data, { ...item, x: item.x + 10, y: item.y + 40 }]);
                       check(data.length);
                     }}
                     style={{ color: '#333' }}
