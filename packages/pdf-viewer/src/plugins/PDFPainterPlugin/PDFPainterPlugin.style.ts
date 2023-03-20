@@ -15,7 +15,6 @@ export default createUseStyles(
       padding: '4px 4px',
       border: '1px solid #DDD',
       display: 'flex',
-      flexDirection: 'column',
     },
     painter: {
       position: 'absolute',

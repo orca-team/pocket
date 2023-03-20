@@ -1,10 +1,10 @@
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useContext, useImperativeHandle, useState } from 'react';
 // import useStyles from './PDFTooltipPlugin.style';
 import { useMemoizedFn } from 'ahooks';
 import ToolbarButton from '../../ToolbarButton';
-import { IconMarkEdit } from '../../icon/icon';
+import { IconAddTooltip } from '../../icon/icon';
 import PDFTooltipPainter from './PDFTooltipPainter';
-import { usePageCoverRenderer } from '../../context';
+import PDFViewerContext, { usePageCoverRenderer } from '../../context';
 import ToolbarPortal from '../../ToolbarPortal';
 import type { TooltipDataType } from './def';
 
@@ -41,12 +41,10 @@ export interface PDFTooltipPluginProps {
   onDraw?: () => void;
 }
 
-const PDFTooltipPlugin = React.forwardRef<
-  PDFTooltipPluginHandle,
-  PDFTooltipPluginProps
->((props, pRef) => {
+const PDFTooltipPlugin = React.forwardRef<PDFTooltipPluginHandle, PDFTooltipPluginProps>((props, pRef) => {
   const { onCheck = ef, onDraw = ef } = props;
   const renderPageCover = usePageCoverRenderer();
+  const { pdfViewer } = useContext(PDFViewerContext);
 
   const [drawing, setDrawing] = useState(false);
   const [checkInfo, setCheckInfo] = useState({ page: -1, index: -1 });
@@ -58,37 +56,25 @@ const PDFTooltipPlugin = React.forwardRef<
     data: [],
   });
 
-  const drawTooltip = useMemoizedFn<PDFTooltipPluginHandle['drawTooltip']>(
-    () => {
-      setDrawing(true);
-    },
-  );
+  const drawTooltip = useMemoizedFn<PDFTooltipPluginHandle['drawTooltip']>(() => {
+    setDrawing(true);
+  });
   const cancelDraw = useMemoizedFn<PDFTooltipPluginHandle['cancelDraw']>(() => {
     setDrawing(false);
   });
-  const clearAllTooltipData = useMemoizedFn<
-    PDFTooltipPluginHandle['clearAllTooltipData']
-  >(() => {
+  const clearAllTooltipData = useMemoizedFn<PDFTooltipPluginHandle['clearAllTooltipData']>(() => {
     _this.data = [];
   });
-  const getAllTooltipData = useMemoizedFn<
-    PDFTooltipPluginHandle['getAllTooltipData']
-  >(() => _this.data);
-  const setTooltipData = useMemoizedFn<
-    PDFTooltipPluginHandle['setTooltipData']
-  >((pageIndex, data) => {
+  const getAllTooltipData = useMemoizedFn<PDFTooltipPluginHandle['getAllTooltipData']>(() => _this.data);
+  const setTooltipData = useMemoizedFn<PDFTooltipPluginHandle['setTooltipData']>((pageIndex, data) => {
     _this.data[pageIndex] = data;
   });
-  const setAllTooltipData = useMemoizedFn<
-    PDFTooltipPluginHandle['setAllTooltipData']
-  >((data) => {
+  const setAllTooltipData = useMemoizedFn<PDFTooltipPluginHandle['setAllTooltipData']>((data) => {
     _this.data = data;
   });
-  const cancelCheck = useMemoizedFn<PDFTooltipPluginHandle['cancelCheck']>(
-    () => {
-      setCheckInfo({ page: -1, index: -1 });
-    },
-  );
+  const cancelCheck = useMemoizedFn<PDFTooltipPluginHandle['cancelCheck']>(() => {
+    setCheckInfo({ page: -1, index: -1 });
+  });
   useImperativeHandle(pRef, () => ({
     drawTooltip,
     cancelDraw,
@@ -105,9 +91,12 @@ const PDFTooltipPlugin = React.forwardRef<
         <ToolbarButton
           checked={drawing}
           onClick={(e) => {
+            if (!drawing) {
+              pdfViewer.cancelDraw();
+            }
             setDrawing(!drawing);
           }}
-          icon={<IconMarkEdit />}
+          icon={<IconAddTooltip />}
         >
           批注
         </ToolbarButton>

@@ -7,6 +7,11 @@ export default createUseStyles(
   {
     root: {
       position: 'relative',
+      padding: [0, 12],
+    },
+    icon: {
+      fontSize: 20,
+      lineHeight: '14px',
     },
     text: {
       fontSize: 14,

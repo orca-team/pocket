@@ -13,6 +13,11 @@ export default createUseStyles(
         pointerEvents: 'initial',
       },
     },
+    drawing: {
+      '&:hover': {
+        outline: '2px solid #19f',
+      },
+    },
   },
   {
     classNamePrefix: prefix,

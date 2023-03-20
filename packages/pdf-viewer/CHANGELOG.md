@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 0.4.3
+
+### Patch Changes
+
+- 完善绘图/批注的对外 API；ToolbarButton 默认不展示
+
 ## 0.4.2
 
 ### Patch Changes
