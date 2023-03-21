@@ -148,7 +148,7 @@ export default () => {
 
 ### PDFPainterPluginHandle
 
-| 属性名称         | 属性详情               | 属性类型                                                    | 版本 |
+| 方法名称         | 描述                   | 类型                                                        | 版本 |
 | ---------------- | ---------------------- | ----------------------------------------------------------- | ---- |
 | getAllMarkData   | 获取所有标注内容       | `() => ShapeDataType[][]`                                   |      |
 | setMarkData      | 设置某一页的标注内容   | `(page: number, markData: ShapeDataType[]) => void`         |      |
