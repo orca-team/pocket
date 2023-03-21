@@ -55,7 +55,7 @@ const propsDef: PropsType[] = [
   },
 ];
 
-export interface PainterToolbarProps {
+export interface PDFPainterPluginProps {
 
   /** 标注内容变化事件 */
   onMarkChange?: (page: number, markData: ShapeDataType[]) => void;
@@ -68,7 +68,7 @@ type PainterRefType = {
   // 绘图数据
   data: ShapeDataType[][];
 };
-const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PainterToolbarProps>((props, pRef) => {
+const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPluginProps>((props, pRef) => {
   const { onMarkChange = ef, onCheck } = props;
   const styles = useStyle();
 

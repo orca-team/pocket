@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 0.4.4
+
+### Patch Changes
+
+- 允许禁用内置插件，并将内置插件导出
+
 ## 0.4.3
 
 ### Patch Changes
