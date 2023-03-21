@@ -36,6 +36,9 @@ group:
 
 ### 重要更新
 
+- `0.4.4`
+  - 将内置的绘图插件和批注插件导出
+  - 支持主动关闭内置插件
 - `0.4.0`
   - 支持自动宽度/高度
 - `0.3.0`
@@ -48,18 +51,20 @@ group:
 
 ### 属性
 
-| 属性名称        | 描述                                                                                                                    | 类型                                                                                        | 默认值        | 版本    |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------- | ------- |
-| pageGap         | 页面间距                                                                                                                | `number`                                                                                    | `24`          |         |
-| maxZoom         | 最大缩放级别                                                                                                            | `number`                                                                                    | `3`           |         |
-| minZoom         | 最小缩放级别                                                                                                            | `number`                                                                                    | `-4`          |         |
-| renderPageCover | 渲染自定义的页面覆盖内容                                                                                                | `(pageIndex: number, options: { viewport: PageViewport, zoom: number }) => React.ReactNode` | `-`           |         |
-| onPageScroll    | 页面渲染事件                                                                                                            | `typeof onScroll`                                                                           | `-`           |         |
-| emptyTips       | 未打开文件时的提示                                                                                                      | `ReactElement`                                                                              | `-`           | `0.0.4` |
-| onMarkChange    | 标注内容变化事件                                                                                                        | `(page: number, markData: ShapeDataType[]) => void`                                         | `-`           | `0.0.5` |
-| defaultTitle    | 默认展示的文件标题                                                                                                      | `string`                                                                                    | `-`           | `0.2.0` |
-| title           | 文件标题，当传入该属性时，`defaultTitle` 以及 `PDFViewerHandle.load` 和 `PDFViewerHandle.setTitle` 的设置标题都不生效。 | `string`                                                                                    | `-`           | `0.2.0` |
-| defaultZoom     | 默认缩放级别                                                                                                            | `number` / `'autoWidth'` / `'authHeight'`                                                   | `'autoWidth'` | `0.4.0` |
+| 属性名称              | 描述                                                                                                                    | 类型                                                                                        | 默认值        | 版本    |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------- | ------- |
+| pageGap               | 页面间距                                                                                                                | `number`                                                                                    | `24`          |         |
+| maxZoom               | 最大缩放级别                                                                                                            | `number`                                                                                    | `3`           |         |
+| minZoom               | 最小缩放级别                                                                                                            | `number`                                                                                    | `-4`          |         |
+| renderPageCover       | 渲染自定义的页面覆盖内容                                                                                                | `(pageIndex: number, options: { viewport: PageViewport, zoom: number }) => React.ReactNode` | `-`           |         |
+| onPageScroll          | 页面渲染事件                                                                                                            | `typeof onScroll`                                                                           | `-`           |         |
+| emptyTips             | 未打开文件时的提示                                                                                                      | `ReactElement`                                                                              | `-`           | `0.0.4` |
+| onMarkChange          | 标注内容变化事件                                                                                                        | `(page: number, markData: ShapeDataType[]) => void`                                         | `-`           | `0.0.5` |
+| defaultTitle          | 默认展示的文件标题                                                                                                      | `string`                                                                                    | `-`           | `0.2.0` |
+| title                 | 文件标题，当传入该属性时，`defaultTitle` 以及 `PDFViewerHandle.load` 和 `PDFViewerHandle.setTitle` 的设置标题都不生效。 | `string`                                                                                    | `-`           | `0.2.0` |
+| defaultZoom           | 默认缩放级别                                                                                                            | `number` / `'autoWidth'` / `'authHeight'`                                                   | `'autoWidth'` | `0.4.0` |
+| disabledPluginPainter | 禁用内置的绘图插件                                                                                                      | `boolean`                                                                                   | `false`       | `0.4.4` |
+| disabledPluginTooltip | 禁用内置的批注插件                                                                                                      | `boolean`                                                                                   | `false`       | `0.4.4` |
 
 ### PDFViewerHandle
 
@@ -100,3 +105,55 @@ export default () => {
 | setAllMarkData   | 更新所有页面的标注数据           | `(markData: ShapeDataType[][]) => void`                           | `0.0.5`                   |
 | clearAllMarkData | 清除所有页面的标注数据           | `() => void`                                                      | `0.0.6`                   |
 | setTitle         | 设置文件标题                     | `(title: string) => void`                                         | `0.2.0`                   |
+
+## API - PDFTooltipPlugin
+
+`0.4.4`
+
+批注插件，用于在 PDF 的页面上添加文本批注
+
+### 属性
+
+| 属性名称 | 描述                                                                                     | 类型         | 默认值 | 版本 |
+| -------- | ---------------------------------------------------------------------------------------- | ------------ | ------ | ---- |
+| onCheck  | 批注选中事件（这是一个内部事件，后面可能会有较大调整）                                   | `() => void` | `-`    |      |
+| onDraw   | 添加批注事件，当完成一个批注的添加、修改时触发（这是一个内部事件，后面可能会有较大调整） | `() => void` | `-`    |      |
+
+### PDFPainterPluginHandle
+
+使用 `ref` 以获得 `PDFPainterPluginHandle`。
+
+| 方法名称            | 描述                   | 类型                                                  | 版本 |
+| ------------------- | ---------------------- | ----------------------------------------------------- | ---- |
+| getAllTooltipData   | 获取所有批注内容       | `() => TooltipDataType[][]`                           |      |
+| setTooltipData      | 设置某一页的批注内容   | `(page: number, markData: TooltipDataType[]) => void` |      |
+| setAllTooltipData   | 设置所有页面的批注内容 | `(markData: TooltipDataType[][]) => void`             |      |
+| clearAllTooltipData | 清除所有页面的批注内容 | `() => void`                                          |      |
+| drawTooltip         | 开始绘制批注           | `(attr?: Record<string, any>) => void`                |      |
+| cancelDraw          | 取消绘图               | `() => void`                                          |      |
+| cancelCheck         | 取消所有选中           | `() => void`                                          |      |
+
+## API - PDFPainterPlugin
+
+绘图插件，用于在 PDF 的页面上绘图
+
+### 属性
+
+`0.4.4`
+
+| 属性名称     | 描述                                                                         | 类型                                                | 默认值 | 版本 |
+| ------------ | ---------------------------------------------------------------------------- | --------------------------------------------------- | ------ | ---- |
+| onCheck      | 绘图选中（这是一个内部事件，后面可能会有较大调整）                           | `(index:number) => void`                            | `-`    |      |
+| onMarkChange | 绘图完成事件，绘图添加、修改时触发（这是一个内部事件，后面可能会有较大调整） | `(page: number, markData: ShapeDataType[]) => void` | `-`    |      |
+
+### PDFPainterPluginHandle
+
+| 属性名称         | 属性详情               | 属性类型                                                    | 版本 |
+| ---------------- | ---------------------- | ----------------------------------------------------------- | ---- |
+| getAllMarkData   | 获取所有标注内容       | `() => ShapeDataType[][]`                                   |      |
+| setMarkData      | 设置某一页的标注内容   | `(page: number, markData: ShapeDataType[]) => void`         |      |
+| setAllMarkData   | 设置所有页面的标注内容 | `(markData: ShapeDataType[][]) => void`                     |      |
+| clearAllMarkData | 清除所有页面的标注内容 | `() => void`                                                |      |
+| drawMark         | 开始绘图               | `(shapeType: ShapeType, attr: Record<string, any>) => void` |      |
+| cancelDraw       | 取消绘图               | `() => void`                                                |      |
+| cancelCheck      | 取消所有选中           | `() => void`                                                |      |
