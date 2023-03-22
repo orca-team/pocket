@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import cn from 'classnames';
 import { useControllableValue, useDebounceFn, useEventListener, useMemoizedFn } from 'ahooks';
+import { usePan } from '@orca-fe/hooks';
 import useStyles from './TransformerBox.style';
 import type { Bounds, Point, ResizeType } from './utils';
 import { calcBoundsChange, getPointByEvent, getPointOffset, getResizeMode } from './utils';
@@ -70,7 +71,7 @@ const TransformerBox = (props: TransformerBoxProps) => {
 
   const setBounds = useMemoizedFn((param: React.SetStateAction<Partial<Bounds>>) => {
     _setBounds((bounds) => {
-      const newBounds = typeof param === 'function' ? param(bounds) : bounds;
+      const newBounds = typeof param === 'function' ? param(bounds) : param;
       return {
         ...bounds,
         ...newBounds,
@@ -84,15 +85,9 @@ const TransformerBox = (props: TransformerBoxProps) => {
     if (!_this.distanceLock || minDragDistance ** 2 < pointOffset.x ** 2 + pointOffset.y ** 2) {
       /* 解锁距离锁 */
       _this.distanceLock = false;
-      // TODO: 改为 Context
-      const getMousePoint = () => [0, 0];
-      const mousePoint = getMousePoint();
       const changedState = calcBoundsChange(
         _this.pointerDownBounds,
-        {
-          x: mousePoint[0],
-          y: mousePoint[1],
-        },
+        { ..._this.currentPoint },
         {
           x: Math.round(pointOffset.x / 1),
           y: Math.round(pointOffset.y / 1),
@@ -130,40 +125,44 @@ const TransformerBox = (props: TransformerBoxProps) => {
     }
   });
 
-  const handleMouseDown = (e: MouseEvent) => {
-    _this.distanceLock = true;
-    if (e.target instanceof HTMLDivElement) {
-      const draggable = onDragBefore(e);
-      if (draggable === false) {
-        return;
+  const rootRef = useRef<HTMLDivElement>(null);
+  usePan(({ target, start, startPosition, ev, offset, finish }) => {
+    const currentPoint = getPointByEvent(ev);
+    if (start) {
+      _this.distanceLock = true;
+      if (target instanceof HTMLDivElement) {
+        const draggable = onDragBefore(ev);
+        if (draggable === false) {
+          return false;
+        }
+
+        /* 加距离锁 */
+        _this.pointerDownPosition = currentPoint;
+        _this.currentPoint = _this.pointerDownPosition;
+        _this.pointerDownBounds = { top: _top, left: _left, width: _width, height: _height };
+        _this.resizeType = getResizeMode(Array.from(target.classList));
+        onChangeStart(ev, _this.resizeType);
+      } else {
+        return false;
       }
-
-      /* 加距离锁 */
-      _this.pointerDownPosition = getPointByEvent(e);
-      _this.currentPoint = _this.pointerDownPosition;
-      _this.pointerDownBounds = { top: _top, left: _left, width: _width, height: _height };
-      _this.resizeType = getResizeMode([...e.target.classList]);
-      onChangeStart(e, _this.resizeType);
     }
-  };
 
-  useEventListener('mousemove', (e) => {
+    if (finish) {
+      if (_this.pointerDownBounds) {
+        _this.pointerDownBounds = false;
+        _this.resizeType = undefined;
+        onChangeEnd();
+      }
+      return true;
+    }
+
     if (_this.pointerDownBounds && _this.resizeType) {
-      const currentPoint = getPointByEvent(e);
       _this.currentPoint = currentPoint;
       changeBounds();
     }
-  });
 
-  useEventListener('mouseup', (e) => {
-    if (_this.pointerDownBounds) {
-      _this.pointerDownBounds = false;
-      _this.resizeType = undefined;
-      onChangeEnd();
-    }
-  });
-
-  const rootRef = useRef<HTMLDivElement>(null);
+    return true;
+  }, rootRef);
 
   useEventListener(
     'dragstart',
@@ -172,8 +171,6 @@ const TransformerBox = (props: TransformerBoxProps) => {
     },
     { target: rootRef },
   );
-
-  useEventListener('mousedown', handleMouseDown, { target: rootRef });
 
   useEventListener(
     'mouseup',
@@ -263,6 +260,7 @@ const TransformerBox = (props: TransformerBoxProps) => {
 
   return (
     <div
+      ref={rootRef}
       className={cn(
         styles.root,
         {

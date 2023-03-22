@@ -14,7 +14,7 @@ export type Point = {
   y: number;
 };
 
-const PREFIX = 'abs-comp-border';
+const PREFIX = 'orca-transformer-box';
 const px = pc(PREFIX);
 
 const minSize = 10;
