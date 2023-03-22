@@ -19,21 +19,12 @@
       "@orca-fe/tools": ["./packages/tools/src"],
       "@orca-fe/hooks": ["./packages/hooks/src"],
       "@orca-fe/pdf-viewer": ["./packages/pdf-viewer/src"],
-      "@orca-fe/painter": ["./packages/painter/src"]
+      "@orca-fe/painter": ["./packages/painter/src"],
+      "@orca-fe/transformer": ["./packages/transformer/src"]
     },
     "outDir": "./lib",
     "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*", "packages/**/*", ".eslintrc.js"],
-  "exclude": [
-    "node_modules",
-    "lib",
-    "es",
-    "dist",
-    "typings",
-    "**/__test__",
-    "test",
-    "docs",
-    "tests"
-  ]
+  "exclude": ["node_modules", "lib", "es", "dist", "typings", "**/__test__", "test", "docs", "tests"]
 }

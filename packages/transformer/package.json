@@ -1,0 +1,69 @@
+{
+  "name": "@orca-fe/transformer",
+  "version": "0.0.0",
+  "description": "Transformer Container",
+  "keywords": [
+    "react",
+    "view",
+    "ui",
+    "antd",
+    "components",
+    "lib",
+    "orca-fe",
+    "orca",
+    "orca-team"
+  ],
+  "author": "NicoKam",
+  "homepage": "https://orca.nicokam.work/",
+  "license": "MIT",
+  "types": "es/index.d.ts",
+  "module": "es/index.js",
+  "main": "lib/index.js",
+  "files": [
+    "dist",
+    "es",
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orca-team/pocket.git"
+  },
+  "scripts": {
+    "build": "father build",
+    "prepublishOnly": "npm run build",
+    "autod": "autod",
+    "clear": "rimraf lib es"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.21.0",
+    "@orca-fe/hooks": "^1.2.0",
+    "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
+    "@orca-fe/pocket": "^1.27.2",
+    "@orca-fe/simple-jss": "^0.0.1",
+    "@orca-fe/tools": "^0.8.0",
+    "ahooks": "^3.7.5",
+    "classnames": "^2.3.2",
+    "color": "^4.2.3",
+    "konva": "^8.4.2",
+    "rc-tooltip": "^5.3.1",
+    "rc-trigger": "^5.3.4",
+    "react-colorful": "^5.6.1",
+    "tslib": "^2.5.0"
+  },
+  "peerDependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "antd": ">=4.23.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "react-router": ">=5.0.0",
+    "react-router-dom": ">=5.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.28",
+    "autod": "^3.1.2"
+  }
+}
