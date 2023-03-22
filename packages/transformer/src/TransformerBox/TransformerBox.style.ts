@@ -23,6 +23,10 @@ export default createUseStyles(
         border: '1px solid #1199ff',
         zIndex: 1,
       },
+
+      '& $scaleHandle': {
+        visibility: 'visible',
+      },
     },
     scaleHandle: {
       width: 6,

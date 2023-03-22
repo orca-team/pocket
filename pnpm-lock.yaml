@@ -90,7 +90,7 @@ importers:
       '@babel/runtime': ^7.21.0
       '@orca-fe/hooks': ^1.2.0
       '@orca-fe/jss-plugin-auto-prefix': ^0.0.1
-      '@orca-fe/pocket': ^1.27.0
+      '@orca-fe/pocket': ^1.27.2
       '@orca-fe/simple-jss': ^0.0.1
       '@orca-fe/tools': ^0.8.0
       '@types/react': ^18.0.28
@@ -127,8 +127,8 @@ importers:
       '@babel/runtime': ^7.21.0
       '@orca-fe/hooks': ^1.2.0
       '@orca-fe/jss-plugin-auto-prefix': ^0.0.1
-      '@orca-fe/painter': ^0.0.6
-      '@orca-fe/pocket': ^1.27.0
+      '@orca-fe/painter': ^0.0.8
+      '@orca-fe/pocket': ^1.27.2
       '@orca-fe/simple-jss': ^0.0.1
       '@orca-fe/tools': ^0.8.0
       '@types/react': ^18.0.28
@@ -161,7 +161,7 @@ importers:
     specifiers:
       '@orca-fe/hooks': ^1.2.0
       '@orca-fe/jss-plugin-auto-prefix': ^0.0.1
-      '@orca-fe/pocket': ^1.27.0
+      '@orca-fe/pocket': ^1.27.2
       '@orca-fe/tools': ^0.8.0
       '@rc-component/trigger': ^1.5.7
       '@types/react': ^18.0.28
@@ -180,7 +180,8 @@ importers:
       mjolnir.js: ^2.7.1
       prefix-classnames: ^0.0.7
       rc-animate: ^3.1.1
-      rc-tooltip: ^5.2.2
+      rc-slider: ^10.1.1
+      rc-tooltip: ^6.0.1
       react-countup: ^6.4.2
       react-transition-group: ^4.4.5
       rfdc: ^1.3.0
@@ -204,7 +205,8 @@ importers:
       mjolnir.js: 2.7.1
       prefix-classnames: 0.0.7
       rc-animate: 3.1.1
-      rc-tooltip: 5.3.1
+      rc-slider: 10.1.1
+      rc-tooltip: 6.0.1
       react-countup: 6.4.2
       react-transition-group: 4.4.5
       rfdc: 1.3.0
@@ -219,6 +221,27 @@ importers:
       '@babel/runtime': ^7.21.0
     dependencies:
       '@babel/runtime': 7.21.0
+
+  packages/transformer:
+    specifiers:
+      '@orca-fe/jss-plugin-auto-prefix': ^0.0.1
+      '@orca-fe/simple-jss': ^0.0.1
+      '@types/react': ^18.0.28
+      ahooks: ^3.7.5
+      autod: ^3.1.2
+      classnames: ^2.3.2
+      prefix-classnames: ^0.0.7
+      tslib: ^2.5.0
+    dependencies:
+      '@orca-fe/jss-plugin-auto-prefix': 0.0.1
+      '@orca-fe/simple-jss': 0.0.1
+      ahooks: 3.7.5
+      classnames: 2.3.2
+      prefix-classnames: 0.0.7
+      tslib: 2.5.0
+    devDependencies:
+      '@types/react': 18.0.28
+      autod: 3.1.2
 
 packages:
 
@@ -1776,7 +1799,7 @@ packages:
     resolution: {integrity: sha512-WOSetDV3YPxbkVJAdv/bqExJjmcdCi/vpCJh3NfQOy1X15vHMSiMioXIcGekXDJJYhqGUMDo9e337mh508foAA==}
     dependencies:
       '@types/history': 5.0.0
-      '@types/react': 16.14.35
+      '@types/react': 18.0.28
       '@types/react-router': 5.1.20
     dev: false
 
@@ -1784,7 +1807,7 @@ packages:
     resolution: {integrity: sha512-db1mx37a1EJDf1XeX8jJN7R3PZABmJQXR8r28yUjVMFSjkmnQo6X6pOEEmNl+Tp2gYQOGPdYbFIipBtdElZ3Yg==}
     dependencies:
       '@types/history': 4.7.11
-      '@types/react': 16.14.35
+      '@types/react': 18.0.28
       '@types/react-router': 5.1.20
     dev: false
 
@@ -1792,7 +1815,7 @@ packages:
     resolution: {integrity: sha512-D5mHD6TbdV/DNHYsnwBTv+y73ei+mMjrkGrla86HthE4/PVvL1J94Bu3qABU+COXzpL23T1EZapVVpwHuBXiUg==}
     dependencies:
       '@types/history': 5.0.0
-      '@types/react': 16.14.35
+      '@types/react': 18.0.28
       '@types/react-router': 5.1.20
     dev: false
 
@@ -1800,7 +1823,7 @@ packages:
     resolution: {integrity: sha512-0bhXQwHYfMeJlCh7mGhc0VJTRm0Gk+Z8T00aiP4702mDUuLs9SMhnd2DitpjWFjdOecx2UXtICK14H9iMnziGA==}
     dependencies:
       '@types/history': 5.0.0
-      '@types/react': 16.14.35
+      '@types/react': 18.0.28
     dev: false
 
   /@types/react-router/5.1.20:
@@ -10765,6 +10788,18 @@ packages:
       shallowequal: 1.1.0
     dev: false
 
+  /rc-slider/10.1.1:
+    resolution: {integrity: sha512-gn8oXazZISEhnmRinI89Z/JD/joAaM35jp+gDtIVSTD/JJMCCBqThqLk1SVJmvtfeiEF/kKaFY0+qt4SDHFUDw==}
+    engines: {node: '>=8.x'}
+    peerDependencies:
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
+    dependencies:
+      '@babel/runtime': 7.21.0
+      classnames: 2.3.2
+      rc-util: 5.29.2
+    dev: false
+
   /rc-steps/5.0.0_wcqkhtmu7mswc6yz4uyexck3ty:
     resolution: {integrity: sha512-9TgRvnVYirdhbV0C3syJFj9EhCRqoJAsxt4i1rED5o8/ZcSv5TLIYyo4H8MCjLPvbe2R+oBAm/IYBEtC+OS1Rw==}
     engines: {node: '>=8.x'}
@@ -10880,6 +10915,17 @@ packages:
       '@babel/runtime': 7.21.0
       classnames: 2.3.2
       rc-trigger: 5.3.4
+    dev: false
+
+  /rc-tooltip/6.0.1:
+    resolution: {integrity: sha512-MdvPlsD1fDSxKp9+HjXrc/CxLmA/s11QYIh1R7aExxfodKP7CZA++DG1AjrW80F8IUdHYcR43HAm0Y2BYPelHA==}
+    peerDependencies:
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
+    dependencies:
+      '@babel/runtime': 7.21.0
+      '@rc-component/trigger': 1.5.7
+      classnames: 2.3.2
     dev: false
 
   /rc-tree-select/5.5.5_wcqkhtmu7mswc6yz4uyexck3ty:
