@@ -1,5 +1,6 @@
-import type { mat3 } from 'gl-matrix';
+import { mat3, vec2 } from 'gl-matrix';
 import pc from 'prefix-classnames';
+import { roundBy } from '@orca-fe/tools';
 
 export type ResizeType = 'keyboard' | 'rotate' | 'move' | 'top' | 'left' | 'bottom' | 'right' | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
 
@@ -60,12 +61,13 @@ export function deg(radians: number): number {
   return (radians * 180) / Math.PI;
 }
 
+const round = roundBy(0.001);
 export function getTransformInfo(matrix: mat3): { x: number; y: number; width: number; height: number; rotate: number } {
   const x = matrix[6];
   const y = matrix[7];
-  const width = Math.sqrt(matrix[0] ** 2 + matrix[1] ** 2);
-  const height = Math.sqrt(matrix[3] ** 2 + matrix[4] ** 2);
-  const rotate = deg(Math.atan2(matrix[1], matrix[0]));
+  const width = round(Math.sqrt(matrix[0] ** 2 + matrix[1] ** 2));
+  const height = round(Math.sqrt(matrix[3] ** 2 + matrix[4] ** 2));
+  const rotate = round(deg(Math.atan2(matrix[1], matrix[0])));
   return { x, y, width, height, rotate };
 }
 
@@ -75,37 +77,42 @@ export function getTransformInfo(matrix: mat3): { x: number; y: number; width: n
  * @param pointOffset 鼠标偏移
  * @param options
  */
-// export function calcBoundsChangeNew(startBounds: Bounds, pointOffset: Point, options: CalcPropsChangeOptions = {}): Partial<Bounds> {
-//   const { top, left, width, height, rotate = 0 } = startBounds;
-//   // const mat = mat3.create();
-//   // const translateMat = mat3.create();
-//   // mat3.translate(translateMat, translateMat, vec2.fromValues(left, top));
-//   // const scaleMat = mat3.create();
-//   // mat3.scale(scaleMat, scaleMat, vec2.fromValues(width, height));
-//   // const rotateMat = mat3.create();
-//   // mat3.rotate(rotateMat, rotateMat, rad(rotate));
-//   //
-//   // mat3.multiply(mat, mat, translateMat);
-//   // mat3.multiply(mat, mat, scaleMat);
-//   // mat3.multiply(mat, mat, rotateMat);
-//
-//   const cos = Math.cos(rad(rotate));
-//   const sin = Math.sin(rad(rotate));
-//   const mat = mat3.fromValues(
-//     width * cos,
-//     width * sin,
-//     0,
-//     -height * sin,
-//     height * cos,
-//     0,
-//     left,
-//     top,
-//     1,
-//   );
-//
-//   // console.log(getTransformInfo(mat));
-// }
+export function calcBoundsChangeNew(startBounds: Bounds, pointOffset: Point, options: CalcPropsChangeOptions = {}) {
+  const { top, left, width, height, rotate = 0 } = startBounds;
+  const mat = mat3.create();
+  const translateMat = mat3.create();
+  mat3.translate(translateMat, translateMat, vec2.fromValues(left, top));
+  const scaleMat = mat3.create();
+  mat3.scale(scaleMat, scaleMat, vec2.fromValues(width, height));
+  const rotateMat = mat3.create();
+  mat3.rotate(rotateMat, rotateMat, rad(rotate));
 
+  mat3.multiply(mat, mat, translateMat);
+  mat3.multiply(mat, mat, rotateMat);
+  mat3.multiply(mat, mat, scaleMat);
+
+  // const cos = Math.cos(rad(rotate));
+  // const sin = Math.sin(rad(rotate));
+  // const mat = mat3.fromValues(
+  //   width * cos,
+  //   width * sin,
+  //   0,
+  //   -height * sin,
+  //   height * cos,
+  //   0,
+  //   left,
+  //   top,
+  //   1,
+  // );
+
+  mat3.multiply(mat, mat, mat3.invert(mat3.create(), scaleMat));
+  mat3.rotate(mat, mat, rad(10));
+  mat3.multiply(mat, mat, scaleMat);
+
+  // console.log(getTransformInfo(mat));
+}
+
+// window.calcBoundsChangeNew=calcBoundsChangeNew;
 /**
  * 计算 bounds 的变化
  * @param startBounds 原始 bounds
