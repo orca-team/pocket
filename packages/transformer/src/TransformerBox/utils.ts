@@ -1,3 +1,4 @@
+import type { mat3 } from 'gl-matrix';
 import pc from 'prefix-classnames';
 
 export type ResizeType = 'keyboard' | 'rotate' | 'move' | 'top' | 'left' | 'bottom' | 'right' | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
@@ -7,6 +8,7 @@ export type Bounds = {
   left: number;
   width: number;
   height: number;
+  rotate?: number;
 };
 
 export type Point = {
@@ -38,6 +40,8 @@ export function getResizeMode(classList: string[]): ResizeType {
     return 'bottomLeft';
   } else if (classList.includes(px('scale-handle-bottom-right'))) {
     return 'bottomRight';
+  } else if (classList.includes(px('rotate-handle'))) {
+    return 'rotate';
   }
   return 'move';
 }
@@ -48,13 +52,67 @@ export type CalcPropsChangeOptions = {
   symmetrical?: boolean;
 };
 
+export function rad(degrees: number): number {
+  return (degrees * Math.PI) / 180;
+}
+
+export function deg(radians: number): number {
+  return (radians * 180) / Math.PI;
+}
+
+export function getTransformInfo(matrix: mat3): { x: number; y: number; width: number; height: number; rotate: number } {
+  const x = matrix[6];
+  const y = matrix[7];
+  const width = Math.sqrt(matrix[0] ** 2 + matrix[1] ** 2);
+  const height = Math.sqrt(matrix[3] ** 2 + matrix[4] ** 2);
+  const rotate = deg(Math.atan2(matrix[1], matrix[0]));
+  return { x, y, width, height, rotate };
+}
+
 /**
  * 计算 bounds 的变化
  * @param startBounds 原始 bounds
  * @param pointOffset 鼠标偏移
  * @param options
  */
-export const calcBoundsChange = (startBounds: Bounds, currentPoint: Point, pointOffset: Point, options: CalcPropsChangeOptions = {}): Partial<Bounds> => {
+// export function calcBoundsChangeNew(startBounds: Bounds, pointOffset: Point, options: CalcPropsChangeOptions = {}): Partial<Bounds> {
+//   const { top, left, width, height, rotate = 0 } = startBounds;
+//   // const mat = mat3.create();
+//   // const translateMat = mat3.create();
+//   // mat3.translate(translateMat, translateMat, vec2.fromValues(left, top));
+//   // const scaleMat = mat3.create();
+//   // mat3.scale(scaleMat, scaleMat, vec2.fromValues(width, height));
+//   // const rotateMat = mat3.create();
+//   // mat3.rotate(rotateMat, rotateMat, rad(rotate));
+//   //
+//   // mat3.multiply(mat, mat, translateMat);
+//   // mat3.multiply(mat, mat, scaleMat);
+//   // mat3.multiply(mat, mat, rotateMat);
+//
+//   const cos = Math.cos(rad(rotate));
+//   const sin = Math.sin(rad(rotate));
+//   const mat = mat3.fromValues(
+//     width * cos,
+//     width * sin,
+//     0,
+//     -height * sin,
+//     height * cos,
+//     0,
+//     left,
+//     top,
+//     1,
+//   );
+//
+//   // console.log(getTransformInfo(mat));
+// }
+
+/**
+ * 计算 bounds 的变化
+ * @param startBounds 原始 bounds
+ * @param pointOffset 鼠标偏移
+ * @param options
+ */
+export const calcBoundsChange = (startBounds: Bounds, _currentPoint: Point, pointOffset: Point, options: CalcPropsChangeOptions = {}): Partial<Bounds> => {
   const { resizeType = 'move', eqRatio = false, symmetrical = false } = options;
   const { x, y } = pointOffset;
   const { top, left, width, height } = startBounds;
@@ -68,7 +126,23 @@ export const calcBoundsChange = (startBounds: Bounds, currentPoint: Point, point
     x: startBounds.left + 0.5 * startBounds.width,
     y: startBounds.top + 0.5 * startBounds.height,
   };
+  // 当前位置（需要基于 pointOffset 算出来
+  const currentPoint = { ...centerPoint };
+  // 基准点，缩放的基准
   const basePoint = { ...centerPoint };
+
+  // 如果是旋转操作
+  if (resizeType === 'rotate') {
+    currentPoint.x = centerPoint.x + pointOffset.x;
+    currentPoint.y = startBounds.top - 32 + pointOffset.y;
+    const x = currentPoint.x - centerPoint.x;
+    const y = currentPoint.y - centerPoint.y;
+    const rotate = (Math.atan2(x, -y) / Math.PI) * 180;
+    return {
+      ...startBounds,
+      rotate,
+    };
+  }
 
   // 根据鼠标偏移，在不影响最小值的情况下，计算出上下左右的变化范围
   const diffRight = Math.min(width - minSize, x);
@@ -90,21 +164,33 @@ export const calcBoundsChange = (startBounds: Bounds, currentPoint: Point, point
   const affectVertical = affectTop || affectBottom;
   const affectHorizontal = affectLeft || affectRight;
 
-  if (!symmetrical) {
-    // 非中心点变化，重新计算 basePoint
-    if (affectTop) {
-      basePoint.y = startBounds.top + startBounds.height;
-    }
-    if (affectBottom) {
-      basePoint.y = startBounds.top;
-    }
-    if (affectLeft) {
-      basePoint.x = startBounds.left + startBounds.width;
-    }
-    if (affectRight) {
-      basePoint.x = startBounds.left;
-    }
+  // 计算 basePoint 位置
+  // currentPoint 刚好和 basePoint 取反
+  if (affectTop) {
+    basePoint.y = startBounds.top + startBounds.height;
+    currentPoint.y = startBounds.top;
   }
+  if (affectBottom) {
+    basePoint.y = startBounds.top;
+    currentPoint.y = startBounds.top + startBounds.height;
+  }
+  if (affectLeft) {
+    basePoint.x = startBounds.left + startBounds.width;
+    currentPoint.x = startBounds.left;
+  }
+  if (affectRight) {
+    basePoint.x = startBounds.left;
+    currentPoint.x = startBounds.left + startBounds.width;
+  }
+  if (symmetrical) {
+    // 如果是以中心为基点变化，则 basePoint 就是 centerPoint
+    basePoint.x = centerPoint.x;
+    basePoint.y = centerPoint.y;
+  }
+
+  // currentPoint 偏移
+  currentPoint.x += pointOffset.x;
+  currentPoint.y += pointOffset.y;
 
   // 计算得出需要缩放的比例
   const xRatio = ((symmetrical ? 2 : 1) * Math.max(minSize, Math.abs(currentPoint.x - basePoint.x))) / startBounds.width;
@@ -113,7 +199,7 @@ export const calcBoundsChange = (startBounds: Bounds, currentPoint: Point, point
   if (eqRatio) {
     // 等比
     // eslint-disable-next-line no-nested-ternary
-    let ratio = Math.min(xRatio, yRatio);
+    let ratio = Math.max(xRatio, yRatio);
     if (affectVertical && !affectHorizontal) {
       ratio = yRatio;
     }

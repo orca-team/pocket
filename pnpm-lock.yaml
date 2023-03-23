@@ -230,6 +230,7 @@ importers:
       ahooks: ^3.7.5
       autod: ^3.1.2
       classnames: ^2.3.2
+      gl-matrix: ^3.4.3
       prefix-classnames: ^0.0.7
       tslib: ^2.5.0
     dependencies:
@@ -237,6 +238,7 @@ importers:
       '@orca-fe/simple-jss': 0.0.1
       ahooks: 3.7.5
       classnames: 2.3.2
+      gl-matrix: 3.4.3
       prefix-classnames: 0.0.7
       tslib: 2.5.0
     devDependencies:
@@ -6421,6 +6423,10 @@ packages:
 
   /github-slugger/1.5.0:
     resolution: {integrity: sha512-wIh+gKBI9Nshz2o46B0B3f5k/W+WI9ZAv6y5Dn5WJ5SK1t0TnDimB4WE5rmTD05ZAIn8HALCZVmCsvj0w0v0lw==}
+    dev: false
+
+  /gl-matrix/3.4.3:
+    resolution: {integrity: sha512-wcCp8vu8FT22BnvKVPjXa/ICBWRq/zjFfdofZy1WSpQZpphblv12/bOQLBC1rMM7SGOFS9ltVmKOHil5+Ml7gA==}
     dev: false
 
   /glob-parent/5.1.2:
