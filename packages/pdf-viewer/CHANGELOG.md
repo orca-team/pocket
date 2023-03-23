@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 0.4.5
+
+### Patch Changes
+
+- 增加 `onZoomChange` 事件
+
 ## 0.4.4
 
 ### Patch Changes

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { clamp } from '@orca-fe/tools';
+import { clamp, roundBy } from '@orca-fe/tools';
 import { useDebounceEffect, useDebounceFn, useEventListener, useMemoizedFn } from 'ahooks';
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useGetState, useSizeListener } from '@orca-fe/hooks';
@@ -20,6 +20,8 @@ import PDFTooltipPlugin from './plugins/PDFTooltipPlugin';
 const pdfJs: any = _pdfJS;
 
 const ef = () => undefined;
+
+const round001 = roundBy(0.001);
 
 function mergeArrays<T, U>(arr1: T[][] = [], arr2: U[][] = []): (T | U)[][] {
   const maxLength = Math.max(arr1.length, arr2.length);
@@ -74,6 +76,9 @@ export interface PDFViewerProps extends Omit<React.HTMLAttributes<HTMLDivElement
 
   /** 禁用内置的批注组件 */
   disabledPluginTooltip?: boolean;
+
+  /** 缩放事件 */
+  onZoomChange?: (zoom: number) => void;
 }
 
 const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef) => {
@@ -84,6 +89,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     minZoom = -4,
     renderPageCover = ef,
     onMarkChange = ef,
+    onZoomChange = ef,
     onPageScroll,
     children,
     emptyTips = defaultEmptyTips,
@@ -145,6 +151,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   const [loading, setLoading] = useState(false);
 
   const setZoomWithScrollLock = useMemoizedFn((newZoom: number) => {
+    const zoom = getZoom();
+    if (newZoom === zoom) return;
     const dom = pageContainerRef.current;
     if (dom) {
       const { scrollTop, scrollLeft } = dom;
@@ -158,6 +166,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       }
       dom.scrollTop = newScrollTop;
       dom.scrollLeft = newScrollLeft;
+      onZoomChange(newZoom);
     }
   });
 
@@ -207,7 +216,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
         }
       }
 
-      newZoom = clamp(newZoom, -4, 3);
+      newZoom = round001(clamp(newZoom, -4, 3));
       if (newZoom !== zoom) {
         setZoomWithScrollLock(newZoom);
       }
@@ -402,11 +411,11 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
           };
         }
 
-        const newZoom = clamp(zoom - clamp(ev.deltaY, -40, 40) * 0.01, minZoom, maxZoom);
+        const newZoom = round001(clamp(zoom - clamp(ev.deltaY, -40, 40) * 0.01, minZoom, maxZoom));
+        if (newZoom === zoom) return;
         _this.zooming = true;
         setZoomMode(false);
         setZoom(newZoom);
-
         if (_this.mousePositionBeforeWheel) {
           // 更新滾動條高度
           const { x: fullScrollLeft, y: fullScrollTop, zoom: originZoom } = _this.mousePositionBeforeWheel;
@@ -421,6 +430,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
           dom.scrollTop = newScrollTop;
           dom.scrollLeft = newScrollLeft;
         }
+        onZoomChange(newZoom);
       } else {
         _this.mousePositionBeforeWheel = undefined;
       }
