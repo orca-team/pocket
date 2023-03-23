@@ -231,10 +231,11 @@ importers:
       autod: ^3.1.2
       classnames: ^2.3.2
       gl-matrix: ^3.4.3
+      jss: ^10.10.0
       prefix-classnames: ^0.0.7
       tslib: ^2.5.0
     dependencies:
-      '@orca-fe/jss-plugin-auto-prefix': 0.0.1
+      '@orca-fe/jss-plugin-auto-prefix': 0.0.1_jss@10.10.0
       '@orca-fe/simple-jss': 0.0.1
       ahooks: 3.7.5
       classnames: 2.3.2
@@ -244,6 +245,7 @@ importers:
     devDependencies:
       '@types/react': 18.0.28
       autod: 3.1.2
+      jss: 10.10.0
 
 packages:
 
