@@ -258,6 +258,8 @@ const TransformerBox = (props: TransformerBoxProps) => {
     }
   });
 
+  const { rotate, ...basePosition } = bounds;
+
   return (
     <div
       ref={rootRef}
@@ -271,7 +273,8 @@ const TransformerBox = (props: TransformerBoxProps) => {
       )}
       style={{
         ...style,
-        ...bounds,
+        ...basePosition,
+        transform: `rotate(${rotate || 0}deg)`,
       }}
       {...otherProps}
     >
@@ -284,6 +287,7 @@ const TransformerBox = (props: TransformerBoxProps) => {
       <div className={cn(styles.scaleHandle, styles.scaleHandleTopRight)} />
       <div className={cn(styles.scaleHandle, styles.scaleHandleBottomLeft)} />
       <div className={cn(styles.scaleHandle, styles.scaleHandleBottomRight)} />
+      <div className={cn(styles.scaleHandle, styles.rotateHandle)} />
     </div>
   );
 };

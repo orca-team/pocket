@@ -29,13 +29,21 @@ export default createUseStyles(
       },
     },
     scaleHandle: {
-      width: 6,
-      height: 6,
+      width: 8,
+      height: 8,
       border: '1px solid #0081ff',
       backgroundColor: 'white',
       transform: 'translate(-50%, -50%)',
       position: 'absolute',
       visibility: 'hidden',
+    },
+    rotateHandle: {
+      width: 10,
+      height: 10,
+      borderRadius: '50%',
+      left: '50%',
+      top: -32,
+      cursor: 'move',
     },
     scaleHandleCenter: {
       top: '50%',

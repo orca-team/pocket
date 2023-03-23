@@ -43,8 +43,9 @@
     "@orca-fe/simple-jss": "^0.0.1",
     "ahooks": "^3.7.5",
     "classnames": "^2.3.2",
-    "tslib": "^2.5.0",
-    "prefix-classnames": "^0.0.7"
+    "gl-matrix": "^3.4.3",
+    "prefix-classnames": "^0.0.7",
+    "tslib": "^2.5.0"
   },
   "peerDependencies": {
     "@ant-design/icons": "^4.7.0",
