@@ -36,6 +36,8 @@ group:
 
 ### 重要更新
 
+- `0.4.5`
+  - 增加 `onZoomChange` 事件
 - `0.4.4`
   - 将内置的绘图插件和批注插件导出
   - 支持主动关闭内置插件
@@ -65,6 +67,7 @@ group:
 | defaultZoom           | 默认缩放级别                                                                                                            | `number` / `'autoWidth'` / `'authHeight'`                                                   | `'autoWidth'` | `0.4.0` |
 | disabledPluginPainter | 禁用内置的绘图插件                                                                                                      | `boolean`                                                                                   | `false`       | `0.4.4` |
 | disabledPluginTooltip | 禁用内置的批注插件                                                                                                      | `boolean`                                                                                   | `false`       | `0.4.4` |
+| onZoomChange          | 缩放事件                                                                                                                | `(zoom: number) => void`                                                                    | `-`           | `0.4.5` |
 
 ### PDFViewerHandle
 
