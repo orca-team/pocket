@@ -11,6 +11,7 @@ export default createUseStyles(
       width: 100,
       height: 150,
       border: '1px solid rgba(0, 129, 255, 0)',
+      transformOrigin: 'left top',
       '&:hover': {
         border: '1px solid #66ccff',
       },

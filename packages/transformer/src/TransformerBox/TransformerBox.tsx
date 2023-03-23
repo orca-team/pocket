@@ -87,7 +87,6 @@ const TransformerBox = (props: TransformerBoxProps) => {
       _this.distanceLock = false;
       const changedState = calcBoundsChange(
         _this.pointerDownBounds,
-        { ..._this.currentPoint },
         {
           x: Math.round(pointOffset.x / 1),
           y: Math.round(pointOffset.y / 1),
@@ -139,7 +138,7 @@ const TransformerBox = (props: TransformerBoxProps) => {
         /* 加距离锁 */
         _this.pointerDownPosition = currentPoint;
         _this.currentPoint = _this.pointerDownPosition;
-        _this.pointerDownBounds = { top: _top, left: _left, width: _width, height: _height };
+        _this.pointerDownBounds = { ...bounds };
         _this.resizeType = getResizeMode(Array.from(target.classList));
         onChangeStart(ev, _this.resizeType);
       } else {
