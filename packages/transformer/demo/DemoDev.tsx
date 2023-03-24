@@ -4,21 +4,44 @@
  * debug: true
  */
 
-import React from 'react';
-import { TransformerBox } from '@orca-fe/transformer';
+import React, { useState } from 'react';
+import type { Bounds } from '@orca-fe/transformer';
+import { TransformerLayout } from '@orca-fe/transformer';
 
-const Demo1 = () => (
-  <div style={{ position: 'relative', height: 300, backgroundColor: '#EEE' }}>
-    <TransformerBox
-      checked
-      defaultBounds={{
-        left: 10,
-        top: 20,
-        width: 100,
+type DataType = {
+  color?: string;
+  bounds: Bounds;
+};
+
+const Demo = () => {
+  const [data, setData] = useState<DataType[]>([
+    {
+      color: '#BEA',
+      bounds: {
+        left: 50,
+        top: 30,
+        width: 120,
+        height: 70,
+        rotate: 0,
+      },
+    },
+    {
+      color: '#EBA',
+      bounds: {
+        left: 200,
+        top: 50,
+        width: 200,
         height: 150,
-      }}
-    />
-  </div>
-);
+        rotate: 30,
+      },
+    },
+  ]);
 
-export default Demo1;
+  return (
+    <TransformerLayout data={data} onDataChange={setData} style={{ position: 'relative', height: 300, backgroundColor: '#EEE' }}>
+      {({ color = '#999' }) => <div style={{ height: '100%', backgroundColor: color }} />}
+    </TransformerLayout>
+  );
+};
+
+export default Demo;

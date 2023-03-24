@@ -1,7 +1,7 @@
 import { createUseStyles } from '@orca-fe/simple-jss';
 import jssAutoPrefix from '@orca-fe/jss-plugin-auto-prefix';
 
-const prefix = 'orca-transformer-stage';
+const prefix = 'orca-transformer-layout';
 
 export default createUseStyles(
   {
