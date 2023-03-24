@@ -2,6 +2,9 @@ import { mat3, vec2 } from 'gl-matrix';
 import pc from 'prefix-classnames';
 import { roundBy } from '@orca-fe/tools';
 
+const roundBy5 = roundBy(5);
+const roundBy45 = roundBy(45);
+
 export type ResizeType = 'keyboard' | 'rotate' | 'move' | 'top' | 'left' | 'bottom' | 'right' | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
 
 export type Bounds = {
@@ -63,6 +66,11 @@ export function deg(radians: number): number {
 
 const round = roundBy(0.001);
 
+/**
+ * 获取变换信息（位置和旋转）
+ * @param matrix 变换矩阵
+ * @returns { x: number; y: number; rotate: number } 变换信息
+ */
 export function getTransformInfo(matrix: mat3): { x: number; y: number; rotate: number } {
   const x = matrix[6];
   const y = matrix[7];
@@ -72,6 +80,13 @@ export function getTransformInfo(matrix: mat3): { x: number; y: number; rotate: 
   return { x, y, rotate };
 }
 
+/**
+ * 旋转矩阵 matrix 绕点 point 旋转 angle 角度
+ * @param matrix 变换矩阵
+ * @param point 旋转点
+ * @param angle 旋转角度
+ * @returns 旋转后的矩阵
+ */
 function rotateMatrixAroundPoint(matrix: mat3, point: Point, angle: number): mat3 {
   const translationMatrix = mat3.fromTranslation(mat3.create(), [point.x, point.y]);
   const rotationMatrix = mat3.fromRotation(mat3.create(), angle);
@@ -83,11 +98,23 @@ function rotateMatrixAroundPoint(matrix: mat3, point: Point, angle: number): mat
   return resultMatrix;
 }
 
+/**
+ * 将点投影到矩阵上
+ * @param point 点
+ * @param matrix 矩阵
+ * @returns 投影后的点
+ */
 function project(point: Point, matrix: mat3): Point {
   const [x, y] = vec2.transformMat3(vec2.create(), [point.x, point.y], matrix);
   return { x, y };
 }
 
+/**
+ * 将点反投影到矩阵上
+ * @param point 点
+ * @param matrix 矩阵
+ * @returns 反投影后的点
+ */
 function unproject(point: Point, matrix: mat3): Point {
   const [x, y] = vec2.transformMat3(vec2.create(), [point.x, point.y], mat3.invert(mat3.create(), matrix));
   return { x, y };
@@ -125,10 +152,14 @@ export function calcBoundsChange(startBounds: Bounds, pointOffset: Point, option
     const rotateHandlePoint = project({ x: 0.5 * width, y: -30 }, mat);
     const cx = rotateHandlePoint.x + x - centerPoint.x;
     const cy = rotateHandlePoint.y + y - centerPoint.y;
-    const newRotate = deg(Math.atan2(cx, -cy));
-    if (newRotate === rotate) {
-      return startBounds;
+    let newRotate = Math.round(deg(Math.atan2(cx, -cy)));
+
+    if (eqRatio) {
+      newRotate = roundBy45(newRotate);
+    } else if (roundBy5(newRotate) % 90 === 0) {
+      newRotate = roundBy5(newRotate);
     }
+
     // 绕中心点旋转
     const matAfterRotate = rotateMatrixAroundPoint(mat, centerPoint, rad(newRotate - rotate));
     const changedBounds = getTransformInfo(matAfterRotate);

@@ -27,6 +27,7 @@ export interface TransformerBoxProps extends Omit<React.HTMLAttributes<HTMLDivEl
   onBoundsChange?: (bounds: Bounds) => void;
   onChangeEnd?: () => void;
   onClickFixed?: (e: MouseEvent) => void;
+  controlledMode?: boolean;
 }
 
 const TransformerBox = (props: TransformerBoxProps) => {
@@ -39,11 +40,12 @@ const TransformerBox = (props: TransformerBoxProps) => {
     disabled,
     minDragDistance = 4,
     onDragBefore = ef,
-    onChangeEnd = ef,
+    onChangeEnd: _onChangeEnd = ef,
     onChangeStart = ef,
     onClickFixed = ef,
     checked,
     style,
+    controlledMode,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -61,22 +63,37 @@ const TransformerBox = (props: TransformerBoxProps) => {
     shiftDown: false,
   });
 
-  const [bounds, _setBounds] = useControllableValue<Bounds>(props, {
+  const [_bounds, _setBounds] = useControllableValue<Bounds>(props, {
     defaultValuePropName: 'defaultBounds',
     valuePropName: 'bounds',
     trigger: 'onBoundsChange',
   });
 
+  const [tmpBounds, setTmpBounds] = useState<Bounds | null>(null);
+
+  const bounds = tmpBounds || _bounds;
+
   const { left: _left, top: _top, width: _width, height: _height } = bounds;
 
   const setBounds = useMemoizedFn((param: React.SetStateAction<Partial<Bounds>>) => {
-    _setBounds((bounds) => {
-      const newBounds = typeof param === 'function' ? param(bounds) : param;
-      return {
-        ...bounds,
-        ...newBounds,
-      };
-    });
+    if (controlledMode) {
+      _setBounds((bounds) => {
+        const newBounds = typeof param === 'function' ? param(bounds) : param;
+        return {
+          ...bounds,
+          ...newBounds,
+        };
+      });
+    } else {
+      setTmpBounds((tmpBounds) => {
+        const bounds = tmpBounds || _bounds;
+        const newBounds = typeof param === 'function' ? param(bounds) : param;
+        return {
+          ...bounds,
+          ...newBounds,
+        };
+      });
+    }
   });
 
   const changeBounds = useMemoizedFn(() => {
@@ -101,6 +118,13 @@ const TransformerBox = (props: TransformerBoxProps) => {
         ...changedState,
       });
     }
+  });
+
+  const onChangeEnd = useMemoizedFn<typeof _onChangeEnd>(() => {
+    if (!controlledMode && tmpBounds) {
+      _setBounds(tmpBounds);
+    }
+    _onChangeEnd();
   });
 
   useEventListener('keydown', (e) => {
@@ -257,7 +281,7 @@ const TransformerBox = (props: TransformerBoxProps) => {
     }
   });
 
-  const { rotate, ...basePosition } = bounds;
+  const content = <div className={styles.content}>{children}</div>;
 
   return (
     <div
@@ -272,11 +296,16 @@ const TransformerBox = (props: TransformerBoxProps) => {
       )}
       style={{
         ...style,
-        ...basePosition,
-        transform: `rotate(${rotate || 0}deg)`,
+        left: Math.round(bounds.left),
+        top: Math.round(bounds.top),
+        width: Math.round(bounds.width),
+        height: Math.round(bounds.height),
+        transform: `rotate(${bounds.rotate || 0}deg)`,
       }}
       {...otherProps}
     >
+      {content}
+
       <div className={cn(styles.scaleHandle, styles.scaleHandleTop)} />
       <div className={cn(styles.scaleHandle, styles.scaleHandleBottom)} />
       <div className={cn(styles.scaleHandle, styles.scaleHandleRight)} />

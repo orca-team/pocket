@@ -91,6 +91,11 @@ export default createUseStyles(
       left: '100%',
       cursor: 'nwse-resize',
     },
+    content: {
+      position: 'relative',
+      width: '100%',
+      height: '100%',
+    },
   },
   {
     classNamePrefix: prefix,
