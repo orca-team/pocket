@@ -1,9 +1,12 @@
 import React, { useRef } from 'react';
-import { useControllableValue } from 'ahooks';
+import { useClickAway, useControllableValue, useEventListener } from 'ahooks';
 import { changeArr } from '@orca-fe/tools';
+import type { BasicTarget } from 'ahooks/lib/utils/domTarget';
 import useStyles from './TransformerLayout.style';
 import type { Bounds } from '../TransformerBox/utils';
 import TransformerBox from '../TransformerBox';
+
+const eArr = [];
 
 export type TransformerLayoutDataType = {
   bounds: Bounds;
@@ -18,6 +21,7 @@ export interface TransformerLayoutProps<T extends TransformerLayoutDataType>
   defaultCheckedIndex?: number;
   checkedIndex?: number;
   onCheck?: (index: number) => void;
+  clickAwayWhitelist?: BasicTarget[];
 }
 
 const TransformerLayout = <T extends TransformerLayoutDataType>(props: TransformerLayoutProps<T>) => {
@@ -30,6 +34,7 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
     defaultCheckedIndex,
     checkedIndex: nouse2,
     onCheck,
+    clickAwayWhitelist = eArr,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -47,6 +52,20 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
     trigger: 'onCheck',
     defaultValue: -1,
   });
+
+  useEventListener(
+    'mousedown',
+    (ev) => {
+      if (ev.target === ev.currentTarget) {
+        setCheckedIndex(-1);
+      }
+    },
+    { target: rootRef },
+  );
+
+  useClickAway(() => {
+    setCheckedIndex(-1);
+  }, [rootRef, ...clickAwayWhitelist]);
 
   return (
     <div ref={rootRef} className={`${styles.root} ${className}`} {...otherProps}>
