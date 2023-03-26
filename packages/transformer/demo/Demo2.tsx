@@ -1,7 +1,6 @@
 /**
- * title: 调试用例
- * description:
- * debug: true
+ * title: TransformLayout
+ * description: 使用列表数据完成多个盒子的渲染
  */
 
 import React, { useState } from 'react';
@@ -68,7 +67,7 @@ const Demo = () => {
       >
         Add Box
       </Button>
-      <TransformerLayout data={data} onDataChange={setData} limit style={{ position: 'relative', height: 300, backgroundColor: '#EEE' }}>
+      <TransformerLayout data={data} onDataChange={setData} style={{ position: 'relative', height: 300, backgroundColor: '#EEE' }}>
         {({ color = '#999' }) => <div style={{ height: '100%', backgroundColor: color }} />}
       </TransformerLayout>
     </>

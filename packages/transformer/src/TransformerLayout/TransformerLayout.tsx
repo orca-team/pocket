@@ -1,7 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useClickAway, useControllableValue, useEventListener } from 'ahooks';
 import { changeArr } from '@orca-fe/tools';
 import type { BasicTarget } from 'ahooks/lib/utils/domTarget';
+import { useSizeListener } from '@orca-fe/hooks';
 import useStyles from './TransformerLayout.style';
 import type { Bounds } from '../TransformerBox/utils';
 import TransformerBox from '../TransformerBox';
@@ -22,6 +23,7 @@ export interface TransformerLayoutProps<T extends TransformerLayoutDataType>
   checkedIndex?: number;
   onCheck?: (index: number) => void;
   clickAwayWhitelist?: BasicTarget[];
+  limit?: boolean;
 }
 
 const TransformerLayout = <T extends TransformerLayoutDataType>(props: TransformerLayoutProps<T>) => {
@@ -35,10 +37,51 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
     checkedIndex: nouse2,
     onCheck,
     clickAwayWhitelist = eArr,
+    limit = false,
     ...otherProps
   } = props;
   const styles = useStyles();
   const rootRef = useRef<HTMLDivElement>(null);
+
+  const [_this] = useState<{
+    size?: { width: number; height: number };
+  }>({});
+
+  const [limitBounds, setLimitBounds] = useState<Bounds | undefined>(undefined);
+
+  useSizeListener((size) => {
+    if (size.width > 0 && size.height > 0) {
+      _this.size = size;
+    }
+    if (limit) {
+      setLimitBounds({
+        top: 0,
+        left: 0,
+        width: size.width,
+        height: size.height,
+      });
+    } else {
+      setLimitBounds(undefined);
+    }
+  }, rootRef);
+
+  useEffect(() => {
+    if (limit) {
+      const { size } = _this;
+      if (size) {
+        setLimitBounds({
+          top: 0,
+          left: 0,
+          width: size.width,
+          height: size.height,
+        });
+      }
+    } else {
+      setLimitBounds(undefined);
+    }
+  }, [limit]);
+
+  const [contentContainer, setContentContainer] = useState<HTMLElement | null>(null);
 
   const [data, setData] = useControllableValue<T[]>(props, {
     valuePropName: 'data',
@@ -56,7 +99,7 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
   useEventListener(
     'mousedown',
     (ev) => {
-      if (ev.target === ev.currentTarget) {
+      if (ev.target === ev.currentTarget || ev.target === contentContainer) {
         setCheckedIndex(-1);
       }
     },
@@ -69,29 +112,33 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
 
   return (
     <div ref={rootRef} className={`${styles.root} ${className}`} {...otherProps}>
-      {data.map((item, index) => {
-        const { bounds } = item;
-        return (
-          <TransformerBox
-            key={index}
-            bounds={bounds}
-            checked={checkedIndex === index}
-            onMouseDown={() => {
-              setCheckedIndex(index);
-            }}
-            onBoundsChange={(bounds) => {
-              setData(data =>
-                changeArr(data, index, {
-                  ...item,
-                  bounds,
-                }),
-              );
-            }}
-          >
-            {children(item, index)}
-          </TransformerBox>
-        );
-      })}
+      <div ref={setContentContainer} className={styles.contentContainer} />
+      {contentContainer &&
+        data.map((item, index) => {
+          const { bounds } = item;
+          return (
+            <TransformerBox
+              key={index}
+              bounds={bounds}
+              checked={checkedIndex === index}
+              portal={() => contentContainer}
+              limitBounds={limitBounds}
+              onMouseDown={() => {
+                setCheckedIndex(index);
+              }}
+              onBoundsChange={(bounds) => {
+                setData(data =>
+                  changeArr(data, index, {
+                    ...item,
+                    bounds,
+                  }),
+                );
+              }}
+            >
+              {children(item, index)}
+            </TransformerBox>
+          );
+        })}
     </div>
   );
 };
