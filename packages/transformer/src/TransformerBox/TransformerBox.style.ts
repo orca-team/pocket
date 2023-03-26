@@ -15,13 +15,17 @@ export default createUseStyles(
       '&:hover': {
         border: '1px solid #66ccff',
       },
+      '&$statusChecked': {
+        '&, &:hover': {
+          border: '1px solid #1199ff',
+        },
+      },
     },
     statusDisabled: {
       pointerEvents: 'none',
     },
     statusChecked: {
       '&, &:hover': {
-        border: '1px solid #1199ff',
         zIndex: 1,
       },
 
@@ -54,47 +58,54 @@ export default createUseStyles(
     scaleHandleTop: {
       top: 0,
       left: '50%',
-      cursor: 'ns-resize',
     },
     scaleHandleBottom: {
       top: '100%',
       left: '50%',
-      cursor: 'ns-resize',
     },
     scaleHandleLeft: {
       top: '50%',
       left: 0,
-      cursor: 'ew-resize',
     },
     scaleHandleRight: {
       top: '50%',
       left: '100%',
-      cursor: 'ew-resize',
     },
     scaleHandleTopLeft: {
       top: 0,
       left: 0,
-      cursor: 'nwse-resize',
     },
     scaleHandleTopRight: {
       top: 0,
       left: '100%',
-      cursor: 'nesw-resize',
     },
     scaleHandleBottomLeft: {
       top: '100%',
       left: 0,
-      cursor: 'nesw-resize',
     },
     scaleHandleBottomRight: {
       top: '100%',
       left: '100%',
+    },
+    cursor0: {
+      cursor: 'ns-resize',
+    },
+    cursor1: {
+      cursor: 'nesw-resize',
+    },
+    cursor2: {
+      cursor: 'ew-resize',
+    },
+    cursor3: {
       cursor: 'nwse-resize',
     },
     content: {
-      position: 'relative',
+      position: 'absolute',
       width: '100%',
       height: '100%',
+      top: 0,
+      left: 0,
+      transformOrigin: 'top left',
     },
   },
   {

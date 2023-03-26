@@ -2,19 +2,19 @@ import React, { useRef, useState } from 'react';
 import cn from 'classnames';
 import { useControllableValue, useDebounceFn, useEventListener, useMemoizedFn } from 'ahooks';
 import { usePan } from '@orca-fe/hooks';
+import ReactDOM from 'react-dom';
+import { roundBy } from '@orca-fe/tools';
 import useStyles from './TransformerBox.style';
 import type { Bounds, Point, ResizeType } from './utils';
-import { calcBoundsChange, getPointByEvent, getPointOffset, getResizeMode } from './utils';
+import { calcBoundsChange, calcLimitBounds, getPointByEvent, getPointOffset, getResizeMode } from './utils';
 
 const ef = () => {};
 
-export type TransformType = {
-  x: number;
-  y: number;
-  scaleX: number;
-  scaleY: number;
-  rotate: number;
-};
+const roundBy45 = roundBy(45);
+
+function mod(n: number, m: number) {
+  return ((n % m) + m) % m;
+}
 
 export interface TransformerBoxProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'> {
   disabled?: boolean;
@@ -28,6 +28,8 @@ export interface TransformerBoxProps extends Omit<React.HTMLAttributes<HTMLDivEl
   onChangeEnd?: () => void;
   onClickFixed?: (e: MouseEvent) => void;
   controlledMode?: boolean;
+  portal?: () => HTMLElement;
+  limitBounds?: Bounds;
 }
 
 const TransformerBox = (props: TransformerBoxProps) => {
@@ -46,9 +48,13 @@ const TransformerBox = (props: TransformerBoxProps) => {
     checked,
     style,
     controlledMode,
+    portal,
+    limitBounds,
     ...otherProps
   } = props;
   const styles = useStyles();
+
+  const cursors = [styles.cursor0, styles.cursor1, styles.cursor2, styles.cursor3];
 
   const [_this] = useState({
     distanceLock: false,
@@ -74,6 +80,8 @@ const TransformerBox = (props: TransformerBoxProps) => {
   const bounds = tmpBounds || _bounds;
 
   const { left: _left, top: _top, width: _width, height: _height } = bounds;
+
+  const cursorDirection = (roundBy45(bounds.rotate || 0) / 45) % 4;
 
   const setBounds = useMemoizedFn((param: React.SetStateAction<Partial<Bounds>>) => {
     if (controlledMode) {
@@ -115,7 +123,7 @@ const TransformerBox = (props: TransformerBoxProps) => {
         },
       );
       setBounds({
-        ...changedState,
+        ...calcLimitBounds({ ...bounds, ...changedState }, limitBounds),
       });
     }
   });
@@ -281,7 +289,32 @@ const TransformerBox = (props: TransformerBoxProps) => {
     }
   });
 
-  const content = <div className={styles.content}>{children}</div>;
+  // 获取内容挂载的位置
+  const contentRoot = portal ? portal() : null;
+
+  const positionStyle = {
+    left: Math.round(bounds.left),
+    top: Math.round(bounds.top),
+    width: Math.round(bounds.width),
+    height: Math.round(bounds.height),
+    transform: `rotate(${bounds.rotate || 0}deg)`,
+  };
+
+  const content = contentRoot ? (
+    ReactDOM.createPortal(
+      <div
+        className={cn(styles.content, {
+          [styles.statusChecked]: checked,
+        })}
+        style={positionStyle}
+      >
+        {children}
+      </div>,
+      contentRoot,
+    )
+  ) : (
+    <div className={styles.content}>{children}</div>
+  );
 
   return (
     <div
@@ -296,25 +329,21 @@ const TransformerBox = (props: TransformerBoxProps) => {
       )}
       style={{
         ...style,
-        left: Math.round(bounds.left),
-        top: Math.round(bounds.top),
-        width: Math.round(bounds.width),
-        height: Math.round(bounds.height),
-        transform: `rotate(${bounds.rotate || 0}deg)`,
+        ...positionStyle,
       }}
       {...otherProps}
     >
       {content}
 
-      <div className={cn(styles.scaleHandle, styles.scaleHandleTop)} />
-      <div className={cn(styles.scaleHandle, styles.scaleHandleBottom)} />
-      <div className={cn(styles.scaleHandle, styles.scaleHandleRight)} />
-      <div className={cn(styles.scaleHandle, styles.scaleHandleLeft)} />
+      <div className={cn(styles.scaleHandle, styles.scaleHandleTop, cursors[mod(0 + cursorDirection, 4)])} />
+      <div className={cn(styles.scaleHandle, styles.scaleHandleBottom, cursors[mod(0 + cursorDirection, 4)])} />
+      <div className={cn(styles.scaleHandle, styles.scaleHandleRight, cursors[mod(2 + cursorDirection, 4)])} />
+      <div className={cn(styles.scaleHandle, styles.scaleHandleLeft, cursors[mod(2 + cursorDirection, 4)])} />
 
-      <div className={cn(styles.scaleHandle, styles.scaleHandleTopLeft)} />
-      <div className={cn(styles.scaleHandle, styles.scaleHandleTopRight)} />
-      <div className={cn(styles.scaleHandle, styles.scaleHandleBottomLeft)} />
-      <div className={cn(styles.scaleHandle, styles.scaleHandleBottomRight)} />
+      <div className={cn(styles.scaleHandle, styles.scaleHandleTopLeft, cursors[mod(3 + cursorDirection, 4)])} />
+      <div className={cn(styles.scaleHandle, styles.scaleHandleTopRight, cursors[mod(1 + cursorDirection, 4)])} />
+      <div className={cn(styles.scaleHandle, styles.scaleHandleBottomLeft, cursors[mod(1 + cursorDirection, 4)])} />
+      <div className={cn(styles.scaleHandle, styles.scaleHandleBottomRight, cursors[mod(3 + cursorDirection, 4)])} />
       <div className={cn(styles.scaleHandle, styles.rotateHandle)} />
     </div>
   );

@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.0.2
+
+### Patch Changes
+
+- feat: 添加 Layout 功能；添加 limit 限制；优化 cursor 显示
+
 ## 0.0.1
 
 ### Patch Changes

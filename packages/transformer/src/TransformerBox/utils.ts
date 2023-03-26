@@ -329,6 +329,46 @@ export function calcBoundsChange(startBounds: Bounds, pointOffset: Point, option
 }
 
 /**
+ * 判断 bounds 的中心点是否在 limit 内，如果不是，则生成符合限制的新 bounds
+ * @param bounds
+ * @param limit
+ */
+export function calcLimitBounds(bounds: Bounds, limit?: Bounds) {
+  const { top, left, width, height, rotate = 0 } = bounds;
+  const { top: limitTop = -Infinity, left: limitLeft = -Infinity, width: limitWidth = Infinity, height: limitHeight = Infinity } = limit || {};
+  const mat = mat3.create();
+  const translateMat = mat3.create();
+  mat3.translate(translateMat, translateMat, vec2.fromValues(left, top));
+  const rotateMat = mat3.create();
+  mat3.rotate(rotateMat, rotateMat, rad(rotate));
+  mat3.multiply(mat, mat, translateMat);
+  mat3.multiply(mat, mat, rotateMat);
+
+  // 取得中心位置
+  const centerPoint = project({ x: 0.5 * width, y: 0.5 * height }, mat);
+
+  const newBounds = { ...bounds };
+  let changed = false;
+  if (centerPoint.x < limitLeft) {
+    newBounds.left += limitLeft - centerPoint.x;
+    changed = true;
+  }
+  if (centerPoint.x > limitLeft + limitWidth) {
+    newBounds.left += limitLeft + limitWidth - centerPoint.x;
+    changed = true;
+  }
+  if (centerPoint.y < limitTop) {
+    newBounds.top += limitTop - centerPoint.y;
+    changed = true;
+  }
+  if (centerPoint.y > limitTop + limitHeight) {
+    newBounds.top += limitTop + limitHeight - centerPoint.y;
+    changed = true;
+  }
+  return changed ? newBounds : bounds;
+}
+
+/**
  * 计算 bounds 的变化
  * @param startBounds 原始 bounds
  * @param pointOffset 鼠标偏移
