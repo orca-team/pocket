@@ -17,6 +17,18 @@ export default createUseStyles(
       width: '100%',
       height: '100%',
     },
+    noEvents: {
+      pointerEvents: 'none',
+      '& > *': {
+        pointerEvents: 'initial',
+      },
+      '& $contentContainer': {
+        pointerEvents: 'none',
+        '& > *': {
+          pointerEvents: 'initial',
+        },
+      },
+    },
   },
   {
     classNamePrefix: prefix,

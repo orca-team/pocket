@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useClickAway, useControllableValue, useEventListener } from 'ahooks';
 import { changeArr } from '@orca-fe/tools';
+import cn from 'classnames';
 import type { BasicTarget } from 'ahooks/lib/utils/domTarget';
 import { useSizeListener } from '@orca-fe/hooks';
 import useStyles from './TransformerLayout.style';
@@ -24,6 +25,7 @@ export interface TransformerLayoutProps<T extends TransformerLayoutDataType>
   onCheck?: (index: number) => void;
   clickAwayWhitelist?: BasicTarget[];
   limit?: boolean;
+  layoutEvents?: boolean;
 }
 
 const TransformerLayout = <T extends TransformerLayoutDataType>(props: TransformerLayoutProps<T>) => {
@@ -38,6 +40,7 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
     onCheck,
     clickAwayWhitelist = eArr,
     limit = false,
+    layoutEvents,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -111,7 +114,7 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
   }, [rootRef, ...clickAwayWhitelist]);
 
   return (
-    <div ref={rootRef} className={`${styles.root} ${className}`} {...otherProps}>
+    <div ref={rootRef} className={cn(styles.root, { [styles.noEvents]: !layoutEvents }, className)} {...otherProps}>
       <div ref={setContentContainer} className={styles.contentContainer} />
       {contentContainer &&
         data.map((item, index) => {
