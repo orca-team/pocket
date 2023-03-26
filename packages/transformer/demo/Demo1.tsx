@@ -1,7 +1,6 @@
 /**
  * title: 基础边框的效果展示
  * description:
- * debug: true
  */
 
 import React from 'react';

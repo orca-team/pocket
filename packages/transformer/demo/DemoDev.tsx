@@ -7,11 +7,22 @@
 import React, { useState } from 'react';
 import type { Bounds } from '@orca-fe/transformer';
 import { TransformerLayout } from '@orca-fe/transformer';
+import { Button } from 'antd';
 
 type DataType = {
   color?: string;
   bounds: Bounds;
 };
+
+function rand(_min: number = 0, _max?: number): number {
+  let max = _max;
+  let min = _min;
+  if (max == null) {
+    max = min;
+    min = 0;
+  }
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 const Demo = () => {
   const [data, setData] = useState<DataType[]>([
@@ -38,9 +49,29 @@ const Demo = () => {
   ]);
 
   return (
-    <TransformerLayout data={data} onDataChange={setData} style={{ position: 'relative', height: 300, backgroundColor: '#EEE' }}>
-      {({ color = '#999' }) => <div style={{ height: '100%', backgroundColor: color }} />}
-    </TransformerLayout>
+    <>
+      <Button
+        onClick={() => {
+          setData([
+            ...data,
+            {
+              color: `rgb(${rand(255)},${rand(255)},${rand(255)})`,
+              bounds: {
+                left: rand(500),
+                top: rand(300),
+                width: rand(30, 150),
+                height: rand(10, 100),
+              },
+            },
+          ]);
+        }}
+      >
+        Add Box
+      </Button>
+      <TransformerLayout data={data} onDataChange={setData} style={{ position: 'relative', height: 300, backgroundColor: '#EEE' }}>
+        {({ color = '#999' }) => <div style={{ height: '100%', backgroundColor: color }} />}
+      </TransformerLayout>
+    </>
   );
 };
 
