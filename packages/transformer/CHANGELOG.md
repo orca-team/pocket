@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.0.3
+
+### Patch Changes
+
+- feat: 默认去除 Layout 上的鼠标事件
+
 ## 0.0.2
 
 ### Patch Changes
