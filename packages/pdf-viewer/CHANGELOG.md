@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 0.4.7
+
+### Patch Changes
+
+- fix: PDFViewer 页码换行
+
 ## 0.4.6
 
 ### Patch Changes
