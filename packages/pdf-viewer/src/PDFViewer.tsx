@@ -622,12 +622,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
             })}
 
             {/* 绘图的工具栏渲染 */}
-            {pages.length > 0 && (
-              <>
-                {!disabledPluginPainter && <PDFPainterPlugin ref={pdfPainterHandle} onMarkChange={onMarkChange} />}
-                {!disabledPluginTooltip && <PDFTooltipPlugin ref={pdfTooltipHandle} />}
-              </>
-            )}
+            {!disabledPluginPainter && <PDFPainterPlugin ref={pdfPainterHandle} onMarkChange={onMarkChange} />}
+            {!disabledPluginTooltip && <PDFTooltipPlugin ref={pdfTooltipHandle} />}
             {children}
           </div>
 
