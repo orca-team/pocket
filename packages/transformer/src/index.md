@@ -24,6 +24,8 @@ group:
 
 <code src="../demo/Demo1.tsx" ></code>
 
+<code src="../demo/Demo2.tsx" ></code>
+
 ## API
 
 | 属性名称 | 描述     | 类型     | 默认值 |
