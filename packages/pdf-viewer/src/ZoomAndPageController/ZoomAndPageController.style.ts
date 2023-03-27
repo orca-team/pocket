@@ -14,6 +14,7 @@ export default createUseStyles(
       gap: 4,
       height: 40,
       color: '#fff',
+      whiteSpace: 'nowrap',
 
       '& .ant-input': {
         color: '#fff',
