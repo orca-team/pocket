@@ -124,7 +124,6 @@ importers:
 
   packages/pdf-viewer:
     specifiers:
-      '@babel/runtime': ^7.21.0
       '@orca-fe/hooks': ^1.2.0
       '@orca-fe/jss-plugin-auto-prefix': ^0.0.1
       '@orca-fe/painter': ^0.0.8
@@ -137,10 +136,8 @@ importers:
       classnames: ^2.3.2
       jss: ^10.10.0
       prefix-classnames: ^0.0.7
-      rc-trigger: ^5.3.4
       tslib: ^2.5.0
     dependencies:
-      '@babel/runtime': 7.21.0
       '@orca-fe/hooks': link:../hooks
       '@orca-fe/jss-plugin-auto-prefix': 0.0.1_jss@10.10.0
       '@orca-fe/painter': link:../painter
@@ -150,7 +147,6 @@ importers:
       ahooks: 3.7.5
       classnames: 2.3.2
       prefix-classnames: 0.0.7
-      rc-trigger: 5.3.4
       tslib: 2.5.0
     devDependencies:
       '@types/react': 18.0.28
@@ -159,20 +155,20 @@ importers:
 
   packages/pocket:
     specifiers:
-      '@orca-fe/hooks': ^1.2.0
+      '@orca-fe/hooks': ^1.3.0
       '@orca-fe/jss-plugin-auto-prefix': ^0.0.1
       '@orca-fe/pocket': ^1.27.2
       '@orca-fe/tools': ^0.8.0
-      '@rc-component/trigger': ^1.5.7
-      '@types/react': ^18.0.28
-      ahooks: ^3.7.5
+      '@rc-component/trigger': 1.5.8
+      '@types/react': ^18.0.29
+      ahooks: ^3.7.6
       ahooks-v2: ^2.10.15
       autod: ^3.1.2
       classnames: ^2.3.2
       copy-to-clipboard: ^3.3.3
       countup.js: ^2.6.0
       events: ^3.3.0
-      immer: ^9.0.19
+      immer: ^9.0.21
       is-in-browser: ^1.1.3
       json5: ^2.2.3
       jss-preset-default: ^10.10.0
@@ -191,13 +187,13 @@ importers:
       '@orca-fe/jss-plugin-auto-prefix': 0.0.1
       '@orca-fe/pocket': 'link:'
       '@orca-fe/tools': link:../tools
-      '@rc-component/trigger': 1.5.7
-      ahooks: 3.7.5
+      '@rc-component/trigger': 1.5.8
+      ahooks: 3.7.6
       ahooks-v2: 2.10.15
       classnames: 2.3.2
       copy-to-clipboard: 3.3.3
       events: 3.3.0
-      immer: 9.0.19
+      immer: 9.0.21
       is-in-browser: 1.1.3
       json5: 2.2.3
       jss-preset-default: 10.10.0
@@ -212,7 +208,7 @@ importers:
       rfdc: 1.3.0
       tslib: 2.5.0
     devDependencies:
-      '@types/react': 18.0.28
+      '@types/react': 18.0.29
       autod: 3.1.2
       countup.js: 2.6.0
 
@@ -1436,8 +1432,8 @@ packages:
       react-dom: 16.14.0_react@16.14.0
     dev: false
 
-  /@rc-component/trigger/1.5.7:
-    resolution: {integrity: sha512-jXPvx48V4TOSShONb8pLUBvCDapZ3O4IT2H3vzkBONyIRS928t4ca3FKZR0ypWml0ZTscyRMwOpNZPgESHvHDA==}
+  /@rc-component/trigger/1.5.8:
+    resolution: {integrity: sha512-RzpvfxybPiolJhCvSX3/VN8qfSb6uNPYyW6DaPSzPohSN71r13Ocz0GKgP8iywK+xJb98FsJM/2HElRzjrvXjA==}
     engines: {node: '>=8.x'}
     peerDependencies:
       react: '>=16.9.0'
@@ -1803,7 +1799,7 @@ packages:
     resolution: {integrity: sha512-WOSetDV3YPxbkVJAdv/bqExJjmcdCi/vpCJh3NfQOy1X15vHMSiMioXIcGekXDJJYhqGUMDo9e337mh508foAA==}
     dependencies:
       '@types/history': 5.0.0
-      '@types/react': 18.0.28
+      '@types/react': 18.0.29
       '@types/react-router': 5.1.20
     dev: false
 
@@ -1811,7 +1807,7 @@ packages:
     resolution: {integrity: sha512-db1mx37a1EJDf1XeX8jJN7R3PZABmJQXR8r28yUjVMFSjkmnQo6X6pOEEmNl+Tp2gYQOGPdYbFIipBtdElZ3Yg==}
     dependencies:
       '@types/history': 4.7.11
-      '@types/react': 18.0.28
+      '@types/react': 18.0.29
       '@types/react-router': 5.1.20
     dev: false
 
@@ -1819,7 +1815,7 @@ packages:
     resolution: {integrity: sha512-D5mHD6TbdV/DNHYsnwBTv+y73ei+mMjrkGrla86HthE4/PVvL1J94Bu3qABU+COXzpL23T1EZapVVpwHuBXiUg==}
     dependencies:
       '@types/history': 5.0.0
-      '@types/react': 18.0.28
+      '@types/react': 18.0.29
       '@types/react-router': 5.1.20
     dev: false
 
@@ -1827,14 +1823,14 @@ packages:
     resolution: {integrity: sha512-0bhXQwHYfMeJlCh7mGhc0VJTRm0Gk+Z8T00aiP4702mDUuLs9SMhnd2DitpjWFjdOecx2UXtICK14H9iMnziGA==}
     dependencies:
       '@types/history': 5.0.0
-      '@types/react': 18.0.28
+      '@types/react': 18.0.29
     dev: false
 
   /@types/react-router/5.1.20:
     resolution: {integrity: sha512-jGjmu/ZqS7FjSH6owMcD5qpq19+1RS9DeVRqfl1FeBMxTDQAGwlMWOcs52NDoXaNKyG3d1cYQFMs9rCrb88o9Q==}
     dependencies:
       '@types/history': 4.7.11
-      '@types/react': 18.0.28
+      '@types/react': 18.0.29
     dev: false
 
   /@types/react/16.14.35:
@@ -1846,6 +1842,14 @@ packages:
 
   /@types/react/18.0.28:
     resolution: {integrity: sha512-RD0ivG1kEztNBdoAK7lekI9M+azSnitIn85h4iOiaLjaTrMjzslhaqCGaI4IyCJ1RljWiLCEu4jyrLLgqxBTew==}
+    dependencies:
+      '@types/prop-types': 15.7.5
+      '@types/scheduler': 0.16.2
+      csstype: 3.1.1
+    dev: true
+
+  /@types/react/18.0.29:
+    resolution: {integrity: sha512-wXHktgUABxplw1+UnljseDq4+uztQyp2tlWZRIxHlpchsCFqiYkvaDS8JR7eKOQm8wziTH/el5qL7D6gYNkYcw==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.2
@@ -2615,6 +2619,24 @@ packages:
       js-cookie: 2.2.1
       lodash: 4.17.21
       react: 16.14.0
+      resize-observer-polyfill: 1.5.1
+      screenfull: 5.2.0
+      tslib: 2.5.0
+    dev: false
+
+  /ahooks/3.7.6:
+    resolution: {integrity: sha512-p+2j4H/BI9vqXR0fZI7S/q6fUPxPklQnHqvU7zAVBljMFNSFeYRWB2iHHbjpXGOwUTOBYCh2OuvIHyJYj6Lpag==}
+    engines: {node: '>=8.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@babel/runtime': 7.21.0
+      '@types/js-cookie': 2.2.7
+      ahooks-v3-count: 1.0.0
+      dayjs: 1.11.7
+      intersection-observer: 0.12.2
+      js-cookie: 2.2.1
+      lodash: 4.17.21
       resize-observer-polyfill: 1.5.1
       screenfull: 5.2.0
       tslib: 2.5.0
@@ -6965,8 +6987,8 @@ packages:
       queue: 6.0.1
     dev: false
 
-  /immer/9.0.19:
-    resolution: {integrity: sha512-eY+Y0qcsB4TZKwgQzLaE/lqYMlKhv5J9dyd2RhhtGhNo2njPXDqU9XPfcNfa3MIDsdtZt5KlkIsirlo4dHsWdQ==}
+  /immer/9.0.21:
+    resolution: {integrity: sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA==}
     dev: false
 
   /import-cwd/2.1.0:
@@ -10932,7 +10954,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.21.0
-      '@rc-component/trigger': 1.5.7
+      '@rc-component/trigger': 1.5.8
       classnames: 2.3.2
     dev: false
 
