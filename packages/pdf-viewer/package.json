@@ -40,7 +40,6 @@
     "clear": "rimraf lib es"
   },
   "dependencies": {
-    "@babel/runtime": "^7.21.0",
     "@orca-fe/hooks": "^1.2.0",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
     "@orca-fe/painter": "^0.0.8",
@@ -50,7 +49,6 @@
     "ahooks": "^3.7.5",
     "classnames": "^2.3.2",
     "prefix-classnames": "^0.0.7",
-    "rc-trigger": "^5.3.4",
     "tslib": "^2.5.0"
   },
   "peerDependencies": {

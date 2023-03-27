@@ -1,5 +1,13 @@
 # @orca-fe/pocket
 
+## 1.27.3
+
+### Patch Changes
+
+- fix: @rc-component/trigger
+- Updated dependencies
+  - @orca-fe/pocket@1.27.3
+
 ## 1.27.2
 
 ### Patch Changes
