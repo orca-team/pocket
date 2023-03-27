@@ -22,7 +22,7 @@ const ToolbarPortal = (props: ToolbarPortalProps) => {
 
   const [, { inc: refresh }] = useCounter(0);
 
-  const show = !alwaysShow && pages.length === 0;
+  const show = alwaysShow || pages.length > 0;
   useEffect(() => {
     if (show && placement === 'center') {
       addCenterToolbarId(id, order);
