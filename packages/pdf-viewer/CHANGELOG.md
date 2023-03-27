@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 0.4.9
+
+### Patch Changes
+
+- fix: 修复 PDFViewer 工具栏排序问题
+
 ## 0.4.8
 
 ### Patch Changes
