@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import cn from 'classnames';
 import { useControllableValue, useDebounceFn, useEventListener, useMemoizedFn } from 'ahooks';
 import { usePan } from '@orca-fe/hooks';
@@ -7,6 +7,7 @@ import { roundBy } from '@orca-fe/tools';
 import useStyles from './TransformerBox.style';
 import type { Bounds, Point, ResizeType } from './utils';
 import { calcBoundsChange, calcLimitBounds, getPointByEvent, getPointOffset, getResizeMode } from './utils';
+import TransformerBoxContext from './TransformerBoxContext';
 
 const ef = () => {};
 
@@ -55,6 +56,8 @@ const TransformerBox = (props: TransformerBoxProps) => {
   const styles = useStyles();
 
   const cursors = [styles.cursor0, styles.cursor1, styles.cursor2, styles.cursor3];
+
+  const { getPointMapping } = useContext(TransformerBoxContext);
 
   const [_this] = useState({
     distanceLock: false,
@@ -158,7 +161,7 @@ const TransformerBox = (props: TransformerBoxProps) => {
 
   const rootRef = useRef<HTMLDivElement>(null);
   usePan(({ target, start, startPosition, ev, offset, finish }) => {
-    const currentPoint = getPointByEvent(ev);
+    const currentPoint = getPointMapping(getPointByEvent(ev));
     if (start) {
       _this.distanceLock = true;
       if (target instanceof HTMLDivElement) {
@@ -293,10 +296,10 @@ const TransformerBox = (props: TransformerBoxProps) => {
   const contentRoot = portal ? portal() : null;
 
   const positionStyle = {
-    left: Math.round(bounds.left),
-    top: Math.round(bounds.top),
-    width: Math.round(bounds.width),
-    height: Math.round(bounds.height),
+    left: `calc(var(--transformer-box-scale) * ${Math.round(bounds.left)}px)`,
+    top: `calc(var(--transformer-box-scale) * ${Math.round(bounds.top)}px)`,
+    width: `calc(var(--transformer-box-scale) * ${Math.round(bounds.width)}px)`,
+    height: `calc(var(--transformer-box-scale) * ${Math.round(bounds.height)}px)`,
     transform: `rotate(${bounds.rotate || 0}deg)`,
   };
 

@@ -8,6 +8,7 @@ export default createUseStyles(
     root: {
       position: 'relative',
       height: 200,
+      '--transformer-layout-scale': 1,
     },
     contentContainer: {
       position: 'absolute',

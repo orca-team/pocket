@@ -68,7 +68,7 @@ const Demo = () => {
       >
         Add Box
       </Button>
-      <TransformerLayout data={data} onDataChange={setData} limit style={{ position: 'relative', height: 300, backgroundColor: '#EEE' }}>
+      <TransformerLayout data={data} onDataChange={setData} limit zoom={1} style={{ position: 'relative', height: 300, backgroundColor: '#EEE' }}>
         {({ color = '#999' }) => <div style={{ height: '100%', backgroundColor: color }} />}
       </TransformerLayout>
     </>

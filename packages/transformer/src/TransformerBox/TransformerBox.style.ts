@@ -12,6 +12,7 @@ export default createUseStyles(
       height: 150,
       border: '1px solid rgba(0, 129, 255, 0)',
       transformOrigin: 'left top',
+      '--transformer-box-scale': 'var(--transformer-layout-scale, 1)',
       '&:hover': {
         border: '1px solid #66ccff',
       },
@@ -100,6 +101,7 @@ export default createUseStyles(
       cursor: 'nwse-resize',
     },
     content: {
+      '--transformer-box-scale': 'var(--transformer-layout-scale, 1)',
       position: 'absolute',
       width: '100%',
       height: '100%',
