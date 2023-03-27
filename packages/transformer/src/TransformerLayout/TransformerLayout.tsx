@@ -18,17 +18,42 @@ export type TransformerLayoutDataType = {
 
 export interface TransformerLayoutProps<T extends TransformerLayoutDataType>
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange' | 'children'> {
+
+  /** 默认边框数据列表 */
   defaultData?: T[];
+
+  /** 边框数据列表 */
   data?: T[];
+
+  /** 数据列表发生变化时的回调 */
   onDataChange?: (data: T[]) => void;
+
+  /** 渲染自定义子元素 */
   children?: (item: T, index: number) => React.ReactNode;
+
+  /** 默认选中的元素下标 */
   defaultCheckedIndex?: number;
+
+  /** 选中的元素下标 */
   checkedIndex?: number;
+
+  /** 选中元素变化时的回调 */
   onCheck?: (index: number) => void;
+
+  /** 点击白名单，当点击组件之外的元素时，会默认取消选中，如果你需要点击弹框之类的挂载在body下的元素，且不希望取消选中，可以考虑这个属性 */
   clickAwayWhitelist?: BasicTarget[];
+
+  /** 是否限制元素移动范围，开启后，边框将不能拖拽到本组件之外的地方（以中心点为基准） */
   limit?: boolean;
+
+  /** 是否开启布局div事件，为了实现空白区域的事件穿透（即不会挡住画布后面的内容），默认去除了画布上的点击事件响应，如果你需要开启，则使用该属性 */
   layoutEvents?: boolean;
+
+  /** 缩放比例 scale = 2 ** zoom */
   zoom?: number;
+
+  /** 是否支持 Box 旋转 */
+  rotateEnable?: boolean;
 }
 
 const TransformerLayout = <T extends TransformerLayoutDataType>(props: TransformerLayoutProps<T>) => {
@@ -46,6 +71,7 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
     layoutEvents,
     zoom = 0,
     style,
+    rotateEnable,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -153,6 +179,7 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
                 checked={checkedIndex === index}
                 portal={() => contentContainer}
                 limitBounds={limitBounds}
+                rotateEnable={rotateEnable}
                 onMouseDown={() => {
                   setCheckedIndex(index);
                 }}

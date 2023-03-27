@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.0.5
+
+### Patch Changes
+
+- feat: rotateEnable support
+
 ## 0.0.4
 
 ### Patch Changes

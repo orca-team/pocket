@@ -18,19 +18,48 @@ function mod(n: number, m: number) {
 }
 
 export interface TransformerBoxProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'> {
+
+  /** 是否禁用 */
   disabled?: boolean;
+
+  /** 是否选中状态，选中状态下，才可以进行边框调整 */
   checked?: boolean;
+
+  /** 最小拖动距离 */
   minDragDistance?: number;
+
+  /** 默认的Bounds信息 */
   defaultBounds?: Bounds;
+
+  /** Bounds信息 */
   bounds?: Bounds;
+
+  /** 开始拖动时的回调函数 */
   onChangeStart?: (e: Event, type: ResizeType) => void;
+
+  /** 拖动前的回调函数 */
   onDragBefore?: (e: MouseEvent) => boolean;
+
+  /** Bounds信息变化时的回调函数 */
   onBoundsChange?: (bounds: Bounds) => void;
+
+  /** 结束拖动时的回调函数 */
   onChangeEnd?: () => void;
+
+  /** 静态点击（非拖拽）时的回调函数 */
   onClickFixed?: (e: MouseEvent) => void;
+
+  /** 是否受控模式，开启后，拖拽的过程，会实时触发 onBoundsChange */
   controlledMode?: boolean;
+
+  /** 修改内容挂载点，默认挂载到边框内部。指定内挂载位置，可实现渲染多个 Box 时，内容不会遮挡边框，造成效果不佳 */
   portal?: () => HTMLElement;
+
+  /** 限制移动区域，设置之后，会以中心点为基准，不能移动超过 limitBounds 的范围 */
   limitBounds?: Bounds;
+
+  /** 支持旋转 */
+  rotateEnable?: boolean;
 }
 
 const TransformerBox = (props: TransformerBoxProps) => {
@@ -51,6 +80,7 @@ const TransformerBox = (props: TransformerBoxProps) => {
     controlledMode,
     portal,
     limitBounds,
+    rotateEnable,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -347,7 +377,7 @@ const TransformerBox = (props: TransformerBoxProps) => {
       <div className={cn(styles.scaleHandle, styles.scaleHandleTopRight, cursors[mod(1 + cursorDirection, 4)])} />
       <div className={cn(styles.scaleHandle, styles.scaleHandleBottomLeft, cursors[mod(1 + cursorDirection, 4)])} />
       <div className={cn(styles.scaleHandle, styles.scaleHandleBottomRight, cursors[mod(3 + cursorDirection, 4)])} />
-      <div className={cn(styles.scaleHandle, styles.rotateHandle)} />
+      {rotateEnable && <div className={cn(styles.scaleHandle, styles.rotateHandle)} />}
     </div>
   );
 };
