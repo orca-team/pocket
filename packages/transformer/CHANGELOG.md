@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.0.6
+
+### Patch Changes
+
+- feat: 修复 PDFViewer 的工具栏排序问题；调整 TransformLayout 的缩放变量优先级
+
 ## 0.0.5
 
 ### Patch Changes

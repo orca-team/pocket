@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 0.4.8
+
+### Patch Changes
+
+- feat: 修复 PDFViewer 的工具栏排序问题；调整 TransformLayout 的缩放变量优先级
+
 ## 0.4.7
 
 ### Patch Changes
