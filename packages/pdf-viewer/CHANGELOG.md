@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 0.4.6
+
+### Patch Changes
+
+- fix: PDFViewer 可能会因内容抖动的 bug
+
 ## 0.4.5
 
 ### Patch Changes

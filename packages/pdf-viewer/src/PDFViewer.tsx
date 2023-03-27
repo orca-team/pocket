@@ -110,6 +110,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
 
   const styles = useStyle();
 
+  const rootRef = useRef<HTMLDivElement>(null);
   const pageContainerRef = useRef<HTMLDivElement>(null);
 
   const [current, setCurrent] = useState(0);
@@ -237,7 +238,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     _this.size = size;
 
     autoZoomDebounce.run();
-  }, pageContainerRef);
+  }, rootRef);
 
   // 翻頁
   const changePage = useMemoizedFn((page: number, anim = false) => {
@@ -578,7 +579,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
           [toolbarRightDom, toolbarLeftDom, centerToolbarIds],
         )}
       >
-        <div className={`${styles.root} ${className}`} {...otherProps}>
+        <div ref={rootRef} className={`${styles.root} ${className}`} {...otherProps}>
           <PDFToolbar
             hide={hideToolbar}
             title={title}
