@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useClickAway, useControllableValue, useEventListener, useMemoizedFn } from 'ahooks';
-import { changeArr } from '@orca-fe/tools';
+import { changeArr, removeArrIndex } from '@orca-fe/tools';
 import cn from 'classnames';
 import type { BasicTarget } from 'ahooks/lib/utils/domTarget';
 import { useSizeListener } from '@orca-fe/hooks';
@@ -54,6 +54,10 @@ export interface TransformerLayoutProps<T extends TransformerLayoutDataType>
 
   /** 是否支持 Box 旋转 */
   rotateEnable?: boolean;
+
+  /** 删除事件 */
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  onDelete?: (index: number) => void | boolean | Promise<boolean>;
 }
 
 const TransformerLayout = <T extends TransformerLayoutDataType>(props: TransformerLayoutProps<T>) => {
@@ -72,6 +76,7 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
     zoom = 0,
     style,
     rotateEnable,
+    onDelete = () => null,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -144,6 +149,32 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
     setCheckedIndex(-1);
   }, [rootRef, ...clickAwayWhitelist]);
 
+  // 删除事件
+  useEventListener(
+    'keydown',
+    async (ev) => {
+      if (ev.key === 'Delete' || ev.key === 'Backspace') {
+        if (checkedIndex >= 0) {
+          const result = await onDelete(checkedIndex);
+          if (result === false) {
+            return;
+          }
+          // 修正下标
+          setCheckedIndex((i) => {
+            if (i > 0) return i - 1;
+            if (data.length === 1) {
+              return -1;
+            }
+            return i;
+          });
+          // 删除
+          setData(d => removeArrIndex(d, checkedIndex));
+        }
+      }
+    },
+    { target: rootRef },
+  );
+
   const getPointMapping = useMemoizedFn((p: Point) => ({
     x: p.x / 2 ** zoom,
     y: p.y / 2 ** zoom,
@@ -158,6 +189,7 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
 
   return (
     <div
+      tabIndex={-1}
       ref={rootRef}
       className={cn(styles.root, { [styles.noEvents]: !layoutEvents }, className)}
       style={{
