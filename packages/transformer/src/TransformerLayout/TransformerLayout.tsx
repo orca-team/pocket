@@ -206,7 +206,7 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
             const { bounds } = item;
             return (
               <TransformerBox
-                key={index}
+                key={`${data.length}_${index}`}
                 bounds={bounds}
                 checked={checkedIndex === index}
                 portal={() => contentContainer}
