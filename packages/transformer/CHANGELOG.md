@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.0.7
+
+### Patch Changes
+
+- feat: TransformerLayout 删除事件
+
 ## 0.0.6
 
 ### Patch Changes
