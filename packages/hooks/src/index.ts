@@ -6,18 +6,10 @@ import useAnimationFrame from './useAnimationFrame';
 import useObjHistoryMgr, { getHistoryModifiedKeys } from './useObjHistoryMgr';
 import useMemorizedFn from './useMemorizedFn';
 import useEventEmitter, { EventEmitterWithHook } from './useEventEmitter';
-import useSizeListener, {
-  useSizeDebounceListener,
-  useSizeUpdateListener,
-} from './useSizeListener';
-import usePromisifyModal, { usePromisifyDrawer } from './usePromisifyModal';
-import useEffectWithTarget, {
-  useLayoutEffectWithTarget,
-} from './useEffectWithTarget';
-import type {
-  HotkeyDefsType,
-  UseHotkeyListenerOptions,
-} from './useHotkeyListener';
+import useSizeListener, { useSizeDebounceListener, useSizeUpdateListener } from './useSizeListener';
+import usePromisifyModal, { PromisifyModalContext, usePromisifyDrawer } from './usePromisifyModal';
+import useEffectWithTarget, { useLayoutEffectWithTarget } from './useEffectWithTarget';
+import type { HotkeyDefsType, UseHotkeyListenerOptions } from './useHotkeyListener';
 import useStaticClick from './useStaticClick';
 import useNextTick, { useLayoutNextTick } from './useNextTick';
 import usePan from './usePan';
@@ -61,6 +53,7 @@ export {
   // modal
   usePromisifyModal,
   usePromisifyDrawer,
+  PromisifyModalContext,
 
   // hotkey
   useHotkeyListener,

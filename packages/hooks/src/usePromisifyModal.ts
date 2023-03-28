@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useDebounceFn } from 'ahooks';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDebounceFn, useMemoizedFn } from 'ahooks';
 import useMemorizedFn from './useMemorizedFn';
 
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 // export type OnOkType<T> = (result: T) => (void | boolean | Promise<void | boolean>);
+
+export const PromisifyModalContext = React.createContext({
+  ok: (() => {}) as (...args: any[]) => void,
+  cancel: () => {},
+  minimize: () => {},
+  resume: () => {},
+});
 
 export type UsePromisifyModalOptions = {
   openField?: string;
@@ -20,16 +27,8 @@ const readyVisible = 'data-promisify-modal-ready';
  * 通过 show 方法，直接弹出 modal 即可。工具会自动接管 onOk 和 onCancel 事件，并更新 open
  * @param options
  */
-export default function usePromisifyModal(
-  options: UsePromisifyModalOptions = {},
-) {
-  const {
-    openField = 'open',
-    onOkField = 'onOk',
-    onCloseField = 'onCancel',
-    destroyDelay = 300,
-    rejectOnClose,
-  } = options;
+export default function usePromisifyModal(options: UsePromisifyModalOptions = {}) {
+  const { openField = 'open', onOkField = 'onOk', onCloseField = 'onCancel', destroyDelay = 300, rejectOnClose } = options;
 
   const [instance, setInstance] = useState<React.ReactElement | null>(null);
 
@@ -51,23 +50,22 @@ export default function usePromisifyModal(
     { wait: destroyDelay },
   );
 
+  const [_this] = useState({
+    ok: (() => {}) as ((...args: any[]) => void) | undefined,
+  });
+
   const hide = useMemorizedFn(() => {
-    setInstance((instance) =>
-      instance ? React.cloneElement(instance, { [openField]: false }) : null,
-    );
+    _this.ok = undefined;
+    setInstance(instance => (instance ? React.cloneElement(instance, { [openField]: false }) : null));
     destroyAfterClose.run();
   });
 
   const minimize = useMemorizedFn(() => {
-    setInstance((instance) =>
-      instance ? React.cloneElement(instance, { [openField]: false }) : null,
-    );
+    setInstance(instance => (instance ? React.cloneElement(instance, { [openField]: false }) : null));
   });
 
   const resume = useMemorizedFn(() => {
-    setInstance((instance) =>
-      instance ? React.cloneElement(instance, { [openField]: true }) : null,
-    );
+    setInstance(instance => (instance ? React.cloneElement(instance, { [openField]: true }) : null));
   });
 
   const show = useMemorizedFn(<T>(element: React.ReactElement = instance!) => {
@@ -82,11 +80,7 @@ export default function usePromisifyModal(
         if (typeof element.props[onOkField] === 'function') {
           const res = element.props[onOkField].apply(null, args);
           if (res instanceof Promise) {
-            setInstance((instance) =>
-              instance
-                ? React.cloneElement(instance, { confirmLoading: true })
-                : null,
-            );
+            setInstance(instance => (instance ? React.cloneElement(instance, { confirmLoading: true }) : null));
             return res
               .then((r) => {
                 hide();
@@ -98,11 +92,7 @@ export default function usePromisifyModal(
                 return r;
               })
               .catch(() => {
-                setInstance((instance) =>
-                  instance
-                    ? React.cloneElement(instance, { confirmLoading: false })
-                    : null,
-                );
+                setInstance(instance => (instance ? React.cloneElement(instance, { confirmLoading: false }) : null));
               });
           } else if (res === false) {
             return undefined;
@@ -123,8 +113,8 @@ export default function usePromisifyModal(
         [readyVisible]: true,
         ...(onOkField
           ? {
-              [onOkField]: onOkHandler,
-            }
+            [onOkField]: onOkHandler,
+          }
           : {}),
         [onCloseField]: (...args) => {
           hide();
@@ -142,10 +132,31 @@ export default function usePromisifyModal(
 
     handler['hide'] = hide;
     handler['ok'] = ok;
+    _this.ok = ok;
     return handler as typeof handler & { hide: () => void; ok: typeof ok };
   });
 
-  return { show, hide, instance, resume, minimize };
+  const ok = useMemoizedFn((...args: any[]) => {
+    _this.ok?.(...args);
+  });
+
+  const instanceWithContext = React.createElement(
+    PromisifyModalContext.Provider,
+    {
+      value: useMemo(
+        () => ({
+          cancel: hide,
+          minimize,
+          resume,
+          ok,
+        }),
+        [],
+      ),
+    },
+    instance,
+  );
+
+  return { show, hide, instance: instanceWithContext, resume, minimize };
 }
 
 export const usePromisifyDrawer = (options: UsePromisifyModalOptions = {}) =>
