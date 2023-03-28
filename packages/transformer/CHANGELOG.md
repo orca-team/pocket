@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.0.8
+
+### Patch Changes
+
+- fix: TransformerLayout 删除事件导致显示不正确的问题
+
 ## 0.0.7
 
 ### Patch Changes
