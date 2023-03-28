@@ -22,15 +22,16 @@ const ToolbarPortal = (props: ToolbarPortalProps) => {
 
   const [, { inc: refresh }] = useCounter(0);
 
+  const show = alwaysShow || pages.length > 0;
   useEffect(() => {
-    if (placement === 'center') {
+    if (show && placement === 'center') {
       addCenterToolbarId(id, order);
       return () => {
         removeCenterToolbarId(id);
       };
     }
     return undefined;
-  }, [placement, order]);
+  }, [placement, order, show]);
 
   useEffect(() => {
     refresh();
@@ -43,7 +44,7 @@ const ToolbarPortal = (props: ToolbarPortalProps) => {
 
   if (toolbarDom == null) return null;
 
-  if (!alwaysShow && pages.length === 0) return null;
+  if (!show) return null;
   return <>{toolbarDom ? ReactDOM.createPortal(children, toolbarDom) : null}</>;
 };
 
