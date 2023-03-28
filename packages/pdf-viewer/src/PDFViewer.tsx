@@ -232,6 +232,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   // 自动调整缩放级别
   useSizeListener((size) => {
     if (size.width === 0 || size.height === 0) {
+      autoZoomDebounce.cancel();
       return;
     }
 
