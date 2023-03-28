@@ -44,7 +44,7 @@ const ToolbarPortal = (props: ToolbarPortalProps) => {
 
   if (toolbarDom == null) return null;
 
-  if (show) return null;
+  if (!show) return null;
   return <>{toolbarDom ? ReactDOM.createPortal(children, toolbarDom) : null}</>;
 };
 
