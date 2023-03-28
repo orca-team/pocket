@@ -18,6 +18,7 @@ export const isFetchResult = (value: any): value is FetchResult => {
 };
 
 export interface ServiceHandler<Args extends any[], Result> {
+
   /** 发起新的请求 */
   run: (...args: Args) => Promise<Result | undefined>;
 
@@ -44,6 +45,7 @@ export interface ServiceHandler<Args extends any[], Result> {
 }
 
 export interface ContextOptions {
+
   /** 是否手动发起第一次请求 */
   manual?: boolean;
 
@@ -59,11 +61,8 @@ export interface ContextOptions {
 
 export const UseServiceContext = React.createContext<ContextOptions>({});
 
-export interface ServiceOptions<
-  Args extends any[],
-  ServiceResult,
-  Result = ServiceResult,
-> extends ContextOptions {
+export interface ServiceOptions<Args extends any[], ServiceResult, Result = ServiceResult> extends ContextOptions {
+
   /** 默认结果 */
   initialData?: Result;
 
@@ -91,9 +90,7 @@ export interface ServiceOptions<
   };
 }
 
-export type Service<Args extends any[], Result> = (
-  ...args: Args
-) => Promise<Result>;
+export type Service<Args extends any[], Result> = (...args: Args) => Promise<Result>;
 
 export type ServiceState<Args extends any[], Result> = {
   loading?: boolean;
@@ -122,11 +119,7 @@ export function defaultFormatter<T>(res: T): FetchResultData<T> {
   return res as FetchResultData<T>;
 }
 
-export function useService<
-  Args extends any[],
-  ServiceResult = any,
-  Result = FetchResultData<ServiceResult>,
->(
+export function useService<Args extends any[], ServiceResult = any, Result = FetchResultData<ServiceResult>>(
   _service: Service<Args, ServiceResult>,
   options: ServiceOptions<Args, ServiceResult, Result> = {},
 ): ServiceHandler<Args, Result> {
@@ -143,6 +136,7 @@ export function useService<
     pollingInterval = 0,
     pollingWhenHidden = false,
     stateMgr,
+    onFinish,
   } = { ...globalOptions, ...options };
 
   const service = useMemoizedFn(_service);
@@ -162,17 +156,15 @@ export function useService<
     loading: false,
   }).current;
 
-  const setState = useMemoizedFn(
-    (newState: Partial<ServiceState<Args, Result>> = {}) => {
-      if (!_this.unloaded) {
-        if (cacheKey != null && newState.data) {
-          cache[cacheKey] = newState.data;
-        }
-        _setState((state) => ({ ...state, ...newState }));
-        // _setState({ ...state, ...newState });
+  const setState = useMemoizedFn((newState: Partial<ServiceState<Args, Result>> = {}) => {
+    if (!_this.unloaded) {
+      if (cacheKey != null && newState.data) {
+        cache[cacheKey] = newState.data;
       }
-    },
-  );
+      _setState(state => ({ ...state, ...newState }));
+      // _setState({ ...state, ...newState });
+    }
+  });
   // 组件状态控制 end
 
   const { loading = false, data, error, params } = state;
@@ -215,6 +207,9 @@ export function useService<
         } else if (typeof onError === 'function') {
           onError(new Error('result is undefined'), args);
         }
+        if (typeof onFinish === 'function') {
+          onFinish(res, args);
+        }
       } else {
         console.warn('Request response out date.');
       }
@@ -243,7 +238,7 @@ export function useService<
 
   const mutate = useMemoizedFn((data: SetStateAction<Result>) => {
     if (_this.unloaded) return;
-    _setState((oldState) => ({
+    _setState(oldState => ({
       ...oldState,
       // @ts-expect-error
       data: typeof data === 'function' ? data(oldState.data) : data,
