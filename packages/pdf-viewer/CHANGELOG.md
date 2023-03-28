@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 0.4.11
+
+### Patch Changes
+
+- feat: cancel resize when hide
+
 ## 0.4.10
 
 ### Patch Changes
