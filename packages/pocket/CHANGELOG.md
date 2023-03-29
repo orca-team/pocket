@@ -1,5 +1,16 @@
 # @orca-fe/pocket
 
+## 1.28.0
+
+### Minor Changes
+
+- feat: 对 Img, OpenBox, ResizableWrapper 的样式进行 jss 化
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/pocket@1.28.0
+
 ## 1.27.3
 
 ### Patch Changes

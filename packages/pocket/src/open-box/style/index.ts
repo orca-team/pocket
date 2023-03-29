@@ -1,1 +1,0 @@
-import '../OpenBox.less';
