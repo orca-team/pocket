@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.0.9
+
+### Patch Changes
+
+- feat: PDFViewer 自定义 loading 效果
+
 ## 0.0.8
 
 ### Patch Changes

@@ -32,7 +32,7 @@ function mergeArrays<T, U>(arr1: T[][] = [], arr2: U[][] = []): (T | U)[][] {
   return result;
 }
 
-const defaultLoadingTips = <div className="pdf-viewer-default-empty-tips">正在打开文件...</div>;
+const defaultLoadingTips = <div className="pdf-viewer-default-loading-tips">正在打开文件...</div>;
 
 const defaultEmptyTips = <div className="pdf-viewer-default-empty-tips">请打开一个 PDF 文件</div>;
 
@@ -65,6 +65,9 @@ export interface PDFViewerProps extends Omit<React.HTMLAttributes<HTMLDivElement
   /** 空文件提示 */
   emptyTips?: React.ReactElement;
 
+  /** 自定义加载过程提示 */
+  loadingTips?: React.ReactElement;
+
   /** 标注内容变化事件 */
   onMarkChange?: PDFPainterPluginProps['onMarkChange'];
 
@@ -93,6 +96,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     onPageScroll,
     children,
     emptyTips = defaultEmptyTips,
+    loadingTips = defaultLoadingTips,
     title: _title,
     hideToolbar,
     defaultTitle,
@@ -603,7 +607,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
               '--pdf-viewer-page-scale': scale,
             }}
           >
-            {viewports.length === 0 && (loading ? defaultLoadingTips : emptyTips)}
+            {viewports.length === 0 && emptyTips}
+            {loading && loadingTips}
             {viewports.map((viewport, pageIndex) => {
               const shouldRender = pageIndex >= renderRange[0] && pageIndex <= renderRange[1];
               const width = `calc(var(--scale-factor) * ${Math.floor(viewport.width)}px)`;
