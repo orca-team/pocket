@@ -12,9 +12,9 @@ group:
 
 ![npm](https://img.shields.io/npm/v/@orca-fe/painter.svg)
 
-`npm i @orca-fe/painter***REMOVED***`
+`npm i @orca-fe/painter`
 
-`yarn add @orca-fe/painter***REMOVED***`
+`yarn add @orca-fe/painter`
 
 ## 功能简介
 

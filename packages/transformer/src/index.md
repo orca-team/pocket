@@ -10,9 +10,9 @@ group:
 
 # Transformer
 
-`npm i @orca-fe/transformer***REMOVED***`
+`npm i @orca-fe/transformer`
 
-`yarn add @orca-fe/transformer***REMOVED***`
+`yarn add @orca-fe/transformer`
 
 ## 功能简介
 
