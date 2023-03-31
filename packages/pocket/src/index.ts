@@ -13,10 +13,7 @@ import type { BreadCrumbProps } from './custom-breadcrumb/Breadcrumb';
 import type { BreadCrumbMenuType } from './custom-breadcrumb/BreadcrumbContext';
 import type { ErrorCatcherProps } from './error-catcher';
 import ErrorCatcher from './error-catcher';
-import type {
-  ContextMenuItemWithSplitType,
-  ContextMenuProps,
-} from './context-menu';
+import type { ContextMenuItemWithSplitType, ContextMenuProps } from './context-menu';
 import ContextMenu from './context-menu';
 import shouldUpdate from './should-update';
 import type { EqRatioImgProps } from './eq-ratio-img';
@@ -40,18 +37,11 @@ import type { TextOverflowProps } from './text-overflow';
 import TextOverflow from './text-overflow';
 import type { BorderSliceImgProps } from './border-slice-img';
 import BorderSliceImg from './border-slice-img';
-import type {
-  UseViewportType,
-  Viewport,
-  ViewportSensorProps,
-} from './viewport-sensor';
+import type { UseViewportType, Viewport, ViewportSensorProps } from './viewport-sensor';
 import ViewportSensor from './viewport-sensor';
 import type { RulerGroupProps, RulerProps } from './ruler-group';
 import { RulerGroup } from './ruler-group';
-import type {
-  JsonSchemaEditorProps,
-  JsonValueType,
-} from './json-schema-editor';
+import type { JsonSchemaEditorProps, JsonValueType } from './json-schema-editor';
 import JsonSchemaEditor from './json-schema-editor';
 import type { IconButtonProps } from './icon-button';
 import IconButton from './icon-button';
@@ -74,6 +64,8 @@ import type { TooltipProps } from './tooltip';
 import Tooltip from './tooltip';
 import type { SliderProps } from './slider';
 import Slider from './slider';
+import type { LoadingDivProps } from './loading-div';
+import LoadingDiv from './loading-div';
 
 export type {
   EqRatioBoxProps,
@@ -115,6 +107,7 @@ export type {
   TriggerProps,
   TooltipProps,
   SliderProps,
+  LoadingDivProps,
 };
 
 export {
@@ -151,4 +144,5 @@ export {
   Trigger,
   Tooltip,
   Slider,
+  LoadingDiv,
 };

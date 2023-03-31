@@ -1,5 +1,16 @@
 # @orca-fe/pocket
 
+## 1.29.0
+
+### Minor Changes
+
+- feat: LoadingDiv
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/pocket@1.29.0
+
 ## 1.28.0
 
 ### Minor Changes
