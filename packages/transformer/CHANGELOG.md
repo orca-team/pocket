@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.0.10
+
+### Patch Changes
+
+- feat: transformer 完善文档 & 添加 onDataChange 导出参数
+
 ## 0.0.9
 
 ### Patch Changes
