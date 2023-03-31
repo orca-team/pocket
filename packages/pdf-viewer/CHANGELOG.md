@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 0.4.13
+
+### Patch Changes
+
+- fix: pdf-viewer loading state
+
 ## 0.4.12
 
 ### Patch Changes

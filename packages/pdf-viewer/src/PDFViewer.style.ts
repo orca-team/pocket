@@ -38,12 +38,17 @@ export default createUseStyles(
     toolbar: {
       flexShrink: 0,
     },
+    pagesOuter: {
+      position: 'relative',
+      flex: 1,
+      height: '100%',
+      overflow: 'hidden',
+    },
     pages: {
       position: 'relative',
       height: '100%',
       overflow: 'auto',
       padding: '24px 0',
-      flex: 1,
       backgroundColor: '#f0f2f5',
       paddingBottom: 48,
     },

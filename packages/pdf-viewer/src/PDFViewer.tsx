@@ -269,12 +269,13 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     setPages([]);
   });
   const load = useMemoizedFn<PDFViewerHandle['load']>(async (file) => {
-    let pdfContent = file;
-    if (pdfContent instanceof File) {
-      pdfContent = await pdfContent.arrayBuffer();
-    }
     if (pdfJs) {
       setLoading(true);
+      let pdfContent = file;
+      if (pdfContent instanceof File) {
+        pdfContent = await pdfContent.arrayBuffer();
+      }
+
       try {
         const pdfDoc = await pdfJs.getDocument(pdfContent).promise;
         if (pdfDoc) {
@@ -597,35 +598,37 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
               setToolbarRightDom(dom);
             }}
           />
-          <div
-            ref={pageContainerRef}
-            className={styles.pages}
-            onScroll={onPageScroll}
-            style={{
-              // @ts-expect-error
-              '--scale-factor': scale,
-              '--pdf-viewer-page-scale': scale,
-            }}
-          >
-            {viewports.length === 0 && emptyTips}
+          <div className={styles.pagesOuter}>
+            <div
+              ref={pageContainerRef}
+              className={styles.pages}
+              onScroll={onPageScroll}
+              style={{
+                // @ts-expect-error
+                '--scale-factor': scale,
+                '--pdf-viewer-page-scale': scale,
+              }}
+            >
+              {viewports.length === 0 && !loading && emptyTips}
+              {viewports.map((viewport, pageIndex) => {
+                const shouldRender = pageIndex >= renderRange[0] && pageIndex <= renderRange[1];
+                const width = `calc(var(--scale-factor) * ${Math.floor(viewport.width)}px)`;
+                const height = `calc(var(--scale-factor) * ${Math.floor(viewport.height)}px)`;
+                const gap = `calc(var(--scale-factor) * ${pageGap}px)`;
+                return (
+                  <div key={pageIndex} className={styles.pageContainer} style={{ width, height, marginBottom: gap }}>
+                    {shouldRender && (
+                      <>
+                        <PDFPage className={styles.page} index={pageIndex} zoom={zoom} render={shouldRender} />
+                        <div ref={node => (pageCoverRefs[pageIndex] = node)} className={styles.pageCover} />
+                        <div className={styles.pageCover}>{renderPageCover(pageIndex, { viewport, zoom })}</div>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
             {loading && loadingTips}
-            {viewports.map((viewport, pageIndex) => {
-              const shouldRender = pageIndex >= renderRange[0] && pageIndex <= renderRange[1];
-              const width = `calc(var(--scale-factor) * ${Math.floor(viewport.width)}px)`;
-              const height = `calc(var(--scale-factor) * ${Math.floor(viewport.height)}px)`;
-              const gap = `calc(var(--scale-factor) * ${pageGap}px)`;
-              return (
-                <div key={pageIndex} className={styles.pageContainer} style={{ width, height, marginBottom: gap }}>
-                  {shouldRender && (
-                    <>
-                      <PDFPage className={styles.page} index={pageIndex} zoom={zoom} render={shouldRender} />
-                      <div ref={node => (pageCoverRefs[pageIndex] = node)} className={styles.pageCover} />
-                      <div className={styles.pageCover}>{renderPageCover(pageIndex, { viewport, zoom })}</div>
-                    </>
-                  )}
-                </div>
-              );
-            })}
 
             {/* 绘图的工具栏渲染 */}
             {!disabledPluginPainter && <PDFPainterPlugin ref={pdfPainterHandle} onMarkChange={onMarkChange} />}
