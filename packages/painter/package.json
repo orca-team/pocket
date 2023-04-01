@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/painter",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Konva Painter",
   "keywords": [
     "react",
@@ -39,7 +39,6 @@
     "clear": "rimraf lib es"
   },
   "dependencies": {
-    "@babel/runtime": "^7.21.0",
     "@orca-fe/hooks": "^1.2.0",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
     "@orca-fe/pocket": "^1.27.2",
@@ -49,8 +48,6 @@
     "classnames": "^2.3.2",
     "color": "^4.2.3",
     "konva": "^8.4.2",
-    "rc-tooltip": "^5.3.1",
-    "rc-trigger": "^5.3.4",
     "react-colorful": "^5.6.1",
     "tslib": "^2.5.0"
   },

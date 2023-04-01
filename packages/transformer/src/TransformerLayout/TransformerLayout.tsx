@@ -26,7 +26,7 @@ export interface TransformerLayoutProps<T extends TransformerLayoutDataType>
   data?: T[];
 
   /** 数据列表发生变化时的回调 */
-  onDataChange?: (data: T[]) => void;
+  onDataChange?: (data: T[], action: 'change' | 'delete', index: number) => void;
 
   /** 渲染自定义子元素 */
   children?: (item: T, index: number) => React.ReactNode;
@@ -168,7 +168,7 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
             return i;
           });
           // 删除
-          setData(d => removeArrIndex(d, checkedIndex));
+          setData(d => removeArrIndex(d, checkedIndex), 'delete', checkedIndex);
         }
       }
     },
@@ -216,11 +216,14 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
                   setCheckedIndex(index);
                 }}
                 onBoundsChange={(bounds) => {
-                  setData(data =>
-                    changeArr(data, index, {
-                      ...item,
-                      bounds,
-                    }),
+                  setData(
+                    data =>
+                      changeArr(data, index, {
+                        ...item,
+                        bounds,
+                      }),
+                    'change',
+                    index,
                   );
                 }}
               >

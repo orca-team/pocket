@@ -8,7 +8,7 @@
 import React from 'react';
 import { Img } from '@orca-fe/pocket';
 
-const errSrc = `${window['publicPath'] ?? '/'}not-exists.jpg`;
+const errSrc = `${window['publicPath'] ?? '/'}error.jpg`;
 
 const Demo = () => (
   <div>
@@ -19,7 +19,7 @@ const Demo = () => (
     <div>自定义Error Element</div>
     <Img
       src="err url"
-      errSrc={
+      errSrc={(
         <div
           style={{
             position: 'absolute',
@@ -33,7 +33,7 @@ const Demo = () => (
         >
           Custom Error
         </div>
-      }
+      )}
       style={{ width: 100, height: 100 }}
     />
   </div>

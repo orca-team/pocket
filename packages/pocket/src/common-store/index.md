@@ -87,7 +87,7 @@ export default () => {
 
 请查看下方计数器组件实现的交互方案(建议查看 `Counter.tsx` 和 `CounterStore.ts` 的实现):
 
-<code src="./demo/Demo1.tsx" />
+<code src="./demo/Demo1.tsx" ></code>
 
 ## API
 

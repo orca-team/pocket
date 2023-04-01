@@ -1,3 +1,9 @@
+---
+nav:
+  title: 组件
+  order: 0
+---
+
 ![npm](https://img.shields.io/npm/v/@orca-fe/pocket.svg)
 
 # 介绍

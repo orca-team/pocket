@@ -1,3 +1,9 @@
+---
+nav:
+  title: 工具
+  order: 2
+---
+
 ![npm](https://img.shields.io/npm/v/@orca-fe/tools.svg)
 
 # 介绍

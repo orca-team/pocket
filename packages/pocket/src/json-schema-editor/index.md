@@ -10,7 +10,7 @@ group:
 
 # JsonSchemaEditor JSON 结构编辑器
 
-<code src="./demo/demo1.tsx" />
+<code src="./demo/demo1.tsx" ></code>
 
 ## API
 
@@ -56,11 +56,5 @@ export interface ArrayValueType extends BaseType {
   items: JsonValueType[];
 }
 
-export type JsonValueType =
-  | StringValueType
-  | NumberValueType
-  | BooleanValueType
-  | NullValueType
-  | ObjectValueType
-  | ArrayValueType;
+export type JsonValueType = StringValueType | NumberValueType | BooleanValueType | NullValueType | ObjectValueType | ArrayValueType;
 ```

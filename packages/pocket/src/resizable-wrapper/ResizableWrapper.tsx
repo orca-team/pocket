@@ -1,13 +1,11 @@
 import React, { useImperativeHandle, useMemo, useRef, useState } from 'react';
-import pc from 'prefix-classnames';
 import { useEventListener } from 'ahooks';
 import { useControllableProps, useSizeListener } from '@orca-fe/hooks';
 import { clamp } from '@orca-fe/tools';
+import cn from 'classnames';
+import useStyles from './ResizableWrapper.style';
 
-const px = pc('resizable-wrapper');
-
-export interface ResizableWrapperProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface ResizableWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
   vertical?: boolean;
   horizontal?: boolean;
   defaultWidth?: number;
@@ -58,17 +56,13 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
     height: defaultHeight,
   });
 
+  const styles = useStyles();
+
   const rootRef = useRef<HTMLDivElement>(null);
   useImperativeHandle(pRef, () => rootRef.current);
 
-  const clampWidth = useMemo(
-    () => (value: number) => clamp(value, minWidth, maxWidth),
-    [minWidth, maxWidth],
-  );
-  const clampHeight = useMemo(
-    () => (value: number) => clamp(value, minHeight, maxHeight),
-    [minHeight, maxHeight],
-  );
+  const clampWidth = useMemo(() => (value: number) => clamp(value, minWidth, maxWidth), [minWidth, maxWidth]);
+  const clampHeight = useMemo(() => (value: number) => clamp(value, minHeight, maxHeight), [minHeight, maxHeight]);
 
   const [_this] = useState<{
     size?: { width: number; height: number };
@@ -85,10 +79,7 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
       const { initialNum, initialMouse, type } = dragging;
       const curMouse = type === 'vertical' ? e.clientY : e.clientX;
       let sign = 1;
-      if (
-        (type === 'vertical' && verticalPosition === 'top') ||
-        (type === 'horizontal' && horizontalPosition === 'left')
-      ) {
+      if ((type === 'vertical' && verticalPosition === 'top') || (type === 'horizontal' && horizontalPosition === 'left')) {
         sign = -1;
       }
       const curNum = Math.max(1, initialNum + sign * (curMouse - initialMouse));
@@ -131,7 +122,7 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
   return (
     <div
       ref={rootRef}
-      className={`${px('root')} ${className}`}
+      className={`${styles.root} ${className}`}
       style={{
         minWidth,
         minHeight,
@@ -147,9 +138,9 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
       {children}
       {vertical && (
         <div
-          className={px('drag-handle', 'handle-vertical', {
-            dragging: dragging?.type === 'vertical',
-            'handle-vertical-top': verticalPosition === 'top',
+          className={cn(styles.dragHandle, styles.handleVertical, {
+            [styles.dragging]: dragging?.type === 'vertical',
+            [styles.handleVerticalTop]: verticalPosition === 'top',
           })}
           draggable
           onDragStart={(e) => {
@@ -166,9 +157,9 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
       )}
       {horizontal && (
         <div
-          className={px('drag-handle', 'handle-horizontal', {
-            dragging: dragging?.type === 'horizontal',
-            'handle-horizontal-left': horizontalPosition === 'left',
+          className={cn(styles.dragHandle, styles.handleHorizontal, {
+            [styles.dragging]: dragging?.type === 'horizontal',
+            [styles.handleHorizontalLeft]: horizontalPosition === 'left',
           })}
           draggable
           onDragStart={(e) => {

@@ -1,3 +1,9 @@
+---
+nav:
+  title: Tools
+  order: 2
+---
+
 ![npm](https://img.shields.io/npm/v/@orca-fe/tools.svg)
 
 # Introduction

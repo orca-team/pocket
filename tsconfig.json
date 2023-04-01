@@ -21,7 +21,8 @@
       "@orca-fe/hooks": ["./packages/hooks/src"],
       "@orca-fe/pdf-viewer": ["./packages/pdf-viewer/src"],
       "@orca-fe/painter": ["./packages/painter/src"],
-      "@orca-fe/transformer": ["./packages/transformer/src"]
+      "@orca-fe/transformer": ["./packages/transformer/src"],
+      "@@/*": [".dumi/tmp/*"]
     },
     "outDir": "./lib",
     "allowSyntheticDefaultImports": true

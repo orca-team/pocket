@@ -3,18 +3,15 @@ title: 画布 Painter
 nav:
   title: 重型组件
   path: /pro-component
-group:
-  title: 画布 Painter
-  path: /painter
 ---
 
 # 画布 Painter
 
 ![npm](https://img.shields.io/npm/v/@orca-fe/painter.svg)
 
-`npm i @orca-fe/painter --registry=https://registry-cnpm.dayu.work/`
+`npm i @orca-fe/painter`
 
-`yarn add @orca-fe/painter --registry=https://registry-cnpm.dayu.work/`
+`yarn add @orca-fe/painter`
 
 ## 功能简介
 

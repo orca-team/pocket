@@ -1,23 +1,13 @@
-import React, {
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import pc from 'prefix-classnames';
+import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import useStyles from './Img.style';
 
-const px = pc('orca-img');
-
-const defaultErrSrc = <div className={px('error-tip')}>暂无图片</div>;
+const defaultErrSrc = <div className="orca-img-error-tip">暂无图片</div>;
 const ef = () => undefined;
 
 export interface ImgProps extends React.HTMLAttributes<HTMLImageElement> {
+
   /** 图片 ref */
-  imgRef?:
-    | ((instance: HTMLImageElement) => void)
-    | React.MutableRefObject<HTMLImageElement>;
+  imgRef?: ((instance: HTMLImageElement) => void) | React.MutableRefObject<HTMLImageElement>;
 
   /** 图片链接 */
   src: string;
@@ -33,23 +23,12 @@ export interface ImgProps extends React.HTMLAttributes<HTMLImageElement> {
 }
 
 const Img = React.forwardRef<HTMLDivElement, ImgProps>((props, pRef) => {
-  const {
-    imgRef,
-    className,
-    src,
-    loadingSrc,
-    errSrc = defaultErrSrc,
-    stretch = true,
-    onLoad = ef,
-    onError = ef,
-    ...otherProps
-  } = props;
+  const { imgRef, className = '', src, loadingSrc, errSrc = defaultErrSrc, stretch = true, onLoad = ef, onError = ef, ...otherProps } = props;
+  const styles = useStyles();
   const ref = useRef<HTMLDivElement>(null);
   useImperativeHandle(pRef, () => ref.current!);
 
-  const [imgState, setImgState] = useState<'loading' | 'loaded' | 'error'>(
-    'loading',
-  );
+  const [imgState, setImgState] = useState<'loading' | 'loaded' | 'error'>('loading');
 
   const [_this] = useState(() => ({
     imgState,
@@ -88,7 +67,7 @@ const Img = React.forwardRef<HTMLDivElement, ImgProps>((props, pRef) => {
     [imgState],
   );
   return (
-    <div ref={ref} className={`${px('root')} ${className}`} {...otherProps}>
+    <div ref={ref} className={`${styles.root} ${className}`} {...otherProps}>
       <img
         ref={imgRef}
         alt=""
@@ -100,18 +79,8 @@ const Img = React.forwardRef<HTMLDivElement, ImgProps>((props, pRef) => {
           ...(stretch ? { width: '100%', height: '100%' } : {}),
         }}
       />
-      {imgState === 'loading' &&
-        (typeof loadingSrc === 'string' ? (
-          <img className={px('loading')} alt="" src={loadingSrc} />
-        ) : (
-          loadingSrc
-        ))}
-      {imgState === 'error' &&
-        (typeof errSrc === 'string' ? (
-          <img className={px('loading')} alt="" src={errSrc} />
-        ) : (
-          errSrc
-        ))}
+      {imgState === 'loading' && (typeof loadingSrc === 'string' ? <img className={styles.loading} alt="" src={loadingSrc} /> : loadingSrc)}
+      {imgState === 'error' && (typeof errSrc === 'string' ? <img className={styles.loading} alt="" src={errSrc} /> : errSrc)}
     </div>
   );
 });

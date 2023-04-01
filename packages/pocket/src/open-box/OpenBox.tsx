@@ -1,8 +1,6 @@
 import { useMount, usePersistFn, useUpdateEffect } from 'ahooks-v2';
 import React, { useImperativeHandle, useRef } from 'react';
-import prefixClassnames from 'prefix-classnames';
-
-const px = prefixClassnames('orca-open-box');
+import useStyles from './OpenBox.style';
 
 export interface OpenBoxProps extends React.HTMLAttributes<HTMLDivElement> {
   open: boolean;
@@ -11,24 +9,17 @@ export interface OpenBoxProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const OpenBox: React.FC<OpenBoxProps> = React.forwardRef((props, pRef) => {
-  const {
-    className = '',
-    open,
-    height = 0,
-    defaultHeight = 'auto',
-    style,
-    ...otherProps
-  } = props;
+  const { className = '', open, height = 0, defaultHeight = 'auto', style, ...otherProps } = props;
+
+  const styles = useStyles();
+
   const ref = useRef<HTMLDivElement>(null);
   useImperativeHandle(pRef, () => ref.current);
 
   useMount(() => {
     if (ref.current) {
       if (open) {
-        if (
-          defaultHeight === 'auto' ||
-          ref.current.scrollHeight === defaultHeight
-        ) {
+        if (defaultHeight === 'auto' || ref.current.scrollHeight === defaultHeight) {
           return;
         }
         ref.current.style.height = `${ref.current.scrollHeight}px`;
@@ -39,17 +30,15 @@ const OpenBox: React.FC<OpenBoxProps> = React.forwardRef((props, pRef) => {
   });
 
   useUpdateEffect(() => {
-    if (ref.current) {
+    const dom = ref.current;
+    if (dom) {
       if (open) {
-        let { scrollHeight } = ref.current;
-        if (
-          ref.current.clientHeight >= scrollHeight &&
-          height >= scrollHeight
-        ) {
+        let { scrollHeight } = dom;
+        if (dom.clientHeight >= scrollHeight && height >= scrollHeight) {
           // 如果展开高度和当前高度一样，则重新计算一次内部元素高度
           let top = Infinity;
           let bottom = -Infinity;
-          for (const child of ref.current.children) {
+          for (const child of dom.children) {
             const bounds = child.getBoundingClientRect();
             top = Math.min(top, bounds.top);
             bottom = Math.max(bottom, bounds.top + bounds.height);
@@ -76,7 +65,7 @@ const OpenBox: React.FC<OpenBoxProps> = React.forwardRef((props, pRef) => {
   return (
     <div
       ref={ref}
-      className={`${px()} ${className}`}
+      className={`${styles.root} ${className}`}
       onTransitionEnd={handleTransitionEnd}
       style={{
         height: defaultHeight,

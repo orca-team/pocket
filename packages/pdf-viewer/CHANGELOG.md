@@ -1,5 +1,19 @@
 # @orca-fe/pdf-viewer
 
+## 0.4.13
+
+### Patch Changes
+
+- fix: pdf-viewer loading state
+
+## 0.4.12
+
+### Patch Changes
+
+- feat: PDFViewer 自定义 loading 效果
+- Updated dependencies
+  - @orca-fe/painter@0.0.9
+
 ## 0.4.11
 
 ### Patch Changes

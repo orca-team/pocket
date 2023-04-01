@@ -3,18 +3,16 @@ title: PDF 阅读器 PdfViewer
 nav:
   title: 重型组件
   path: /pro-component
-group:
-  title: PDF 阅读器 PdfViewer
-  path: /pdf-viewer
+path: /pdf-viewer
 ---
 
 # PDF 阅读器 PdfViewer
 
 ![npm](https://img.shields.io/npm/v/@orca-fe/pdf-viewer.svg)
 
-`npm i @orca-fe/pdf-viewer --registry=https://registry-cnpm.dayu.work/`
+`npm i @orca-fe/pdf-viewer`
 
-`yarn add @orca-fe/pdf-viewer --registry=https://registry-cnpm.dayu.work/`
+`yarn add @orca-fe/pdf-viewer`
 
 ## 功能简介
 
