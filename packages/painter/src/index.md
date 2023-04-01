@@ -3,9 +3,6 @@ title: 画布 Painter
 nav:
   title: 重型组件
   path: /pro-component
-group:
-  title: 画布 Painter
-  path: /painter
 ---
 
 # 画布 Painter

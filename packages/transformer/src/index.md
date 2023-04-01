@@ -3,9 +3,6 @@ title: Transformer
 nav:
   title: 重型组件
   path: /pro-component
-group:
-  title: Transformer
-  path: /transformer
 ---
 
 # Transformer

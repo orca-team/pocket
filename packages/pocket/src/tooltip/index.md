@@ -1,5 +1,5 @@
 ---
-title: Trigger 下拉内容
+title: Tooltip 提示框
 nav:
   title: Pocket 组件
   path: /component
@@ -8,7 +8,7 @@ group:
   path: /base
 ---
 
-# Trigger 下拉内容
+# Tooltip 提示框
 
 下拉内容
 
@@ -20,7 +20,7 @@ Later
 
 ## API
 
-[`@rc-component/trigger`](https://github.com/react-component/trigger)
+[`rc-tooltip`](https://github.com/react-component/tooltip)
 
 | 属性 | 说明 | 类型 | 默认值 |
 | ---- | ---- | ---- | ------ |

@@ -1,3 +1,9 @@
+---
+nav:
+  title: Hooks
+  order: 1
+---
+
 ![npm](https://img.shields.io/npm/v/@orca-fe/hooks.svg)
 
 # 介绍

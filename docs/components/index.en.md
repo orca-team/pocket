@@ -1,3 +1,9 @@
+---
+nav:
+  title: Component
+  order: 0
+---
+
 ![npm](https://img.shields.io/npm/v/@orca-fe/pocket.svg)
 
 # Introduction

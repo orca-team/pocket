@@ -1,5 +1,5 @@
 ---
-title: Trigger 下拉内容
+title: Slider 滑动条
 nav:
   title: Pocket 组件
   path: /component
@@ -8,7 +8,7 @@ group:
   path: /base
 ---
 
-# Trigger 下拉内容
+# Slider 滑动条
 
 下拉内容
 
@@ -20,7 +20,7 @@ Later
 
 ## API
 
-[`@rc-component/trigger`](https://github.com/react-component/trigger)
+[`rc-slider`](https://github.com/react-component/slider)
 
 | 属性 | 说明 | 类型 | 默认值 |
 | ---- | ---- | ---- | ------ |

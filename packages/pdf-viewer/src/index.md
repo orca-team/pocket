@@ -3,9 +3,7 @@ title: PDF 阅读器 PdfViewer
 nav:
   title: 重型组件
   path: /pro-component
-group:
-  title: PDF 阅读器 PdfViewer
-  path: /pdf-viewer
+path: /pdf-viewer
 ---
 
 # PDF 阅读器 PdfViewer
