@@ -1,16 +1,20 @@
-export type ShapeType = 'line' | 'ellipse' | 'rectangle' | 'line-path' | string;
+export type ShapeType = 'line' | 'ellipse' | 'rectangle' | 'line-path' | 'image' | string;
+
+export type Point = [number, number];
 
 export type LineShapeType = {
   type: 'line';
-  points: [number, number, number, number];
+  point1: Point;
+  point2: Point;
 };
 
 export type EllipseType = {
   type: 'ellipse';
   x: number;
   y: number;
-  radiusX: number;
-  radiusY: number;
+  width: number;
+  height: number;
+  rotate: number;
 };
 
 export type RectangleType = {
@@ -19,15 +23,37 @@ export type RectangleType = {
   y: number;
   width: number;
   height: number;
+  rotate: number;
 };
 
 export type LinePathType = {
   type: 'line-path';
-  points: number[];
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  rotate: number;
+  points: Point[];
 };
 
-export type ShapeDataType =
-  | LineShapeType
-  | EllipseType
-  | RectangleType
-  | LinePathType;
+export type ImageType = {
+  type: 'image';
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  rotate: number;
+  src: string;
+};
+
+export type GraphShapeType = LineShapeType | EllipseType | RectangleType | LinePathType;
+
+export type ShapeDataType = GraphShapeType | ImageType;
+
+export function isGraphShapeType(shape: ShapeDataType): shape is GraphShapeType {
+  return shape.type !== 'image';
+}
+
+export function isImageType(shape: ShapeDataType): shape is ImageType {
+  return shape.type === 'image';
+}

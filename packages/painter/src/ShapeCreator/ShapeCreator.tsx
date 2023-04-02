@@ -1,36 +1,27 @@
 import React, { useRef, useState } from 'react';
 import { usePan } from '@orca-fe/hooks';
 import useStyle from './ShapeCreator.style';
-import type { ShapeDataType, ShapeType } from '../def';
+import type { GraphShapeType, ShapeType } from '../def';
 import { simplify } from '../pathSimplify';
 
 const ef = () => {};
 
-export interface ShapeCreatorProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface ShapeCreatorProps extends React.HTMLAttributes<HTMLDivElement> {
   shapeType?: ShapeType;
-  onDrawing?: (shape: ShapeDataType) => void;
-  onCreate?: (shape: ShapeDataType) => void;
+  onDrawing?: (shape: GraphShapeType) => void;
+  onCreate?: (shape: GraphShapeType) => void;
   onCancel?: () => void;
   pointMapping?: (point: { x: number; y: number }) => { x: number; y: number };
 }
 
 const ShapeCreator = (props: ShapeCreatorProps) => {
-  const {
-    className = '',
-    shapeType = 'line',
-    onCreate = ef,
-    onDrawing = ef,
-    onCancel = ef,
-    pointMapping = (a) => a,
-    ...otherProps
-  } = props;
+  const { className = '', shapeType = 'line', onCreate = ef, onDrawing = ef, onCancel = ef, pointMapping = a => a, ...otherProps } = props;
   const styles = useStyle();
 
   const rootRef = useRef<HTMLDivElement>(null);
 
   const [_this] = useState<{
-    data?: ShapeDataType;
+    data?: GraphShapeType;
   }>({});
 
   usePan(({ ev, startPosition, offset, start, finish }) => {
@@ -52,26 +43,32 @@ const ShapeCreator = (props: ShapeCreatorProps) => {
 
     switch (shapeType) {
       case 'line':
-        _this.data = { type: 'line', points: [x1, y1, x2, y2] };
+        _this.data = { type: 'line', point1: [x1, y1], point2: [x2, y2] };
         break;
       // eslint-disable-next-line no-fallthrough
       case 'ellipse':
         _this.data = {
           type: 'ellipse',
-          x: x + 0.5 * width,
-          y: y + 0.5 * height,
-          radiusX: 0.5 * width,
-          radiusY: 0.5 * height,
+          x,
+          y,
+          width,
+          height,
+          rotate: 0,
         };
         break;
       case 'rectangle':
-        _this.data = { type: 'rectangle', x, y, width, height };
+        _this.data = { type: 'rectangle', x, y, width, height, rotate: 0 };
         break;
       case 'line-path':
         // 折线
         _this.data = {
           type: 'line-path',
-          points: [...(_this.data?.['points'] ?? []), x2, y2],
+          x,
+          y,
+          width,
+          height,
+          points: [...(_this.data?.['points'] ?? []), [x2, y2]],
+          rotate: 0,
         };
         break;
       default:
@@ -96,13 +93,7 @@ const ShapeCreator = (props: ShapeCreatorProps) => {
     }
   }, rootRef);
 
-  return (
-    <div
-      ref={rootRef}
-      className={`${styles.root} ${className}`}
-      {...otherProps}
-    />
-  );
+  return <div ref={rootRef} className={`${styles.root} ${className}`} {...otherProps} />;
 };
 
 export default ShapeCreator;
