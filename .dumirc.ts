@@ -44,24 +44,6 @@ export default defineConfig({
   extraBabelIncludes: [/\.md/],
   extraBabelPlugins: [
     [
-      'import',
-      {
-        libraryName: '@orca-fe/pocket',
-        libraryDirectory: '',
-        // style: true,
-        style: (name: string, file: Object) => {
-          console.log(name);
-          const matched = name.match(/@orca-fe\/pocket\/([^/]+)/);
-          if (matched) {
-            console.log(matched[1]);
-            return resolve('packages', 'pocket', 'src', matched[1], 'style');
-          }
-          return false;
-        },
-      },
-      'orca',
-    ],
-    [
       'babel-plugin-import',
       {
         libraryName: 'antd',
