@@ -1,22 +1,15 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import pc from 'prefix-classnames';
 import { useMap, useMemoizedFn } from 'ahooks';
-import './TabsLayout.less';
 import ReactDOM from 'react-dom';
 import type { TabsProps } from 'antd';
 import { Tabs } from 'antd';
 import { changeArr, removeArrIndex } from '@orca-fe/tools';
 import type { TabCloseListener, TabConfigType } from './TabsLayoutContext';
-import TabsLayoutContext, {
-  TabConfigContext,
-  useTabCloseListener,
-} from './TabsLayoutContext';
+import TabsLayoutContext, { TabConfigContext, useTabCloseListener } from './TabsLayoutContext';
+import useStyles from './TabsLayout.style';
 
-const px = pc('orca-tabs-layout');
-
-const TabView = (
-  props: Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>,
-) => {
+const TabView = (props: Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>) => {
+  const styles = useStyles();
   const { className = '', ...otherProps } = props;
   const { setRenderRoot } = useContext(TabsLayoutContext);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -30,13 +23,7 @@ const TabView = (
     }
     return undefined;
   }, []);
-  return (
-    <div
-      ref={rootRef}
-      className={`${px('view')} ${className}`}
-      {...otherProps}
-    />
-  );
+  return <div ref={rootRef} className={`${styles.view} ${className}`} {...otherProps} />;
 };
 
 const eArr = [];
@@ -49,15 +36,8 @@ export interface TabsLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const TabsLayout = (props: TabsLayoutProps) => {
-  const {
-    className = '',
-    children = <TabView />,
-    emptyContent = null,
-    tabsProps,
-    initialTabs = eArr,
-    defaultActiveKey = '',
-    ...otherProps
-  } = props;
+  const { className = '', children = <TabView />, emptyContent = null, tabsProps, initialTabs = eArr, defaultActiveKey = '', ...otherProps } = props;
+  const styles = useStyles();
 
   const [root, setRoot] = useState<HTMLElement | null>(null);
 
@@ -71,34 +51,30 @@ const TabsLayout = (props: TabsLayoutProps) => {
   const [, onCloseListenerMap] = useMap<string, Set<TabCloseListener>>([]);
 
   // 添加 tab
-  const add = useMemoizedFn(
-    (tabConfig: TabConfigType, active: boolean = true) => {
-      setTabs((tabs) => {
-        const index = tabs.findIndex(({ key }) => key === tabConfig.key);
-        // TODO order
-        if (index >= 0) {
-          return changeArr(tabs, index, tabConfig);
-        }
-        return [...tabs, tabConfig];
-      });
-      if (active || tabs.length === 0) {
-        setActiveKey(tabConfig.key);
+  const add = useMemoizedFn((tabConfig: TabConfigType, active: boolean = true) => {
+    setTabs((tabs) => {
+      const index = tabs.findIndex(({ key }) => key === tabConfig.key);
+      // TODO order
+      if (index >= 0) {
+        return changeArr(tabs, index, tabConfig);
       }
-    },
-  );
+      return [...tabs, tabConfig];
+    });
+    if (active || tabs.length === 0) {
+      setActiveKey(tabConfig.key);
+    }
+  });
 
   // 添加 tab
-  const update = useMemoizedFn(
-    (tabConfig: Partial<TabConfigType> & { key: string }) => {
-      setTabs((tabs) => {
-        const index = tabs.findIndex(({ key }) => key === tabConfig.key);
-        if (index >= 0) {
-          return changeArr(tabs, index, { ...tabs[index], ...tabConfig });
-        }
-        return tabs;
-      });
-    },
-  );
+  const update = useMemoizedFn((tabConfig: Partial<TabConfigType> & { key: string }) => {
+    setTabs((tabs) => {
+      const index = tabs.findIndex(({ key }) => key === tabConfig.key);
+      if (index >= 0) {
+        return changeArr(tabs, index, { ...tabs[index], ...tabConfig });
+      }
+      return tabs;
+    });
+  });
 
   // 移除 tab
   const remove = useMemoizedFn(async (_key: string) => {
@@ -143,29 +119,25 @@ const TabsLayout = (props: TabsLayoutProps) => {
     }
   });
 
-  const addCloseListener = useMemoizedFn(
-    (_key: string, callback: TabCloseListener) => {
-      let listenerList = onCloseListenerMap.get(_key);
-      if (listenerList == null) {
-        listenerList = new Set();
-      }
-      listenerList.add(callback);
-      onCloseListenerMap.set(_key, listenerList);
-    },
-  );
+  const addCloseListener = useMemoizedFn((_key: string, callback: TabCloseListener) => {
+    let listenerList = onCloseListenerMap.get(_key);
+    if (listenerList == null) {
+      listenerList = new Set();
+    }
+    listenerList.add(callback);
+    onCloseListenerMap.set(_key, listenerList);
+  });
 
-  const removeCloseListener = useMemoizedFn(
-    (_key: string, callback: TabCloseListener) => {
-      const listenerList = onCloseListenerMap.get(_key);
-      if (listenerList != null) {
-        listenerList.delete(callback);
-        onCloseListenerMap.set(_key, listenerList);
-      }
-    },
-  );
+  const removeCloseListener = useMemoizedFn((_key: string, callback: TabCloseListener) => {
+    const listenerList = onCloseListenerMap.get(_key);
+    if (listenerList != null) {
+      listenerList.delete(callback);
+      onCloseListenerMap.set(_key, listenerList);
+    }
+  });
 
   return (
-    <div className={`${px('root')} ${className}`} {...otherProps}>
+    <div className={`${styles.root} ${className}`} {...otherProps}>
       <TabsLayoutContext.Provider
         value={{
           setRenderRoot: setRoot,
@@ -185,7 +157,7 @@ const TabsLayout = (props: TabsLayoutProps) => {
             ReactDOM.createPortal(
               tabs.length > 0 ? (
                 <Tabs
-                  className={px('tab')}
+                  className={styles.tab}
                   type="editable-card"
                   activeKey={activeKey}
                   onChange={setActiveKey}
@@ -199,13 +171,7 @@ const TabsLayout = (props: TabsLayoutProps) => {
                   {...tabsProps}
                 >
                   {tabs.map((tabConfig, index) => {
-                    const {
-                      key,
-                      content,
-                      title,
-                      params,
-                      closable = true,
-                    } = tabConfig;
+                    const { key, content, title, params, closable = true } = tabConfig;
                     return (
                       <Tabs.TabPane key={key} tab={title} closable={closable}>
                         <TabConfigContext.Provider

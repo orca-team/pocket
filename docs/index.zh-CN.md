@@ -8,7 +8,7 @@ hero:
     - text: 工具
       link: /tools
     - text: 组件库
-      link: /component
+      link: /components
 
 footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [dumi](https://d.umijs.org)
 ---

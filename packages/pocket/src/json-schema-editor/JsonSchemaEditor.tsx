@@ -1,42 +1,24 @@
 import React, { useState } from 'react';
-import pc from 'prefix-classnames';
-import './JsonSchemaEditor.less';
 import { useControllableValue, useMemoizedFn } from 'ahooks';
-import {
-  CaretRightFilled,
-  CloseOutlined,
-  MenuOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
+import { CaretRightFilled, CloseOutlined, MenuOutlined, PlusOutlined } from '@ant-design/icons';
 import { Checkbox, Dropdown, Menu, Select, Tooltip } from 'antd';
 import { insertArr, removeArrIndex } from '@orca-fe/tools';
+import cn from 'classnames';
 import DraggableList from './DraggableListNoKey';
 import IconButton from './IconButton';
 import { defaultValueFromJsonSchema, toTypeScriptDefinition } from './utils';
 import type { BaseType, JsonValueType } from './defs';
 import UcInput from '../uc-input/UcInput';
 import OpenBox from '../open-box/OpenBox';
+import useStyles from './JsonSchemaEditor.style';
 
 export type { JsonValueType };
 
-const px = pc('json-schema-editor');
-
 const ef = () => {};
 
-const jsonValueTypes = [
-  'number',
-  'string',
-  'boolean',
-  'null',
-  'object',
-  'array',
-];
+const jsonValueTypes = ['number', 'string', 'boolean', 'null', 'object', 'array'];
 
-export interface JsonSchemaItemProps
-  extends Omit<
-    React.HTMLAttributes<HTMLDivElement>,
-    'defaultValue' | 'onChange'
-  > {
+export interface JsonSchemaItemProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'> {
   defaultValue?: JsonValueType;
   value?: JsonValueType;
   onChange?: (value: JsonValueType) => void;
@@ -73,8 +55,8 @@ const JsonSchemaItem = (props: JsonSchemaItemProps) => {
     addSiblings,
     ...otherProps
   } = props;
-  const [value = {} as JsonValueType, setValue] =
-    useControllableValue<BaseType>(props);
+  const styles = useStyles();
+  const [value = {} as JsonValueType, setValue] = useControllableValue<BaseType>(props);
 
   const collapsable = value.type === 'array' || value.type === 'object';
   const addChild = value.type === 'object';
@@ -82,9 +64,9 @@ const JsonSchemaItem = (props: JsonSchemaItemProps) => {
   const prefix: React.ReactElement[] = [];
   if (draggable) {
     prefix.push(
-      <div key="draggable" className={px('item-space')}>
+      <div key="draggable" className={styles.itemSpace}>
         <IconButton
-          className={px('drag-handle')}
+          className={styles.dragHandle}
           size="small"
           draggable
           onDragStart={(e) => {
@@ -101,17 +83,14 @@ const JsonSchemaItem = (props: JsonSchemaItemProps) => {
   }
   if (collapsable) {
     prefix.push(
-      <div key="collapsable" className={px('item-space')}>
+      <div key="collapsable" className={styles.itemSpace}>
         <IconButton
           size="small"
           onClick={() => {
             onOpenChange(!open);
           }}
         >
-          <CaretRightFilled
-            className={px('icon', { open })}
-            style={{ color: '#999999' }}
-          />
+          <CaretRightFilled className={cn(styles.icon, { [styles.open]: open })} style={{ color: '#999999' }} />
         </IconButton>
       </div>,
     );
@@ -134,7 +113,7 @@ const JsonSchemaItem = (props: JsonSchemaItemProps) => {
     // 可添加子节点和相邻节点，需要使用 Dropdown
     buttons.push(
       <Dropdown
-        overlay={
+        overlay={(
           <Menu>
             <Menu.Item
               key="1"
@@ -153,7 +132,7 @@ const JsonSchemaItem = (props: JsonSchemaItemProps) => {
               添加子节点
             </Menu.Item>
           </Menu>
-        }
+        )}
       >
         <IconButton size="small">
           <PlusOutlined style={{ color: '#1199ff' }} />
@@ -180,12 +159,9 @@ const JsonSchemaItem = (props: JsonSchemaItemProps) => {
   }
 
   return (
-    <div className={px('item')} {...otherProps}>
-      <div className={px('item-left')}>
-        <div
-          className={px('item-space')}
-          style={{ width: 32 * (level + 1 - prefix.length) }}
-        />
+    <div className={styles.item} {...otherProps}>
+      <div className={styles.itemLeft}>
+        <div className={styles.itemSpace} style={{ width: 32 * (level + 1 - prefix.length) }} />
         {prefix}
         <UcInput
           placeholder="属性名称"
@@ -196,9 +172,9 @@ const JsonSchemaItem = (props: JsonSchemaItemProps) => {
           }}
         />
       </div>
-      <div className={px('item-right')}>
+      <div className={styles.itemRight}>
         <Tooltip title="是否必须">
-          <div className={px('item-space', 'checkbox')}>
+          <div className={`${styles.itemSpace} ${styles.checkbox}`}>
             <Checkbox
               disabled={nameDisabled}
               checked={value.required}
@@ -212,7 +188,7 @@ const JsonSchemaItem = (props: JsonSchemaItemProps) => {
           </div>
         </Tooltip>
         <Select
-          className={px('item-type')}
+          className={styles.itemType}
           value={value.type}
           onChange={(type) => {
             setValue({
@@ -221,14 +197,14 @@ const JsonSchemaItem = (props: JsonSchemaItemProps) => {
             });
           }}
         >
-          {jsonValueTypes.map((value) => (
+          {jsonValueTypes.map(value => (
             <Select.Option key={value} value={value}>
               {value}
             </Select.Option>
           ))}
         </Select>
         <Tooltip title="可否为Null">
-          <div className={px('item-space', 'checkbox')}>
+          <div className={`${styles.itemSpace} ${styles.checkbox}`}>
             <Checkbox
               checked={value.nullable}
               onChange={(e) => {
@@ -256,18 +232,14 @@ const JsonSchemaItem = (props: JsonSchemaItemProps) => {
             setValue({ ...value, defaultValue });
           }}
         />
-        <div className={px('item-space', 'button')}>{buttons[0]}</div>
-        <div className={px('item-space', 'button')}>{buttons[1]}</div>
+        <div className={`${styles.itemSpace} ${styles.button}`}>{buttons[0]}</div>
+        <div className={`${styles.itemSpace} ${styles.button}`}>{buttons[1]}</div>
       </div>
     </div>
   );
 };
 
-export interface JsonSchemaEditorProps
-  extends Omit<
-    React.HTMLAttributes<HTMLDivElement>,
-    'defaultValue' | 'onChange'
-  > {
+export interface JsonSchemaEditorProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'> {
   // 结构数据
   defaultValue?: JsonValueType;
   value?: JsonValueType;
@@ -302,11 +274,10 @@ const JsonSchemaEditor = (props: JsonSchemaEditorProps) => {
     onDelete,
     ...otherProps
   } = props;
-  const [value = {} as JsonValueType, _setValue] =
-    useControllableValue<JsonValueType>(props);
+  const styles = useStyles();
+  const [value = {} as JsonValueType, _setValue] = useControllableValue<JsonValueType>(props);
   // 默认情况下，Object 和 null 类型无法编辑默认值
-  const defaultValueDisabled =
-    _defaultValueDisabled ?? (value.type === 'object' || value.type === 'null');
+  const defaultValueDisabled = _defaultValueDisabled ?? (value.type === 'object' || value.type === 'null');
   const collapsable = value.type === 'array' || value.type === 'object';
   const [open, setOpen] = useState(true);
 
@@ -330,7 +301,6 @@ const JsonSchemaEditor = (props: JsonSchemaEditorProps) => {
         _setValue({ ...newValue, items: [] });
         return;
       } else if ('items' in newValue) {
-        // @ts-expect-error
         const { items, ...v } = newValue;
         _setValue(v);
         return;
@@ -374,7 +344,7 @@ const JsonSchemaEditor = (props: JsonSchemaEditorProps) => {
   });
 
   return (
-    <div className={`${px('root')} ${className}`} {...otherProps}>
+    <div className={`${styles.root} ${className}`} {...otherProps}>
       <JsonSchemaItem
         value={value}
         level={level}
@@ -424,11 +394,7 @@ const JsonSchemaEditor = (props: JsonSchemaEditorProps) => {
                   handleAddSiblings(index);
                 }}
                 nameDisabled={value.type === 'array'}
-                defaultValueDisabled={
-                  _defaultValueDisabled || value.type === 'array'
-                    ? true
-                    : undefined
-                }
+                defaultValueDisabled={_defaultValueDisabled || value.type === 'array' ? true : undefined}
                 root={false}
                 onDelete={() => {
                   handleDelete(index);

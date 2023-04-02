@@ -1,12 +1,9 @@
 import React from 'react';
-import pc from 'prefix-classnames';
 import { SimpleNumberInput } from '@orca-fe/pocket';
 import { CaretDownOutlined } from '@ant-design/icons';
 import { useControllableValue } from 'ahooks';
 import { Dropdown, Menu } from 'antd';
-import './ZoomEditor.less';
-
-const px = pc('zoom-editor');
+import useStyles from './ZoomEditor.style';
 
 const ef = () => {};
 
@@ -32,10 +29,11 @@ const ZoomEditor = (props: ZoomEditorProps) => {
     onZoomModeChange = ef,
     ...otherProps
   } = props;
+  const styles = useStyles();
   const [value = 1, setValue] = useControllableValue(props);
 
   return (
-    <div className={`${px('root')} ${className}`} {...otherProps}>
+    <div className={`${styles.root} ${className}`} {...otherProps}>
       <Dropdown
         overlay={(
           <Menu>
@@ -120,7 +118,7 @@ const ZoomEditor = (props: ZoomEditorProps) => {
           </Menu>
         )}
       >
-        <div className={px('zoom-control')}>
+        <div className={styles.zoomControl}>
           {zoomMode ? (
             {
               autoWidth: '自动宽度',
@@ -129,7 +127,7 @@ const ZoomEditor = (props: ZoomEditorProps) => {
           ) : (
             <>
               <SimpleNumberInput
-                className={px('text')}
+                className={styles.text}
                 min={min * 100}
                 max={max * 100}
                 value={Math.trunc(value * 100)}
@@ -141,7 +139,7 @@ const ZoomEditor = (props: ZoomEditorProps) => {
               %
             </>
           )}
-          <CaretDownOutlined className={px('icon')} />
+          <CaretDownOutlined className={styles.icon} />
         </div>
       </Dropdown>
     </div>

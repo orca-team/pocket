@@ -1,26 +1,21 @@
 import React from 'react';
-import pc from 'prefix-classnames';
+import useStyles from './ErrorCatcher.style';
 
-const px = pc('error-catcher');
+const Style = (props: { children: (style: ReturnType<typeof useStyles>) => React.ReactElement }) => {
+  const { children } = props;
+  const styles = useStyles();
+
+  return children(styles);
+};
 
 type ErrorState = { error: Error; errorInfo: React.ErrorInfo };
 
-export interface ErrorCatcherProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onError'> {
-  errorTips?:
-    | React.ReactNode
-    | ((
-        error: Error,
-        errorInfo: React.ErrorInfo,
-        reset: () => void,
-      ) => React.ReactNode);
+export interface ErrorCatcherProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onError'> {
+  errorTips?: React.ReactNode | ((error: Error, errorInfo: React.ErrorInfo, reset: () => void) => React.ReactNode);
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
 }
 
-class ErrorCatcher extends React.Component<
-  ErrorCatcherProps,
-  { error: false | ErrorState }
-> {
+class ErrorCatcher extends React.Component<ErrorCatcherProps, { error: false | ErrorState }> {
   state = {
     error: false as false | ErrorState,
   };
@@ -28,7 +23,7 @@ class ErrorCatcher extends React.Component<
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error(error, errorInfo);
     const { onError } = this.props;
-    this.setState({ error: { error, errorInfo } });
+    this.setState({ error: { error, errorInfo }});
     if (typeof onError === 'function') {
       onError(error, errorInfo);
     }
@@ -45,9 +40,13 @@ class ErrorCatcher extends React.Component<
       return typeof errorTips === 'function' ? (
         errorTips(error.error, error.errorInfo, this.reset)
       ) : (
-        <div className={`${px('root')}`} {...otherProps}>
-          {errorTips}
-        </div>
+        <Style>
+          {styles => (
+            <div className={`${styles.root}`} {...otherProps}>
+              {errorTips}
+            </div>
+          )}
+        </Style>
       );
     }
 

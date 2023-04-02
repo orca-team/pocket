@@ -1,7 +1,6 @@
 import React from 'react';
-import pc from 'prefix-classnames';
-
-const px = pc('arrow');
+import cn from 'classnames';
+import useStyles from './Arrow.style';
 
 export interface ArrowProps extends React.HTMLAttributes<HTMLDivElement> {
   down?: boolean;
@@ -9,10 +8,11 @@ export interface ArrowProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Arrow = (props: ArrowProps) => {
   const { className = '', down, ...otherProps } = props;
+  const styles = useStyles();
   return (
-    <div className={`${px('root', { down })} ${className}`} {...otherProps}>
-      <div className={px('before')} />
-      <div className={px('after')} />
+    <div className={`${cn(styles.root, { [styles.down]: down })} ${className}`} {...otherProps}>
+      <div className={styles.before} />
+      <div className={styles.after} />
     </div>
   );
 };

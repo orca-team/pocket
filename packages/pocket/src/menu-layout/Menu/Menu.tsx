@@ -1,10 +1,12 @@
 import React, { useMemo } from 'react';
 import pc from 'prefix-classnames';
 import { useControllableProps } from '@orca-fe/hooks';
+import cn from 'classnames';
 import type { MenuItemType } from '../menuUtils';
 import MenuItem from './MenuItem';
 import type { MenuContextBaseType, OpenKeysType } from './MenuContext';
 import { MenuProvider } from './MenuContext';
+import useStyles from './Menu.style';
 
 export interface MenuProps extends React.HTMLAttributes<HTMLDivElement> {
   menu?: MenuItemType[];
@@ -13,11 +15,7 @@ export interface MenuProps extends React.HTMLAttributes<HTMLDivElement> {
   direction?: 'vertical' | 'horizontal';
   openKeys?: OpenKeysType;
   defaultOpenAll?: boolean;
-  onOpenKeysChange?: (
-    openKeys: OpenKeysType,
-    currentChange: string,
-    isOpen: boolean,
-  ) => void;
+  onOpenKeysChange?: (openKeys: OpenKeysType, currentChange: string, isOpen: boolean) => void;
   collapsed?: boolean;
   onItemClick?: MenuContextBaseType['onItemClick'];
   theme?: 'light' | 'dark' | string;
@@ -49,6 +47,7 @@ const Menu = (props: MenuProps) => {
   ] = useControllableProps(props, {
     openKeys: {},
   });
+  const styles = useStyles();
 
   const px = pc(classPrefix);
 
@@ -69,21 +68,10 @@ const Menu = (props: MenuProps) => {
         changeProps({ openKeys });
       }}
     >
-      <div
-        className={`${px('root', `theme-${theme}`, direction)} ${className}`}
-        {...otherProps}
-      >
+      <div className={cn(styles.root, px(`theme-${theme}`), styles[direction], className)} {...otherProps}>
         {menu.map((menu, index) => {
           const { key, visible } = menu;
-          return (
-            visible !== false && (
-              <MenuItem
-                key={key || `menu-item-${index}`}
-                menu={menu}
-                showIcon={showIcon}
-              />
-            )
-          );
+          return visible !== false && <MenuItem key={key || `menu-item-${index}`} menu={menu} showIcon={showIcon} />;
         })}
       </div>
     </MenuProvider>

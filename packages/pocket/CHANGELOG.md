@@ -1,5 +1,16 @@
 # @orca-fe/pocket
 
+## 2.0.0
+
+### Major Changes
+
+- feat: change all component to jss
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/pocket@2.0.0
+
 ## 1.29.0
 
 ### Minor Changes

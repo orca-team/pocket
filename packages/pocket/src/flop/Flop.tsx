@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import CountUp from 'react-countup';
 import type { ConvertOptions, ConvertRule } from '@orca-fe/tools';
 import { createCovertUnitFn, createUnitValue } from '@orca-fe/tools';
+import useStyles from './Flop.style';
 
 function decimalLength(num: number, max = 10) {
   const s = String(num);
@@ -19,8 +20,7 @@ const defaultConvertUnitRules: ConvertRule[] = [
   { divisor: 10000, unit: '万亿' },
 ];
 
-export interface FlopProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'prefix'> {
+export interface FlopProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'prefix'> {
   value?: number | string;
 
   /**
@@ -77,11 +77,11 @@ const Flop = React.forwardRef<HTMLSpanElement, FlopProps>((props, ref) => {
     decimalsMaxLength = 4,
     ...otherProps
   } = props;
+  const styles = useStyles();
   const _value = Number.isNaN(Number(value)) ? 0 : Number(value);
 
   const convertUnitFn = useMemo(() => {
-    const { rules = defaultConvertUnitRules, ...otherConfig } =
-      convertUnit || {};
+    const { rules = defaultConvertUnitRules, ...otherConfig } = convertUnit || {};
     return createCovertUnitFn(rules, otherConfig);
   }, [convertUnit]);
 
@@ -93,7 +93,7 @@ const Flop = React.forwardRef<HTMLSpanElement, FlopProps>((props, ref) => {
   }, [_value, convertUnit, convertUnitFn]);
 
   return (
-    <span ref={ref} className={`flop-root ${className}`} {...otherProps}>
+    <span ref={ref} className={`${styles.root} ${className}`} {...otherProps}>
       {prefix}
       <CountUp
         style={numStyle}

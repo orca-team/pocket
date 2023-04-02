@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import pc from 'prefix-classnames';
 import { useControllableValue, useEventListener } from 'ahooks';
 import { clamp } from '@orca-fe/tools';
-
-const px = pc('simple-number-input');
+import cn from 'classnames';
+import useStyles from './SimpleNumberInput.style';
 
 function selectDom(dom: HTMLElement) {
   // @ts-expect-error
@@ -20,8 +19,7 @@ function selectDom(dom: HTMLElement) {
   }
 }
 
-export interface SimpleNumberInputProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+export interface SimpleNumberInputProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   editable?: boolean;
   defaultValue?: number;
   value?: number;
@@ -33,16 +31,10 @@ export interface SimpleNumberInputProps
 }
 
 const SimpleNumberInput = (props: SimpleNumberInputProps) => {
-  const {
-    className = '',
-    editable = true,
-    onChange,
-    min,
-    max,
-    step = 1,
-    triggerOnDrag = true,
-    ...otherProps
-  } = props;
+  const { className = '', editable = true, onChange, min, max, step = 1, triggerOnDrag = true, ...otherProps } = props;
+
+  const styles = useStyles();
+
   const [_value, setValue] = useControllableValue(props, {
     defaultValue: 0,
   });
@@ -99,21 +91,14 @@ const SimpleNumberInput = (props: SimpleNumberInputProps) => {
   );
 
   useEventListener('mousemove', (e) => {
-    if (
-      _this.startPageX != null &&
-      _this.startValue != null &&
-      rootRef.current
-    ) {
+    if (_this.startPageX != null && _this.startValue != null && rootRef.current) {
       let offset: number = e.pageX - _this.startPageX;
       const weakRange = 6;
       const weakTimes = 5;
       if (Math.abs(offset) <= weakRange * weakTimes) {
         offset = Math.round(offset / weakTimes);
       } else {
-        offset = Math.round(
-          Math.sign(offset) *
-            (Math.abs(offset) - weakRange * weakTimes + weakRange),
-        );
+        offset = Math.round(Math.sign(offset) * (Math.abs(offset) - weakRange * weakTimes + weakRange));
       }
       if (!_this.moved && Math.abs(offset) > 0) {
         _this.moved = true;
@@ -124,9 +109,7 @@ const SimpleNumberInput = (props: SimpleNumberInputProps) => {
       if (triggerOnDrag) {
         setValue(newValue);
       } else {
-        rootRef.current.innerText = `${Number(
-          newValue.toFixed(decimalLength),
-        )}`;
+        rootRef.current.innerText = `${Number(newValue.toFixed(decimalLength))}`;
       }
     }
   });
@@ -174,11 +157,7 @@ const SimpleNumberInput = (props: SimpleNumberInputProps) => {
         if (key === 'ArrowUp' || key === 'ArrowDown') {
           e.preventDefault();
           const editingValue = rootRef.current.innerText;
-          rootRef.current.innerText = `${clamp(
-            Number(editingValue) + step * (key === 'ArrowUp' ? 1 : -1),
-            min,
-            max,
-          )}`;
+          rootRef.current.innerText = `${clamp(Number(editingValue) + step * (key === 'ArrowUp' ? 1 : -1), min, max)}`;
           selectDom(rootRef.current);
         }
       }
@@ -222,7 +201,7 @@ const SimpleNumberInput = (props: SimpleNumberInputProps) => {
   return (
     <div
       ref={rootRef}
-      className={`${px('root', { editing, editable })} ${className}`}
+      className={cn(styles.root, { [styles.editing]: editing, [styles.editable]: editable }, className)}
       {...otherProps}
       // @ts-expect-error
       contentEditable={editing ? 'plaintext-only' : 'false'}

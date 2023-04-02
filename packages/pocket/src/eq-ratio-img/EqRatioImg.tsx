@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import pc from 'prefix-classnames';
-import './EqRatioImg.less';
 import { useControllableProps, useMemorizedFn } from '@orca-fe/hooks';
+import cn from 'classnames';
+import useStyles from './EqRatioImg.style';
 
 const px = pc('eq-ratio-img');
 
@@ -12,10 +13,9 @@ const failedComponent = <div className={px('error-tip')}>暂无图片</div>;
 export interface EqRatioImgProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onLoad' | 'onError'>,
     Pick<React.HTMLAttributes<HTMLImageElement>, 'onLoad' | 'onError'> {
+
   /** 图片 ref */
-  imgRef?:
-    | ((instance: HTMLImageElement) => void)
-    | React.MutableRefObject<HTMLImageElement>;
+  imgRef?: ((instance: HTMLImageElement) => void) | React.MutableRefObject<HTMLImageElement>;
 
   /** 图片链接 */
   src?: string;
@@ -65,6 +65,7 @@ const EqRatioImg = (props: EqRatioImgProps) => {
   ] = useControllableProps(props, {
     status: _src ? 'loading' : 'failed',
   });
+  const styles = useStyles();
 
   const setStatus = useMemorizedFn((status) => {
     changeProps({
@@ -92,16 +93,16 @@ const EqRatioImg = (props: EqRatioImgProps) => {
 
   return (
     <div
-      className={`${px('root', {
-        'default-height': mode !== 'normal',
+      className={`${cn(styles.root, {
+        [styles.defaultHeight]: mode !== 'normal',
       })} ${className}`}
       {...otherProps}
     >
       {/* hidden src image */}
       <img
         key={src}
-        className={px('hidden-img', {
-          'hidden-img-placeholder': isLoaded && mode === 'normal',
+        className={cn(styles.hiddenImg, {
+          [styles.hiddenImgPlaceholder]: isLoaded && mode === 'normal',
         })}
         src={src}
         onLoad={(e) => {
@@ -119,7 +120,7 @@ const EqRatioImg = (props: EqRatioImgProps) => {
 
       {/* div img */}
       <div
-        className={px('img', { show: isLoaded })}
+        className={cn(styles.img, { [styles.show]: isLoaded })}
         style={{
           backgroundImage: `url(${src})`,
           backgroundSize: getRealBackgroundSize(mode),
@@ -128,20 +129,9 @@ const EqRatioImg = (props: EqRatioImgProps) => {
       />
 
       {/* failed */}
-      {typeof errSrc === 'string' ? (
-        <img src={errSrc} style={{ display: isFailed ? 'initial' : 'none' }} />
-      ) : (
-        isFailed && errSrc
-      )}
+      {typeof errSrc === 'string' ? <img src={errSrc} style={{ display: isFailed ? 'initial' : 'none' }} /> : isFailed && errSrc}
       {/* loading */}
-      {typeof loadingSrc === 'string' ? (
-        <img
-          src={loadingSrc}
-          style={{ display: isLoading ? 'initial' : 'none' }}
-        />
-      ) : (
-        isLoading && loadingSrc
-      )}
+      {typeof loadingSrc === 'string' ? <img src={loadingSrc} style={{ display: isLoading ? 'initial' : 'none' }} /> : isLoading && loadingSrc}
     </div>
   );
 };

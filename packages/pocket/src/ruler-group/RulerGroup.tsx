@@ -1,14 +1,14 @@
 /* eslint-disable react/no-unused-prop-types */
 import React from 'react';
-import pc from 'prefix-classnames';
 import { useControllableProps, useThis } from '@orca-fe/hooks';
 import { useEventListener, useSetState } from 'ahooks';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
+import cn from 'classnames';
 import Ruler from './Ruler';
-
-const px = pc('ruler-group');
+import useStyles from './RulerGroup.style';
 
 export interface RulerGroupProps {
+
   /* 标尺尺寸 */
   size?: number;
 
@@ -34,18 +34,8 @@ export interface RulerGroupProps {
 }
 
 const RulerGroup = (props: RulerGroupProps) => {
-  const [
-    {
-      size = 20,
-      offsetX = 0,
-      offsetY = 0,
-      zoom = 0,
-      lineVisible,
-      xLines,
-      yLines,
-    },
-    changeProps,
-  ] = useControllableProps(props, {
+  const styles = useStyles();
+  const [{ size = 20, offsetX = 0, offsetY = 0, zoom = 0, lineVisible, xLines, yLines }, changeProps] = useControllableProps(props, {
     /* 横轴辅助线 */
     xLines: [] as number[],
 
@@ -107,9 +97,7 @@ const RulerGroup = (props: RulerGroupProps) => {
   /* 删除辅助线 */
   const deleteLine = (e, config) => {
     const { index, isHorizon } = config;
-    const newLines = (isHorizon ? xLines : yLines).filter(
-      (_, i) => i !== index,
-    );
+    const newLines = (isHorizon ? xLines : yLines).filter((_, i) => i !== index);
 
     changeProps(isHorizon ? { xLines: newLines } : { yLines: newLines });
   };
@@ -149,26 +137,20 @@ const RulerGroup = (props: RulerGroupProps) => {
   const renderLinePreview = () => {
     if (xPreview != null) {
       return (
-        <div
-          className={px('line', 'preview')}
-          style={{ height: '100%', left: offsetX + xPreview * 2 ** zoom }}
-        >
-          <div className={px('line-tip')}>{xPreview}</div>
+        <div className={cn(styles.line, styles.preview)} style={{ height: '100%', left: offsetX + xPreview * 2 ** zoom }}>
+          <div className={styles.lineTip}>{xPreview}</div>
         </div>
       );
     } else if (yPreview != null) {
       return (
-        <div
-          className={px('line', 'preview')}
-          style={{ width: '100%', top: offsetY + yPreview * 2 ** zoom }}
-        >
-          <div className={px('line-tip')}>{yPreview}</div>
+        <div className={cn(styles.line, styles.preview)} style={{ width: '100%', top: offsetY + yPreview * 2 ** zoom }}>
+          <div className={styles.lineTip}>{yPreview}</div>
         </div>
       );
     }
     return (
       <div
-        className={px('line', 'preview')}
+        className={cn(styles.line, styles.preview)}
         style={{
           width: '100%',
           top: 0,
@@ -176,7 +158,7 @@ const RulerGroup = (props: RulerGroupProps) => {
           pointerEvents: 'none',
         }}
       >
-        <div className={px('line-tip')}>{yPreview}</div>
+        <div className={styles.lineTip}>{yPreview}</div>
       </div>
     );
   };
@@ -196,32 +178,30 @@ const RulerGroup = (props: RulerGroupProps) => {
             onDoubleClick={(e) => {
               deleteLine(e, { isHorizon, index, value: line });
             }}
-            className={px('line')}
+            className={styles.line}
             style={{
               ...(isHorizon
                 ? {
-                    height: '100%',
-                    left: offsetX + zoomOffset,
-                    cursor: 'col-resize',
-                  }
+                  height: '100%',
+                  left: offsetX + zoomOffset,
+                  cursor: 'col-resize',
+                }
                 : {
-                    width: '100%',
-                    top: offsetY + zoomOffset,
-                    cursor: 'row-resize',
-                  }),
+                  width: '100%',
+                  top: offsetY + zoomOffset,
+                  cursor: 'row-resize',
+                }),
             }}
           >
             {/* 辅助线提示 */}
             <div
-              className={px('line-tip')}
+              className={styles.lineTip}
               style={{
-                ...(_this.lineDragging &&
-                _this.lineDragging.index === index &&
-                _this.lineDragging.isHorizon === isHorizon
+                ...(_this.lineDragging && _this.lineDragging.index === index && _this.lineDragging.isHorizon === isHorizon
                   ? {
-                      color: '#999999',
-                      backgroundColor: 'rgba(0, 145, 255, 0.8)',
-                    }
+                    color: '#999999',
+                    backgroundColor: 'rgba(0, 145, 255, 0.8)',
+                  }
                   : {}),
               }}
             >
@@ -232,40 +212,21 @@ const RulerGroup = (props: RulerGroupProps) => {
       }
       return null;
     };
-    return xLines
-      .map(renderLine.bind(null, true))
-      .concat(yLines.map(renderLine.bind(null, false)));
+    return xLines.map(renderLine.bind(null, true)).concat(yLines.map(renderLine.bind(null, false)));
   };
 
   return (
     <>
       {/* 横向标尺 */}
-      <Ruler
-        size={size}
-        zoom={zoom}
-        offsetX={offsetX}
-        onRulerClick={handleHRulerClick}
-        onRulerMouseMove={handleRulerHMouseMove}
-      />
+      <Ruler size={size} zoom={zoom} offsetX={offsetX} onRulerClick={handleHRulerClick} onRulerMouseMove={handleRulerHMouseMove} />
       {/* 纵向标尺 */}
-      <Ruler
-        size={size}
-        zoom={zoom}
-        offsetY={offsetY}
-        orientation="vertical"
-        onRulerClick={handleVRulerClick}
-        onRulerMouseMove={handleRulerVMouseMove}
-      />
+      <Ruler size={size} zoom={zoom} offsetY={offsetY} orientation="vertical" onRulerClick={handleVRulerClick} onRulerMouseMove={handleRulerVMouseMove} />
       {/* 辅助线 */}
       {lineVisible && renderLines()}
       {/* 辅助线（预览） */}
       {lineVisible && renderLinePreview()}
       {/* 辅助线开关 */}
-      <div
-        className={px('corner')}
-        style={{ width: size, height: size }}
-        onClick={handleLineVisibleClick}
-      >
+      <div className={styles.corner} style={{ width: size, height: size }} onClick={handleLineVisibleClick}>
         {lineVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
       </div>
     </>

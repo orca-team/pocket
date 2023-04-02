@@ -1,17 +1,9 @@
 import React, { useMemo, useRef, useState } from 'react';
-import pc from 'prefix-classnames';
 import { useClickAway, useEventListener } from 'ahooks';
 import ReactDOM from 'react-dom';
-import {
-  arr2Keys,
-  changeArr,
-  isCopy,
-  isPaste,
-  removeArrIndex,
-  toggleArr,
-} from '@orca-fe/tools';
-
-const px = pc('draggable-list');
+import { arr2Keys, changeArr, isCopy, isPaste, removeArrIndex, toggleArr } from '@orca-fe/tools';
+import cn from 'classnames';
+import useStyles from './DraggableList.style';
 
 const eArr = [];
 
@@ -36,6 +28,7 @@ function getMousePosition(event: React.MouseEvent<HTMLDivElement>) {
 
 const DraggingNum = (props) => {
   const { value } = props;
+  const styles = useStyles();
 
   const [mouse, setMouse] = useState({ x: -1000, y: -1000 });
 
@@ -48,7 +41,7 @@ const DraggingNum = (props) => {
   });
 
   return ReactDOM.createPortal(
-    <div className={px('dragging-num')} style={{ top: mouse.y, left: mouse.x }}>
+    <div className={styles.draggingNum} style={{ top: mouse.y, left: mouse.x }}>
       {value}
     </div>,
     document.body,
@@ -59,8 +52,7 @@ type DraggableData = {
   key?: string | number;
 };
 
-export interface DraggableListProps<T extends DraggableData>
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+export interface DraggableListProps<T extends DraggableData> extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
   // 列表数据
   data?: T[];
   // 列表数据发生变化
@@ -100,9 +92,7 @@ const defaultHandleGenerateKey = <T extends DraggableData>(item: T): T => ({
   key: `tmp_${index++}_${Math.trunc(Math.random() * 1000000)}`,
 });
 
-const DraggableList = <T extends DraggableData>(
-  props: DraggableListProps<T>,
-) => {
+const DraggableList = <T extends DraggableData>(props: DraggableListProps<T>) => {
   const {
     className = '',
     data = eArr,
@@ -114,6 +104,7 @@ const DraggableList = <T extends DraggableData>(
     customDragHandler = false,
     ...otherProps
   } = props;
+  const styles = useStyles();
 
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -146,7 +137,7 @@ const DraggableList = <T extends DraggableData>(
     data.forEach((item) => {
       if (item.key) cache[item.key] = item;
     });
-    return (_k) => cache[_k];
+    return _k => cache[_k];
   }, [data]);
 
   const isChecked = useMemo<(key?: string | number) => boolean>(() => {
@@ -154,7 +145,7 @@ const DraggableList = <T extends DraggableData>(
     checked.forEach((key) => {
       cache[key] = 1;
     });
-    return (_k) => (_k != null ? !!cache[_k] : false);
+    return _k => (_k != null ? !!cache[_k] : false);
   }, [checked]);
 
   const isDragging = useMemo<(key?: string | number) => boolean>(() => {
@@ -162,7 +153,7 @@ const DraggableList = <T extends DraggableData>(
     draggingItem.forEach((key) => {
       cache[key] = 1;
     });
-    return (_k) => (_k != null ? !!cache[_k] : false);
+    return _k => (_k != null ? !!cache[_k] : false);
   }, [draggingItem]);
 
   // 点击其它地方后，取消选中
@@ -238,30 +229,23 @@ const DraggableList = <T extends DraggableData>(
     const newData = data.slice();
     newData.splice(to, 0, placeholder);
     // 替换内容
-    onDataChange(
-      newData
-        .filter((item) => item !== fromItem)
-        .map((item) => (item === placeholder ? fromItem : item)),
-    );
+    onDataChange(newData.filter(item => item !== fromItem).map(item => (item === placeholder ? fromItem : item)));
     return true;
   };
 
   return (
     <div
       ref={rootRef}
-      className={`${px('root', {
-        dragging,
-        'internal-style': !customStyle,
+      className={`${cn(styles.root, {
+        [styles.dragging]: dragging,
+        [styles.internalStyle]: !customStyle,
       })} ${className}`}
       tabIndex={-1}
       onKeyDown={(e) => {
-        if (
-          isCopy(e.nativeEvent) &&
-          (e.target['tagName'] === 'DIV' || checked.length > 1)
-        ) {
+        if (isCopy(e.nativeEvent) && (e.target['tagName'] === 'DIV' || checked.length > 1)) {
           e.stopPropagation();
           const keys = arr2Keys(data);
-          if (checked.filter((key) => keys.has(key)).length > 0) {
+          if (checked.filter(key => keys.has(key)).length > 0) {
             setCopyItem(checked);
             // Toast.infoTop(`${checked.length} 项已复制`);
           }
@@ -270,9 +254,7 @@ const DraggableList = <T extends DraggableData>(
           e.stopPropagation();
           // 粘贴
           if (copyItem.length > 0) {
-            let pasteIndex =
-              data.findIndex(({ key }) => key === checked[checked.length - 1]) +
-              1;
+            let pasteIndex = data.findIndex(({ key }) => key === checked[checked.length - 1]) + 1;
             if (pasteIndex <= 0) {
               pasteIndex = data.length;
             }
@@ -281,11 +263,7 @@ const DraggableList = <T extends DraggableData>(
             const newData = data.slice();
             newData.splice(pasteIndex, 0, ...newCopyData);
             onDataChange(newData);
-            setChecked(
-              newCopyData
-                .map(({ key }) => key)
-                .filter((key) => key != null) as (string | number)[],
-            );
+            setChecked(newCopyData.map(({ key }) => key).filter(key => key != null) as (string | number)[]);
           }
         }
       }}
@@ -321,11 +299,11 @@ const DraggableList = <T extends DraggableData>(
 
         return (
           <div
-            className={px('item', {
-              checked: currentChecked,
-              'dragging-item': currentDragging,
-              before: index === insertFlag + 1,
-              after: index === insertFlag,
+            className={cn(styles.item, {
+              [styles.checked]: currentChecked,
+              [styles.draggingItem]: currentDragging,
+              [styles.before]: index === insertFlag + 1,
+              [styles.after]: index === insertFlag,
             })}
             key={item.key}
             draggable={!customDragHandler}
@@ -346,9 +324,7 @@ const DraggableList = <T extends DraggableData>(
               const { shiftKey, ctrlKey } = e;
               if (shiftKey) {
                 // 连续选择模式
-                let index1 = data.findIndex(
-                  (value) => value.key === checked[0],
-                );
+                let index1 = data.findIndex(value => value.key === checked[0]);
                 if (index1 < 0) index1 = 0;
                 const start = Math.min(index, index1);
                 const end = Math.max(index, index1) + 1;
@@ -357,19 +333,11 @@ const DraggableList = <T extends DraggableData>(
                   ...(data
                     .slice(start, end)
                     .map(({ key }) => key)
-                    .filter((key) => key != null && key !== checked[0]) as (
-                    | string
-                    | number
-                  )[]),
+                    .filter(key => key != null && key !== checked[0]) as (string | number)[]),
                 ]);
               } else if (ctrlKey) {
                 // toggle模式
-                setChecked(
-                  toggleArr(checked, item.key).filter((key) => key != null) as (
-                    | string
-                    | number
-                  )[],
-                );
+                setChecked(toggleArr(checked, item.key).filter(key => key != null) as (string | number)[]);
               } else if (item.key != null) {
                 // 单选模式
                 setChecked([item.key]);

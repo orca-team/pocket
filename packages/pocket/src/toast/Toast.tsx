@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useTimeout } from 'ahooks';
-import pc from 'prefix-classnames';
 import { useMemorizedFn } from '@orca-fe/hooks';
+import cn from 'classnames';
 import { render } from '../utils/Portal';
-
-const px = pc('orca-toast');
+import useStyles from './Toast.styles';
 
 const ef = () => {};
 
@@ -14,18 +13,11 @@ interface ToastPropsOnly {
   afterClosed?: () => void;
 }
 
-export interface ToastProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    ToastPropsOnly {}
+export interface ToastProps extends React.HTMLAttributes<HTMLDivElement>, ToastPropsOnly {}
 
 const Toast = (props: ToastProps) => {
-  const {
-    className = '',
-    duration = 2000,
-    centered,
-    afterClosed = ef,
-    ...otherProps
-  } = props;
+  const { className = '', duration = 2000, centered, afterClosed = ef, ...otherProps } = props;
+  const styles = useStyles();
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     setVisible(true);
@@ -43,9 +35,9 @@ const Toast = (props: ToastProps) => {
 
   return (
     <div
-      className={`${px('root', {
-        hide: !visible,
-        centered,
+      className={`${cn(styles.root, {
+        [styles.hide]: !visible,
+        [styles.centered]: centered,
       })} ${className}`}
       {...otherProps}
       onTransitionEnd={handleTransitionEnd}

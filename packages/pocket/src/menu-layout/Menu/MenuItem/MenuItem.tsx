@@ -2,20 +2,17 @@ import React, { useContext, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import pc from 'prefix-classnames';
 import Animate from 'rc-animate';
+import cn from 'classnames';
 import OpenBox from '../../../open-box';
 import type { MenuItemType } from '../../menuUtils';
 import Arrow from '../Arrow';
 import MenuContext from '../MenuContext';
 import Trigger from '../../../trigger';
+import useStyles, { prefix } from './MenuItem.style';
 
-const Span = ({
-  visible,
-  ...props
-}: React.HTMLAttributes<HTMLSpanElement> & Record<string, unknown>) => (
-  <span {...props} />
-);
+const Span = ({ visible, ...props }: React.HTMLAttributes<HTMLSpanElement> & Record<string, unknown>) => <span {...props} />;
 
-const px = pc('orca-menu-item');
+const px = pc(prefix);
 
 const eArr = [];
 
@@ -32,24 +29,12 @@ export interface SubMenuProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const SubMenu = (props: SubMenuProps) => {
-  const {
-    className = '',
-    level = 0,
-    menu,
-    open = false,
-    isInPopup = false,
-    ...otherProps
-  } = props;
+  const { className = '', level = 0, menu, open = false, isInPopup = false, ...otherProps } = props;
   const showIcon = useMemo(() => menu.some(({ icon }) => icon != null), [menu]);
 
   return (
     <MenuLevelContext.Provider value={{ level: level + 1, isInPopup }}>
-      <OpenBox
-        className={`orca-menu-sub-menu ${className}`}
-        {...otherProps}
-        open={open}
-        height={0}
-      >
+      <OpenBox className={`orca-menu-sub-menu ${className}`} {...otherProps} open={open} height={0}>
         {menu.map((menu) => {
           const { key, visible } = menu;
           return (
@@ -71,38 +56,19 @@ export interface MenuItemProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const MenuItem = (props: MenuItemProps) => {
-  const {
-    className = '',
-    menu,
-    style,
-    showIcon = false,
-    ...otherProps
-  } = props;
+  const { className = '', menu, style, showIcon = false, ...otherProps } = props;
+  const styles = useStyles();
   const { children = eArr, key, path, redirect, render, text, icon } = menu;
-  const hasChildren =
-    children.filter((child) => child.visible !== false).length > 0;
+  const hasChildren = children.filter(child => child.visible !== false).length > 0;
 
-  const {
-    isVertical,
-    openKeys,
-    defaultOpenAll,
-    checkedKey,
-    groupCheckedKeys,
-    toggleOpenKey,
-    collapsed,
-    theme,
-    toggleOnItemClick,
-    onItemClick,
-  } = useContext(MenuContext);
+  const { isVertical, openKeys, defaultOpenAll, checkedKey, groupCheckedKeys, toggleOpenKey, collapsed, theme, toggleOnItemClick, onItemClick } =
+    useContext(MenuContext);
   const { level, isInPopup } = useContext(MenuLevelContext);
   const collapseAndZero = level === 0 && collapsed;
 
   const isOpen = openKeys[key] ?? defaultOpenAll;
 
-  const childChecked = useMemo(
-    () => groupCheckedKeys.includes(key),
-    [groupCheckedKeys, key],
-  );
+  const childChecked = useMemo(() => groupCheckedKeys.includes(key), [groupCheckedKeys, key]);
   const checked = key === checkedKey;
   const verticalAndParent = isVertical && hasChildren;
 
@@ -113,29 +79,15 @@ const MenuItem = (props: MenuItemProps) => {
     const isShowText = !(isVertical && collapseAndZero);
     return (
       <>
-        {isShowIcon && (
-          <div className={px('icon', { collapsed: collapseAndZero })}>
-            {icon}
-          </div>
-        )}
-        <Animate
-          className={px('text-anim-container')}
-          showProp="visible"
-          transitionName={px('text-anim')}
-          transitionAppear
-          transitionEnter
-          transitionLeave
-        >
-          <Span
-            className={px('text', { 'text-hidden': !isShowText })}
-            visible={isShowText}
-          >
+        {isShowIcon && <div className={cn(styles.icon, { [styles.collapsed]: collapseAndZero })}>{icon}</div>}
+        <Animate className={styles.textAnimContainer} showProp="visible" transitionName={px('text-anim')} transitionAppear transitionEnter transitionLeave>
+          <Span className={cn(styles.text, { [styles.textHidden]: !isShowText })} visible={isShowText}>
             {text}
           </Span>
         </Animate>
         {verticalAndParent && !collapseAndZero && (
           <div
-            className={px('arrow')}
+            className={styles.arrow}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -162,20 +114,11 @@ const MenuItem = (props: MenuItemProps) => {
     paddingLeft = 24 * (level - 1) + 20;
   }
   let menuText = path ? (
-    <Link
-      className={px('link')}
-      to={redirect || path}
-      style={{ paddingLeft }}
-      onClick={handleItemClick}
-    >
+    <Link className={styles.link} to={redirect || path} style={{ paddingLeft }} onClick={handleItemClick}>
       {renderMenuTextContent()}
     </Link>
   ) : (
-    <div
-      className={px('link')}
-      style={{ paddingLeft }}
-      onClick={handleItemClick}
-    >
+    <div className={styles.link} style={{ paddingLeft }} onClick={handleItemClick}>
       {renderMenuTextContent()}
     </div>
   );
@@ -184,7 +127,7 @@ const MenuItem = (props: MenuItemProps) => {
   if (verticalAndParent && level === 0) {
     menuText = (
       <Trigger
-        prefixCls={px('popup')}
+        prefixCls={styles.popup}
         popupClassName={px(`theme-${theme}`)}
         action={collapsed ? ['hover'] : []}
         popup={<SubMenu menu={children} level={level} open isInPopup />}
@@ -204,23 +147,16 @@ const MenuItem = (props: MenuItemProps) => {
 
   return (
     <div
-      className={`${px('root', `theme-${theme}`, {
-        'child-checked': childChecked && !checked,
-        checked,
-        vertical: isVertical,
+      className={`${cn(styles.root, `${prefix}-theme-${theme}`, {
+        [styles.childChecked]: childChecked && !checked,
+        [styles.checked]: checked,
+        [styles.vertical]: isVertical,
       })} ${className}`}
       {...otherProps}
     >
       {render?.({ checked })}
       {!render && menuText}
-      {verticalAndParent && (
-        <SubMenu
-          menu={children}
-          level={level}
-          open={isOpen && !collapseAndZero}
-          isInPopup={isInPopup}
-        />
-      )}
+      {verticalAndParent && <SubMenu menu={children} level={level} open={isOpen && !collapseAndZero} isInPopup={isInPopup} />}
     </div>
   );
 };

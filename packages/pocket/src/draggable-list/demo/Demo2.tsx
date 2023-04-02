@@ -2,12 +2,11 @@
  * title: 自定义拖拽 handle
  */
 
-import '../../../../../typings.d';
 import React, { useState } from 'react';
 import { DraggableList } from '@orca-fe/pocket';
 import cn from 'classnames';
 import { DragOutlined } from '@ant-design/icons';
-import styles from './Demo2.less';
+import styles from './Demo2.module.less';
 
 /**
  * item must with key
@@ -35,12 +34,7 @@ export default () => {
   const [data, setData] = useState(defaultData);
 
   return (
-    <DraggableList
-      data={data}
-      onDataChange={setData}
-      customDragHandler
-      customStyle
-    >
+    <DraggableList data={data} onDataChange={setData} customDragHandler customStyle>
       {(item, { dragging, checked, drag }, index) => (
         <div
           className={cn(styles.item, {

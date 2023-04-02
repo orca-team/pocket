@@ -1,5 +1,19 @@
 # @orca-fe/pdf-viewer
 
+## 0.4.15
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/pocket@2.0.0
+  - @orca-fe/painter@0.0.10
+
+## 0.4.14
+
+### Patch Changes
+
+- feat: ZoomEditor change to jss
+
 ## 0.4.13
 
 ### Patch Changes

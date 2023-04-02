@@ -1,10 +1,7 @@
 import React from 'react';
-import pc from 'prefix-classnames';
+import useStyles from './BorderSliceImg.style';
 
-const px = pc('border-slice-img');
-
-export interface BorderSliceImgProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface BorderSliceImgProps extends React.HTMLAttributes<HTMLDivElement> {
   src?: string;
   sliceTop?: number;
   sliceLeft?: number;
@@ -14,38 +11,23 @@ export interface BorderSliceImgProps
   scale?: number;
 }
 
-const BorderSliceImg = React.forwardRef<HTMLDivElement, BorderSliceImgProps>(
-  (props, ref) => {
-    const {
-      className = '',
-      src,
-      style,
-      scale = 1,
-      fill = true,
-      sliceBottom = 0,
-      sliceLeft = 0,
-      sliceRight = 0,
-      sliceTop = 0,
-      ...otherProps
-    } = props;
-    return (
-      <div
-        ref={ref}
-        className={`${px('root')} ${className}`}
-        style={{
-          ...style,
-          borderImageSource: `url(${src})`,
-          borderImageSlice: `${sliceTop} ${sliceRight} ${sliceBottom} ${sliceLeft} ${
-            fill ? 'fill' : ''
-          }`,
-          borderWidth: `${sliceTop * scale}px ${sliceRight * scale}px ${
-            sliceBottom * scale
-          }px ${sliceLeft * scale}px`,
-        }}
-        {...otherProps}
-      />
-    );
-  },
-);
+const BorderSliceImg = React.forwardRef<HTMLDivElement, BorderSliceImgProps>((props, ref) => {
+  const { className = '', src, style, scale = 1, fill = true, sliceBottom = 0, sliceLeft = 0, sliceRight = 0, sliceTop = 0, ...otherProps } = props;
+
+  const styles = useStyles();
+  return (
+    <div
+      ref={ref}
+      className={`${styles.root} ${className}`}
+      style={{
+        ...style,
+        borderImageSource: `url(${src})`,
+        borderImageSlice: `${sliceTop} ${sliceRight} ${sliceBottom} ${sliceLeft} ${fill ? 'fill' : ''}`,
+        borderWidth: `${sliceTop * scale}px ${sliceRight * scale}px ${sliceBottom * scale}px ${sliceLeft * scale}px`,
+      }}
+      {...otherProps}
+    />
+  );
+});
 
 export default BorderSliceImg;

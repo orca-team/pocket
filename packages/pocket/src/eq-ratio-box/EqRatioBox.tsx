@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useSize } from 'ahooks-v2';
+import useStyles from './EqRatioBox.style';
 import EqRatioBoxContext, { useRatio } from './EqRatioBoxContext';
 
 // import './EqRatioBox.less';
@@ -30,6 +31,7 @@ const EqRatioBox = (props: EqRatioBoxProps) => {
     children,
     ...otherProps
   } = props;
+  const styles = useStyles();
   const rootRef = useRef<HTMLDivElement>(null);
   const { width: containerWidth, height: containerHeight } = useSize(rootRef);
 
@@ -79,13 +81,9 @@ const EqRatioBox = (props: EqRatioBoxProps) => {
   }, [ratio]);
 
   return (
-    <div className={`eq-ratio-box ${className}`} ref={rootRef} {...otherProps}>
+    <div className={`${styles.root} ${className}`} ref={rootRef} {...otherProps}>
       <div className="eq-ratio-box-content" style={style as CSSProperties}>
-        {hasSize && (
-          <EqRatioBoxContext.Provider value={{ ratio }}>
-            {children}
-          </EqRatioBoxContext.Provider>
-        )}
+        {hasSize && <EqRatioBoxContext.Provider value={{ ratio }}>{children}</EqRatioBoxContext.Provider>}
       </div>
     </div>
   );

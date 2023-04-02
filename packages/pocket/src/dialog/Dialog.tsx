@@ -4,15 +4,17 @@ import pc from 'prefix-classnames';
 import { CloseOutlined } from '@ant-design/icons';
 import { Button, Space } from 'antd';
 import { useDebounceFn, useEventListener } from 'ahooks';
+import cn from 'classnames';
 import { isInBy } from '../utils/isIn';
 import useDraggable from './useDraggable';
+import useStyles from './Dialog.style';
 
 const px = pc('orca-dialog');
 
 const ef = () => {};
 
-export interface DialogProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+export interface DialogProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+
   /** 是否展示 */
   open?: boolean;
 
@@ -101,15 +103,14 @@ const Dialog = (props: DialogProps) => {
     ...otherProps
   } = props;
 
+  const styles = useStyles();
   const [openRef, setOpenRef] = useState({ value: forceRender });
   const [dragging, setDragging] = useState(false);
   const [show, setShow] = useState(false);
 
   const [{ centerLeft, centerTop }] = useState(() => ({
     centerLeft: Math.round(0.5 * (window.innerWidth - width)),
-    centerTop: Math.round(
-      0.5 * (window.innerHeight - (typeof height === 'string' ? 500 : height)),
-    ),
+    centerTop: Math.round(0.5 * (window.innerHeight - (typeof height === 'string' ? 500 : height))),
   }));
 
   const triggerAfterClose = useDebounceFn(
@@ -173,17 +174,10 @@ const Dialog = (props: DialogProps) => {
 
   const defaultFooter = (
     <Space>
-      <Button
-        size={size === 'small' ? 'small' : 'middle'}
-        onClick={triggerClose}
-      >
+      <Button size={size === 'small' ? 'small' : 'middle'} onClick={triggerClose}>
         取消
       </Button>
-      <Button
-        size={size === 'small' ? 'small' : 'middle'}
-        type="primary"
-        onClick={triggerOk}
-      >
+      <Button size={size === 'small' ? 'small' : 'middle'} type="primary" onClick={triggerOk}>
         确定
       </Button>
     </Space>
@@ -193,14 +187,10 @@ const Dialog = (props: DialogProps) => {
   if (!openRef.value) return <>{null}</>;
 
   return ReactDOM.createPortal(
-    <span
-      className={px('wrapper', { hidden: !show })}
-      style={{ zIndex }}
-      {...rootProps}
-    >
+    <span className={cn(styles.wrapper, { [styles.hidden]: !show })} style={{ zIndex }} {...rootProps}>
       <div
         ref={rootRef}
-        className={`${px('root', `size-${size}`, { dragging })} ${className}`}
+        className={`${cn(styles.root, px(`size-${size}`), { [styles.dragging]: dragging })} ${className}`}
         style={{
           ...style,
           width,
@@ -210,35 +200,24 @@ const Dialog = (props: DialogProps) => {
       >
         <div
           {...handleProps}
-          className={px('header')}
+          className={styles.header}
           onMouseDown={(e) => {
-            if (
-              isInBy(
-                e.target as HTMLElement,
-                (node) => node.tagName === 'BUTTON',
-              )
-            ) {
+            if (isInBy(e.target as HTMLElement, node => node.tagName === 'BUTTON')) {
               e.preventDefault();
             }
           }}
         >
-          <div className={px('title')}>{title}</div>
-          <div className={px('buttons')}>
-            <div
-              className={px('button', 'button-danger')}
-              onClick={triggerClose}
-            >
+          <div className={styles.title}>{title}</div>
+          <div className={styles.buttons}>
+            <div className={cn(styles.button, styles.buttonDanger)} onClick={triggerClose}>
               <CloseOutlined />
             </div>
           </div>
         </div>
-        <div
-          className={`${px('body', { scrollable })} ${bodyClassname}`}
-          style={bodyStyle}
-        >
+        <div className={`${cn(styles.body, { [styles.scrollable]: scrollable })} ${bodyClassname}`} style={bodyStyle}>
           {children}
         </div>
-        <div className={px('footer')} style={{ textAlign: footerAlign }}>
+        <div className={styles.footer} style={{ textAlign: footerAlign }}>
           {footer !== undefined ? footer : defaultFooter}
         </div>
       </div>

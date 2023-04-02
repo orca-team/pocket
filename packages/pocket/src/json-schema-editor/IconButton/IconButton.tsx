@@ -1,10 +1,8 @@
 import React from 'react';
-import pc from 'prefix-classnames';
+import cn from 'classnames';
+import useStyles from './IconButton.style';
 
-const px = pc('json-schema-editor-icon-button');
-
-export interface SimpleButtonProps
-  extends React.HTMLAttributes<HTMLButtonElement> {
+export interface SimpleButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   checked?: boolean;
   size?: 'x-small' | 'small' | 'middle' | 'large';
   disabled?: boolean;
@@ -12,22 +10,21 @@ export interface SimpleButtonProps
 }
 
 const IconButton = (props: SimpleButtonProps) => {
-  const {
-    className = '',
-    size = 'middle',
-    checked,
-    disabled,
-    theme = 'default',
-    ...otherProps
-  } = props;
+  const { className = '', size = 'middle', checked, disabled, theme = 'default', ...otherProps } = props;
+  const styles = useStyles();
   return (
     <button
       type="button"
-      className={`${px()} ${px(size, {
-        disabled,
-        checked,
-        dark: theme === 'dark',
-      })} ${className}`}
+      className={cn(
+        styles.root,
+        styles[size],
+        {
+          [styles.disabled]: disabled,
+          [styles.checked]: checked,
+          [styles.dark]: theme === 'dark',
+        },
+        className,
+      )}
       {...otherProps}
     />
   );

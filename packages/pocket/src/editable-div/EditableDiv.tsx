@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import pc from 'prefix-classnames';
-import './EditableDiv.less';
 import { useControllableValue, useEventListener } from 'ahooks';
 import { useMergedRefs } from '@orca-fe/hooks';
-
-const px = pc('editable-div');
+import cn from 'classnames';
+import useStyles from './EditableDiv.style';
 
 function selectDom(dom: HTMLElement) {
   // @ts-expect-error
@@ -21,8 +19,7 @@ function selectDom(dom: HTMLElement) {
   }
 }
 
-export interface EditableDivProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'children'> {
+export interface EditableDivProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'children'> {
   defaultValue?: string;
   value?: string;
   onChange?: (value: string) => void;
@@ -33,121 +30,120 @@ export interface EditableDivProps
   transparent?: boolean;
 }
 
-const EditableDiv = React.forwardRef<HTMLDivElement, EditableDivProps>(
-  (props, pRef) => {
-    const {
-      className = '',
-      value: nouse,
-      defaultValue,
-      onEditChange,
-      editing: nouse2,
-      onChange,
-      compact,
-      trigger = 'dblclick',
-      transparent,
-      ...otherProps
-    } = props;
-    const [value, setValue] = useControllableValue(props);
-    const [editing, setEditing] = useControllableValue(props, {
-      defaultValue: false,
-      trigger: 'onEditChange',
-      defaultValuePropName: 'noDefaultValue',
-      valuePropName: 'editing',
-    });
+const EditableDiv = React.forwardRef<HTMLDivElement, EditableDivProps>((props, pRef) => {
+  const {
+    className = '',
+    value: nouse,
+    defaultValue,
+    onEditChange,
+    editing: nouse2,
+    onChange,
+    compact,
+    trigger = 'dblclick',
+    transparent,
+    ...otherProps
+  } = props;
+  const styles = useStyles();
+  const [value, setValue] = useControllableValue(props);
+  const [editing, setEditing] = useControllableValue(props, {
+    defaultValue: false,
+    trigger: 'onEditChange',
+    defaultValuePropName: 'noDefaultValue',
+    valuePropName: 'editing',
+  });
 
-    const rootRef = useRef<HTMLDivElement>(null);
-    const preRef = useRef<HTMLPreElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const preRef = useRef<HTMLPreElement>(null);
 
-    const mergedRootRef = useMergedRefs(rootRef, pRef);
+  const mergedRootRef = useMergedRefs(rootRef, pRef);
 
-    const [_this] = useState({
-      lastValue: '',
-      lastEditing: editing,
-    });
+  const [_this] = useState({
+    lastValue: '',
+    lastEditing: editing,
+  });
 
-    const confirm = () => {
-      if (preRef.current) {
-        const editingValue = preRef.current.innerText;
-        setValue(editingValue);
+  const confirm = () => {
+    if (preRef.current) {
+      const editingValue = preRef.current.innerText;
+      setValue(editingValue);
+      setEditing(false);
+    }
+  };
+
+  useEventListener(
+    'blur',
+    (e) => {
+      confirm();
+    },
+    { target: preRef },
+  );
+
+  useEventListener(
+    trigger,
+    (e) => {
+      if (!editing) {
+        setEditing(true);
+      }
+    },
+    { target: rootRef },
+  );
+
+  useEventListener(
+    'keydown',
+    (e: KeyboardEvent) => {
+      const { key, ctrlKey, altKey, shiftKey } = e;
+
+      if (key === 'Escape') {
+        // 取消本次编辑
         setEditing(false);
       }
-    };
-
-    useEventListener(
-      'blur',
-      (e) => {
+      if (key === 'Enter' && !ctrlKey && !altKey && !shiftKey) {
+        // 确认本次编辑
+        e.preventDefault();
         confirm();
-      },
-      { target: preRef },
-    );
+      }
+    },
+    { target: preRef },
+  );
 
-    useEventListener(
-      trigger,
-      (e) => {
+  useEffect(() => {
+    if (preRef.current) {
+      if (editing) {
+        preRef.current.focus();
+        selectDom(preRef.current);
+      }
+    }
+  }, [editing]);
+
+  useEffect(() => {
+    if (preRef.current) {
+      if (_this.lastValue !== value || _this.lastEditing !== editing) {
         if (!editing) {
-          setEditing(true);
+          preRef.current.innerText = value;
         }
-      },
-      { target: rootRef },
-    );
-
-    useEventListener(
-      'keydown',
-      (e: KeyboardEvent) => {
-        const { key, ctrlKey, altKey, shiftKey } = e;
-
-        if (key === 'Escape') {
-          // 取消本次编辑
-          setEditing(false);
-        }
-        if (key === 'Enter' && !ctrlKey && !altKey && !shiftKey) {
-          // 确认本次编辑
-          e.preventDefault();
-          confirm();
-        }
-      },
-      { target: preRef },
-    );
-
-    useEffect(() => {
-      if (preRef.current) {
-        if (editing) {
-          preRef.current.focus();
-          selectDom(preRef.current);
-        }
+        _this.lastValue = value;
+        _this.lastEditing = editing;
       }
-    }, [editing]);
+    }
+  });
 
-    useEffect(() => {
-      if (preRef.current) {
-        if (_this.lastValue !== value || _this.lastEditing !== editing) {
-          if (!editing) {
-            preRef.current.innerText = value;
-          }
-          _this.lastValue = value;
-          _this.lastEditing = editing;
-        }
-      }
-    });
-
-    return (
-      <div
-        ref={mergedRootRef}
-        className={`${px('root', {
-          editing,
-          compact,
-          transparent,
-        })} ${className}`}
-        {...otherProps}
-      >
-        <pre
-          ref={preRef}
-          // @ts-expect-error
-          contentEditable={editing ? 'plaintext-only' : 'false'}
-        />
-      </div>
-    );
-  },
-);
+  return (
+    <div
+      ref={mergedRootRef}
+      className={`${cn(styles.root, {
+        [styles.editing]: editing,
+        [styles.compact]: compact,
+        [styles.transparent]: transparent,
+      })} ${className}`}
+      {...otherProps}
+    >
+      <pre
+        ref={preRef}
+        // @ts-expect-error
+        contentEditable={editing ? 'plaintext-only' : 'false'}
+      />
+    </div>
+  );
+});
 
 export default EditableDiv;

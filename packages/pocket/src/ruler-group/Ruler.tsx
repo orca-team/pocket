@@ -1,17 +1,15 @@
 import React, { useRef } from 'react';
-import pc from 'prefix-classnames';
 import { useMemoizedFn, useUpdateEffect } from 'ahooks';
 import { isMac } from '@orca-fe/tools';
 import { useSizeListener } from '@orca-fe/hooks';
+import useStyles from './Ruler.style';
 
-const getStep = (n: number) =>
-  Math.trunc(n / 10 ** Math.max(0, Math.trunc(Math.log10(n))));
+const getStep = (n: number) => Math.trunc(n / 10 ** Math.max(0, Math.trunc(Math.log10(n))));
 
 const ef = () => {};
 
-const px = pc('ruler');
-
 export interface RulerProps extends React.HTMLAttributes<HTMLDivElement> {
+
   /* 标尺方向 */
   orientation?: 'vertical' | 'horizontal';
 
@@ -50,6 +48,7 @@ const Ruler = (props: RulerProps) => {
     onRulerMouseMove = ef,
     ...otherProps
   } = props;
+  const styles = useStyles();
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -131,11 +130,7 @@ const Ruler = (props: RulerProps) => {
         const left = pixel(i);
         if (num % 10 === 0) {
           top = 0.2 * size;
-          ctx.fillText(
-            `${i}`,
-            Math.round(left + 2) + (isMac() ? 0.5 : 0),
-            Math.round(0.55 * size) + 0.5,
-          );
+          ctx.fillText(`${i}`, Math.round(left + 2) + (isMac() ? 0.5 : 0), Math.round(0.55 * size) + 0.5);
         } else if (num % 5 === 0) {
           top = 0.6 * size;
         }
@@ -199,7 +194,7 @@ const Ruler = (props: RulerProps) => {
   return (
     <div
       ref={rootRef}
-      className={`${px('root')} ${className}`}
+      className={`${styles.root} ${className}`}
       {...otherProps}
       onClick={handleClick}
       onMouseMove={handleMouseMove}
@@ -208,15 +203,15 @@ const Ruler = (props: RulerProps) => {
         ...style,
         ...(isHorizon
           ? {
-              cursor: 'ew-resize',
-              overflowY: 'visible',
-              height: size,
-            }
+            cursor: 'ew-resize',
+            overflowY: 'visible',
+            height: size,
+          }
           : {
-              cursor: 'ns-resize',
-              overflowX: 'visible',
-              width: size,
-            }),
+            cursor: 'ns-resize',
+            overflowX: 'visible',
+            width: size,
+          }),
       }}
     >
       <canvas ref={canvasRef} />

@@ -3,6 +3,7 @@ import pc from 'prefix-classnames';
 import { Link } from 'react-router-dom';
 import type { BaseMenuType } from './BreadcrumbContext';
 import BreadcrumbContext from './BreadcrumbContext';
+import useStyles from './Breadcrumb.style';
 
 const px = pc('custom-breadcrumb');
 
@@ -10,21 +11,15 @@ const ef = () => {};
 
 const defaultSeparator = <div className={px('default-separator')}>/</div>;
 
-export interface BreadCrumbProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'prefix'> {
+export interface BreadCrumbProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'prefix'> {
   prefix?: BaseMenuType;
   separator?: React.ReactNode;
   onLinkClick?: (link: BaseMenuType, e: React.MouseEvent) => void;
 }
 
 const Breadcrumb = (props: BreadCrumbProps) => {
-  const {
-    className = '',
-    separator = defaultSeparator,
-    prefix,
-    onLinkClick = ef,
-    ...otherProps
-  } = props;
+  const { className = '', separator = defaultSeparator, prefix, onLinkClick = ef, ...otherProps } = props;
+  const styles = useStyles();
   const { menu, customBreadcrumb } = useContext(BreadcrumbContext);
 
   const menuWithPrefix = useMemo(() => {
@@ -53,7 +48,7 @@ const Breadcrumb = (props: BreadCrumbProps) => {
   }, [menuWithPrefix, customBreadcrumb]);
 
   return (
-    <div className={`${px('root')} ${className}`} {...otherProps}>
+    <div className={`${styles.root} ${className}`} {...otherProps}>
       {finalMenu.map((item, index) => (
         <React.Fragment key={index}>
           {index > 0 && separator}

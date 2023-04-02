@@ -2,11 +2,12 @@ import React, { useMemo, useRef, useState } from 'react';
 import pc from 'prefix-classnames';
 import { CaretRightFilled, CopyOutlined } from '@ant-design/icons';
 import JSON5 from 'json5';
-import './JsonViewer.less';
 import produce from 'immer';
 import copy from 'copy-to-clipboard';
+import cn from 'classnames';
 import EditableDiv from '../editable-div';
 import OpenBox from '../open-box';
+import useStyles from './JsonViewer.style';
 
 const px = pc('orca-json-viewer');
 const eArr = [];
@@ -22,8 +23,7 @@ export type ValueChangeType<T> = {
   modifiedValue: any;
 };
 
-export interface JsonViewerProps<T>
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onCopy'> {
+export interface JsonViewerProps<T> extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onCopy'> {
   value?: T;
   level?: number;
   path?: PathType[];
@@ -57,6 +57,7 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
     _keyOnly,
     ...otherProps
   } = props;
+  const styles = useStyles();
   const valueType = typeof value;
   const isNull = value === null;
   const isObject = value != null && valueType === 'object';
@@ -91,8 +92,7 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
     }
     if (isArray) {
       const optimizedArray: any[] = [];
-      const splitSize =
-        10 ** (Math.trunc(Math.log10(value.length - 1) / 2) * 2);
+      const splitSize = 10 ** (Math.trunc(Math.log10(value.length - 1) / 2) * 2);
       if (!Number.isNaN(splitSize) && splitSize > 1) {
         optimizedArray[optimizedArraySplitSize] = splitSize;
         for (let i = 0; i * splitSize < value.length; i++) {
@@ -129,9 +129,9 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
     previewValue = JSON5.stringify(value);
   }
   return (
-    <div className={`${px('root')} ${className}`} {...otherProps}>
+    <div className={`${styles.root} ${className}`} {...otherProps}>
       <div
-        className={px('item')}
+        className={styles.item}
         onClick={() => {
           if (isObject) {
             setOpen(!open);
@@ -140,21 +140,19 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
       >
         {/* 缩进 */}
         <div
-          className={px('indent')}
+          className={styles.indent}
           style={{
             width: `${1.0 * level + (isObject ? 0 : Math.sign(level))}em`,
           }}
         />
         {/* 下拉箭头 */}
         {isObject && (
-          <div className={px('arrow', { 'arrow-open': open })}>
+          <div className={cn(styles.arrow, { [styles.arrowOpen]: open })}>
             <CaretRightFilled />
           </div>
         )}
         {/* 如果存在 key，则添加 key */}
-        {fieldKey != null && (
-          <div className={px('key', { 'key-only': _keyOnly })}>{fieldKey}</div>
-        )}
+        {fieldKey != null && <div className={cn(styles.key, { [styles.keyOnly]: _keyOnly })}>{fieldKey}</div>}
 
         {!_keyOnly && (
           <>
@@ -195,7 +193,7 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
             />
             {comma && !open && ','}
             <div
-              className={px('operator')}
+              className={styles.operator}
               onClick={(event) => {
                 event.stopPropagation();
               }}
@@ -203,9 +201,7 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
               <CopyOutlined
                 title="复制 value 到剪贴板"
                 onClick={() => {
-                  const text = isObject
-                    ? JSON.stringify(value, null, 2)
-                    : String(value);
+                  const text = isObject ? JSON.stringify(value, null, 2) : String(value);
                   if (!customCopy) {
                     copy(text);
                   }
@@ -221,18 +217,14 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
       {isObject && openedRef.current && optimizedValue && (
         <OpenBox open={open} defaultHeight={defaultOpenValue ? 'auto' : 0}>
           {Object.entries(optimizedValue).map(([key, subValue], index) => {
-            const splitSize =
-              (optimizedValue[optimizedArraySplitSize] as number) || 1;
-            const currentIndexStart =
-              (_optimizedArrayIndex || 0) + index * splitSize;
+            const splitSize = (optimizedValue[optimizedArraySplitSize] as number) || 1;
+            const currentIndexStart = (_optimizedArrayIndex || 0) + index * splitSize;
             const isOptimizedSubValue = !!subValue?.[optimizedArrayRef];
             let fieldKey = key;
             let _keyOnly = false;
             if (isOptimizedSubValue) {
               // 子元素也是优化过的数组，将呈现 [0 ... 99] 的形态
-              fieldKey = `[${currentIndexStart} ... ${
-                currentIndexStart + subValue.length - 1
-              }]`;
+              fieldKey = `[${currentIndexStart} ... ${currentIndexStart + subValue.length - 1}]`;
               _keyOnly = true;
             } else if (isArray && _optimizedArrayIndex != null) {
               fieldKey = `${currentIndexStart}`;
@@ -242,9 +234,7 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
               <JsonViewer
                 _isRoot={false}
                 _keyOnly={_keyOnly}
-                _optimizedArrayIndex={
-                  isOptimizedSubValue ? currentIndexStart : 0
-                }
+                _optimizedArrayIndex={isOptimizedSubValue ? currentIndexStart : 0}
                 value={subValue}
                 key={key}
                 fieldKey={fieldKey}
@@ -280,11 +270,8 @@ const JsonViewer = function <T>(props: JsonViewerProps<T>) {
               />
             );
           })}
-          <div className={px('item')}>
-            <div
-              className={px('indent')}
-              style={{ width: `${1.0 * level + 1}em` }}
-            />
+          <div className={styles.item}>
+            <div className={styles.indent} style={{ width: `${1.0 * level + 1}em` }} />
             {isArray ? ']' : '}'}
           </div>
         </OpenBox>

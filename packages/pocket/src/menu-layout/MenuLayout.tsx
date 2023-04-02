@@ -2,12 +2,14 @@ import React, { useMemo } from 'react';
 import pc from 'prefix-classnames';
 import { useLocation } from 'react-router';
 import { useControllableProps } from '@orca-fe/hooks';
+import cn from 'classnames';
 import type { MenuProps } from './Menu';
 import Menu from './Menu';
 import type { MenuItemType } from './menuUtils';
 import { findSelectedMenu, findSelectedMenuIndexTraverse } from './menuUtils';
 import { BreadCrumbProvider } from '../custom-breadcrumb/BreadcrumbContext';
 import type { OpenKeysType } from './Menu/MenuContext';
+import useStyles from './MenuLayout.style';
 
 // 菜单展开按钮
 const iconMenuPathExpand =
@@ -23,8 +25,8 @@ const iconMenuPathCollapse =
   'c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56' +
   'c0-4.4-3.6-8-8-8zM142.4 642.1L298.7 519a8.84 8.84 0 000-13.9L142.4 381.9c-5.8-4.6-14.4-.5-14.4 6.9v246.3a8.9 8.9 0 0014.4 7z';
 
-export interface MenuLayoutProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+export interface MenuLayoutProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+
   /** 传入自定义的路径 */
   pathname?: string;
 
@@ -124,17 +126,18 @@ const MenuLayout = (props: MenuLayoutProps) => {
     collapse: false,
     openKeys: _defaultOpenKeys ?? [],
   });
+  const styles = useStyles();
 
   const openKeys: OpenKeysType = useMemo(
     () =>
       Array.isArray(_openKeys)
         ? (() => {
-            const res: OpenKeysType = {};
-            _openKeys.forEach((key) => {
-              res[key] = true;
-            });
-            return res;
-          })()
+          const res: OpenKeysType = {};
+          _openKeys.forEach((key) => {
+            res[key] = true;
+          });
+          return res;
+        })()
         : _openKeys,
     [_openKeys],
   );
@@ -148,15 +151,9 @@ const MenuLayout = (props: MenuLayoutProps) => {
   // 判断取用哪个 pathname
   const pathname = _pathname != null ? _pathname : location.pathname;
 
-  const checkedMenuIndex = useMemo(
-    () => findSelectedMenuIndexTraverse(pathname, menu),
-    [menu, pathname],
-  );
+  const checkedMenuIndex = useMemo(() => findSelectedMenuIndexTraverse(pathname, menu), [menu, pathname]);
 
-  const checkedMenu = useMemo(
-    () => findSelectedMenu(pathname, menu),
-    [menu, pathname],
-  );
+  const checkedMenu = useMemo(() => findSelectedMenu(pathname, menu), [menu, pathname]);
 
   // 主菜单是否在左侧
   const mainSideLeft = mainMenuSide === 'left';
@@ -167,24 +164,20 @@ const MenuLayout = (props: MenuLayoutProps) => {
   let sideMenu = menu;
   // 如果包含顶部菜单，则侧边菜单为当前选中的一级菜单下的子菜单
   if (useTopMenu) {
-    sideMenu =
-      (checkedMenuIndex.length > 0
-        ? menu[checkedMenuIndex[0]].children
-        : undefined) ?? [];
+    sideMenu = (checkedMenuIndex.length > 0 ? menu[checkedMenuIndex[0]].children : undefined) ?? [];
   }
 
-  const headerCheckedKey =
-    checkedMenuIndex.length > 0 ? menu[checkedMenuIndex[0]].key : undefined;
+  const headerCheckedKey = checkedMenuIndex.length > 0 ? menu[checkedMenuIndex[0]].key : undefined;
 
-  const titleDiv = <div className={px('title')}>{title}</div>;
+  const titleDiv = <div className={styles.title}>{title}</div>;
 
   const logoDiv = (
     <div
-      className={px('logo-container', {
-        'left-side': mainSideLeft,
+      className={cn(styles.logoContainer, {
+        [styles.leftSide]: mainSideLeft,
       })}
     >
-      <div className={px('logo')}>
+      <div className={styles.logo}>
         {logo || (
           <div
             style={{
@@ -202,13 +195,10 @@ const MenuLayout = (props: MenuLayoutProps) => {
 
   // 侧边栏收缩按钮
   const collapseSwitchDiv = (
-    <div
-      className={px('collapse-handle')}
-      onClick={() => changeProps({ collapse: !collapse })}
-    >
+    <div className={styles.collapseHandle} onClick={() => changeProps({ collapse: !collapse })}>
       <svg
-        className={px('collapse-handle-icon', {
-          collapsed: collapse,
+        className={cn(styles.collapseHandleIcon, {
+          [styles.collapsed]: collapse,
         })}
         viewBox="64 64 896 896"
         focusable="false"
@@ -225,7 +215,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
 
   /* 顶栏 */
   const header = (
-    <div className={px('header', `theme-${themeHeader}`)}>
+    <div className={`${styles.header} ${px(`theme-${themeHeader}`)}`}>
       {/* 非侧边栏为主，顶栏需要显示logo */}
       {!mainSideLeft && logoDiv}
       {/* 侧边栏为主，且支持收缩时，显示 switch 按钮 */}
@@ -233,7 +223,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
       {useTopMenu && (
         <Menu
           classPrefix={classPrefix}
-          className={px('header-menu')}
+          className={styles.headerMenu}
           menu={menu}
           theme={themeHeader}
           checked={headerCheckedKey}
@@ -246,25 +236,20 @@ const MenuLayout = (props: MenuLayoutProps) => {
     </div>
   );
 
-  const matchedItem = checkedMenu.length
-    ? checkedMenu[checkedMenu.length - 1]
-    : undefined;
+  const matchedItem = checkedMenu.length ? checkedMenu[checkedMenu.length - 1] : undefined;
   const { style: itemStyle } = matchedItem || {};
 
   const content = (
-    <div
-      className={`${px('content')} ${wrapperClassName}`}
-      style={{ ...wrapperStyle, ...itemStyle }}
-    >
+    <div className={`${styles.content} ${wrapperClassName}`} style={{ ...wrapperStyle, ...itemStyle }}>
       {children}
     </div>
   );
 
   const sideMenuDiv = sideMenu.length > 0 && (
     <div
-      className={px('side-menu-container', `theme-${themeSide}`, {
-        'top-splitter': useTopMenu,
-        collapsed: collapse,
+      className={cn(styles.sideMenuContainer, px(`theme-${themeSide}`), {
+        [styles.topSplitter]: useTopMenu,
+        [styles.collapsed]: collapse,
       })}
     >
       {/* 当侧边栏为主时，logo展示在 SideMenu 第一位 */}
@@ -273,7 +258,7 @@ const MenuLayout = (props: MenuLayoutProps) => {
       {!mainSideLeft && collapsible && collapseSwitchDiv}
       <Menu
         classPrefix={classPrefix}
-        className={px('side-menu')}
+        className={styles.sideMenu}
         collapsed={collapse}
         menu={sideMenu}
         theme={themeSide}
@@ -283,13 +268,13 @@ const MenuLayout = (props: MenuLayoutProps) => {
         onItemClick={onItemClick}
         defaultOpenAll={defaultOpenAll}
         openKeys={openKeys}
-        onOpenKeysChange={(openKeys) => changeProps({ openKeys })}
+        onOpenKeysChange={openKeys => changeProps({ openKeys })}
       />
     </div>
   );
 
   const center = (
-    <div className={px('center')}>
+    <div className={styles.center}>
       {/* showHeader == true 时，才渲染 header */}
       {mainSideLeft ? showHeader && header : sideMenuDiv}
       {content}
@@ -298,8 +283,8 @@ const MenuLayout = (props: MenuLayoutProps) => {
 
   return (
     <div
-      className={`${px('root', {
-        'main-side-left': mainSideLeft,
+      className={`${cn(styles.root, {
+        [styles.mainSideLeft]: mainSideLeft,
       })} ${className}`}
       {...otherProps}
     >

@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import pc from 'prefix-classnames';
 import { useClickAway, useEventListener, useSet } from 'ahooks';
 import ReactDOM from 'react-dom';
 import rfdc from 'rfdc';
 import { changeArr, isCopy, isPaste, removeArrIndex } from '@orca-fe/tools';
-
-const px = pc('draggable-list-no-key');
+import cn from 'classnames';
+import useStyles from './DraggableListNoKey.style';
 
 const eArr = [];
 
@@ -32,7 +31,7 @@ function getMousePosition(event: React.MouseEvent<HTMLDivElement>) {
 
 const DraggingNum = (props) => {
   const { value } = props;
-
+  const styles = useStyles();
   const [mouse, setMouse] = useState({ x: -1000, y: -1000 });
 
   useEventListener('mousemove', (event) => {
@@ -44,15 +43,14 @@ const DraggingNum = (props) => {
   });
 
   return ReactDOM.createPortal(
-    <div className={px('dragging-num')} style={{ top: mouse.y, left: mouse.x }}>
+    <div className={styles.draggingNum} style={{ top: mouse.y, left: mouse.x }}>
       {value}
     </div>,
     document.body,
   );
 };
 
-export interface DraggableListNoKeyProps<T>
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+export interface DraggableListNoKeyProps<T> extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
   // 列表数据
   data?: T[];
   // 列表数据发生变化
@@ -101,6 +99,7 @@ function DraggableListNoKey<T>(props: DraggableListNoKeyProps<T>) {
     ...otherProps
   } = props;
 
+  const styles = useStyles();
   const rootRef = useRef<HTMLDivElement>(null);
 
   const [_this] = useState(() => ({
@@ -185,7 +184,7 @@ function DraggableListNoKey<T>(props: DraggableListNoKeyProps<T>) {
         }
         return true;
       });
-      const startIndex = newData.findIndex((item) => item === startItem);
+      const startIndex = newData.findIndex(item => item === startItem);
       newData.splice(startIndex + 1, 0, ...tmp);
       onDataChange(newData);
       setTimeout(cancelDrag, 16);
@@ -202,31 +201,24 @@ function DraggableListNoKey<T>(props: DraggableListNoKeyProps<T>) {
     const newData = data.slice();
     newData.splice(to, 0, placeholder);
     // 替换内容
-    onDataChange(
-      newData
-        .filter((item) => item !== fromItem)
-        .map((item) => (item === placeholder ? fromItem : item)),
-    );
+    onDataChange(newData.filter(item => item !== fromItem).map(item => (item === placeholder ? fromItem : item)));
     return true;
   };
 
   return (
     <div
       ref={rootRef}
-      className={`${px('root', {
-        dragging,
-        'hover-style': !customStyle && !noHoverStyle,
-        'internal-style': !customStyle,
+      className={`${cn(styles.root, {
+        [styles.dragging]: dragging,
+        [styles.hoverStyle]: !customStyle && !noHoverStyle,
+        [styles.internalStyle]: !customStyle,
       })} ${className}`}
       tabIndex={-1}
       onKeyDown={(e) => {
-        if (
-          isCopy(e.nativeEvent) &&
-          (e.target['tagName'] === 'DIV' || checkedSet.size > 1)
-        ) {
+        if (isCopy(e.nativeEvent) && (e.target['tagName'] === 'DIV' || checkedSet.size > 1)) {
           e.stopPropagation();
           const cache = new Set(data);
-          const readyToCopy = [...checkedSet].filter((item) => cache.has(item));
+          const readyToCopy = [...checkedSet].filter(item => cache.has(item));
           if (readyToCopy.length > 0) setCopyItem(readyToCopy);
         }
         if (isPaste(e.nativeEvent) && e.target['tagName'] === 'DIV') {
@@ -234,7 +226,7 @@ function DraggableListNoKey<T>(props: DraggableListNoKeyProps<T>) {
           // 粘贴
           if (copyItem.length > 0) {
             const lastChecked = [...checkedSet][checkedSet.size - 1];
-            let pasteIndex = data.findIndex((item) => item === lastChecked) + 1;
+            let pasteIndex = data.findIndex(item => item === lastChecked) + 1;
             if (pasteIndex <= 0) {
               pasteIndex = data.length;
             }
@@ -284,11 +276,11 @@ function DraggableListNoKey<T>(props: DraggableListNoKeyProps<T>) {
 
         return (
           <div
-            className={px('item', {
-              checked: currentChecked,
-              'dragging-item': currentDragging,
-              before: index === insertFlag + 1,
-              after: index === insertFlag,
+            className={cn(styles.item, {
+              [styles.checked]: currentChecked,
+              [styles.draggingItem]: currentDragging,
+              [styles.before]: index === insertFlag + 1,
+              [styles.after]: index === insertFlag,
             })}
             key={index}
             draggable={!customDragHandler}
@@ -310,7 +302,7 @@ function DraggableListNoKey<T>(props: DraggableListNoKeyProps<T>) {
               if (multipleCheck && shiftKey) {
                 const [firstChecked] = [...checkedSet];
                 // 连续选择模式
-                let index1 = data.findIndex((item) => item === firstChecked);
+                let index1 = data.findIndex(item => item === firstChecked);
                 if (index1 < 0) index1 = 0;
                 const start = Math.min(index, index1);
                 const end = Math.max(index, index1) + 1;

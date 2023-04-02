@@ -1,25 +1,17 @@
 import React, { useRef } from 'react';
-import pc from 'prefix-classnames';
 import { useSizeListener } from '@orca-fe/hooks';
+import cn from 'classnames';
+import useStyles from './TextOverflow.style';
 
-const px = pc('text-overflow');
-
-export interface TextOverflowProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface TextOverflowProps extends React.HTMLAttributes<HTMLDivElement> {
   align?: 'left' | 'center' | 'right';
   pauseOnHover?: boolean;
   contentStyle?: React.CSSProperties;
 }
 
 const TextOverflow = (props: TextOverflowProps) => {
-  const {
-    className = '',
-    children,
-    align = 'left',
-    pauseOnHover = true,
-    contentStyle,
-    ...otherProps
-  } = props;
+  const { className = '', children, align = 'left', pauseOnHover = true, contentStyle, ...otherProps } = props;
+  const styles = useStyles();
 
   const rootRef = useRef<HTMLDivElement>(null);
   const placeholderRef = useRef<HTMLDivElement>(null);
@@ -38,9 +30,7 @@ const TextOverflow = (props: TextOverflowProps) => {
 
       const width = Math.max(0, textWidth - rootWidth);
       textWrapper.style.width = `${width}px`;
-      textWrapper.style.animationDuration = `${
-        4000 + Math.round(width / 100) * 5000
-      }ms`;
+      textWrapper.style.animationDuration = `${4000 + Math.round(width / 100) * 5000}ms`;
 
       if (!isOverflow) {
         if (align === 'left') {
@@ -64,20 +54,16 @@ const TextOverflow = (props: TextOverflowProps) => {
     <div
       ref={rootRef}
       key={typeof children === 'string' ? children : '-'}
-      className={`${px('root', {
-        'pause-on-hover': pauseOnHover,
+      className={`${cn(styles.root, {
+        [styles.pauseOnHover]: pauseOnHover,
       })} ${className}`}
       {...otherProps}
     >
-      <div
-        ref={placeholderRef}
-        className={px('place-holder')}
-        style={contentStyle}
-      >
+      <div ref={placeholderRef} className={styles.placeHolder} style={contentStyle}>
         {children}
       </div>
-      <div ref={textWrapperRef} className={px('text-wrapper')}>
-        <div ref={textRef} className={px('text')} style={contentStyle}>
+      <div ref={textWrapperRef} className={styles.textWrapper}>
+        <div ref={textRef} className={styles.text} style={contentStyle}>
           {children}
         </div>
       </div>
