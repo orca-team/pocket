@@ -4,33 +4,20 @@ import { useDebounceEffect, useDebounceFn, useEventListener, useMemoizedFn } fro
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useGetState, useSizeListener } from '@orca-fe/hooks';
 import type { PageViewport, PDFViewerHandle, RenderPageCoverFnType } from './context';
-import PDFViewerContext, { isShapeData, isTooltipData, PDFToolbarContext } from './context';
+import PDFViewerContext, { PDFToolbarContext } from './context';
 import PDFPage from './PDFPage';
-import PDFToolbar from './PDFToolbar';
-import useStyle from './PDFViewer.style';
 import * as _pdfJS from '../pdfjs-build/pdf';
 import * as pdfjsWorker from '../pdfjs-build/pdf.worker';
 import { findSortedArr } from './utils';
-import type { PDFPainterPluginProps, PDFPainterPluginHandle } from './plugins/PDFPainterPlugin';
-import PDFPainterPlugin from './plugins/PDFPainterPlugin';
 import ZoomAndPageController from './ZoomAndPageController';
-import type { PDFTooltipPluginHandle } from './plugins/PDFTooltipPlugin';
-import PDFTooltipPlugin from './plugins/PDFTooltipPlugin';
+import PDFToolbar from './PDFToolbar';
+import useStyle from './PDFViewer.style';
 
 const pdfJs: any = _pdfJS;
 
 const ef = () => undefined;
 
 const round001 = roundBy(0.001);
-
-function mergeArrays<T, U>(arr1: T[][] = [], arr2: U[][] = []): (T | U)[][] {
-  const maxLength = Math.max(arr1.length, arr2.length);
-  const result: (T | U)[][] = [];
-  for (let i = 0; i < maxLength; i++) {
-    result.push([...arr1[i], ...arr2[i]]);
-  }
-  return result;
-}
 
 const defaultLoadingTips = <div className="pdf-viewer-default-loading-tips">正在打开文件...</div>;
 
@@ -68,17 +55,8 @@ export interface PDFViewerProps extends Omit<React.HTMLAttributes<HTMLDivElement
   /** 自定义加载过程提示 */
   loadingTips?: React.ReactElement;
 
-  /** 标注内容变化事件 */
-  onMarkChange?: PDFPainterPluginProps['onMarkChange'];
-
   /** 隐藏工具栏 */
   hideToolbar?: boolean;
-
-  /** 禁用内置的绘图组件 */
-  disabledPluginPainter?: boolean;
-
-  /** 禁用内置的批注组件 */
-  disabledPluginTooltip?: boolean;
 
   /** 缩放事件 */
   onZoomChange?: (zoom: number) => void;
@@ -91,7 +69,6 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     maxZoom = 3,
     minZoom = -4,
     renderPageCover = ef,
-    onMarkChange = ef,
     onZoomChange = ef,
     onPageScroll,
     children,
@@ -101,8 +78,6 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     hideToolbar,
     defaultTitle,
     defaultZoom = 'autoWidth',
-    disabledPluginPainter,
-    disabledPluginTooltip,
     ...otherProps
   } = props;
 
@@ -485,48 +460,6 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     setCenterToolbarIds(ids => ids.filter(([_id]) => _id !== id));
   });
 
-  // 绘图功能
-  const pdfPainterHandle = useRef<PDFPainterPluginHandle>(null);
-  // 批注功能
-  const pdfTooltipHandle = useRef<PDFTooltipPluginHandle>(null);
-
-  const getAllMarkData = useMemoizedFn<PDFViewerHandle['getAllMarkData']>(() => {
-    const pdfPainter = pdfPainterHandle.current;
-    const pdfTooltip = pdfTooltipHandle.current;
-    const shapeData = pdfPainter?.getAllMarkData();
-    const tooltipData = pdfTooltip?.getAllTooltipData();
-    return mergeArrays(shapeData, tooltipData);
-  });
-  const setMarkData = useMemoizedFn<PDFViewerHandle['setMarkData']>((page, markData) => {
-    const shapeData = markData.filter(isShapeData);
-    const tooltipData = markData.filter(isTooltipData);
-
-    pdfPainterHandle.current?.setMarkData(page, shapeData);
-    pdfTooltipHandle.current?.setTooltipData(page, tooltipData);
-  });
-  const setAllMarkData = useMemoizedFn<PDFViewerHandle['setAllMarkData']>((data) => {
-    pdfPainterHandle.current?.setAllMarkData(data.map(pageData => pageData.filter(isShapeData)));
-    pdfTooltipHandle.current?.setAllTooltipData(data.map(pageData => pageData.filter(isTooltipData)));
-  });
-  const clearAllMarkData = useMemoizedFn<PDFViewerHandle['clearAllMarkData']>((...args) => {
-    pdfPainterHandle.current?.clearAllMarkData();
-    pdfTooltipHandle.current?.clearAllTooltipData();
-  });
-  const drawMark = useMemoizedFn<PDFViewerHandle['drawMark']>((...args) => {
-    pdfPainterHandle.current?.drawMark(...args);
-  });
-  const drawTooltip = useMemoizedFn<PDFViewerHandle['drawTooltip']>((...args) => {
-    pdfTooltipHandle.current?.drawTooltip();
-  });
-  const cancelDraw = useMemoizedFn<PDFViewerHandle['cancelDraw']>((...args) => {
-    pdfPainterHandle.current?.cancelDraw();
-    pdfTooltipHandle.current?.cancelDraw();
-  });
-  const cancelCheck = useMemoizedFn<PDFViewerHandle['cancelCheck']>((...args) => {
-    pdfPainterHandle.current?.cancelCheck();
-    pdfTooltipHandle.current?.cancelCheck();
-  });
-
   const pdfViewerHandle = useMemo<PDFViewerHandle>(
     () => ({
       load,
@@ -538,15 +471,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       getCurrentPage,
       getPageCount,
       scrollTo,
-      getAllMarkData,
-      setMarkData,
-      setAllMarkData,
-      clearAllMarkData,
       setTitle,
-      drawMark,
-      drawTooltip,
-      cancelDraw,
-      cancelCheck,
     }),
     [],
   );
@@ -631,8 +556,6 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
             {loading && loadingTips}
 
             {/* 绘图的工具栏渲染 */}
-            {!disabledPluginPainter && <PDFPainterPlugin ref={pdfPainterHandle} onMarkChange={onMarkChange} />}
-            {!disabledPluginTooltip && <PDFTooltipPlugin ref={pdfTooltipHandle} />}
             {children}
           </div>
 

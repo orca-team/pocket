@@ -118,7 +118,7 @@ function simplifyDouglasPeucker(points: Point[], sqTolerance: number) {
   const simplified = [points[0]];
 
   simplifyDPStep(points, 0, last, sqTolerance, simplified);
-  simplified.push(points[last], points[last + 1]);
+  simplified.push(points[last]);
 
   return simplified;
 }

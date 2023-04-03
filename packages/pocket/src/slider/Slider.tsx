@@ -16,7 +16,7 @@ const AutoAlignTooltip = React.forwardRef<any, TooltipProps>((props, pRef) => {
     () => {
       const tooltip = tooltipRef.current;
       if (tooltip) {
-        tooltip.forcePopupAlign();
+        // tooltip.forcePopupAlign();
       }
     },
     visible ? 16 : undefined,
@@ -34,11 +34,7 @@ const Slider: React.FC<SliderProps> = (props) => {
     <RcSlider
       prefixCls="orca-slider"
       handleRender={(node, handleProps) => (
-        <AutoAlignTooltip
-          overlay={handleProps.value}
-          placement="top"
-          visible={handleProps.dragging}
-        >
+        <AutoAlignTooltip overlay={handleProps.value} placement="top" visible={handleProps.dragging}>
           {node}
         </AutoAlignTooltip>
       )}

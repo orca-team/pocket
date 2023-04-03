@@ -34,6 +34,8 @@ path: /pdf-viewer
 
 ### 重要更新
 
+- `1.0.0`
+  - 移除了内置组件，改为通过插件机制来实现
 - `0.4.5`
   - 增加 `onZoomChange` 事件
 - `0.4.4`
@@ -51,21 +53,21 @@ path: /pdf-viewer
 
 ### 属性
 
-| 属性名称              | 描述                                                                                                                    | 类型                                                                                        | 默认值        | 版本    |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------- | ------- |
-| pageGap               | 页面间距                                                                                                                | `number`                                                                                    | `24`          |         |
-| maxZoom               | 最大缩放级别                                                                                                            | `number`                                                                                    | `3`           |         |
-| minZoom               | 最小缩放级别                                                                                                            | `number`                                                                                    | `-4`          |         |
-| renderPageCover       | 渲染自定义的页面覆盖内容                                                                                                | `(pageIndex: number, options: { viewport: PageViewport, zoom: number }) => React.ReactNode` | `-`           |         |
-| onPageScroll          | 页面渲染事件                                                                                                            | `typeof onScroll`                                                                           | `-`           |         |
-| emptyTips             | 未打开文件时的提示                                                                                                      | `ReactElement`                                                                              | `-`           | `0.0.4` |
-| onMarkChange          | 标注内容变化事件                                                                                                        | `(page: number, markData: ShapeDataType[]) => void`                                         | `-`           | `0.0.5` |
-| defaultTitle          | 默认展示的文件标题                                                                                                      | `string`                                                                                    | `-`           | `0.2.0` |
-| title                 | 文件标题，当传入该属性时，`defaultTitle` 以及 `PDFViewerHandle.load` 和 `PDFViewerHandle.setTitle` 的设置标题都不生效。 | `string`                                                                                    | `-`           | `0.2.0` |
-| defaultZoom           | 默认缩放级别                                                                                                            | `number` / `'autoWidth'` / `'authHeight'`                                                   | `'autoWidth'` | `0.4.0` |
-| disabledPluginPainter | 禁用内置的绘图插件                                                                                                      | `boolean`                                                                                   | `false`       | `0.4.4` |
-| disabledPluginTooltip | 禁用内置的批注插件                                                                                                      | `boolean`                                                                                   | `false`       | `0.4.4` |
-| onZoomChange          | 缩放事件                                                                                                                | `(zoom: number) => void`                                                                    | `-`           | `0.4.5` |
+| 属性名称                                     | 描述                                                                                                                    | 类型                                                                                        | 默认值        | 版本    |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------- | ------- |
+| pageGap                                      | 页面间距                                                                                                                | `number`                                                                                    | `24`          |         |
+| maxZoom                                      | 最大缩放级别                                                                                                            | `number`                                                                                    | `3`           |         |
+| minZoom                                      | 最小缩放级别                                                                                                            | `number`                                                                                    | `-4`          |         |
+| renderPageCover                              | 渲染自定义的页面覆盖内容                                                                                                | `(pageIndex: number, options: { viewport: PageViewport, zoom: number }) => React.ReactNode` | `-`           |         |
+| onPageScroll                                 | 页面渲染事件                                                                                                            | `typeof onScroll`                                                                           | `-`           |         |
+| emptyTips                                    | 未打开文件时的提示                                                                                                      | `ReactElement`                                                                              | `-`           | `0.0.4` |
+| onMarkChange(deprecated at `1.0.0`)          | 标注内容变化事件                                                                                                        | `(page: number, markData: ShapeDataType[]) => void`                                         | `-`           | `0.0.5` |
+| defaultTitle                                 | 默认展示的文件标题                                                                                                      | `string`                                                                                    | `-`           | `0.2.0` |
+| title                                        | 文件标题，当传入该属性时，`defaultTitle` 以及 `PDFViewerHandle.load` 和 `PDFViewerHandle.setTitle` 的设置标题都不生效。 | `string`                                                                                    | `-`           | `0.2.0` |
+| defaultZoom                                  | 默认缩放级别                                                                                                            | `number` / `'autoWidth'` / `'authHeight'`                                                   | `'autoWidth'` | `0.4.0` |
+| disabledPluginPainter(deprecated at `1.0.0`) | 禁用内置的绘图插件                                                                                                      | `boolean`                                                                                   | `false`       | `0.4.4` |
+| disabledPluginTooltip(deprecated at `1.0.0`) | 禁用内置的批注插件                                                                                                      | `boolean`                                                                                   | `false`       | `0.4.4` |
+| onZoomChange                                 | 缩放事件                                                                                                                | `(zoom: number) => void`                                                                    | `-`           | `0.4.5` |
 
 ### PDFViewerHandle
 
@@ -90,22 +92,22 @@ export default () => {
 };
 ```
 
-| 方法名称         | 描述                             | 类型                                                              | 版本                      |
-| ---------------- | -------------------------------- | ----------------------------------------------------------------- | ------------------------- |
-| load             | 加载文件                         | `(file: ArrayBuffer, title?:string) => Promise<void>`             | `0.2.0` 增加 `title` 属性 |
-| close            | 关闭文件                         | `() => void`                                                      | `0.1.0`                   |
-| setZoom          | 设置缩放级别                     | `(zoom: number) => void`                                          |                           |
-| getZoom          | 取得当前缩放级别                 | `() => number`                                                    |                           |
-| changePage       | 翻页（从 0 开始）                | `(pageIndex: number, anim?: boolean) => void`                     |                           |
-| scrollTo         | 控制页面滚动到特定未知           | 同 `HTMLElement.scrollTo`                                         |                           |
-| getCurrentPage   | 获取当前窗口中的页码，从 0 开始  | `() => number`                                                    |                           |
-| getPageCount     | 获取当前页面数量                 | `() => number`                                                    |                           |
-| getPageBlob      | 获取页面的渲染信息（图片二进制） | `(index: number, options?: { scale?: number },) => Promise<Blob>` |                           |
-| getAllMarkData   | 获取当前页面中所有的标注数据     | `() => ShapeDataType[][]`                                         | `0.0.5`                   |
-| setMarkData      | 更新某一页的标注数据             | `(page: number, markData: ShapeDataType[]) => void`               | `0.0.5`                   |
-| setAllMarkData   | 更新所有页面的标注数据           | `(markData: ShapeDataType[][]) => void`                           | `0.0.5`                   |
-| clearAllMarkData | 清除所有页面的标注数据           | `() => void`                                                      | `0.0.6`                   |
-| setTitle         | 设置文件标题                     | `(title: string) => void`                                         | `0.2.0`                   |
+| 方法名称                                | 描述                             | 类型                                                              | 版本                      |
+| --------------------------------------- | -------------------------------- | ----------------------------------------------------------------- | ------------------------- |
+| load                                    | 加载文件                         | `(file: ArrayBuffer, title?:string) => Promise<void>`             | `0.2.0` 增加 `title` 属性 |
+| close                                   | 关闭文件                         | `() => void`                                                      | `0.1.0`                   |
+| setZoom                                 | 设置缩放级别                     | `(zoom: number) => void`                                          |                           |
+| getZoom                                 | 取得当前缩放级别                 | `() => number`                                                    |                           |
+| changePage                              | 翻页（从 0 开始）                | `(pageIndex: number, anim?: boolean) => void`                     |                           |
+| scrollTo                                | 控制页面滚动到特定未知           | 同 `HTMLElement.scrollTo`                                         |                           |
+| getCurrentPage                          | 获取当前窗口中的页码，从 0 开始  | `() => number`                                                    |                           |
+| getPageCount                            | 获取当前页面数量                 | `() => number`                                                    |                           |
+| getPageBlob                             | 获取页面的渲染信息（图片二进制） | `(index: number, options?: { scale?: number },) => Promise<Blob>` |                           |
+| getAllMarkData(deprecated at `1.0.0`)   | 获取当前页面中所有的标注数据     | `() => ShapeDataType[][]`                                         | `0.0.5`                   |
+| setMarkData(deprecated at `1.0.0`)      | 更新某一页的标注数据             | `(page: number, markData: ShapeDataType[]) => void`               | `0.0.5`                   |
+| setAllMarkData(deprecated at `1.0.0`)   | 更新所有页面的标注数据           | `(markData: ShapeDataType[][]) => void`                           | `0.0.5`                   |
+| clearAllMarkData(deprecated at `1.0.0`) | 清除所有页面的标注数据           | `() => void`                                                      | `0.0.6`                   |
+| setTitle                                | 设置文件标题                     | `(title: string) => void`                                         | `0.2.0`                   |
 
 ## API - PDFTooltipPlugin
 

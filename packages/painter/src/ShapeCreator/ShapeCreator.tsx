@@ -85,6 +85,22 @@ const ShapeCreator = (props: ShapeCreatorProps) => {
       if (_this.data.type === 'line-path') {
         // 简化自由绘图
         _this.data.points = simplify(_this.data.points);
+        // 根据绘图的信息，优化 bounds
+        let left = Infinity;
+        let top = Infinity;
+        let right = -Infinity;
+        let bottom = -Infinity;
+        _this.data.points.forEach(([x, y]) => {
+          // 找到最大最小值
+          left = Math.min(left, x);
+          top = Math.min(top, y);
+          right = Math.max(right, x);
+          bottom = Math.max(bottom, y);
+        });
+        _this.data.x = left;
+        _this.data.y = top;
+        _this.data.width = right - left;
+        _this.data.height = bottom - top;
       }
       onCreate(_this.data);
       _this.data = undefined;

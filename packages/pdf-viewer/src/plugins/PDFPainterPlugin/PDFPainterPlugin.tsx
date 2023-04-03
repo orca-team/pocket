@@ -1,43 +1,31 @@
-import React, { useContext, useEffect, useImperativeHandle, useState } from 'react';
+/* eslint-disable react/no-unused-prop-types */
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { IconButton, Trigger } from '@orca-fe/pocket';
-import type { PainterProps, PainterRef, ShapeDataType, ShapeType } from '@orca-fe/painter';
+import type { PainterRef, ShapeDataType, ShapeType } from '@orca-fe/painter';
 import Painter from '@orca-fe/painter';
-import { useMemoizedFn } from 'ahooks';
+import { useControllableValue, useMemoizedFn } from 'ahooks';
 import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
+import { changeArr } from '@orca-fe/tools';
+import produce from 'immer';
 import useStyle from './PDFPainterPlugin.style';
 import ToolbarPortal from '../../ToolbarPortal';
 import { IconAddShape, IconEllipse, IconFreedom, IconLine, IconRectangle } from '../../icon/icon';
 import ToolbarButton from '../../ToolbarButton';
-import PDFViewerContext, { usePageCoverRenderer } from '../../context';
+import { usePageCoverRenderer } from '../../context';
 import SimplePropsEditor from '../SimplePropsEditor';
 import PopupBox from '../PopupBox';
 import type { PropsType } from '../SimplePropsEditor/def';
 
 export type PDFPainterPluginHandle = {
 
-  /** 获取所有标注内容 */
-  getAllMarkData: () => ShapeDataType[][];
-
-  /** 设置某一页的标注内容 */
-  setMarkData: (page: number, markData: ShapeDataType[]) => void;
-
-  /** 设置所有页面的标注内容 */
-  setAllMarkData: (markData: ShapeDataType[][]) => void;
-
-  /** 清除所有页面的标注内容 */
-  clearAllMarkData: () => void;
-
   /** 开始绘图 */
   drawMark: (shapeType: ShapeType, attr: Record<string, any>) => void;
 
   /** 取消绘图 */
   cancelDraw: () => void;
-
-  /** 取消所有选中 */
-  cancelCheck: () => void;
 };
 
-const ef = () => undefined;
+const eArr = [];
 
 const propsDef: PropsType[] = [
   {
@@ -56,21 +44,35 @@ const propsDef: PropsType[] = [
 ];
 
 export interface PDFPainterPluginProps {
-
-  /** 标注内容变化事件 */
-  onMarkChange?: (page: number, markData: ShapeDataType[]) => void;
-
-  onCheck?: PainterProps['onCheck'];
+  defaultChecked?: [number, number];
+  checked?: [number, number];
+  onCheck?: (checked: [number, number]) => void;
+  defaultData?: ShapeDataType[][];
+  data?: ShapeDataType[][];
+  onDataChange?: (data: ShapeDataType[][], action: 'add' | 'change' | 'delete', pageIndex: number, index: number) => void;
 }
 
 type PainterRefType = {
   refs: (PainterRef | null)[];
-  // 绘图数据
-  data: ShapeDataType[][];
 };
+
+/**
+ * PDFPainterPlugin 绘图插件
+ */
 const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPluginProps>((props, pRef) => {
-  const { onMarkChange = ef, onCheck } = props;
   const styles = useStyle();
+
+  const [checked, setChecked] = useControllableValue<[number, number] | undefined>(props, {
+    defaultValuePropName: 'defaultChecked',
+    trigger: 'onCheck',
+    valuePropName: 'checked',
+  });
+
+  const [dataList = eArr, setDataList] = useControllableValue<ShapeDataType[][]>(props, {
+    defaultValuePropName: 'defaultData',
+    trigger: 'onDataChange',
+    valuePropName: 'data',
+  });
 
   /* 绘图功能 */
   const [drawing, setDrawing] = useState(false);
@@ -84,7 +86,6 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
 
   const [_painter] = useState<PainterRefType>({
     refs: [],
-    data: [],
   });
 
   useEffect(() => {
@@ -99,32 +100,7 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
     });
   }, [drawing, drawMode]);
 
-  const getAllMarkData = useMemoizedFn<PDFPainterPluginHandle['getAllMarkData']>(() => _painter.data);
-  const setMarkData = useMemoizedFn<PDFPainterPluginHandle['setMarkData']>((pageIndex, data) => {
-    const ref = _painter.refs[pageIndex];
-    if (ref) {
-      ref.clearShapes();
-      ref.addShapes(data);
-    }
-    _painter.data[pageIndex] = data;
-  });
-  const clearAllMarkData = useMemoizedFn<PDFPainterPluginHandle['clearAllMarkData']>(() => {
-    _painter.refs.forEach((ref, pageIndex) => {
-      if (ref) {
-        ref.clearShapes();
-      }
-    });
-  });
-  const setAllMarkData = useMemoizedFn<PDFPainterPluginHandle['setAllMarkData']>((shapeDataList) => {
-    clearAllMarkData();
-    shapeDataList.forEach((shapeData, pageIndex) => {
-      setMarkData(pageIndex, shapeData);
-    });
-  });
-
   const renderPageCover = usePageCoverRenderer();
-
-  const { pdfViewer } = useContext(PDFViewerContext);
 
   const drawMark = useMemoizedFn<PDFPainterPluginHandle['drawMark']>((shapeType, attr) => {
     setDrawMode({
@@ -132,29 +108,16 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
       shapeType,
     });
     if (!drawing) {
-      pdfViewer.cancelDraw();
       setDrawing(true);
     }
   });
   const cancelDraw = useMemoizedFn<PDFPainterPluginHandle['cancelDraw']>(() => {
     setDrawing(false);
   });
-  const cancelCheck = useMemoizedFn<PDFPainterPluginHandle['cancelCheck']>(() => {
-    _painter.refs.forEach((painter) => {
-      if (painter) {
-        painter.unCheck();
-      }
-    });
-  });
 
   useImperativeHandle(pRef, () => ({
-    clearAllMarkData,
-    getAllMarkData,
-    setMarkData,
-    setAllMarkData,
     drawMark,
     cancelDraw,
-    cancelCheck,
   }));
 
   // let stroke = '#cc0000';
@@ -168,6 +131,7 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
   // }
   ({ shapeType } = drawMode);
 
+  // 绘图菜单栏（二级）
   const renderPainterToolbar = () => (
     <div className={styles.toolbar}>
       <IconButton
@@ -247,36 +211,31 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
           ref={ref => (_painter.refs[pageIndex] = ref)}
           draggable={false}
           className={`${styles.painter} ${drawing ? styles.drawing : ''}`}
-          width={viewport.width}
-          height={viewport.height}
-          style={{ height: '100%' }}
-          defaultDrawMode={drawing ? drawMode : false}
-          onInit={() => {
-            const shapeData = _painter.data[pageIndex];
-            const ref = _painter.refs[pageIndex];
-            if (shapeData && ref) {
-              // 恢复数据
-              ref.addShapes(shapeData);
-
-              if (drawing) {
-                // 进入绘图模式
-                ref.draw(drawMode.shapeType, drawMode.attr);
+          style={{
+            height: '100%',
+            // @ts-expect-error
+            '--painter-scale': 'var(--scale-factor, 1)',
+            '--transformer-layout-scale': 'var(--scale-factor, 1)',
+          }}
+          zoom={zoom}
+          defaultDrawMode={drawing ? drawMode : undefined}
+          data={dataList[pageIndex] || eArr}
+          onDataChange={(pageData, action, index) => {
+            setDataList(changeArr(dataList, pageIndex, pageData), action, pageIndex, index);
+          }}
+          checked={checked?.[0] === pageIndex ? checked[1] : undefined}
+          onCheck={(index) => {
+            setChecked((checked) => {
+              if (index >= 0) {
+                return [pageIndex, index];
               }
-            }
+              if (checked && checked[0] !== pageIndex) {
+                return checked;
+              }
+              return undefined;
+            });
           }}
-          onDataChange={() => {
-            const ref = _painter.refs[pageIndex];
-            if (ref) {
-              const shapes = ref.getShapes();
-              _painter.data[pageIndex] = shapes;
-              onMarkChange(pageIndex, shapes);
-            }
-          }}
-          onDraw={() => {
-            setDrawing(false);
-          }}
-          onCheck={onCheck}
-          renderTransformingRect={(indexList, shapes, painter) => (
+          renderTransformingRect={(shape, index) => (
             <Trigger
               popupVisible
               getPopupContainer={dom => dom}
@@ -288,14 +247,26 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
                 <PopupBox style={{ pointerEvents: 'initial' }}>
                   <SimplePropsEditor
                     value={{
-                      stroke: shapes[0]['stroke'],
-                      strokeWidth: shapes[0]['strokeWidth'],
+                      stroke: shape['stroke'],
+                      strokeWidth: shape['strokeWidth'],
                     }}
                     propsDef={propsDef}
                     onChange={(newProps) => {
-                      indexList.forEach((i) => {
-                        painter.updateShape(i, newProps);
-                      });
+                      const newShape = {
+                        ...shape,
+                        ...newProps,
+                      };
+                      setDataList(
+                        produce(dataList, (_dataList) => {
+                          if (_dataList[pageIndex]) {
+                            // eslint-disable-next-line no-param-reassign
+                            _dataList[pageIndex][index] = newShape;
+                          }
+                        }),
+                        'change',
+                        pageIndex,
+                        index,
+                      );
                     }}
                     colorTriggerProps={{
                       getPopupContainer: () => _painter.refs[pageIndex]?.getRoot() ?? document.body,
@@ -316,7 +287,18 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
                     <IconButton
                       size="small"
                       onClick={() => {
-                        painter.addShapes(shapes);
+                        // 复制
+                        setDataList(
+                          produce(dataList, (_dataList) => {
+                            if (_dataList[pageIndex]) {
+                              // eslint-disable-next-line no-param-reassign
+                              _dataList[pageIndex].push(_dataList[pageIndex][index]);
+                            }
+                          }),
+                          'add',
+                          pageIndex,
+                          index,
+                        );
                       }}
                       style={{ color: '#333' }}
                     >
@@ -325,12 +307,18 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
                     <IconButton
                       size="small"
                       onClick={() => {
-                        indexList
-                          .slice()
-                          .sort((a, b) => b - a)
-                          .forEach((i) => {
-                            painter.removeShape(i);
-                          });
+                        // 删除
+                        setDataList(
+                          produce(dataList, (_dataList) => {
+                            if (_dataList[pageIndex]) {
+                              // eslint-disable-next-line no-param-reassign
+                              _dataList[pageIndex].splice(index, 1);
+                            }
+                          }),
+                          'delete',
+                          pageIndex,
+                          index,
+                        );
                       }}
                       style={{ color: '#C00' }}
                     >

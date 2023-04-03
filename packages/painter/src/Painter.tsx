@@ -1,36 +1,106 @@
 import type { Ref } from 'react';
 import React, { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useControllableValue, useMemoizedFn } from 'ahooks';
+import { useStaticClick } from '@orca-fe/hooks';
+import type { TransformerBoxContextType } from '@orca-fe/transformer';
+import { TransformerBoxContext } from '@orca-fe/transformer';
 import useStyle from './Painter.style';
 import ShapeCreator from './ShapeCreator';
 import type { GraphShapeType, ShapeDataType, ShapeType } from './def';
 import { isGraphShapeType } from './def';
-import ShapeRenderer from './ShapeRenderer';
+import ShapesRenderContainer from './ShapesRenderContainer';
 
 export type { ShapeDataType, ShapeType };
 
-// const ef = () => undefined;
+const ef = () => undefined;
 
 export type PainterRef = {
+
+  /**
+   * 绘制图形
+   * @param {ShapeType} shapeType - 图形类型
+   * @param {Record<string, any>} attr - 图形属性
+   */
   draw: (shapeType: ShapeType, attr?: Record<string, any>) => void;
+
+  /**
+   * 取消绘制
+   */
   cancelDraw: () => void;
+
+  /**
+   * 是否正在绘制
+   * @returns {boolean} - 是否正在绘制
+   */
   isDrawing: () => boolean;
+
+  /**
+   * 获取根元素
+   * @returns {HTMLElement | null} - 根元素
+   */
+  getRoot: () => HTMLElement | null;
 };
 
 export type DrawMode = { shapeType: ShapeType; attr?: Record<string, any> };
 
-export interface PainterProps<T extends ShapeDataType> extends React.HTMLAttributes<HTMLDivElement> {
+export interface PainterProps<T extends ShapeDataType> extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultChecked'> {
+
+  /** 缩放比例 */
   zoom?: number;
+
+  /** 默认绘画模式 */
   defaultDrawMode?: DrawMode;
+
+  /** 默认图形数据 */
   defaultData?: T[];
+
+  /** 图形数据 */
   data?: T[];
-  onDataChange?: (data: T[], action: 'add' | 'change' | 'remove', index: number) => void;
+
+  /** 图形数据变化回调 */
+  onDataChange?: (data: T[], action: 'add' | 'change' | 'delete', index: number) => void;
+
+  /** 渲染变换框 */
+  renderTransformingRect?: (shape: T, index: number) => React.ReactNode;
+
+  /** 默认选中项 */
+  defaultChecked?: number;
+
+  /** 选中项 */
+  checked?: number;
+
+  /** 选中项变化回调 */
+  onCheck?: (checked: number) => void;
+
+  /** 取消绘图 */
+  onCancelDraw?: () => void;
 }
 
 const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProps<T>, pRef: Ref<PainterRef>) {
-  const { className = '', zoom, defaultDrawMode = false, data: nouse1, defaultData: nouse2, onDataChange: nouse3, ...otherProps } = props;
+  const {
+    className = '',
+    zoom = 0,
+    defaultDrawMode = false,
+    data: nouse1,
+    defaultData: nouse2,
+    onDataChange: nouse3,
+    renderTransformingRect = () => null,
+    defaultChecked,
+    checked: nouse4,
+    onCheck,
+    onCancelDraw = ef,
+    style,
+    ...otherProps
+  } = props;
   const styles = useStyle();
   const rootRef = useRef<HTMLDivElement>(null);
+
+  const [checked, setChecked] = useControllableValue<number>(props, {
+    defaultValue: -1,
+    valuePropName: 'checked',
+    defaultValuePropName: 'defaultChecked',
+    trigger: 'onCheck',
+  });
 
   // 图形数据
   const [data, setData] = useControllableValue<T[]>(props, {
@@ -68,12 +138,33 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
     setDrawMode(false);
   });
 
+  const isDrawing = useMemoizedFn(() => !!drawMode);
+  const getRoot = useMemoizedFn(() => rootRef.current);
   useImperativeHandle(
     pRef,
     () => ({
       draw,
       cancelDraw,
-      isDrawing: () => !!drawMode,
+      isDrawing,
+      getRoot,
+    }),
+    [],
+  );
+
+  useStaticClick((e) => {
+    const root = rootRef.current;
+    if (root && (root === e.target || !root.contains(e.target as Node))) {
+      setChecked(-1);
+    }
+  });
+
+  const getPointMapping = useMemoizedFn<TransformerBoxContextType['getPointMapping']>(point => ({
+    x: point.x / 2 ** zoom,
+    y: point.y / 2 ** zoom,
+  }));
+  const context = useMemo<TransformerBoxContextType>(
+    () => ({
+      getPointMapping,
     }),
     [],
   );
@@ -84,23 +175,39 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
       ref={rootRef}
       className={`${styles.root} ${className}`}
       // onBlur={() => { unCheck(); }}
+      style={{
+        // @ts-expect-error
+        '--painter-scale': 2 ** zoom,
+        ...style,
+      }}
       {...otherProps}
     >
-      <ShapeRenderer shapes={mergedGraphShapeData as GraphShapeType[]} />
+      <TransformerBoxContext.Provider value={context}>
+        <ShapesRenderContainer
+          checked={checked}
+          onCheck={setChecked}
+          shapes={mergedGraphShapeData as GraphShapeType[]}
+          onShapesChange={(newShapes, action, index) => {
+            setData(newShapes as T[], action, index);
+          }}
+          renderTransformingRect={renderTransformingRect as PainterProps<GraphShapeType>['renderTransformingRect']}
+        />
+      </TransformerBoxContext.Provider>
       {drawMode && (
         <ShapeCreator
+          pointMapping={getPointMapping}
           shapeType={drawMode.shapeType}
           onDrawing={(shape) => {
             setTempShape(shape);
           }}
           onCancel={() => {
-            setDrawMode(false);
             setTempShape(false);
+            setDrawMode(false);
+            onCancelDraw();
           }}
           onCreate={(shape) => {
-            setData(data => [...data, shape as T]);
-            setDrawMode(false);
             setTempShape(false);
+            setData(data => [...data, shape as T]);
           }}
         />
       )}

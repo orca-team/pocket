@@ -1,26 +1,28 @@
 import { createUseStyles } from '@orca-fe/simple-jss';
 import jssAutoPrefix from '@orca-fe/jss-plugin-auto-prefix';
 
-const prefix = 'painter';
+const prefix = 'shapes-render-container';
+
 export default createUseStyles(
   {
     root: {
       position: 'relative',
-      height: 200,
-      outline: 'none !important',
-      '--painter-scale': 1,
-      '--transformer-layout-scale': 'var(--painter-scale)',
     },
-    canvasContainer: {
-      width: '100%',
-      height: '100%',
+    pointer: {
+      cursor: 'pointer',
     },
-    move: {
-      cursor: 'move',
-    },
-    transformingRect: {
+    svg: {
       position: 'absolute',
+      left: 0,
+      top: 0,
       pointerEvents: 'none',
+      overflow: 'visible',
+      stroke: '#f00',
+      fill: 'none',
+      outline: 'none !important',
+      '--svg-stroke-width': 1,
+      transform: 'scale(var(--painter-scale, 1))',
+      transformOrigin: 'left top',
     },
   },
   {

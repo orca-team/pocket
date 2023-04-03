@@ -31,6 +31,8 @@ nav:
 
 <code src="../demo/Demo2.tsx" ></code>
 
+<code src="../demo/Demo3.tsx" ></code>
+
 ## API
 
 ### TransformerBox
@@ -50,7 +52,7 @@ nav:
 | controlledMode  | 是否受控模式，开启后，拖拽的过程，会实时触发 onBoundsChange                                               | `boolean`                              | `false` |        |
 | portal          | 修改内容挂载点，默认挂载到边框内部。指定内挂载位置，可实现渲染多个 Box 时，内容不会遮挡边框，造成效果不佳 | `() => HTMLElement`                    | -       |        |
 | limitBounds     | 限制移动区域，设置之后，会以中心点为基准，不能移动超过 limitBounds 的范围                                 | `Bounds`                               | -       |        |
-| rotateEnable    | 支持旋转                                                                                                  | `boolean`                              | `false` |        |
+| rotateEnabled   | 支持旋转                                                                                                  | `boolean`                              | `false` |        |
 
 ### TransformerLayout
 
@@ -67,5 +69,5 @@ nav:
 | limit               | 是否限制元素移动范围，开启后，边框将不能拖拽到本组件之外的地方（以中心点为基准）                                                            | `boolean`                                              | `false`                           | -       |
 | layoutEvents        | 是否开启布局 div 事件，为了实现空白区域的事件穿透（即不会挡住画布后面的内容），默认去除了画布上的点击事件响应，如果你需要开启，则使用该属性 | `boolean`                                              | `false`                           | -       |
 | zoom                | 缩放比例 scale = 2 \*\* zoom                                                                                                                | `number`                                               | `1`                               | -       |
-| rotateEnable        | 是否支持 Box 旋转                                                                                                                           | `boolean`                                              | `false`                           | -       |
+| rotateEnabled       | 是否支持 Box 旋转                                                                                                                           | `boolean`                                              | `false`                           | -       |
 | onDelete            | 删除事件， return false 可以终止删除                                                                                                        | `(index: number) => void / boolean / Promise<boolean>` | `-`                               | `0.0.7` |

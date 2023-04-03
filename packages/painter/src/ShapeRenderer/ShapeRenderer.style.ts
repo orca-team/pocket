@@ -8,20 +8,18 @@ export default createUseStyles(
     root: {
       position: 'relative',
       overflow: 'visible',
-      '--svg-stroke-width': 1,
-    },
-    svg: {
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      pointerEvents: 'none',
-      overflow: 'visible',
-      stroke: '#f00',
-      fill: 'none',
+
+      '& .orca-transformer-box-root': {
+        pointerEvents: 'none',
+        cursor: 'move',
+      },
+      '& .orca-transformer-box-status-checked': {
+        pointerEvents: 'initial',
+      },
     },
     svgHit: {
       pointerEvents: 'initial',
-      strokeWidth: 'calc(var(--svg-stroke-width) + 5)',
+      strokeWidth: 'calc(var(--svg-stroke-width, 1) + 5)',
       stroke: 'transparent',
     },
   },

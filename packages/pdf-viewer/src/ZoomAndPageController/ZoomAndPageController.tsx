@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { UcInput } from '@orca-fe/pocket';
-import useStyles from './ZoomAndPageController.style';
 import type { ZoomEditorProps } from '../ZoomEditor';
 import ZoomEditor from '../ZoomEditor';
 import PDFViewerContext from '../context';
+import useStyles from './ZoomAndPageController.style';
 
 export interface ZoomAndPageControllerProps extends React.HTMLAttributes<HTMLDivElement> {
   max?: number;

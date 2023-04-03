@@ -53,7 +53,7 @@ export interface TransformerLayoutProps<T extends TransformerLayoutDataType>
   zoom?: number;
 
   /** 是否支持 Box 旋转 */
-  rotateEnable?: boolean;
+  rotateEnabled?: boolean;
 
   /** 删除事件 */
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
@@ -75,7 +75,7 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
     layoutEvents,
     zoom = 0,
     style,
-    rotateEnable,
+    rotateEnabled,
     onDelete = () => null,
     ...otherProps
   } = props;
@@ -211,7 +211,7 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
                 checked={checkedIndex === index}
                 portal={() => contentContainer}
                 limitBounds={limitBounds}
-                rotateEnable={rotateEnable}
+                rotateEnabled={rotateEnabled}
                 onMouseDown={() => {
                   setCheckedIndex(index);
                 }}

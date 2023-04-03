@@ -48,6 +48,7 @@
     "@orca-fe/tools": "^0.8.0",
     "ahooks": "^3.7.5",
     "classnames": "^2.3.2",
+    "immer": "^9.0.21",
     "prefix-classnames": "^0.0.7",
     "tslib": "^2.5.0"
   },

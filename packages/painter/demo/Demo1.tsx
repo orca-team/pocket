@@ -1,7 +1,6 @@
 /**
- * title: 调试用例
+ * title: 基础用法
  * description:
- * debug: true
  */
 
 import React, { useState } from 'react';

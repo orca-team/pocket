@@ -16,7 +16,7 @@ const Demo = () => (
         width: 200,
         height: 150,
       }}
-      rotateEnable
+      rotateEnabled
     >
       你可以拖拽本边框
     </TransformerBox>

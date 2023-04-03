@@ -4,10 +4,10 @@ import { useControllableValue, useDebounceFn, useEventListener, useMemoizedFn } 
 import { usePan } from '@orca-fe/hooks';
 import ReactDOM from 'react-dom';
 import { roundBy } from '@orca-fe/tools';
-import useStyles from './TransformerBox.style';
 import type { Bounds, Point, ResizeType } from './utils';
 import { calcBoundsChange, calcLimitBounds, getPointByEvent, getPointOffset, getResizeMode } from './utils';
 import TransformerBoxContext from './TransformerBoxContext';
+import useStyles from './TransformerBox.style';
 
 const ef = () => {};
 
@@ -44,7 +44,7 @@ export interface TransformerBoxProps extends Omit<React.HTMLAttributes<HTMLDivEl
   onBoundsChange?: (bounds: Bounds) => void;
 
   /** 结束拖动时的回调函数 */
-  onChangeEnd?: () => void;
+  onChangeEnd?: (bounds: Bounds) => void;
 
   /** 静态点击（非拖拽）时的回调函数 */
   onClickFixed?: (e: MouseEvent) => void;
@@ -53,13 +53,13 @@ export interface TransformerBoxProps extends Omit<React.HTMLAttributes<HTMLDivEl
   controlledMode?: boolean;
 
   /** 修改内容挂载点，默认挂载到边框内部。指定内挂载位置，可实现渲染多个 Box 时，内容不会遮挡边框，造成效果不佳 */
-  portal?: () => HTMLElement;
+  portal?: () => HTMLElement | SVGSVGElement;
 
   /** 限制移动区域，设置之后，会以中心点为基准，不能移动超过 limitBounds 的范围 */
   limitBounds?: Bounds;
 
   /** 支持旋转 */
-  rotateEnable?: boolean;
+  rotateEnabled?: boolean;
 }
 
 const TransformerBox = (props: TransformerBoxProps) => {
@@ -80,7 +80,7 @@ const TransformerBox = (props: TransformerBoxProps) => {
     controlledMode,
     portal,
     limitBounds,
-    rotateEnable,
+    rotateEnabled,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -156,16 +156,17 @@ const TransformerBox = (props: TransformerBoxProps) => {
         },
       );
       setBounds({
-        ...calcLimitBounds({ ...bounds, ...changedState }, limitBounds),
+        ...calcLimitBounds({ ..._bounds, ...changedState }, limitBounds),
       });
     }
   });
 
-  const onChangeEnd = useMemoizedFn<typeof _onChangeEnd>(() => {
+  const onChangeEnd = useMemoizedFn(() => {
     if (!controlledMode && tmpBounds) {
       _setBounds(tmpBounds);
     }
-    _onChangeEnd();
+    setTmpBounds(null);
+    _onChangeEnd(tmpBounds || _bounds);
   });
 
   useEventListener('keydown', (e) => {
@@ -377,7 +378,7 @@ const TransformerBox = (props: TransformerBoxProps) => {
       <div className={cn(styles.scaleHandle, styles.scaleHandleTopRight, cursors[mod(1 + cursorDirection, 4)])} />
       <div className={cn(styles.scaleHandle, styles.scaleHandleBottomLeft, cursors[mod(1 + cursorDirection, 4)])} />
       <div className={cn(styles.scaleHandle, styles.scaleHandleBottomRight, cursors[mod(3 + cursorDirection, 4)])} />
-      {rotateEnable && <div className={cn(styles.scaleHandle, styles.rotateHandle)} />}
+      {rotateEnabled && <div className={cn(styles.scaleHandle, styles.rotateHandle)} />}
     </div>
   );
 };

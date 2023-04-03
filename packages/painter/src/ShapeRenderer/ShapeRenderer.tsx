@@ -1,25 +1,77 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
+import type { Bounds } from '@orca-fe/transformer';
+import { TransformerBox, TransformerLine } from '@orca-fe/transformer';
+import cn from 'classnames';
+import type { GraphShapeType, LineShapeType } from '../def';
 import useStyles from './ShapeRenderer.style';
-import type { GraphShapeType } from '../def';
-
-const eArr = [];
 
 const ef = () => undefined;
 
-export interface ShapeRendererProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'> {
-  shapes?: GraphShapeType[];
-  onShapeClick?: (shape: GraphShapeType, index: number) => void;
-  onShapeMouseEnter?: (shape: GraphShapeType, index: number) => void;
-  onShapeMouseLeave?: (shape: GraphShapeType, index: number) => void;
+function getNewShape(shape: Exclude<GraphShapeType, LineShapeType>, originBounds: Bounds, newBounds: Bounds) {
+  // 新旧宽度和高度的比例
+  const ratio = {
+    width: newBounds.width / originBounds.width,
+    height: newBounds.height / originBounds.height,
+  };
+  const newShape = {
+    ...shape,
+  };
+  newShape.x = newBounds.left;
+  newShape.y = newBounds.top;
+  newShape.width = newBounds.width;
+  newShape.height = newBounds.height;
+  newShape.rotate = newBounds.rotate || 0;
+  // 对特殊图形进行特殊处理
+  switch (newShape.type) {
+    case 'line-path':
+      newShape.points = newShape.points.map(([x, y]) => [
+        (x - originBounds.left) * ratio.width + newBounds.left,
+        (y - originBounds.top) * ratio.height + newBounds.top,
+      ]);
+      break;
+    default:
+  }
+  return newShape;
 }
 
-const ShapeRenderer = (props: ShapeRendererProps) => {
-  const { className = '', shapes = eArr, onShapeClick = ef, onShapeMouseEnter = ef, onShapeMouseLeave = ef, ...otherProps } = props;
+export interface ShapeRendererProps<T extends GraphShapeType>
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange' | 'defaultChecked'> {
+  shape: T;
+  onShapeChange?: (shape: T) => void;
+  checked?: boolean;
+  onCheck?: () => void;
+  onShapeClick?: () => void;
+  onShapeMouseEnter?: () => void;
+  onShapeMouseLeave?: () => void;
+  svgRoot: SVGSVGElement;
+  renderTransformingRect?: () => React.ReactNode;
+}
+
+const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) => {
+  const {
+    className = '',
+    shape: _shape,
+    onShapeClick = ef,
+    onShapeMouseEnter = ef,
+    onShapeMouseLeave = ef,
+    onShapeChange = ef,
+    checked,
+    onCheck = ef,
+    svgRoot,
+    renderTransformingRect = () => null,
+    ...otherProps
+  } = props;
   const styles = useStyles();
+
+  const [tmpShape, setTmpShape] = useState<GraphShapeType | null>(null);
+
+  const shape = tmpShape || _shape;
+
   return (
-    <div className={`${styles.root} ${className}`} {...otherProps}>
-      <svg className={styles.svg} version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
-        {shapes.map((shape, index) => {
+    <div className={cn(styles.root, className)} {...otherProps}>
+      {svgRoot &&
+        (() => {
           let element: React.ReactElement | null = null;
           switch (shape.type) {
             case 'ellipse':
@@ -29,9 +81,9 @@ const ShapeRenderer = (props: ShapeRendererProps) => {
                   cy={shape.y + 0.5 * shape.height}
                   rx={0.5 * shape.width}
                   ry={0.5 * shape.height}
-                  rotate={`${shape.rotate}deg`}
                   style={{
                     transformOrigin: `${shape.x}px ${shape.y}px`,
+                    transform: `rotate(${shape.rotate}deg)`,
                   }}
                 />
               );
@@ -49,6 +101,7 @@ const ShapeRenderer = (props: ShapeRendererProps) => {
                   rotate={`${shape.rotate}deg`}
                   style={{
                     transformOrigin: `${shape.x}px ${shape.y}px`,
+                    transform: `rotate(${shape.rotate}deg)`,
                   }}
                 />
               );
@@ -60,6 +113,7 @@ const ShapeRenderer = (props: ShapeRendererProps) => {
                   rotate={`${shape.rotate}deg`}
                   style={{
                     transformOrigin: `${shape.x}px ${shape.y}px`,
+                    transform: `rotate(${shape.rotate}deg)`,
                   }}
                 />
               );
@@ -67,29 +121,93 @@ const ShapeRenderer = (props: ShapeRendererProps) => {
             default:
           }
           if (element) {
-            return (
-              <React.Fragment key={index}>
+            const svgElement = (
+              <>
                 {element}
                 {React.cloneElement(element, {
                   className: styles.svgHit,
                   onClick: () => {
-                    onShapeClick(shape, index);
+                    onShapeClick();
+                    onCheck();
                   },
                   onMouseEnter: () => {
-                    onShapeMouseEnter(shape, index);
+                    onShapeMouseEnter();
                   },
                   onMouseLeave: () => {
-                    onShapeMouseLeave(shape, index);
+                    onShapeMouseLeave();
                   },
                 })}
-              </React.Fragment>
+              </>
+            );
+
+            if (shape.type === 'line') {
+              return (
+                <>
+                  {ReactDOM.createPortal(svgElement, svgRoot)}
+                  <TransformerLine
+                    checked={checked}
+                    points={[
+                      {
+                        x: shape.point1[0],
+                        y: shape.point1[1],
+                      },
+                      {
+                        x: shape.point2[0],
+                        y: shape.point2[1],
+                      },
+                    ]}
+                    onPointsChange={(newPoints) => {
+                      setTmpShape({
+                        ...shape,
+                        point1: [newPoints[0].x, newPoints[0].y],
+                        point2: [newPoints[1].x, newPoints[1].y],
+                      });
+                    }}
+                    onChangeEnd={(newPoints) => {
+                      onShapeChange({
+                        ...shape,
+                        point1: [newPoints[0].x, newPoints[0].y],
+                        point2: [newPoints[1].x, newPoints[1].y],
+                      } as T);
+                      setTmpShape(null);
+                    }}
+                  >
+                    {checked && renderTransformingRect()}
+                  </TransformerLine>
+                </>
+              );
+            }
+
+            const bounds = {
+              left: shape.x,
+              top: shape.y,
+              height: shape.height,
+              width: shape.width,
+              rotate: shape.rotate,
+            };
+
+            return (
+              <TransformerBox
+                controlledMode
+                checked={checked}
+                bounds={bounds}
+                rotateEnabled
+                onBoundsChange={(newTmpBounds) => {
+                  setTmpShape(getNewShape(shape, bounds, newTmpBounds));
+                }}
+                onChangeEnd={(newBounds) => {
+                  onShapeChange(getNewShape(shape, bounds, newBounds) as T);
+                  setTmpShape(null);
+                }}
+              >
+                {checked && renderTransformingRect()}
+                {ReactDOM.createPortal(svgElement, svgRoot)}
+              </TransformerBox>
             );
           }
           return null;
-        })}
-      </svg>
+        })()}
     </div>
   );
 };
-
 export default ShapeRenderer;
