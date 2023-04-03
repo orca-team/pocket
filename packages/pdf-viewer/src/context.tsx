@@ -35,6 +35,8 @@ export type PDFViewerHandle = {
   getPageBlob: (index: number, options?: { scale?: number }) => Promise<Blob | null>;
 
   setTitle: (title: React.ReactNode) => void;
+
+  getRoot: () => HTMLElement | null;
 };
 
 export type PageViewport = {
@@ -54,7 +56,13 @@ export type PageViewport = {
   };
 };
 
-export type RenderPageCoverFnType = (pageIndex: number, options: { viewport: PageViewport; zoom: number }) => React.ReactNode;
+export type RenderPageCoverFnType = (
+  pageIndex: number,
+  options: {
+    viewport: PageViewport;
+    zoom: number;
+  },
+) => React.ReactNode;
 
 export type PDFViewerContextType = {
   pages: any[];
@@ -92,6 +100,7 @@ const PDFViewerContext = React.createContext<PDFViewerContextType>({
     scrollTo() {},
     setZoom() {},
     setTitle() {},
+    getRoot: () => null,
   },
 });
 

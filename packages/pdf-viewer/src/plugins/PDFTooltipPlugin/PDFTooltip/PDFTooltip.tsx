@@ -9,8 +9,7 @@ const ef = () => {};
 
 const { round } = Math;
 
-export interface PDFTooltipProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+export interface PDFTooltipProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   data: TooltipDataType;
   onChange?: (data: TooltipDataType) => void;
   onChangeStart?: () => void;
@@ -144,23 +143,13 @@ const PDFTooltip = (props: PDFTooltipProps) => {
         width: data.width,
         transform: 'scale(var(--scale-factor))',
         transformOrigin: '0 0',
-        // @ts-expect-error
         '--pdf-tooltip-color': color,
       }}
       {...otherProps}
     >
-      <svg
-        className={styles.svg}
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        style={{ width: data.width }}
-      >
+      <svg className={styles.svg} version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" style={{ width: data.width }}>
         <path
-          d={(isLeft
-            ? ['M 0 10', 'l -16 0', `L ${pointX} ${pointY}`]
-            : [`M ${data.width} 10`, 'l 16 0', `L ${pointX} ${pointY}`]
-          ).join(' ')}
+          d={(isLeft ? ['M 0 10', 'l -16 0', `L ${pointX} ${pointY}`] : [`M ${data.width} 10`, 'l 16 0', `L ${pointX} ${pointY}`]).join(' ')}
           style={{
             fill: 'none',
             stroke: 'transparent',
@@ -168,10 +157,7 @@ const PDFTooltip = (props: PDFTooltipProps) => {
           }}
         />
         <path
-          d={(isLeft
-            ? ['M 0 10', 'l -8 0', `L ${pointX} ${pointY}`]
-            : [`M ${data.width} 10`, 'l 8 0', `L ${pointX} ${pointY}`]
-          ).join(' ')}
+          d={(isLeft ? ['M 0 10', 'l -8 0', `L ${pointX} ${pointY}`] : [`M ${data.width} 10`, 'l 8 0', `L ${pointX} ${pointY}`]).join(' ')}
           style={{
             fill: 'none',
           }}
@@ -194,16 +180,8 @@ const PDFTooltip = (props: PDFTooltipProps) => {
           }}
         />
       </div>
-      <div
-        ref={widthHandlerRef}
-        className={`${styles.dragHandler} ${styles.widthResizer}`}
-        style={{ left: isLeft ? '100%' : 0, top: '50%' }}
-      />
-      <div
-        ref={moveHandlerRef}
-        className={`${styles.dragHandler} ${styles.pointResizer}`}
-        style={{ left: pointX, top: pointY }}
-      />
+      <div ref={widthHandlerRef} className={`${styles.dragHandler} ${styles.widthResizer}`} style={{ left: isLeft ? '100%' : 0, top: '50%' }} />
+      <div ref={moveHandlerRef} className={`${styles.dragHandler} ${styles.pointResizer}`} style={{ left: pointX, top: pointY }} />
     </div>
   );
 };

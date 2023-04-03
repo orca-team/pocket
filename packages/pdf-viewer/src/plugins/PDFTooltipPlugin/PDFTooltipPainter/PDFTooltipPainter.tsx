@@ -34,11 +34,12 @@ export interface PDFTooltipPainterProps extends Omit<React.HTMLAttributes<HTMLDi
   drawing?: boolean;
   defaultData?: TooltipDataType[];
   data?: TooltipDataType[];
-  onChange?: (data: TooltipDataType[]) => void;
+  onDataChange?: (data: TooltipDataType[], action: 'add' | 'change' | 'delete', index: number) => void;
   defaultChecked?: number;
   checked?: number;
   onCheck?: (index: number) => void;
   zoom?: number;
+  getPopupContainer?: (node: HTMLElement) => HTMLElement;
 }
 
 const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
@@ -47,11 +48,12 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
     drawing,
     defaultData: nouse1,
     data: nouse2,
-    onChange,
+    onDataChange,
     checked: nouse3,
     defaultChecked: nouse4,
     onCheck,
     zoom = 0,
+    getPopupContainer = () => document.body,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -60,7 +62,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
 
   const [data = eArr, setData] = useControllableValue<TooltipDataType[]>(props, {
     defaultValue: [],
-    trigger: 'onChange',
+    trigger: 'onDataChange',
     valuePropName: 'data',
     defaultValuePropName: 'defaultData',
   });
@@ -90,14 +92,14 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
               offset: [0, -5],
             }}
             popupVisible={!changing && checked === index}
-            getPopupContainer={node => node ?? document.body}
+            getPopupContainer={getPopupContainer}
             popup={(
               <PopupBox>
                 <SimplePropsEditor
                   value={{ fontSize, color }}
                   propsDef={propsDef}
                   onChange={(newProps) => {
-                    setData(arr => changeArr(arr, index, { ...item, ...newProps }));
+                    setData(arr => changeArr(arr, index, { ...item, ...newProps }), 'change', index);
                   }}
                 />
                 <div
@@ -110,7 +112,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
                   <IconButton
                     size="small"
                     onClick={() => {
-                      setData(data => [...data, { ...item, x: item.x + 10, y: item.y + 40 }]);
+                      setData(data => [...data, { ...item, x: item.x + 10, y: item.y + 40 }], 'change', index);
                       check(data.length);
                     }}
                     style={{ color: '#333' }}
@@ -121,7 +123,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
                     size="small"
                     onClick={() => {
                       check(-1);
-                      setData(data => removeArrIndex(data, index));
+                      setData(data => removeArrIndex(data, index), 'delete', index);
                     }}
                     style={{ color: '#C00' }}
                   >

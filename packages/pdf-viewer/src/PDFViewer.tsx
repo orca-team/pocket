@@ -282,6 +282,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   });
   const getCurrentPage = useMemoizedFn<PDFViewerHandle['getCurrentPage']>(() => current);
   const getPageCount = useMemoizedFn<PDFViewerHandle['getPageCount']>(() => getPages().length);
+  const getRoot = useMemoizedFn<PDFViewerHandle['getRoot']>(() => rootRef.current);
 
   // 獲取頁面的圖片
   const getPageBlob = useMemoizedFn<PDFViewerHandle['getPageBlob']>(async (index, options = {}) => {
@@ -472,10 +473,11 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       getPageCount,
       scrollTo,
       setTitle,
+      getRoot,
     }),
     [],
   );
-  useImperativeHandle(pRef, () => pdfViewerHandle);
+  useImperativeHandle(pRef, () => pdfViewerHandle, []);
 
   const [pageCoverRefs, setPageCoverRefs] = useState<(HTMLDivElement | null)[]>([]);
   useEffect(() => {
@@ -529,7 +531,6 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
               className={styles.pages}
               onScroll={onPageScroll}
               style={{
-                // @ts-expect-error
                 '--scale-factor': scale,
                 '--pdf-viewer-page-scale': scale,
               }}

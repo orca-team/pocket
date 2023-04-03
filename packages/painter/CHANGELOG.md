@@ -1,5 +1,17 @@
 # @orca-fe/painter
 
+## 1.0.0
+
+### Major Changes
+
+- feat: 重新用 SVG 写了一遍
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/pocket@2.0.1
+  - @orca-fe/tools@0.8.1
+
 ## 0.0.10
 
 ### Patch Changes

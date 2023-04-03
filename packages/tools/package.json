@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/tools",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "front-end tools",
   "keywords": [
     "tools",
@@ -34,7 +34,8 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@babel/runtime": "^7.21.0"
+    "@babel/runtime": "^7.21.0",
+    "immer": "^9.0.21"
   },
   "gitHead": "0f38f477546c9603891bad4b0c847554147262df"
 }

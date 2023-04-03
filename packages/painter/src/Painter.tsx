@@ -176,7 +176,6 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
       className={`${styles.root} ${className}`}
       // onBlur={() => { unCheck(); }}
       style={{
-        // @ts-expect-error
         '--painter-scale': 2 ** zoom,
         ...style,
       }}
@@ -197,17 +196,20 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
         <ShapeCreator
           pointMapping={getPointMapping}
           shapeType={drawMode.shapeType}
-          onDrawing={(shape) => {
-            setTempShape(shape);
-          }}
           onCancel={() => {
             setTempShape(false);
             setDrawMode(false);
             onCancelDraw();
           }}
+          onDrawing={(shape) => {
+            setTempShape({
+              ...shape,
+              ...drawMode.attr,
+            });
+          }}
           onCreate={(shape) => {
             setTempShape(false);
-            setData(data => [...data, shape as T]);
+            setData(data => [...data, { ...shape, ...drawMode.attr } as T]);
           }}
         />
       )}

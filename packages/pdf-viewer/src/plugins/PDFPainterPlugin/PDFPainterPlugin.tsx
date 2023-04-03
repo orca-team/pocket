@@ -213,7 +213,6 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
           className={`${styles.painter} ${drawing ? styles.drawing : ''}`}
           style={{
             height: '100%',
-            // @ts-expect-error
             '--painter-scale': 'var(--scale-factor, 1)',
             '--transformer-layout-scale': 'var(--scale-factor, 1)',
           }}

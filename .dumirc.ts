@@ -53,5 +53,12 @@ export default defineConfig({
       'antd',
     ],
   ],
-  styles: [`body .dumi-default-hero-title { font-size: 100px; } body .dumi-default-sidebar { width: 230px; } .dumi-default-navbar { white-space: nowrap; }`],
+  styles: [
+    `
+  body .dumi-default-hero-title { font-size: 100px; }
+  body .dumi-default-sidebar { width: 230px; }
+  .dumi-default-navbar { white-space: nowrap; }
+  body .dumi-default-header-left { width: 230px; }
+  `,
+  ],
 });

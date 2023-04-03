@@ -1,5 +1,16 @@
 # @orca-fe/painter
 
+## 0.1.0
+
+### Minor Changes
+
+- feat: add TransformerLine
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/tools@0.8.1
+
 ## 0.0.10
 
 ### Patch Changes

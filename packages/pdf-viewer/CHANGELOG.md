@@ -1,5 +1,18 @@
 # @orca-fe/pdf-viewer
 
+## 1.0.0
+
+### Major Changes
+
+- feat: 重构插件，移除内置插件
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/painter@1.0.0
+  - @orca-fe/pocket@2.0.1
+  - @orca-fe/tools@0.8.1
+
 ## 0.4.16
 
 ### Patch Changes

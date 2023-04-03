@@ -73,6 +73,10 @@ const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) =
       {svgRoot &&
         (() => {
           let element: React.ReactElement | null = null;
+          const strokeStyle = {
+            stroke: shape.stroke,
+            strokeWidth: shape.strokeWidth,
+          };
           switch (shape.type) {
             case 'ellipse':
               element = (
@@ -85,6 +89,7 @@ const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) =
                     transformOrigin: `${shape.x}px ${shape.y}px`,
                     transform: `rotate(${shape.rotate}deg)`,
                   }}
+                  {...strokeStyle}
                 />
               );
               break;
@@ -103,6 +108,7 @@ const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) =
                     transformOrigin: `${shape.x}px ${shape.y}px`,
                     transform: `rotate(${shape.rotate}deg)`,
                   }}
+                  {...strokeStyle}
                 />
               );
               break;
@@ -115,6 +121,7 @@ const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) =
                     transformOrigin: `${shape.x}px ${shape.y}px`,
                     transform: `rotate(${shape.rotate}deg)`,
                   }}
+                  {...strokeStyle}
                 />
               );
               break;
@@ -210,4 +217,5 @@ const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) =
     </div>
   );
 };
+
 export default ShapeRenderer;
