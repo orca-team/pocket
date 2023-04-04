@@ -16,6 +16,8 @@ import PopupBox from '../PopupBox';
 import type { PropsType } from '../SimplePropsEditor/def';
 import useStyle from './PDFPainterPlugin.style';
 
+export type { PainterRef, ShapeDataType, ShapeType };
+
 export type PDFPainterPluginHandle = {
 
   /** 开始绘图 */

@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.0.2
+
+### Patch Changes
+
+- feat: 更新类型导出
+
 ## 1.0.1
 
 ### Patch Changes

@@ -2,9 +2,7 @@ import type { PDFViewerContextType } from './context';
 import PDFViewerContext, { usePageCoverRenderer } from './context';
 import OpenFileButton from './OpenFileButton';
 import PDFViewer from './PDFViewer';
-import type { PDFPainterPluginProps, PDFPainterPluginHandle } from './plugins/PDFPainterPlugin';
 import PDFPainterPlugin from './plugins/PDFPainterPlugin';
-import type { PDFTooltipPluginHandle, PDFTooltipPluginProps } from './plugins/PDFTooltipPlugin';
 import PDFTooltipPlugin from './plugins/PDFTooltipPlugin';
 import type { ToolbarButtonProps } from './ToolbarButton';
 import ToolbarButton from './ToolbarButton';
@@ -32,8 +30,8 @@ export { usePageCoverRenderer };
 
 export { PDFPainterPlugin };
 
-export type { PDFPainterPluginHandle, PDFPainterPluginProps };
+export * from './plugins/PDFPainterPlugin';
 
 export { PDFTooltipPlugin };
 
-export type { PDFTooltipPluginHandle, PDFTooltipPluginProps };
+export type * from './plugins/PDFTooltipPlugin';
