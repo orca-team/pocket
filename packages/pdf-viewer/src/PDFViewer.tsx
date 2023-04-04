@@ -272,6 +272,9 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
           );
           if (key !== _this.pdfLoadingKey) return;
           setPages(allPages);
+          if (title != null) {
+            setTitle(title);
+          }
           const dom = pageContainerRef.current;
           if (dom) {
             dom.scrollTop = 0;
@@ -522,7 +525,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
         <div ref={rootRef} className={`${styles.root} ${className}`} {...otherProps}>
           <PDFToolbar
             hide={hideToolbar}
-            title={title}
+            title={loading ? '' : title}
             className={styles.toolbar}
             leftRef={(dom) => {
               setToolbarLeftDom(dom);

@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.0.4
+
+### Patch Changes
+
+- fix: 修复 load 方法没有自动设置 title 的 bug
+
 ## 1.0.3
 
 ### Patch Changes
