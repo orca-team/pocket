@@ -1,5 +1,13 @@
 # @orca-fe/pdf-viewer
 
+## 1.0.1
+
+### Patch Changes
+
+- feat: 更新类型导出
+- Updated dependencies
+  - @orca-fe/painter@1.0.1
+
 ## 1.0.0
 
 ### Major Changes

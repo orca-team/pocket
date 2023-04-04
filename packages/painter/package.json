@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/painter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Konva Painter",
   "keywords": [
     "react",

@@ -12,8 +12,6 @@ import { isGraphShapeType, isImageType } from './def';
 import ShapesRenderContainer from './ShapesRenderContainer';
 import useStyle from './Painter.style';
 
-export type { ShapeDataType, ShapeType };
-
 const ef = () => undefined;
 
 export type PainterRef = {

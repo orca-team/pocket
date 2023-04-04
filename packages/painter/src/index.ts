@@ -8,3 +8,5 @@ export * from './Painter';
 
 export { ColorPicker };
 export type { ColorPickerProps };
+
+export * from './def';

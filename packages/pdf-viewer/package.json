@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/pdf-viewer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "PDF Viewer",
   "keywords": [
     "react",
@@ -40,9 +40,9 @@
     "clear": "rimraf lib es"
   },
   "dependencies": {
-    "@orca-fe/hooks": "^1.2.0",
+    "@orca-fe/hooks": "^1.4.1",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
-    "@orca-fe/painter": "^1.0.0",
+    "@orca-fe/painter": "^1.0.1",
     "@orca-fe/pocket": "^2.0.1",
     "@orca-fe/simple-jss": "^0.0.1",
     "@orca-fe/tools": "^0.8.1",
