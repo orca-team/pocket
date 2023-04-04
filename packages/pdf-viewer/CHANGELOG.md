@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.0.3
+
+### Patch Changes
+
+- feat: 限制文件加载次序
+
 ## 1.0.2
 
 ### Patch Changes

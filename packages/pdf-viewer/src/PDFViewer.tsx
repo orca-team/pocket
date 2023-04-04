@@ -103,6 +103,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   const scale = 2 ** zoom;
 
   const [_this] = useState<{
+    pdfLoadingKey?: string;
     pdfDoc?: any;
     mousePositionBeforeWheel?: { x: number; y: number; zoom: number };
     zooming: boolean;
@@ -235,7 +236,9 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   const close = useMemoizedFn<PDFViewerHandle['close']>(async () => {
     if (_this.pdfDoc) {
       try {
+        _this.pdfLoadingKey = undefined;
         await _this.pdfDoc.destroy();
+        setLoading(false);
       } catch (err) {
         console.error('pdfDoc destory failed');
       }
@@ -243,13 +246,16 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     _this.pdfDoc = undefined;
     setPages([]);
   });
-  const load = useMemoizedFn<PDFViewerHandle['load']>(async (file) => {
+  const load = useMemoizedFn<PDFViewerHandle['load']>(async (file, title) => {
+    const key = `${Date.now()}_${Math.random()}`;
     if (pdfJs) {
+      _this.pdfLoadingKey = key;
       setLoading(true);
       let pdfContent = file;
       if (pdfContent instanceof File) {
         pdfContent = await pdfContent.arrayBuffer();
       }
+      if (key !== _this.pdfLoadingKey) return;
 
       try {
         const pdfDoc = await pdfJs.getDocument(pdfContent).promise;
@@ -264,6 +270,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                 return page;
               }),
           );
+          if (key !== _this.pdfLoadingKey) return;
           setPages(allPages);
           const dom = pageContainerRef.current;
           if (dom) {
@@ -271,7 +278,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
           }
         }
       } finally {
-        setLoading(false);
+        if (_this.pdfLoadingKey === key) setLoading(false);
       }
       // 總頁數
     }
