@@ -4,11 +4,11 @@ import { changeArr, removeArrIndex } from '@orca-fe/tools';
 import cn from 'classnames';
 import type { BasicTarget } from 'ahooks/lib/utils/domTarget';
 import { useSizeListener } from '@orca-fe/hooks';
-import useStyles from './TransformerLayout.style';
 import type { Bounds, Point } from '../TransformerBox/utils';
 import TransformerBox from '../TransformerBox';
 import type { TransformerBoxContextType } from '../TransformerBox/TransformerBoxContext';
 import TransformerBoxContext from '../TransformerBox/TransformerBoxContext';
+import useStyles from './TransformerLayout.style';
 
 const eArr = [];
 
@@ -58,6 +58,9 @@ export interface TransformerLayoutProps<T extends TransformerLayoutDataType>
   /** 删除事件 */
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   onDelete?: (index: number) => void | boolean | Promise<boolean>;
+
+  /** 禁用取消点击事件（由外部受控） */
+  disableClickAway?: boolean;
 }
 
 const TransformerLayout = <T extends TransformerLayoutDataType>(props: TransformerLayoutProps<T>) => {
@@ -76,6 +79,7 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
     zoom = 0,
     style,
     rotateEnabled,
+    disableClickAway,
     onDelete = () => null,
     ...otherProps
   } = props;
@@ -138,15 +142,19 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
   useEventListener(
     'mousedown',
     (ev) => {
-      if (ev.target === ev.currentTarget || ev.target === contentContainer) {
-        setCheckedIndex(-1);
+      if (!disableClickAway) {
+        if (ev.target === ev.currentTarget || ev.target === contentContainer) {
+          setCheckedIndex(-1);
+        }
       }
     },
     { target: rootRef },
   );
 
   useClickAway(() => {
-    setCheckedIndex(-1);
+    if (!disableClickAway) {
+      setCheckedIndex(-1);
+    }
   }, [rootRef, ...clickAwayWhitelist]);
 
   // 删除事件

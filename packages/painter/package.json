@@ -39,17 +39,17 @@
     "clear": "rimraf lib es"
   },
   "dependencies": {
-    "@orca-fe/hooks": "^1.2.0",
+    "@orca-fe/hooks": "^1.4.1",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
     "@orca-fe/pocket": "^2.0.1",
     "@orca-fe/simple-jss": "^0.0.1",
     "@orca-fe/tools": "^0.8.1",
-    "ahooks": "^3.7.5",
+    "ahooks": "^3.7.6",
     "classnames": "^2.3.2",
     "color": "^4.2.3",
     "react-colorful": "^5.6.1",
     "tslib": "^2.5.0",
-    "@orca-fe/transformer": "^0.1.0"
+    "@orca-fe/transformer": "^0.1.1"
   },
   "peerDependencies": {
     "@ant-design/icons": "^4.7.0",
@@ -60,7 +60,7 @@
     "react-router-dom": ">=5.0.0"
   },
   "devDependencies": {
-    "@types/react": "^18.0.28",
+    "@types/react": "^18.0.33",
     "autod": "^3.1.2",
     "jss": "^10.10.0"
   }

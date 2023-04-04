@@ -22,6 +22,15 @@ export default createUseStyles(
       position: 'absolute',
       pointerEvents: 'none',
     },
+    img: {
+      height: '100%',
+      width: '100%',
+    },
+    transformerLayout: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+    },
   },
   {
     classNamePrefix: prefix,

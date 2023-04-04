@@ -7,7 +7,6 @@ import { useControllableValue, useMemoizedFn } from 'ahooks';
 import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
 import { changeArr } from '@orca-fe/tools';
 import produce from 'immer';
-import useStyle from './PDFPainterPlugin.style';
 import ToolbarPortal from '../../ToolbarPortal';
 import { IconAddShape, IconEllipse, IconFreedom, IconLine, IconRectangle } from '../../icon/icon';
 import ToolbarButton from '../../ToolbarButton';
@@ -15,6 +14,7 @@ import { usePageCoverRenderer } from '../../context';
 import SimplePropsEditor from '../SimplePropsEditor';
 import PopupBox from '../PopupBox';
 import type { PropsType } from '../SimplePropsEditor/def';
+import useStyle from './PDFPainterPlugin.style';
 
 export type PDFPainterPluginHandle = {
 
@@ -50,6 +50,7 @@ export interface PDFPainterPluginProps {
   defaultData?: ShapeDataType[][];
   data?: ShapeDataType[][];
   onDataChange?: (data: ShapeDataType[][], action: 'add' | 'change' | 'delete', pageIndex: number, index: number) => void;
+  disabledButton?: boolean;
 }
 
 type PainterRefType = {
@@ -60,6 +61,7 @@ type PainterRefType = {
  * PDFPainterPlugin 绘图插件
  */
 const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPluginProps>((props, pRef) => {
+  const { disabledButton } = props;
   const styles = useStyle();
 
   const [checked, setChecked] = useControllableValue<[number, number] | undefined>(props, {
@@ -171,41 +173,43 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
 
   return (
     <>
-      <ToolbarPortal>
-        <div className={styles.root}>
-          <Trigger
-            action="click"
-            popupVisible={drawing}
-            popupAlign={{
-              points: ['tr', 'br'],
-              offset: [0, 3],
-            }}
-            popup={renderPainterToolbar()}
-          >
-            <span className={styles.root}>
-              <ToolbarButton
-                checked={drawing}
-                onClick={(e) => {
-                  if (drawing) {
-                    setDrawing(false);
-                  } else {
-                    drawMark(
-                      drawMode.shapeType || 'rectangle',
-                      drawMode.attr || {
-                        strokeWidth: 1,
-                        stroke: '#CC0000',
-                      },
-                    );
-                  }
-                }}
-                icon={<IconAddShape />}
-              >
-                绘图
-              </ToolbarButton>
-            </span>
-          </Trigger>
-        </div>
-      </ToolbarPortal>
+      {!disabledButton && (
+        <ToolbarPortal>
+          <div className={styles.root}>
+            <Trigger
+              action="click"
+              popupVisible={drawing}
+              popupAlign={{
+                points: ['tr', 'br'],
+                offset: [0, 3],
+              }}
+              popup={renderPainterToolbar()}
+            >
+              <span className={styles.root}>
+                <ToolbarButton
+                  checked={drawing}
+                  onClick={(e) => {
+                    if (drawing) {
+                      setDrawing(false);
+                    } else {
+                      drawMark(
+                        drawMode.shapeType || 'rectangle',
+                        drawMode.attr || {
+                          strokeWidth: 1,
+                          stroke: '#CC0000',
+                        },
+                      );
+                    }
+                  }}
+                  icon={<IconAddShape />}
+                >
+                  绘图
+                </ToolbarButton>
+              </span>
+            </Trigger>
+          </div>
+        </ToolbarPortal>
+      )}
       {renderPageCover((pageIndex, { viewport, zoom }) => (
         <Painter
           ref={ref => (_painter.refs[pageIndex] = ref)}
@@ -213,6 +217,7 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
           className={`${styles.painter} ${drawing ? styles.drawing : ''}`}
           style={{
             height: '100%',
+            // @ts-expect-error
             '--painter-scale': 'var(--scale-factor, 1)',
             '--transformer-layout-scale': 'var(--scale-factor, 1)',
           }}

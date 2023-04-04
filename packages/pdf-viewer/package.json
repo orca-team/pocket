@@ -46,7 +46,7 @@
     "@orca-fe/pocket": "^2.0.1",
     "@orca-fe/simple-jss": "^0.0.1",
     "@orca-fe/tools": "^0.8.1",
-    "ahooks": "^3.7.5",
+    "ahooks": "^3.7.6",
     "classnames": "^2.3.2",
     "immer": "^9.0.21",
     "prefix-classnames": "^0.0.7",
@@ -61,7 +61,7 @@
     "react-router-dom": ">=5.0.0"
   },
   "devDependencies": {
-    "@types/react": "^18.0.28",
+    "@types/react": "^18.0.33",
     "autod": "^3.1.2",
     "jss": "^10.10.0"
   }

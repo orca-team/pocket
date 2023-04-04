@@ -3,12 +3,14 @@ import React, { forwardRef, useImperativeHandle, useMemo, useRef, useState } fro
 import { useControllableValue, useMemoizedFn } from 'ahooks';
 import { useStaticClick } from '@orca-fe/hooks';
 import type { TransformerBoxContextType } from '@orca-fe/transformer';
-import { TransformerBoxContext } from '@orca-fe/transformer';
-import useStyle from './Painter.style';
+import { TransformerBoxContext, TransformerLayout } from '@orca-fe/transformer';
+import { Img } from '@orca-fe/pocket';
+import { changeArr, removeArrIndex } from '@orca-fe/tools';
 import ShapeCreator from './ShapeCreator';
-import type { GraphShapeType, ShapeDataType, ShapeType } from './def';
-import { isGraphShapeType } from './def';
+import type { GraphShapeType, ImageType, ShapeDataType, ShapeType } from './def';
+import { isGraphShapeType, isImageType } from './def';
 import ShapesRenderContainer from './ShapesRenderContainer';
+import useStyle from './Painter.style';
 
 export type { ShapeDataType, ShapeType };
 
@@ -43,6 +45,8 @@ export type PainterRef = {
 
 export type DrawMode = { shapeType: ShapeType; attr?: Record<string, any> };
 
+type Action = 'add' | 'change' | 'delete';
+
 export interface PainterProps<T extends ShapeDataType> extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultChecked'> {
 
   /** 缩放比例 */
@@ -58,7 +62,7 @@ export interface PainterProps<T extends ShapeDataType> extends Omit<React.HTMLAt
   data?: T[];
 
   /** 图形数据变化回调 */
-  onDataChange?: (data: T[], action: 'add' | 'change' | 'delete', index: number) => void;
+  onDataChange?: (data: T[], action: Action, index: number) => void;
 
   /** 渲染变换框 */
   renderTransformingRect?: (shape: T, index: number) => React.ReactNode;
@@ -110,8 +114,59 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
     defaultValuePropName: 'defaultData',
   });
 
-  const graphShapeList = useMemo(() => data.filter(shape => isGraphShapeType(shape)), [data]);
-  // const imageList = useMemo(() => data.filter(shape => (isImageType(shape))), [data]);
+  // 将 data 拆分为 graphShapeList 和 imageList，并保留 index 映射
+  const { graphShapeList, imageList, graphIndexMap, imageIndexMap, dataIndexMap, dataTypeMap } = useMemo(() => {
+    const graphShapeList: GraphShapeType[] = [];
+    const imageList: ImageType[] = [];
+    const dataIndexMap: Record<number, number> = {};
+    const dataTypeMap: Record<number, 'shape' | 'image'> = {};
+    const graphIndexMap: Record<number, number> = {};
+    const imageIndexMap: Record<number, number> = {};
+    data.forEach((item, index) => {
+      if (isGraphShapeType(item)) {
+        graphShapeList.push(item);
+        graphIndexMap[graphShapeList.length - 1] = index;
+        dataIndexMap[index] = graphShapeList.length - 1;
+        dataTypeMap[index] = 'shape';
+      } else if (isImageType(item)) {
+        imageList.push(item);
+        imageIndexMap[imageList.length - 1] = index;
+        dataIndexMap[index] = imageList.length - 1;
+        dataTypeMap[index] = 'image';
+      }
+    });
+    return {
+      dataTypeMap,
+      graphShapeList,
+      imageList,
+      graphIndexMap,
+      imageIndexMap,
+      dataIndexMap,
+    };
+  }, [data]);
+
+  // 分析当前选中的是图形还是图片
+  const checkedShape = dataTypeMap[checked] === 'shape' ? dataIndexMap[checked] ?? -1 : -1;
+  const checkedImage = dataTypeMap[checked] === 'image' ? dataIndexMap[checked] ?? -1 : -1;
+
+  const imageListWithBounds = useMemo(
+    () =>
+      imageList.map((image) => {
+        // 为 imageList 添加 bounds 数据
+        const img = image;
+        return {
+          ...img,
+          bounds: {
+            left: img.x,
+            top: img.y,
+            width: img.width,
+            height: img.height,
+            rotate: img.rotate,
+          },
+        };
+      }),
+    [imageList],
+  );
 
   // 临时绘制图形
   const [tempShape, setTempShape] = useState<GraphShapeType | false>(false);
@@ -176,18 +231,80 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
       className={`${styles.root} ${className}`}
       // onBlur={() => { unCheck(); }}
       style={{
+        // @ts-expect-error
         '--painter-scale': 2 ** zoom,
         ...style,
       }}
       {...otherProps}
     >
       <TransformerBoxContext.Provider value={context}>
+        <TransformerLayout
+          className={styles.transformerLayout}
+          data={imageListWithBounds}
+          checkedIndex={checkedImage}
+          onCheck={(index) => {
+            setChecked(imageIndexMap[index] ?? -1);
+          }}
+          zoom={zoom}
+          rotateEnabled
+          disableClickAway
+          onDataChange={(data, action, index) => {
+            // 修改图片数据
+            const dataIndex = imageIndexMap[index];
+            setData(
+              (oldData) => {
+                if (action === 'change') {
+                  // 仅取出变化的图形数据，更新到全量数据
+                  const item = data[index];
+                  const { bounds, ...rest } = item;
+                  return changeArr(oldData, dataIndex, {
+                    ...rest,
+                    x: bounds.left,
+                    y: bounds.top,
+                    width: bounds.width,
+                    height: bounds.height,
+                    rotate: bounds.rotate,
+                  } as T);
+                } else if (action === 'delete') {
+                  // 删除数据
+                  return removeArrIndex(oldData, dataIndex);
+                }
+                return oldData;
+              },
+              action,
+              dataIndex,
+            );
+          }}
+          style={{
+            // @ts-expect-error
+            '--transformer-layout-scale': 'var(--scale-factor)',
+          }}
+        >
+          {item => <Img className={styles.img} src={item.src} />}
+        </TransformerLayout>
         <ShapesRenderContainer
-          checked={checked}
-          onCheck={setChecked}
-          shapes={mergedGraphShapeData as GraphShapeType[]}
+          checked={checkedShape}
+          onCheck={(index) => {
+            setChecked(graphIndexMap[index] ?? -1);
+          }}
+          shapes={mergedGraphShapeData}
           onShapesChange={(newShapes, action, index) => {
-            setData(newShapes as T[], action, index);
+            // 修改图形数据
+            const dataIndex = graphIndexMap[index];
+            setData(
+              (oldData) => {
+                if (action === 'change') {
+                  // 仅取出变化的图形数据，更新到全量数据
+                  return changeArr(oldData, dataIndex, newShapes[index] as T);
+                } else if (action === 'delete') {
+                  // 删除数据
+                  return removeArrIndex(oldData, dataIndex);
+                }
+                return oldData;
+              },
+              action,
+              dataIndex,
+            );
           }}
           renderTransformingRect={renderTransformingRect as PainterProps<GraphShapeType>['renderTransformingRect']}
         />
@@ -209,7 +326,8 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
           }}
           onCreate={(shape) => {
             setTempShape(false);
-            setData(data => [...data, { ...shape, ...drawMode.attr } as T]);
+            // 创建图形数据
+            setData([...data, { ...shape, ...drawMode.attr } as T], 'add', data.length);
           }}
         />
       )}

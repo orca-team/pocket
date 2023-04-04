@@ -50,6 +50,28 @@ const Demo1 = () => {
       >
         Draw Rectangle
       </Button>
+      <Button
+        onClick={async () => {
+          // eslint-disable-next-line no-alert
+          const url = window.prompt('insert image url.');
+          if (url) {
+            setData([
+              ...data,
+              {
+                type: 'image',
+                src: url,
+                x: 0,
+                y: 0,
+                width: 100,
+                height: 100,
+                rotate: 0,
+              },
+            ]);
+          }
+        }}
+      >
+        Add Image
+      </Button>
       <Painter ref={painterRef} data={data} onDataChange={setData} style={{ height: 400 }} />
     </div>
   );

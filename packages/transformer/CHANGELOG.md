@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.1.1
+
+### Patch Changes
+
+- feat: 增加禁用内置取消点击事件
+
 ## 0.1.0
 
 ### Minor Changes
