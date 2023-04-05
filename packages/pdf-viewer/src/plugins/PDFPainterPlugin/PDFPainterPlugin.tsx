@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unused-prop-types */
-import React, { useEffect, useImperativeHandle, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState, useContext } from 'react';
 import { IconButton, Trigger } from '@orca-fe/pocket';
 import type { PainterRef, ShapeDataType, ShapeType } from '@orca-fe/painter';
 import Painter from '@orca-fe/painter';
@@ -10,7 +10,7 @@ import produce from 'immer';
 import ToolbarPortal from '../../ToolbarPortal';
 import { IconAddShape, IconEllipse, IconFreedom, IconLine, IconRectangle } from '../../icon/icon';
 import ToolbarButton from '../../ToolbarButton';
-import { usePageCoverRenderer } from '../../context';
+import PDFViewerContext, { usePageCoverRenderer } from '../../context';
 import SimplePropsEditor from '../SimplePropsEditor';
 import PopupBox from '../PopupBox';
 import type { PropsType } from '../SimplePropsEditor/def';
@@ -59,12 +59,16 @@ type PainterRefType = {
   refs: (PainterRef | null)[];
 };
 
+const drawingNamePDFPainterPlugin = 'PDFPainterPlugin';
+
 /**
  * PDFPainterPlugin 绘图插件
  */
 const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPluginProps>((props, pRef) => {
   const { disabledButton } = props;
   const styles = useStyle();
+
+  const { internalState, setInternalState } = useContext(PDFViewerContext);
 
   const [checked, setChecked] = useControllableValue<[number, number] | undefined>(props, {
     defaultValuePropName: 'defaultChecked',
@@ -79,7 +83,13 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
   });
 
   /* 绘图功能 */
-  const [drawing, setDrawing] = useState(false);
+  const drawing = internalState.drawingPluginName === drawingNamePDFPainterPlugin;
+
+  const setDrawing = useMemoizedFn((b: boolean) => {
+    setInternalState({
+      drawingPluginName: b ? drawingNamePDFPainterPlugin : '',
+    });
+  });
 
   const [drawMode, setDrawMode] = useState<{
     shapeType: ShapeType;
@@ -219,7 +229,6 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
           className={`${styles.painter} ${drawing ? styles.drawing : ''}`}
           style={{
             height: '100%',
-            // @ts-expect-error
             '--painter-scale': 'var(--scale-factor, 1)',
             '--transformer-layout-scale': 'var(--scale-factor, 1)',
           }}

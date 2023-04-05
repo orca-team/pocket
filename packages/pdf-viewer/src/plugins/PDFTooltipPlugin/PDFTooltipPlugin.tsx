@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unused-prop-types */
-import React, { useContext, useImperativeHandle, useState } from 'react';
+import React, { useContext, useImperativeHandle } from 'react';
 import { useControllableValue, useMemoizedFn } from 'ahooks';
 import { changeArr } from '@orca-fe/tools';
 import ToolbarButton from '../../ToolbarButton';
@@ -36,12 +36,22 @@ export interface PDFTooltipPluginProps {
   onDataChange?: (data: TooltipDataType[][], action: 'add' | 'change' | 'delete', pageIndex: number, index: number) => void;
 }
 
+const drawingNamePDFTooltipPlugin = 'PDFTooltipPlugin';
+
 const PDFTooltipPlugin = React.forwardRef<PDFTooltipPluginHandle, PDFTooltipPluginProps>((props, pRef) => {
   const renderPageCover = usePageCoverRenderer();
 
-  const { pdfViewer } = useContext(PDFViewerContext);
+  const { pdfViewer, internalState, setInternalState } = useContext(PDFViewerContext);
 
-  const [drawing, setDrawing] = useState(false);
+  /* 绘图功能 */
+  const drawing = internalState.drawingPluginName === drawingNamePDFTooltipPlugin;
+
+  const setDrawing = useMemoizedFn((b: boolean) => {
+    setInternalState({
+      drawingPluginName: b ? drawingNamePDFTooltipPlugin : '',
+    });
+  });
+
   const [checked, setChecked] = useControllableValue<[number, number] | undefined>(props, {
     defaultValuePropName: 'defaultChecked',
     trigger: 'onCheck',

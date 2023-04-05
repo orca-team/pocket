@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.1.0
+
+### Minor Changes
+
+- feat: 增加插件互斥状态
+
 ## 1.0.4
 
 ### Patch Changes

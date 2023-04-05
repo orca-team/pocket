@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { clamp, roundBy } from '@orca-fe/tools';
-import { useDebounceEffect, useDebounceFn, useEventListener, useMemoizedFn } from 'ahooks';
+import { useDebounceEffect, useDebounceFn, useEventListener, useMemoizedFn, useSetState } from 'ahooks';
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useGetState, useSizeListener } from '@orca-fe/hooks';
-import type { PageViewport, PDFViewerHandle, RenderPageCoverFnType } from './context';
+import type { PageViewport, PDFViewerHandle, RenderPageCoverFnType, PDFViewerInternalStateType } from './context';
 import PDFViewerContext, { PDFToolbarContext } from './context';
 import PDFPage from './PDFPage';
 import * as _pdfJS from '../pdfjs-build/pdf';
@@ -494,6 +494,11 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     setPageCoverRefs(l => l.slice());
   }, [renderRange[0], renderRange[1]]);
 
+  // 内部共享状态
+  const [internalState, setInternalState] = useSetState<PDFViewerInternalStateType>(() => ({
+    drawingPluginName: '',
+  }));
+
   return (
     <PDFViewerContext.Provider
       value={useMemo(
@@ -506,8 +511,10 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
           forceUpdate,
           pageCoverRefs,
           pdfViewer: pdfViewerHandle,
+          internalState,
+          setInternalState,
         }),
-        [pages, viewports, zoom, current, pageCoverRefs],
+        [pages, viewports, zoom, current, pageCoverRefs, internalState],
       )}
     >
       <PDFToolbarContext.Provider
