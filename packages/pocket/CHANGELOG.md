@@ -1,5 +1,13 @@
 # @orca-fe/pocket
 
+## 2.0.3
+
+### Patch Changes
+
+- fix: 图片组件，调整设置 loading 状态的 dependencies
+- Updated dependencies
+  - @orca-fe/pocket@2.0.3
+
 ## 2.0.2
 
 ### Patch Changes

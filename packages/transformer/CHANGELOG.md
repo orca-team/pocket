@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.1.2
+
+### Patch Changes
+
+- fix: 图片组件，调整设置 loading 状态的 dependencies
+
 ## 0.1.1
 
 ### Patch Changes

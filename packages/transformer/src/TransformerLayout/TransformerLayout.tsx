@@ -201,7 +201,6 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
       ref={rootRef}
       className={cn(styles.root, { [styles.noEvents]: !layoutEvents }, className)}
       style={{
-        // @ts-expect-error css variable
         '--transformer-layout-scale': 2 ** zoom,
         ...style,
       }}

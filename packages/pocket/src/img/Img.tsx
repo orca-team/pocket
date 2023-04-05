@@ -48,20 +48,16 @@ const Img = React.forwardRef<HTMLDivElement, ImgProps>((props, pRef) => {
 
   const handleLoad = useCallback<typeof onLoad>(
     (event) => {
-      if (imgState !== 'loaded') {
-        _this.imgState = 'loaded';
-        setImgState('loaded');
-      }
+      _this.imgState = 'loaded';
+      setImgState('loaded');
       onLoad(event);
     },
     [imgState],
   );
   const handleError = useCallback<typeof onError>(
     (event) => {
-      if (imgState !== 'error') {
-        _this.imgState = 'error';
-        setImgState('error');
-      }
+      _this.imgState = 'error';
+      setImgState('error');
       onError(event);
     },
     [imgState],
