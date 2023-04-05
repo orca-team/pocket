@@ -44,7 +44,7 @@ const Img = React.forwardRef<HTMLDivElement, ImgProps>((props, pRef) => {
 
   useEffect(() => {
     setImgState(_this.imgState);
-  }, [_this.imgState]);
+  }, [src]);
 
   const handleLoad = useCallback<typeof onLoad>(
     (event) => {

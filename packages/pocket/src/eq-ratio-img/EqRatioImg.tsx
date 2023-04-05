@@ -89,7 +89,7 @@ const EqRatioImg = (props: EqRatioImgProps) => {
 
   useEffect(() => {
     setStatus(_this.status);
-  }, [_this.status]);
+  }, [src]);
 
   return (
     <div
