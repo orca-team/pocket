@@ -27,7 +27,7 @@ export default createUseStyles(
       },
     },
     drawing: {
-      '&:hover': {
+      '&:hover, & .shape-creator-root:hover': {
         outline: '2px solid #19f',
       },
     },

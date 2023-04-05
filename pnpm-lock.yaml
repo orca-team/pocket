@@ -141,7 +141,7 @@ importers:
         specifier: ^0.8.1
         version: link:../tools
       '@orca-fe/transformer':
-        specifier: ^0.1.0
+        specifier: ^0.1.1
         version: link:../transformer
       ahooks:
         specifier: ^3.7.6
@@ -172,13 +172,13 @@ importers:
   packages/pdf-viewer:
     dependencies:
       '@orca-fe/hooks':
-        specifier: ^1.2.0
+        specifier: ^1.4.1
         version: link:../hooks
       '@orca-fe/jss-plugin-auto-prefix':
         specifier: ^0.0.1
         version: 0.0.1(jss@10.10.0)
       '@orca-fe/painter':
-        specifier: ^1.0.0
+        specifier: ^1.0.1
         version: link:../painter
       '@orca-fe/pocket':
         specifier: ^2.0.1

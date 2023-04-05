@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import ReactDOM from 'react-dom';
+import type { SetState } from 'ahooks/es/useSetState';
 
 /**
  * PDF 控制器
@@ -64,6 +65,12 @@ export type RenderPageCoverFnType = (
   },
 ) => React.ReactNode;
 
+// PDF 组件内置状态
+export type PDFViewerInternalStateType = Record<string, any> & {
+  // 用于共享（互斥）组件之间的绘制状态
+  drawingPluginName: string;
+};
+
 export type PDFViewerContextType = {
   pages: any[];
   current: number;
@@ -72,6 +79,8 @@ export type PDFViewerContextType = {
   forceUpdate: () => void;
   pageCoverRefs: (HTMLDivElement | null)[];
   viewports: PageViewport[];
+  internalState: PDFViewerInternalStateType;
+  setInternalState: SetState<PDFViewerInternalStateType>;
 };
 
 const PDFViewerContext = React.createContext<PDFViewerContextType>({
@@ -81,6 +90,10 @@ const PDFViewerContext = React.createContext<PDFViewerContextType>({
   zoom: 0,
   forceUpdate: () => {},
   pageCoverRefs: [],
+  internalState: {
+    drawingPluginName: '',
+  },
+  setInternalState: () => {},
   pdfViewer: {
     async load() {},
     async close() {},
