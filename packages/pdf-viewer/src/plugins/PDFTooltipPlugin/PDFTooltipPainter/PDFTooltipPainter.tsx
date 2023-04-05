@@ -149,7 +149,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
                 setChanging(true);
               }}
               onChange={(item) => {
-                setData(arr => changeArr(arr, index, item));
+                setData(arr => changeArr(arr, index, item), 'change', index);
                 setChanging(false);
               }}
               color={color}
@@ -169,7 +169,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
             setTmpTooltip(tooltip);
           }}
           onCreate={(tooltip) => {
-            setData(d => [...(d || []), tooltip]);
+            setData(d => [...(d || []), tooltip], 'add', data.length);
             setTmpTooltip(null);
             check(data.length);
           }}

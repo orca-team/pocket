@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.1.1
+
+### Patch Changes
+
+- fix: PDFTooltipPainter.tsx 创建时，没有标记 action
+
 ## 1.1.0
 
 ### Minor Changes
