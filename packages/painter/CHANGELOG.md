@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 1.1.0
+
+### Minor Changes
+
+- feat: 自动选择最后创建的元素
+
 ## 1.0.1
 
 ### Patch Changes

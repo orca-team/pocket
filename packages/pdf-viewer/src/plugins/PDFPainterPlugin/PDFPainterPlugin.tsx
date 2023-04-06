@@ -53,6 +53,7 @@ export interface PDFPainterPluginProps {
   data?: ShapeDataType[][];
   onDataChange?: (data: ShapeDataType[][], action: 'add' | 'change' | 'delete', pageIndex: number, index: number) => void;
   disabledButton?: boolean;
+  autoCheck?: boolean;
 }
 
 type PainterRefType = {
@@ -65,7 +66,7 @@ const drawingNamePDFPainterPlugin = 'PDFPainterPlugin';
  * PDFPainterPlugin 绘图插件
  */
 const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPluginProps>((props, pRef) => {
-  const { disabledButton } = props;
+  const { disabledButton, autoCheck = true } = props;
   const styles = useStyle();
 
   const { internalState, setInternalState } = useContext(PDFViewerContext);
@@ -225,6 +226,7 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
       {renderPageCover((pageIndex, { viewport, zoom }) => (
         <Painter
           ref={ref => (_painter.refs[pageIndex] = ref)}
+          autoCheck={autoCheck}
           draggable={false}
           className={`${styles.painter} ${drawing ? styles.drawing : ''}`}
           style={{

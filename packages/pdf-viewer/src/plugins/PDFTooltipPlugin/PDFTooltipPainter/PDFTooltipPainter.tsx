@@ -14,6 +14,8 @@ import PopupBox from '../../PopupBox';
 
 const eArr = [];
 
+const ef = () => undefined;
+
 const propsDef: PropsType[] = [
   {
     key: 'color',
@@ -32,6 +34,7 @@ const propsDef: PropsType[] = [
 
 export interface PDFTooltipPainterProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultChecked' | 'onChange'> {
   drawing?: boolean;
+  onDrawChange?: (drawing: boolean) => void;
   defaultData?: TooltipDataType[];
   data?: TooltipDataType[];
   onDataChange?: (data: TooltipDataType[], action: 'add' | 'change' | 'delete', index: number) => void;
@@ -40,12 +43,14 @@ export interface PDFTooltipPainterProps extends Omit<React.HTMLAttributes<HTMLDi
   onCheck?: (index: number) => void;
   zoom?: number;
   getPopupContainer?: (node: HTMLElement) => HTMLElement;
+  autoCheck?: boolean;
 }
 
 const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
   const {
     className = '',
     drawing,
+    onDrawChange = ef,
     defaultData: nouse1,
     data: nouse2,
     onDataChange,
@@ -54,6 +59,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
     onCheck,
     zoom = 0,
     getPopupContainer = () => document.body,
+    autoCheck = true,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -171,7 +177,10 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
           onCreate={(tooltip) => {
             setData(d => [...(d || []), tooltip], 'add', data.length);
             setTmpTooltip(null);
-            check(data.length);
+            if (autoCheck) {
+              check(data.length);
+              onDrawChange(false);
+            }
           }}
           onCancel={() => {
             setTmpTooltip(null);

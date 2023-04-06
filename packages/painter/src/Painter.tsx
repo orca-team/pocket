@@ -76,6 +76,9 @@ export interface PainterProps<T extends ShapeDataType> extends Omit<React.HTMLAt
 
   /** 取消绘图 */
   onCancelDraw?: () => void;
+
+  /** 自动选择最后创建的元素 */
+  autoCheck?: boolean;
 }
 
 const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProps<T>, pRef: Ref<PainterRef>) {
@@ -92,6 +95,7 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
     onCheck,
     onCancelDraw = ef,
     style,
+    autoCheck = true,
     ...otherProps
   } = props;
   const styles = useStyle();
@@ -326,6 +330,11 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
             setTempShape(false);
             // 创建图形数据
             setData([...data, { ...shape, ...drawMode.attr } as T], 'add', data.length);
+            if (autoCheck) {
+              setChecked(data.length);
+              // 退出绘图模式
+              setDrawMode(false);
+            }
           }}
         />
       )}

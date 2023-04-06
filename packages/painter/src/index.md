@@ -29,17 +29,18 @@ nav:
 
 ### 属性
 
-| 属性名称               | 描述             | 类型                                                                                  | 默认值         | 版本号 |
-| ---------------------- | ---------------- | ------------------------------------------------------------------------------------- | -------------- | ------ |
-| zoom                   | 缩放比例         | `number`                                                                              |                |        |
-| defaultDrawMode        | 默认绘画模式     | `DrawMode`                                                                            | `DrawMode.PEN` |        |
-| defaultData            | 默认图形数据     | `ShapeDataType[]`                                                                     | `[]`           |        |
-| data                   | 图形数据         | `ShapeDataType[]`                                                                     | `[]`           |        |
-| onDataChange           | 图形数据变化回调 | `(data: ShapeDataType[], action: 'add' / 'change' / 'delete', index: number) => void` |                |        |
-| renderTransformingRect | 渲染变换框       | `(shape: T, index: number) => React.ReactNode`                                        |                |        |
-| defaultChecked         | 默认选中项       | `number`                                                                              | `-1`           |        |
-| checked                | 选中项           | `number`                                                                              | `-1`           |        |
-| onCheck                | 选中项变化回调   | `(checked: number) => void`                                                           |                |        |
+| 属性名称               | 描述                   | 类型                                                                                  | 默认值         | 版本号  |
+| ---------------------- | ---------------------- | ------------------------------------------------------------------------------------- | -------------- | ------- |
+| zoom                   | 缩放比例               | `number`                                                                              |                |         |
+| defaultDrawMode        | 默认绘画模式           | `DrawMode`                                                                            | `DrawMode.PEN` |         |
+| defaultData            | 默认图形数据           | `ShapeDataType[]`                                                                     | `[]`           |         |
+| data                   | 图形数据               | `ShapeDataType[]`                                                                     | `[]`           |         |
+| onDataChange           | 图形数据变化回调       | `(data: ShapeDataType[], action: 'add' / 'change' / 'delete', index: number) => void` |                |         |
+| renderTransformingRect | 渲染变换框             | `(shape: T, index: number) => React.ReactNode`                                        |                |         |
+| defaultChecked         | 默认选中项             | `number`                                                                              | `-1`           |         |
+| checked                | 选中项                 | `number`                                                                              | `-1`           |         |
+| onCheck                | 选中项变化回调         | `(checked: number) => void`                                                           |                |         |
+| autoCheck              | 自动选择最后创建的元素 | `boolean`                                                                             | `false`        | `1.1.0` |
 
 ### PainterRef
 

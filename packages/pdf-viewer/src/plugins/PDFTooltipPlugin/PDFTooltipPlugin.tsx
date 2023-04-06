@@ -34,11 +34,13 @@ export interface PDFTooltipPluginProps {
   defaultData?: TooltipDataType[][];
   data?: TooltipDataType[][];
   onDataChange?: (data: TooltipDataType[][], action: 'add' | 'change' | 'delete', pageIndex: number, index: number) => void;
+  autoCheck?: boolean;
 }
 
 const drawingNamePDFTooltipPlugin = 'PDFTooltipPlugin';
 
 const PDFTooltipPlugin = React.forwardRef<PDFTooltipPluginHandle, PDFTooltipPluginProps>((props, pRef) => {
+  const { autoCheck = true } = props;
   const renderPageCover = usePageCoverRenderer();
 
   const { pdfViewer, internalState, setInternalState } = useContext(PDFViewerContext);
@@ -90,10 +92,12 @@ const PDFTooltipPlugin = React.forwardRef<PDFTooltipPluginHandle, PDFTooltipPlug
       </ToolbarPortal>
       {renderPageCover((pageIndex, { viewport, zoom }) => (
         <PDFTooltipPainter
+          autoCheck={autoCheck}
           data={dataList[pageIndex] || eArr}
           onDataChange={(pageData, action, index) => {
             setDataList(changeArr(dataList, pageIndex, pageData), action, pageIndex, index);
           }}
+          onDrawChange={setDrawing}
           checked={checked?.[0] === pageIndex ? checked[1] : undefined}
           onCheck={(index) => {
             setChecked((checked) => {
