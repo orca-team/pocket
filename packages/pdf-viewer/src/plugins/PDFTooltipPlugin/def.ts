@@ -8,4 +8,5 @@ export type TooltipDataType = {
   value: string;
   color?: string;
   fontSize?: number;
+  disabled?: boolean;
 };

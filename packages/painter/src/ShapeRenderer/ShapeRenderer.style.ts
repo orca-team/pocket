@@ -17,6 +17,10 @@ export default createUseStyles(
         pointerEvents: 'initial',
       },
     },
+    disabled: {
+      opacity: 0.7,
+      pointerEvents: 'none',
+    },
     svgHit: {
       pointerEvents: 'initial',
       strokeWidth: 'calc(var(--svg-stroke-width, 1) + 5)',

@@ -132,7 +132,7 @@ const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) =
               <>
                 {element}
                 {React.cloneElement(element, {
-                  className: styles.svgHit,
+                  className: cn(styles.svgHit, { [styles.disabled]: shape.disabled }),
                   onClick: () => {
                     onShapeClick();
                     onCheck();

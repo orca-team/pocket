@@ -16,6 +16,7 @@ export interface PDFTooltipProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   editable?: boolean;
   pointMapping?: (point: { x: number; y: number }) => { x: number; y: number };
   color?: string;
+  disabled?: boolean;
 }
 
 const PDFTooltip = (props: PDFTooltipProps) => {
@@ -28,6 +29,7 @@ const PDFTooltip = (props: PDFTooltipProps) => {
     editable = false,
     pointMapping = a => a,
     color = '#C00',
+    disabled,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -134,7 +136,7 @@ const PDFTooltip = (props: PDFTooltipProps) => {
 
   return (
     <div
-      className={cn(styles.root, { [styles.editable]: editable }, className)}
+      className={cn(styles.root, { [styles.editable]: editable, [styles.disabled]: disabled }, className)}
       draggable={false}
       style={{
         ...style,

@@ -14,6 +14,7 @@ const eArr = [];
 
 export type TransformerLayoutDataType = {
   bounds: Bounds;
+  disabled?: boolean;
 };
 
 export interface TransformerLayoutProps<T extends TransformerLayoutDataType>
@@ -214,6 +215,7 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
             return (
               <TransformerBox
                 key={`${data.length}_${index}`}
+                disabled={item.disabled}
                 bounds={bounds}
                 checked={checkedIndex === index}
                 portal={() => contentContainer}

@@ -7,41 +7,49 @@ export type StrokeStyle = {
   strokeWidth?: number;
 };
 
-export type LineShapeType = StrokeStyle & {
-  type: 'line';
-  point1: Point;
-  point2: Point;
+export type CommonShapeType = {
+  disabled?: boolean;
 };
 
-export type EllipseType = StrokeStyle & {
-  type: 'ellipse';
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  rotate: number;
-};
+export type LineShapeType = StrokeStyle &
+  CommonShapeType & {
+    type: 'line';
+    point1: Point;
+    point2: Point;
+  };
 
-export type RectangleType = StrokeStyle & {
-  type: 'rectangle';
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  rotate: number;
-};
+export type EllipseType = StrokeStyle &
+  CommonShapeType & {
+    type: 'ellipse';
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    rotate: number;
+  };
 
-export type LinePathType = StrokeStyle & {
-  type: 'line-path';
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  rotate: number;
-  points: Point[];
-};
+export type RectangleType = StrokeStyle &
+  CommonShapeType & {
+    type: 'rectangle';
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    rotate: number;
+  };
 
-export type ImageType = {
+export type LinePathType = StrokeStyle &
+  CommonShapeType & {
+    type: 'line-path';
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    rotate: number;
+    points: Point[];
+  };
+
+export type ImageType = CommonShapeType & {
   type: 'image';
   x: number;
   y: number;

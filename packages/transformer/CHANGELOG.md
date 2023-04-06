@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.2.0
+
+### Minor Changes
+
+- feat: Painter 等相关组件增加 disabled 能力
+
 ## 0.1.2
 
 ### Patch Changes

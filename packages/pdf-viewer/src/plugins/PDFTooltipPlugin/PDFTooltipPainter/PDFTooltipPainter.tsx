@@ -140,6 +140,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
             )}
           >
             <PDFTooltip
+              disabled={item.disabled}
               editable={checked === index}
               pointMapping={point => ({
                 x: point.x / 2 ** zoom,

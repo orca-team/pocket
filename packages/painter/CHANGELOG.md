@@ -1,5 +1,16 @@
 # @orca-fe/painter
 
+## 1.2.0
+
+### Minor Changes
+
+- feat: Painter 等相关组件增加 disabled 能力
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/transformer@0.2.0
+
 ## 1.1.0
 
 ### Minor Changes

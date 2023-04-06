@@ -27,6 +27,11 @@ export default createUseStyles(
       border: '1px solid var(--pdf-tooltip-color)',
       padding: [4, 8],
     },
+
+    disabled: {
+      opacity: 0.7,
+      pointerEvents: 'none',
+    },
     editable: {
       outline: '2px solid var(--pdf-tooltip-color)',
       '&:hover': {
