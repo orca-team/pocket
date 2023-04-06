@@ -53,10 +53,18 @@ export default () => {
 type PositionType = [number, number];
 
 type UsePanCallbackParams = {
+  /** 拖动事件的起始位置 */
+  startPosition: PositionType;
+  /** 拖动事件的偏移量 */
   offset: PositionType;
+  /** 是否结束（鼠标抬起） */
   finish: boolean;
+  /** 是否开始（鼠标按下） */
   start: boolean;
+  /** 触发拖动事件的鼠标事件 */
   ev: MouseEvent;
+  /** 触发拖动事件的 HTML 元素 */
+  target: HTMLElement;
 };
 ```
 

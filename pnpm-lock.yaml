@@ -224,7 +224,7 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       '@orca-fe/pocket':
-        specifier: ^2.0.1
+        specifier: ^2.0.3
         version: 'link:'
       '@orca-fe/tools':
         specifier: ^0.8.1

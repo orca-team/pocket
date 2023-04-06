@@ -5,11 +5,23 @@ import type { Target } from 'ahooks/lib/useEventListener';
 type PositionType = [number, number];
 
 export type UsePanCallbackParams = {
+
+  /** 拖动事件的起始位置 */
   startPosition: PositionType;
+
+  /** 拖动事件的偏移量 */
   offset: PositionType;
+
+  /** 是否结束（鼠标抬起） */
   finish: boolean;
+
+  /** 是否开始（鼠标按下） */
   start: boolean;
+
+  /** 触发拖动事件的鼠标事件 */
   ev: MouseEvent;
+
+  /** 触发拖动事件的 HTML 元素 */
   target: HTMLElement;
 };
 
@@ -33,10 +45,7 @@ export default function usePan<T extends Target = Target>(
       const res = callback({
         start: true,
         finish: false,
-        startPosition: [
-          _this.mousedownPosition[0] - left,
-          _this.mousedownPosition[1] - top,
-        ],
+        startPosition: [_this.mousedownPosition[0] - left, _this.mousedownPosition[1] - top],
         offset: [0, 0],
         ev: e,
         target: _this.triggerTarget,
@@ -58,10 +67,7 @@ export default function usePan<T extends Target = Target>(
       const res = callback({
         start: false,
         finish: false,
-        startPosition: [
-          _this.mousedownPosition[0] - left,
-          _this.mousedownPosition[1] - top,
-        ],
+        startPosition: [_this.mousedownPosition[0] - left, _this.mousedownPosition[1] - top],
         offset: [offsetX, offsetY],
         ev: e,
         target: _this.triggerTarget,
@@ -82,10 +88,7 @@ export default function usePan<T extends Target = Target>(
       callback({
         start: false,
         finish: true,
-        startPosition: [
-          _this.mousedownPosition[0] - left,
-          _this.mousedownPosition[1] - top,
-        ],
+        startPosition: [_this.mousedownPosition[0] - left, _this.mousedownPosition[1] - top],
         offset: [offsetX, offsetY],
         ev: e,
         target: _this.triggerTarget,
