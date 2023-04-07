@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.4.4
+
+### Patch Changes
+
+- feat: change pdfjs-build to cjs
+
 ## 1.4.3
 
 ### Patch Changes
