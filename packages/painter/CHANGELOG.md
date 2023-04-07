@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 1.2.3
+
+### Patch Changes
+
+- feat: Painter，drawing 受控，增加 TooltipPlugin 的初始值設置
+
 ## 1.2.2
 
 ### Patch Changes

@@ -7,6 +7,7 @@ import cn from 'classnames';
 import useStyles from './PDFTooltipPainter.style';
 import type { TooltipDataType } from '../def';
 import PDFTooltip from '../PDFTooltip';
+import type { ShapeCreatorProps } from '../TooltipCreator';
 import TooltipCreator from '../TooltipCreator';
 import SimplePropsEditor from '../../SimplePropsEditor';
 import type { PropsType } from '../../SimplePropsEditor/def';
@@ -20,7 +21,7 @@ const propsDef: PropsType[] = [
   {
     key: 'color',
     type: 'color',
-    name: '颜色',
+    name: '顏色',
   },
   {
     key: 'fontSize',
@@ -28,7 +29,7 @@ const propsDef: PropsType[] = [
     min: 10,
     max: 50,
     step: 1,
-    name: '字号',
+    name: '字號',
   },
 ];
 
@@ -44,6 +45,7 @@ export interface PDFTooltipPainterProps extends Omit<React.HTMLAttributes<HTMLDi
   zoom?: number;
   getPopupContainer?: (node: HTMLElement) => HTMLElement;
   autoCheck?: boolean;
+  initialAttr?: ShapeCreatorProps['initialAttr'];
 }
 
 const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
@@ -60,6 +62,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
     zoom = 0,
     getPopupContainer = () => document.body,
     autoCheck = true,
+    initialAttr,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -168,6 +171,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
       {tmpTooltip && <PDFTooltip data={tmpTooltip} />}
       {drawing && (
         <TooltipCreator
+          initialAttr={initialAttr}
           pointMapping={point => ({
             x: point.x / 2 ** zoom,
             y: point.y / 2 ** zoom,

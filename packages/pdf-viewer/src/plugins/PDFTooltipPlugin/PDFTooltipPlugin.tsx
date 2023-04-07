@@ -4,6 +4,7 @@ import { useControllableValue, useMemoizedFn } from 'ahooks';
 import { changeArr } from '@orca-fe/tools';
 import ToolbarButton from '../../ToolbarButton';
 import { IconAddTooltip } from '../../icon/icon';
+import type { PDFTooltipPainterProps } from './PDFTooltipPainter';
 import PDFTooltipPainter from './PDFTooltipPainter';
 import PDFViewerContext, { usePageCoverRenderer } from '../../context';
 import ToolbarPortal from '../../ToolbarPortal';
@@ -35,12 +36,13 @@ export interface PDFTooltipPluginProps {
   data?: TooltipDataType[][];
   onDataChange?: (data: TooltipDataType[][], action: 'add' | 'change' | 'delete', pageIndex: number, index: number) => void;
   autoCheck?: boolean;
+  initialAttr?: PDFTooltipPainterProps['initialAttr'];
 }
 
 const drawingNamePDFTooltipPlugin = 'PDFTooltipPlugin';
 
 const PDFTooltipPlugin = React.forwardRef<PDFTooltipPluginHandle, PDFTooltipPluginProps>((props, pRef) => {
-  const { autoCheck = true } = props;
+  const { autoCheck = true, initialAttr } = props;
   const renderPageCover = usePageCoverRenderer();
 
   const { pdfViewer, internalState, setInternalState } = useContext(PDFViewerContext);
@@ -92,6 +94,7 @@ const PDFTooltipPlugin = React.forwardRef<PDFTooltipPluginHandle, PDFTooltipPlug
       </ToolbarPortal>
       {renderPageCover((pageIndex, { viewport, zoom }) => (
         <PDFTooltipPainter
+          initialAttr={initialAttr}
           autoCheck={autoCheck}
           data={dataList[pageIndex] || eArr}
           onDataChange={(pageData, action, index) => {

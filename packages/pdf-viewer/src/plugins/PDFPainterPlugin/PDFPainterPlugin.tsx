@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unused-prop-types */
-import React, { useEffect, useImperativeHandle, useState, useContext } from 'react';
+import React, { useContext, useImperativeHandle, useState } from 'react';
 import { IconButton, Trigger } from '@orca-fe/pocket';
 import type { PainterRef, ShapeDataType, ShapeType } from '@orca-fe/painter';
 import Painter from '@orca-fe/painter';
@@ -102,18 +102,6 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
   const [_painter] = useState<PainterRefType>({
     refs: [],
   });
-
-  useEffect(() => {
-    _painter.refs.forEach((painter) => {
-      if (painter) {
-        if (drawing) {
-          painter.draw(drawMode.shapeType, drawMode.attr);
-        } else {
-          painter.cancelDraw();
-        }
-      }
-    });
-  }, [drawing, drawMode]);
 
   const renderPageCover = usePageCoverRenderer();
 
@@ -236,6 +224,14 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
           }}
           zoom={zoom}
           defaultDrawMode={drawing ? drawMode : undefined}
+          drawMode={drawing ? drawMode : undefined}
+          onDrawModeChange={(drawMode) => {
+            if (drawMode) {
+              setDrawMode(drawMode);
+            } else {
+              setDrawing(false);
+            }
+          }}
           data={dataList[pageIndex] || eArr}
           onDataChange={(pageData, action, index) => {
             setDataList(changeArr(dataList, pageIndex, pageData), action, pageIndex, index);

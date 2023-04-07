@@ -51,7 +51,11 @@ export interface PainterProps<T extends ShapeDataType> extends Omit<React.HTMLAt
   zoom?: number;
 
   /** 默认绘画模式 */
-  defaultDrawMode?: DrawMode;
+  defaultDrawMode?: DrawMode | false;
+
+  drawMode?: DrawMode | false;
+
+  onDrawModeChange?: (drawMode: DrawMode | false) => void;
 
   /** 默认图形数据 */
   defaultData?: T[];
@@ -85,7 +89,9 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
   const {
     className = '',
     zoom = 0,
-    defaultDrawMode = false,
+    defaultDrawMode,
+    drawMode: nouse5,
+    onDrawModeChange,
     data: nouse1,
     defaultData: nouse2,
     onDataChange: nouse3,
@@ -96,6 +102,7 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
     onCancelDraw = ef,
     style,
     autoCheck = true,
+
     ...otherProps
   } = props;
   const styles = useStyle();
@@ -182,7 +189,11 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
   }, [graphShapeList, tempShape]);
 
   // 绘画模式
-  const [drawMode, setDrawMode] = useState<DrawMode | false>(defaultDrawMode);
+  const [drawMode, setDrawMode] = useControllableValue<DrawMode | false>(props, {
+    defaultValuePropName: 'defaultDrawMode',
+    trigger: 'onDrawModeChange',
+    valuePropName: 'drawMode',
+  });
 
   const draw = useMemoizedFn<PainterRef['draw']>((type, attr) => {
     setDrawMode({
