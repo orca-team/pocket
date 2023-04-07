@@ -73,7 +73,7 @@ async function main(packageRoot: string = './packages') {
         const packageJsonPath = pkgPathMap.get(name);
         if (packageJsonPath && json) {
           const { dependencies } = json;
-          dependencies[depName] = version;
+          dependencies[depName] = `^${version}`;
           pkgJsonMap.set(name, json);
         }
       }
@@ -86,7 +86,7 @@ async function main(packageRoot: string = './packages') {
       });
     }
   } else {
-    console.warn('Done. Everything ok.');
+    console.warn(chalk.green('Done. Everything ok.'));
   }
 }
 

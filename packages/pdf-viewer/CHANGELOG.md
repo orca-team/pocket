@@ -1,5 +1,13 @@
 # @orca-fe/pdf-viewer
 
+## 1.4.2
+
+### Patch Changes
+
+- feat: update dependencies
+- Updated dependencies
+  - @orca-fe/painter@1.2.2
+
 ## 1.4.1
 
 ### Patch Changes
