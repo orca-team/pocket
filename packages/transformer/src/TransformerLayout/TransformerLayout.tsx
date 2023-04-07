@@ -211,11 +211,11 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
       <TransformerBoxContext.Provider value={transformerBoxContext}>
         {contentContainer &&
           data.map((item, index) => {
-            const { bounds } = item;
+            const { bounds, disabled } = item;
             return (
               <TransformerBox
                 key={`${data.length}_${index}`}
-                disabled={item.disabled}
+                disabled={disabled}
                 bounds={bounds}
                 checked={checkedIndex === index}
                 portal={() => contentContainer}

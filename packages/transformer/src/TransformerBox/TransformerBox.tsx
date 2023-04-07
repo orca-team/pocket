@@ -339,6 +339,7 @@ const TransformerBox = (props: TransformerBoxProps) => {
       <div
         className={cn(styles.content, {
           [styles.statusChecked]: checked,
+          [styles.statusDisabled]: disabled,
         })}
         style={positionStyle}
       >

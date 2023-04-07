@@ -23,7 +23,7 @@ export default createUseStyles(
       },
     },
     statusDisabled: {
-      pointerEvents: 'none',
+      pointerEvents: 'none !important',
     },
     statusChecked: {
       '&, &:hover': {

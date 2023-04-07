@@ -1,5 +1,13 @@
 # @orca-fe/painter
 
+## 1.2.1
+
+### Patch Changes
+
+- fix: disabled 事件禁用不完全
+- Updated dependencies
+  - @orca-fe/transformer@0.2.1
+
 ## 1.2.0
 
 ### Minor Changes

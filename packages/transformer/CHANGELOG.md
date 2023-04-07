@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.2.1
+
+### Patch Changes
+
+- fix: disabled 事件禁用不完全
+
 ## 0.2.0
 
 ### Minor Changes
