@@ -42,7 +42,7 @@
   "dependencies": {
     "@orca-fe/hooks": "^1.4.1",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
-    "@orca-fe/painter": "^1.2.1",
+    "@orca-fe/painter": "^1.2.0",
     "@orca-fe/pocket": "^2.0.1",
     "@orca-fe/simple-jss": "^0.0.1",
     "@orca-fe/tools": "^0.8.1",
