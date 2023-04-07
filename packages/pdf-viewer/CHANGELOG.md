@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.4.0
+
+### Minor Changes
+
+- feat: loading 时不展示页面覆盖物
+
 ## 1.3.0
 
 ### Minor Changes

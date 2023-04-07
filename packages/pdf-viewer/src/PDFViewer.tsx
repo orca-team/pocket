@@ -503,6 +503,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     <PDFViewerContext.Provider
       value={useMemo(
         () => ({
+          loading,
           pages,
           viewports,
           zoom,
@@ -514,7 +515,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
           internalState,
           setInternalState,
         }),
-        [pages, viewports, zoom, current, pageCoverRefs, internalState],
+        [loading, pages, viewports, zoom, current, pageCoverRefs, internalState],
       )}
     >
       <PDFToolbarContext.Provider

@@ -72,6 +72,7 @@ export type PDFViewerInternalStateType = Record<string, any> & {
 };
 
 export type PDFViewerContextType = {
+  loading: boolean;
   pages: any[];
   current: number;
   zoom: number;
@@ -84,6 +85,7 @@ export type PDFViewerContextType = {
 };
 
 const PDFViewerContext = React.createContext<PDFViewerContextType>({
+  loading: false,
   pages: [],
   viewports: [],
   current: 1,
@@ -136,15 +138,16 @@ export const PDFToolbarContext = React.createContext<PDFToolbarContextType>({
 });
 
 export function usePageCoverRenderer() {
-  const { pageCoverRefs, viewports, zoom } = useContext(PDFViewerContext);
+  const { pageCoverRefs, viewports, zoom, loading } = useContext(PDFViewerContext);
 
   return (callback: RenderPageCoverFnType) =>
     pageCoverRefs.map((dom, pageIndex) => {
+      if (loading) return null;
+      if (!dom) return null;
       const node = callback(pageIndex, {
         viewport: viewports[pageIndex],
         zoom,
       });
-      if (!dom) return null;
       return <React.Fragment key={pageIndex}>{ReactDOM.createPortal(node, dom)}</React.Fragment>;
     });
 }
