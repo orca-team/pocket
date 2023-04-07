@@ -42,6 +42,7 @@ export default createUseStyles(
       justifyContent: 'end',
       height: '100%',
       flex: 1,
+      flexDirection: 'row-reverse',
     },
     hide: {
       display: 'none',
