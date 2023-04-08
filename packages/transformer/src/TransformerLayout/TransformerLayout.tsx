@@ -3,7 +3,7 @@ import { useClickAway, useControllableValue, useEventListener, useMemoizedFn } f
 import { changeArr, removeArrIndex } from '@orca-fe/tools';
 import cn from 'classnames';
 import type { BasicTarget } from 'ahooks/lib/utils/domTarget';
-import { useSizeListener } from '@orca-fe/hooks';
+import { useCombineKeyListener, useSizeListener } from '@orca-fe/hooks';
 import type { Bounds, Point } from '../TransformerBox/utils';
 import TransformerBox from '../TransformerBox';
 import type { TransformerBoxContextType } from '../TransformerBox/TransformerBoxContext';
@@ -159,26 +159,24 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
   }, [rootRef, ...clickAwayWhitelist]);
 
   // 删除事件
-  useEventListener(
-    'keydown',
-    async (ev) => {
-      if (ev.key === 'Delete' || ev.key === 'Backspace') {
-        if (checkedIndex >= 0) {
-          const result = await onDelete(checkedIndex);
-          if (result === false) {
-            return;
-          }
-          // 修正下标
-          setCheckedIndex((i) => {
-            if (i > 0) return i - 1;
-            if (data.length === 1) {
-              return -1;
-            }
-            return i;
-          });
-          // 删除
-          setData(d => removeArrIndex(d, checkedIndex), 'delete', checkedIndex);
+  useCombineKeyListener(
+    'Delete,Backspace',
+    async () => {
+      if (checkedIndex >= 0) {
+        const result = await onDelete(checkedIndex);
+        if (result === false) {
+          return;
         }
+        // 修正下标
+        setCheckedIndex((i) => {
+          if (i > 0) return i - 1;
+          if (data.length === 1) {
+            return -1;
+          }
+          return i;
+        });
+        // 删除
+        setData(d => removeArrIndex(d, checkedIndex), 'delete', checkedIndex);
       }
     },
     { target: rootRef },

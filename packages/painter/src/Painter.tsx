@@ -1,7 +1,7 @@
 import type { Ref } from 'react';
 import React, { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useControllableValue, useMemoizedFn } from 'ahooks';
-import { useStaticClick } from '@orca-fe/hooks';
+import { useCombineKeyListener, useStaticClick } from '@orca-fe/hooks';
 import type { TransformerBoxContextType } from '@orca-fe/transformer';
 import { TransformerBoxContext, TransformerLayout } from '@orca-fe/transformer';
 import { Img } from '@orca-fe/pocket';
@@ -108,6 +108,8 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
   const styles = useStyle();
   const rootRef = useRef<HTMLDivElement>(null);
 
+  const shapeRendererRef = useRef<HTMLDivElement>(null);
+
   const [checked, setChecked] = useControllableValue<number>(props, {
     defaultValue: -1,
     valuePropName: 'checked',
@@ -124,7 +126,14 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
   });
 
   // 将 data 拆分为 graphShapeList 和 imageList，并保留 index 映射
-  const { graphShapeList, imageList, graphIndexMap, imageIndexMap, dataIndexMap, dataTypeMap } = useMemo(() => {
+  const {
+    graphShapeList,
+    imageList,
+    graphIndexMap: shapeIndexMap,
+    imageIndexMap,
+    dataIndexMap,
+    dataTypeMap,
+  } = useMemo(() => {
     const graphShapeList: GraphShapeType[] = [];
     const imageList: ImageType[] = [];
     const dataIndexMap: Record<number, number> = {};
@@ -237,6 +246,36 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
     [],
   );
 
+  // 删除事件
+  useCombineKeyListener(
+    'Delete,Backspace',
+    async () => {
+      let deleteIndex = -1;
+      if (checkedImage >= 0) {
+        // 选中了图片
+        deleteIndex = imageIndexMap[checkedImage];
+      }
+      if (checkedShape >= 0) {
+        // 选中了图片
+        deleteIndex = shapeIndexMap[checkedShape];
+      }
+
+      if (deleteIndex >= 0) {
+        // 修正下标
+        let i = deleteIndex;
+        if (i > 0) {
+          i -= 1;
+        } else if (data.length === 1) {
+          i = -1;
+        }
+        setChecked(i);
+
+        setData(removeArrIndex(data, deleteIndex), 'delete', deleteIndex);
+      }
+    },
+    { target: rootRef },
+  );
+
   return (
     <div
       tabIndex={-1}
@@ -244,7 +283,6 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
       className={`${styles.root} ${className}`}
       // onBlur={() => { unCheck(); }}
       style={{
-        // @ts-expect-error
         '--painter-scale': 2 ** zoom,
         ...style,
       }}
@@ -261,6 +299,7 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
           zoom={zoom}
           rotateEnabled
           disableClickAway
+          onDelete={() => false}
           onDataChange={(data, action, index) => {
             // 修改图片数据
             const dataIndex = imageIndexMap[index];
@@ -289,21 +328,21 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
             );
           }}
           style={{
-            // @ts-expect-error
             '--transformer-layout-scale': 'var(--scale-factor)',
           }}
         >
           {item => <Img className={styles.img} src={item.src} />}
         </TransformerLayout>
         <ShapesRenderContainer
+          ref={shapeRendererRef}
           checked={checkedShape}
           onCheck={(index) => {
-            setChecked(graphIndexMap[index] ?? -1);
+            setChecked(shapeIndexMap[index] ?? -1);
           }}
           shapes={mergedGraphShapeData}
           onShapesChange={(newShapes, action, index) => {
             // 修改图形数据
-            const dataIndex = graphIndexMap[index];
+            const dataIndex = shapeIndexMap[index];
             setData(
               (oldData) => {
                 if (action === 'change') {

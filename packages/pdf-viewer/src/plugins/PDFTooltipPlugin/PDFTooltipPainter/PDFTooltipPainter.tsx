@@ -4,6 +4,7 @@ import { changeArr, removeArrIndex } from '@orca-fe/tools';
 import { IconButton, Trigger } from '@orca-fe/pocket';
 import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
 import cn from 'classnames';
+import { useCombineKeyListener } from '@orca-fe/hooks';
 import useStyles from './PDFTooltipPainter.style';
 import type { TooltipDataType } from '../def';
 import PDFTooltip from '../PDFTooltip';
@@ -88,6 +89,27 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
   useClickAway(() => {
     check(-1);
   }, rootRef);
+
+  // 删除事件
+  useCombineKeyListener(
+    'Delete,Backspace',
+    async () => {
+      if (checked >= 0) {
+        // // 修正下标
+        // let i = checked;
+        // if (i > 0) {
+        //   i -= 1;
+        // } else if (data.length === 1) {
+        //   i = -1;
+        // }
+        check(-1);
+
+        setData(removeArrIndex(data, checked), 'delete', checked);
+      }
+    },
+    { target: rootRef },
+  );
+
   return (
     <div ref={rootRef} tabIndex={-1} className={cn(styles.root, { [styles.drawing]: drawing }, className)} draggable={false} {...otherProps}>
       {data.map((item, index) => {

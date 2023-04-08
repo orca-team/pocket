@@ -1,5 +1,16 @@
 # @orca-fe/painter
 
+## 1.3.0
+
+### Minor Changes
+
+- feat: PDF 插件 键盘删除事件
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/transformer@0.2.2
+
 ## 1.2.3
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @orca-fe/pdf-viewer
 
+## 1.5.0
+
+### Minor Changes
+
+- feat: PDF 插件 键盘删除事件
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/painter@1.3.0
+
 ## 1.4.4
 
 ### Patch Changes

@@ -39,7 +39,7 @@
     "clear": "rimraf lib es"
   },
   "dependencies": {
-    "@orca-fe/hooks": "^1.4.1",
+    "@orca-fe/hooks": "^1.5.0",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
     "@orca-fe/pocket": "^2.0.3",
     "@orca-fe/tools": "^0.8.1",

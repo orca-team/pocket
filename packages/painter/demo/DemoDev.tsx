@@ -65,7 +65,6 @@ const Demo1 = () => {
                 width: 100,
                 height: 100,
                 rotate: 0,
-                disabled: true,
               },
             ]);
           }

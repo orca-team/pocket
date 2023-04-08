@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.2.2
+
+### Patch Changes
+
+- feat: PDF 插件 键盘删除事件
+
 ## 0.2.1
 
 ### Patch Changes

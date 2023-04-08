@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-invalid-void-type */
+import type { ForwardedRef } from 'react';
+import React, { forwardRef, useRef, useState } from 'react';
 import cn from 'classnames';
 import { changeArr } from '@orca-fe/tools';
+import { useMergedRefs } from '@orca-fe/hooks';
 import type { GraphShapeType } from '../def';
 import ShapeRenderer from '../ShapeRenderer';
 import useStyles from './ShapesRenderContainer.style';
@@ -20,7 +23,7 @@ export interface ShapesRenderContainerProps extends Omit<React.HTMLAttributes<HT
   renderTransformingRect?: (shape: GraphShapeType, index: number) => React.ReactNode;
 }
 
-const ShapesRenderContainer = (props: ShapesRenderContainerProps) => {
+const ShapesRenderContainer = forwardRef((props: ShapesRenderContainerProps, pRef: ForwardedRef<HTMLDivElement>) => {
   const {
     className = '',
     shapes = eArr,
@@ -35,12 +38,15 @@ const ShapesRenderContainer = (props: ShapesRenderContainerProps) => {
   } = props;
   const styles = useStyles();
 
+  const _rootRef = useRef<HTMLDivElement>(null);
+  const rootRef = useMergedRefs(_rootRef, pRef);
+
   const [svgRoot, setSvgRoot] = useState<SVGSVGElement | null>(null);
 
   const [cursor, setCursor] = useState<'default' | 'pointer'>('default');
 
   return (
-    <div className={cn(styles.root, { [styles.pointer]: cursor === 'pointer' }, className)} {...otherProps}>
+    <div ref={rootRef} tabIndex={-1} className={cn(styles.root, { [styles.pointer]: cursor === 'pointer' }, className)} {...otherProps}>
       <svg ref={setSvgRoot} className={styles.svg} version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" />
       {svgRoot &&
         shapes.map((shape, index) => (
@@ -71,6 +77,6 @@ const ShapesRenderContainer = (props: ShapesRenderContainerProps) => {
         ))}
     </div>
   );
-};
+});
 
 export default ShapesRenderContainer;

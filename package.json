@@ -79,6 +79,7 @@
     "inquirer": "^9.1.5",
     "jss": "^10.10.0",
     "react-json-view": "^1.21.3",
-    "semver": "^7.3.8"
+    "semver": "^7.3.8",
+    "ts-node": "^10.9.1"
   }
 }

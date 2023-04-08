@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.5.0
+
+### Minor Changes
+
+- 增加 useCombineKeyListener
+
 ## 1.4.1
 
 ### Patch Changes

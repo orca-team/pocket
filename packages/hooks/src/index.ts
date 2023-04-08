@@ -9,7 +9,6 @@ import useEventEmitter, { EventEmitterWithHook } from './useEventEmitter';
 import useSizeListener, { useSizeDebounceListener, useSizeUpdateListener } from './useSizeListener';
 import usePromisifyModal, { PromisifyModalContext, usePromisifyDrawer } from './usePromisifyModal';
 import useEffectWithTarget, { useLayoutEffectWithTarget } from './useEffectWithTarget';
-import type { HotkeyDefsType, UseHotkeyListenerOptions } from './useHotkeyListener';
 import useStaticClick from './useStaticClick';
 import useNextTick, { useLayoutNextTick } from './useNextTick';
 import usePan from './usePan';
@@ -20,6 +19,7 @@ import HotkeyManager from './hotkey-manager';
 import HotkeyManagerContext from './hotkey-manager/HotkeyManagerContext';
 import useGetState from './useGetState';
 import useMergedRefs from './useMergedRefs';
+import useCombineKeyListener from './useCombineKeyListener';
 
 export {
   useWindowSize,
@@ -38,6 +38,7 @@ export {
   useInterval,
   useGetState,
   useMergedRefs,
+  useCombineKeyListener,
 
   // events
   useEventEmitter,
@@ -60,5 +61,3 @@ export {
   HotkeyManager,
   HotkeyManagerContext,
 };
-
-export type { HotkeyDefsType, UseHotkeyListenerOptions };
