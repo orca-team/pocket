@@ -1,5 +1,16 @@
 # @orca-fe/pdf-viewer
 
+## 1.6.0
+
+### Minor Changes
+
+- feat: PDF 插件 添加 onChangeStart 事件
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/painter@1.4.0
+
 ## 1.5.0
 
 ### Minor Changes

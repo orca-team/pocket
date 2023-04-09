@@ -1,5 +1,16 @@
 # @orca-fe/painter
 
+## 1.4.0
+
+### Minor Changes
+
+- feat: PDF 插件 添加 onChangeStart 事件
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/transformer@0.3.0
+
 ## 1.3.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.3.0
+
+### Minor Changes
+
+- feat: PDF 插件 添加 onChangeStart 事件
+
 ## 0.2.2
 
 ### Patch Changes
