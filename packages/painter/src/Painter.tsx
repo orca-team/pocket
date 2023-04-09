@@ -83,6 +83,9 @@ export interface PainterProps<T extends ShapeDataType> extends Omit<React.HTMLAt
 
   /** 自动选择最后创建的元素 */
   autoCheck?: boolean;
+
+  /** 开始拖拽事件 */
+  onChangeStart?: (index: number) => void;
 }
 
 const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProps<T>, pRef: Ref<PainterRef>) {
@@ -102,7 +105,7 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
     onCancelDraw = ef,
     style,
     autoCheck = true,
-
+    onChangeStart = ef,
     ...otherProps
   } = props;
   const styles = useStyle();
@@ -300,6 +303,7 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
           rotateEnabled
           disableClickAway
           onDelete={() => false}
+          onChangeStart={onChangeStart}
           onDataChange={(data, action, index) => {
             // 修改图片数据
             const dataIndex = imageIndexMap[index];
@@ -340,6 +344,7 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
             setChecked(shapeIndexMap[index] ?? -1);
           }}
           shapes={mergedGraphShapeData}
+          onChangeStart={onChangeStart}
           onShapesChange={(newShapes, action, index) => {
             // 修改图形数据
             const dataIndex = shapeIndexMap[index];

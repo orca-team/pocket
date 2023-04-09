@@ -11,6 +11,7 @@ import TransformerBoxContext from '../TransformerBox/TransformerBoxContext';
 import useStyles from './TransformerLayout.style';
 
 const eArr = [];
+const ef = () => {};
 
 export type TransformerLayoutDataType = {
   bounds: Bounds;
@@ -62,6 +63,9 @@ export interface TransformerLayoutProps<T extends TransformerLayoutDataType>
 
   /** 禁用取消点击事件（由外部受控） */
   disableClickAway?: boolean;
+
+  /** 开始变化的事件 */
+  onChangeStart?: (index: number) => void;
 }
 
 const TransformerLayout = <T extends TransformerLayoutDataType>(props: TransformerLayoutProps<T>) => {
@@ -82,6 +86,7 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
     rotateEnabled,
     disableClickAway,
     onDelete = () => null,
+    onChangeStart = ef,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -219,6 +224,9 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
                 portal={() => contentContainer}
                 limitBounds={limitBounds}
                 rotateEnabled={rotateEnabled}
+                onChangeStart={() => {
+                  onChangeStart(index);
+                }}
                 onMouseDown={() => {
                   setCheckedIndex(index);
                 }}

@@ -21,6 +21,7 @@ export interface ShapesRenderContainerProps extends Omit<React.HTMLAttributes<HT
   onShapeMouseEnter?: (shape: GraphShapeType, index: number) => void;
   onShapeMouseLeave?: (shape: GraphShapeType, index: number) => void;
   renderTransformingRect?: (shape: GraphShapeType, index: number) => React.ReactNode;
+  onChangeStart?: (index: number) => void;
 }
 
 const ShapesRenderContainer = forwardRef((props: ShapesRenderContainerProps, pRef: ForwardedRef<HTMLDivElement>) => {
@@ -34,6 +35,7 @@ const ShapesRenderContainer = forwardRef((props: ShapesRenderContainerProps, pRe
     onCheck = ef,
     onShapesChange = ef,
     renderTransformingRect = () => null,
+    onChangeStart = ef,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -54,6 +56,9 @@ const ShapesRenderContainer = forwardRef((props: ShapesRenderContainerProps, pRe
             key={index}
             shape={shape}
             svgRoot={svgRoot}
+            onChangeStart={() => {
+              onChangeStart(index);
+            }}
             onCheck={() => {
               onCheck(index);
             }}

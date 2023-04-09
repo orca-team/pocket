@@ -29,6 +29,8 @@ export type PDFPainterPluginHandle = {
 
 const eArr = [];
 
+const ef = () => {};
+
 const propsDef: PropsType[] = [
   {
     key: 'stroke',
@@ -54,6 +56,7 @@ export interface PDFPainterPluginProps {
   onDataChange?: (data: ShapeDataType[][], action: 'add' | 'change' | 'delete', pageIndex: number, index: number) => void;
   disabledButton?: boolean;
   autoCheck?: boolean;
+  onChangeStart?: (pageIndex: number, index: number) => void;
 }
 
 type PainterRefType = {
@@ -66,7 +69,7 @@ const drawingNamePDFPainterPlugin = 'PDFPainterPlugin';
  * PDFPainterPlugin 绘图插件
  */
 const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPluginProps>((props, pRef) => {
-  const { disabledButton, autoCheck = true } = props;
+  const { disabledButton, autoCheck = true, onChangeStart = ef } = props;
   const styles = useStyle();
 
   const { internalState, setInternalState } = useContext(PDFViewerContext);
@@ -225,6 +228,9 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
           zoom={zoom}
           defaultDrawMode={drawing ? drawMode : undefined}
           drawMode={drawing ? drawMode : undefined}
+          onChangeStart={(index) => {
+            onChangeStart(pageIndex, index);
+          }}
           onDrawModeChange={(drawMode) => {
             if (drawMode) {
               setDrawMode(drawMode);

@@ -41,6 +41,7 @@ nav:
 | checked                | 选中项                 | `number`                                                                              | `-1`           |         |
 | onCheck                | 选中项变化回调         | `(checked: number) => void`                                                           |                |         |
 | autoCheck              | 自动选择最后创建的元素 | `boolean`                                                                             | `false`        | `1.1.0` |
+| onChangeStart          | 变换开始回调           | `(index: number) => void`                                                             | -              | `1.4.0` |
 
 ### PainterRef
 

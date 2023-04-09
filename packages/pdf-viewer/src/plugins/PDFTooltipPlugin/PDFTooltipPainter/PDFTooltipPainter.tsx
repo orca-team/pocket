@@ -47,6 +47,7 @@ export interface PDFTooltipPainterProps extends Omit<React.HTMLAttributes<HTMLDi
   getPopupContainer?: (node: HTMLElement) => HTMLElement;
   autoCheck?: boolean;
   initialAttr?: ShapeCreatorProps['initialAttr'];
+  onChangeStart?: (index: number) => void;
 }
 
 const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
@@ -64,6 +65,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
     getPopupContainer = () => document.body,
     autoCheck = true,
     initialAttr,
+    onChangeStart = ef,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -179,6 +181,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
               data={item}
               onChangeStart={() => {
                 setChanging(true);
+                onChangeStart(index);
               }}
               onChange={(item) => {
                 setData(arr => changeArr(arr, index, item), 'change', index);

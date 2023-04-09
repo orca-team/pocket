@@ -46,6 +46,7 @@ export interface ShapeRendererProps<T extends GraphShapeType>
   onShapeMouseLeave?: () => void;
   svgRoot: SVGSVGElement;
   renderTransformingRect?: () => React.ReactNode;
+  onChangeStart?: () => void;
 }
 
 const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) => {
@@ -60,6 +61,7 @@ const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) =
     onCheck = ef,
     svgRoot,
     renderTransformingRect = () => null,
+    onChangeStart = ef,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -163,6 +165,7 @@ const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) =
                         y: shape.point2[1],
                       },
                     ]}
+                    onChangeStart={onChangeStart}
                     onPointsChange={(newPoints) => {
                       setTmpShape({
                         ...shape,

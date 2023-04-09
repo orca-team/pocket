@@ -11,6 +11,7 @@ import ToolbarPortal from '../../ToolbarPortal';
 import type { TooltipDataType } from './def';
 
 const eArr = [];
+const ef = () => undefined;
 
 export type PDFTooltipPluginHandle = {
   defaultChecked?: [number, number];
@@ -22,10 +23,6 @@ export type PDFTooltipPluginHandle = {
 
   /** 取消绘图 */
   cancelDraw: () => void;
-
-  defaultData?: TooltipDataType[][];
-  data?: TooltipDataType[][];
-  onDataChange?: (data: TooltipDataType[][], action: 'add' | 'change' | 'delete', pageIndex: number, index: number) => void;
 };
 
 export interface PDFTooltipPluginProps {
@@ -37,12 +34,13 @@ export interface PDFTooltipPluginProps {
   onDataChange?: (data: TooltipDataType[][], action: 'add' | 'change' | 'delete', pageIndex: number, index: number) => void;
   autoCheck?: boolean;
   initialAttr?: PDFTooltipPainterProps['initialAttr'];
+  onChangeStart?: (pageIndex: number, index: number) => void;
 }
 
 const drawingNamePDFTooltipPlugin = 'PDFTooltipPlugin';
 
 const PDFTooltipPlugin = React.forwardRef<PDFTooltipPluginHandle, PDFTooltipPluginProps>((props, pRef) => {
-  const { autoCheck = true, initialAttr } = props;
+  const { autoCheck = true, initialAttr, onChangeStart = ef } = props;
   const renderPageCover = usePageCoverRenderer();
 
   const { pdfViewer, internalState, setInternalState } = useContext(PDFViewerContext);
@@ -97,6 +95,9 @@ const PDFTooltipPlugin = React.forwardRef<PDFTooltipPluginHandle, PDFTooltipPlug
           initialAttr={initialAttr}
           autoCheck={autoCheck}
           data={dataList[pageIndex] || eArr}
+          onChangeStart={(index) => {
+            onChangeStart(pageIndex, index);
+          }}
           onDataChange={(pageData, action, index) => {
             setDataList(changeArr(dataList, pageIndex, pageData), action, pageIndex, index);
           }}
