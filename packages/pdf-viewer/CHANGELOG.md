@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.6.2
+
+### Patch Changes
+
+- fix: disabled 时，不展示属性编辑器
+
 ## 1.6.1
 
 ### Patch Changes

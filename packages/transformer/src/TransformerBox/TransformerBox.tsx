@@ -338,7 +338,7 @@ const TransformerBox = (props: TransformerBoxProps) => {
     ReactDOM.createPortal(
       <div
         className={cn(styles.content, {
-          [styles.statusChecked]: checked,
+          [styles.statusChecked]: checked && !disabled,
           [styles.statusDisabled]: disabled,
         })}
         style={positionStyle}
@@ -357,7 +357,7 @@ const TransformerBox = (props: TransformerBoxProps) => {
       className={cn(
         styles.root,
         {
-          [styles.statusChecked]: checked,
+          [styles.statusChecked]: checked && !disabled,
           [styles.statusDisabled]: disabled,
         },
         className,
