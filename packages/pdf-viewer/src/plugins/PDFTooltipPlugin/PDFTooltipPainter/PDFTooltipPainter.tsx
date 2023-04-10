@@ -124,7 +124,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
               points: ['bl', 'tl'],
               offset: [0, -5],
             }}
-            popupVisible={!changing && checked === index}
+            popupVisible={!changing && !item.disabled && checked === index}
             getPopupContainer={getPopupContainer}
             popup={(
               <PopupBox>

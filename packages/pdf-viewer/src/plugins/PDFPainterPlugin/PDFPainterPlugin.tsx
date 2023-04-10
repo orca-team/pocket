@@ -256,7 +256,7 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
           }}
           renderTransformingRect={(shape, index) => (
             <Trigger
-              popupVisible
+              popupVisible={!shape.disabled}
               getPopupContainer={dom => dom}
               popupAlign={{
                 points: ['bl', 'tl'],
