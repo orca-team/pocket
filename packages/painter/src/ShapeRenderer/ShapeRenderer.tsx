@@ -132,7 +132,9 @@ const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) =
           if (element) {
             const svgElement = (
               <>
-                {element}
+                {React.cloneElement(element, {
+                  className: cn({ [styles.disabled]: shape.disabled }),
+                })}
                 {React.cloneElement(element, {
                   className: cn(styles.svgHit, { [styles.disabled]: shape.disabled }),
                   onClick: () => {
@@ -155,6 +157,7 @@ const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) =
                   {ReactDOM.createPortal(svgElement, svgRoot)}
                   <TransformerLine
                     checked={checked}
+                    disabled={shape.disabled}
                     points={[
                       {
                         x: shape.point1[0],
@@ -200,6 +203,7 @@ const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) =
               <TransformerBox
                 controlledMode
                 checked={checked}
+                disabled={shape.disabled}
                 bounds={bounds}
                 rotateEnabled
                 onBoundsChange={(newTmpBounds) => {
@@ -220,5 +224,4 @@ const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) =
     </div>
   );
 };
-
 export default ShapeRenderer;

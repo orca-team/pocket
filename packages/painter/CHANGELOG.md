@@ -1,5 +1,13 @@
 # @orca-fe/painter
 
+## 1.4.1
+
+### Patch Changes
+
+- fix: disabled 时，不展示属性编辑器
+- Updated dependencies
+  - @orca-fe/transformer@0.3.2
+
 ## 1.4.0
 
 ### Minor Changes

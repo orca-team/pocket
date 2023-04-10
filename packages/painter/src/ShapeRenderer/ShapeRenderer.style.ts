@@ -20,6 +20,10 @@ export default createUseStyles(
     disabled: {
       opacity: 0.7,
       pointerEvents: 'none',
+
+      '&$svgHit': {
+        pointerEvents: 'none',
+      },
     },
     svgHit: {
       pointerEvents: 'initial',

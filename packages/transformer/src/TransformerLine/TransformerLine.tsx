@@ -229,7 +229,7 @@ const TransformerLine = (props: TransformerLineProps) => {
       className={cn(
         styles.root,
         {
-          [styles.statusChecked]: checked,
+          [styles.statusChecked]: checked && !disabled,
           [styles.statusDisabled]: disabled,
         },
         className,

@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.3.2
+
+### Patch Changes
+
+- fix: disabled 时，不展示属性编辑器
+
 ## 0.3.1
 
 ### Patch Changes

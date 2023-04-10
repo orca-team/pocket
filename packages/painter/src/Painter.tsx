@@ -384,7 +384,7 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
           onCreate={(shape) => {
             setTempShape(false);
             // 创建图形数据
-            setData([...data, { ...shape, ...drawMode.attr } as T], 'add', data.length);
+            setData([...data, { ...shape, ...drawMode.attr, disabled: true } as T], 'add', data.length);
             if (autoCheck) {
               setChecked(data.length);
               // 退出绘图模式
