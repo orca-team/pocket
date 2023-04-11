@@ -3,17 +3,18 @@ import { clamp, roundBy } from '@orca-fe/tools';
 import { useDebounceEffect, useDebounceFn, useEventListener, useMemoizedFn, useSetState } from 'ahooks';
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useGetState, useSizeListener } from '@orca-fe/hooks';
+import type { PDFDocumentProxy } from '@orca-fe/pdfjs-dist-browserify';
+import { getDocument } from '@orca-fe/pdfjs-dist-browserify';
+import * as pdfjsWorker from '@orca-fe/pdfjs-dist-browserify/build/pdf.worker';
 import type { PageViewport, PDFViewerHandle, RenderPageCoverFnType, PDFViewerInternalStateType, SourceType } from './context';
 import PDFViewerContext, { PDFToolbarContext } from './context';
 import PDFPage from './PDFPage';
-import * as _pdfJS from '../pdfjs-build/pdf.cjs';
-import * as pdfjsWorker from '../pdfjs-build/pdf.worker.cjs';
+// import * as _pdfJS from '../pdfjs-build/pdf.cjs';
+// import * as pdfjsWorker from '../pdfjs-build/pdf.worker.cjs';
 import { findSortedArr } from './utils';
 import ZoomAndPageController from './ZoomAndPageController';
 import PDFToolbar from './PDFToolbar';
 import useStyle from './PDFViewer.style';
-
-const pdfJs: any = _pdfJS;
 
 const ef = () => undefined;
 
@@ -104,7 +105,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
 
   const [_this] = useState<{
     pdfLoadingKey?: string;
-    pdfDoc?: any;
+    pdfDoc?: PDFDocumentProxy;
     mousePositionBeforeWheel?: { x: number; y: number; zoom: number };
     zooming: boolean;
     size?: { width: number; height: number };
@@ -251,44 +252,42 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   });
   const load = useMemoizedFn<PDFViewerHandle['load']>(async (file, title) => {
     const key = `${Date.now()}_${Math.random()}`;
-    if (pdfJs) {
-      _this.pdfLoadingKey = key;
-      setLoading(true);
-      let pdfContent = file;
-      if (pdfContent instanceof File) {
-        pdfContent = await pdfContent.arrayBuffer();
-      }
-      if (key !== _this.pdfLoadingKey) return;
-
-      try {
-        const pdfDoc = await pdfJs.getDocument(pdfContent).promise;
-        if (pdfDoc) {
-          _this.pdfDoc = pdfDoc;
-          const pageLength = pdfDoc.numPages;
-          const allPages = await Promise.all(
-            new Array(pageLength).fill(0)
-              .map(async (_, index) => {
-                const pageNum = index + 1;
-                const page = await pdfDoc.getPage(pageNum);
-                return page;
-              }),
-          );
-          if (key !== _this.pdfLoadingKey) return;
-          setPages(allPages);
-          _this.file = pdfContent;
-          if (title != null) {
-            setTitle(title);
-          }
-          const dom = pageContainerRef.current;
-          if (dom) {
-            dom.scrollTop = 0;
-          }
-        }
-      } finally {
-        if (_this.pdfLoadingKey === key) setLoading(false);
-      }
-      // 總頁數
+    _this.pdfLoadingKey = key;
+    setLoading(true);
+    let pdfContent = file;
+    if (pdfContent instanceof File) {
+      pdfContent = await pdfContent.arrayBuffer();
     }
+    if (key !== _this.pdfLoadingKey) return;
+
+    try {
+      const pdfDoc = await getDocument(pdfContent).promise;
+      if (pdfDoc) {
+        _this.pdfDoc = pdfDoc;
+        const pageLength = pdfDoc.numPages;
+        const allPages = await Promise.all(
+          new Array(pageLength).fill(0)
+            .map(async (_, index) => {
+              const pageNum = index + 1;
+              const page = await pdfDoc.getPage(pageNum);
+              return page;
+            }),
+        );
+        if (key !== _this.pdfLoadingKey) return;
+        setPages(allPages);
+        _this.file = pdfContent;
+        if (title != null) {
+          setTitle(title);
+        }
+        const dom = pageContainerRef.current;
+        if (dom) {
+          dom.scrollTop = 0;
+        }
+      }
+    } finally {
+      if (_this.pdfLoadingKey === key) setLoading(false);
+    }
+    // 總頁數
   });
   const scrollTo = useMemoizedFn<PDFViewerHandle['scrollTo']>((...args) => {
     const dom = pageContainerRef.current;

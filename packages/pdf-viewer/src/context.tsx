@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import ReactDOM from 'react-dom';
+import type { PDFDocumentProxy } from '@orca-fe/pdfjs-dist-browserify';
 import type { SetState } from 'ahooks/es/useSetState';
 
 export type SourceType = string | URL | ArrayBuffer;
@@ -42,6 +43,8 @@ export type PDFViewerHandle = {
   getRoot: () => HTMLElement | null;
 
   getFileSource: () => SourceType | null | undefined;
+
+  getPDFInstance: () => PDFDocumentProxy | undefined;
 };
 
 export type PageViewport = {

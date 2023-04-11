@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.8.0
+
+### Minor Changes
+
+- feat: 重新编译 pdfjs-build 并提供 getPDFInstance
+
 ## 1.7.0
 
 ### Minor Changes

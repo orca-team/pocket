@@ -159,7 +159,7 @@ importers:
         specifier: ^0.8.1
         version: link:../tools
       '@orca-fe/transformer':
-        specifier: ^0.3.0
+        specifier: ^0.3.2
         version: link:../transformer
       ahooks:
         specifier: ^3.7.6
@@ -196,8 +196,11 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1(jss@10.10.0)
       '@orca-fe/painter':
-        specifier: ^1.4.0
+        specifier: ^1.4.1
         version: link:../painter
+      '@orca-fe/pdfjs-dist-browserify':
+        specifier: ^3.2.147
+        version: registry.npmjs.org/@orca-fe/pdfjs-dist-browserify@3.2.147
       '@orca-fe/pocket':
         specifier: ^2.0.3
         version: link:../pocket
@@ -15490,4 +15493,12 @@ packages:
 
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
+    dev: false
+
+  registry.npmjs.org/@orca-fe/pdfjs-dist-browserify@3.2.147:
+    resolution: {integrity: sha512-E7mnxgqrRUnkFxIqJOcs17QWgUsaN4hBBDJnevYSw+SCrVvUPqCiiJTpxzVr7rgozO4gfw1JrUSY8FeawyrRWg==, registry: https://registry.npmmirror.com/, tarball: https://registry.npmjs.org/@orca-fe/pdfjs-dist-browserify/-/pdfjs-dist-browserify-3.2.147.tgz}
+    name: '@orca-fe/pdfjs-dist-browserify'
+    version: 3.2.147
+    dependencies:
+      web-streams-polyfill: 3.2.1
     dev: false
