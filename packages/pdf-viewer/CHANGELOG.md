@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.8.1
+
+### Patch Changes
+
+- fix: getPDFInstance 忘记提供
+
 ## 1.8.0
 
 ### Minor Changes

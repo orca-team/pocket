@@ -9,8 +9,6 @@ import * as pdfjsWorker from '@orca-fe/pdfjs-dist-browserify/build/pdf.worker';
 import type { PageViewport, PDFViewerHandle, RenderPageCoverFnType, PDFViewerInternalStateType, SourceType } from './context';
 import PDFViewerContext, { PDFToolbarContext } from './context';
 import PDFPage from './PDFPage';
-// import * as _pdfJS from '../pdfjs-build/pdf.cjs';
-// import * as pdfjsWorker from '../pdfjs-build/pdf.worker.cjs';
 import { findSortedArr } from './utils';
 import ZoomAndPageController from './ZoomAndPageController';
 import PDFToolbar from './PDFToolbar';
@@ -19,7 +17,6 @@ import useStyle from './PDFViewer.style';
 const ef = () => undefined;
 
 const round001 = roundBy(0.001);
-
 const defaultLoadingTips = <div className="pdf-viewer-default-loading-tips">正在打开文件...</div>;
 
 const defaultEmptyTips = <div className="pdf-viewer-default-empty-tips">请打开一个 PDF 文件</div>;
@@ -235,6 +232,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     }
   });
 
+  const getPDFInstance = useMemoizedFn<PDFViewerHandle['getPDFInstance']>(() => _this.pdfDoc);
   const getFileSource = useMemoizedFn<PDFViewerHandle['getFileSource']>(() => _this.file);
   const close = useMemoizedFn<PDFViewerHandle['close']>(async () => {
     if (_this.pdfDoc) {
@@ -488,6 +486,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       setTitle,
       getRoot,
       getFileSource,
+      getPDFInstance,
     }),
     [],
   );
