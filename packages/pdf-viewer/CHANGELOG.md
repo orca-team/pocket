@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.7.0
+
+### Minor Changes
+
+- feat: 增加获取当前打开的 PDF 文件的接口
+
 ## 1.6.2
 
 ### Patch Changes

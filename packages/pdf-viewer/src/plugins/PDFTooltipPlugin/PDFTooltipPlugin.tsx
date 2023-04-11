@@ -14,9 +14,6 @@ const eArr = [];
 const ef = () => undefined;
 
 export type PDFTooltipPluginHandle = {
-  defaultChecked?: [number, number];
-  checked?: [number, number];
-  onCheck?: (checked: [number, number]) => void;
 
   /** 开始绘制批注 */
   drawTooltip: (attr?: Record<string, any>) => void;
@@ -26,14 +23,32 @@ export type PDFTooltipPluginHandle = {
 };
 
 export interface PDFTooltipPluginProps {
+
+  /** 默认选中的批注 */
   defaultChecked?: [number, number];
+
+  /** 当前选中的批注 */
   checked?: [number, number];
+
+  /** 选中批注时的回调函数 */
   onCheck?: (checked: [number, number]) => void;
+
+  /** 默认数据 */
   defaultData?: TooltipDataType[][];
+
+  /** 数据 */
   data?: TooltipDataType[][];
+
+  /** 数据变化时的回调函数 */
   onDataChange?: (data: TooltipDataType[][], action: 'add' | 'change' | 'delete', pageIndex: number, index: number) => void;
+
+  /** 是否自动选中 */
   autoCheck?: boolean;
+
+  /** 初始属性 */
   initialAttr?: PDFTooltipPainterProps['initialAttr'];
+
+  /** 开始更改时的回调函数 */
   onChangeStart?: (pageIndex: number, index: number) => void;
 }
 

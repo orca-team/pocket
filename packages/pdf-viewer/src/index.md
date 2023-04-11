@@ -108,33 +108,36 @@ export default () => {
 | setAllMarkData(deprecated at `1.0.0`)   | 更新所有页面的标注数据           | `(markData: ShapeDataType[][]) => void`                           | `0.0.5`                   |
 | clearAllMarkData(deprecated at `1.0.0`) | 清除所有页面的标注数据           | `() => void`                                                      | `0.0.6`                   |
 | setTitle                                | 设置文件标题                     | `(title: string) => void`                                         | `0.2.0`                   |
+| getFileSource                           | 获取当前加载的文件资源           | `() => string / URL / ArrayBuffer / undefined`                    | `1.7.0`                   |
 
 ## API - PDFTooltipPlugin
 
-`0.4.4`
+`1.0.0`
 
 批注插件，用于在 PDF 的页面上添加文本批注
 
 ### 属性
 
-| 属性名称 | 描述                                                                                     | 类型         | 默认值 | 版本 |
-| -------- | ---------------------------------------------------------------------------------------- | ------------ | ------ | ---- |
-| onCheck  | 批注选中事件（这是一个内部事件，后面可能会有较大调整）                                   | `() => void` | `-`    |      |
-| onDraw   | 添加批注事件，当完成一个批注的添加、修改时触发（这是一个内部事件，后面可能会有较大调整） | `() => void` | `-`    |      |
+| 属性名称       | 描述                 | 类型                                                                                                         | 默认值 | 版本    |
+| -------------- | -------------------- | ------------------------------------------------------------------------------------------------------------ | ------ | ------- |
+| defaultChecked | 默认选中的批注       | `[number, number]`                                                                                           | -      | `1.0.0` |
+| checked        | 当前选中的批注       | `[number, number]`                                                                                           | -      | `1.0.0` |
+| onCheck        | 选中批注时的回调函数 | `(checked: [number, number]) => void`                                                                        | -      | `1.0.0` |
+| defaultData    | 默认数据             | `TooltipDataType[][]`                                                                                        | -      | `1.0.0` |
+| data           | 数据                 | `TooltipDataType[][]`                                                                                        | -      | `1.0.0` |
+| onDataChange   | 数据变化时的回调函数 | `(data: TooltipDataType[][], action: 'add' / 'change' / 'delete', pageIndex: number, index: number) => void` | -      | `1.0.0` |
+| autoCheck      | 是否自动选中         | `boolean`                                                                                                    | `true` | `1.0.0` |
+| initialAttr    | 初始属性             | `PDFTooltipPainterProps['initialAttr']`                                                                      | -      | `1.0.0` |
+| onChangeStart  | 开始更改时的回调函数 | `(pageIndex: number, index: number) => void`                                                                 | -      | `1.0.0` |
 
-### PDFPainterPluginHandle
+### PDFTooltipPluginHandle
 
-使用 `ref` 以获得 `PDFPainterPluginHandle`。
+使用 `ref` 以获得 `PDFTooltipPluginHandle`。
 
-| 方法名称            | 描述                   | 类型                                                  | 版本 |
-| ------------------- | ---------------------- | ----------------------------------------------------- | ---- |
-| getAllTooltipData   | 获取所有批注内容       | `() => TooltipDataType[][]`                           |      |
-| setTooltipData      | 设置某一页的批注内容   | `(page: number, markData: TooltipDataType[]) => void` |      |
-| setAllTooltipData   | 设置所有页面的批注内容 | `(markData: TooltipDataType[][]) => void`             |      |
-| clearAllTooltipData | 清除所有页面的批注内容 | `() => void`                                          |      |
-| drawTooltip         | 开始绘制批注           | `(attr?: Record<string, any>) => void`                |      |
-| cancelDraw          | 取消绘图               | `() => void`                                          |      |
-| cancelCheck         | 取消所有选中           | `() => void`                                          |      |
+| 属性名称    | 描述                 | 类型                                   | 默认值 | 版本 |
+| ----------- | -------------------- | -------------------------------------- | ------ | ---- |
+| drawTooltip | 在当前页面上绘制批注 | `(attr?: Record<string, any>) => void` | -      |      |
+| cancelDraw  | 取消绘制批注         | `() => void`                           | -      |      |
 
 ## API - PDFPainterPlugin
 
@@ -142,21 +145,23 @@ export default () => {
 
 ### 属性
 
-`0.4.4`
+`1.0.0`
 
-| 属性名称     | 描述                                                                         | 类型                                                | 默认值 | 版本 |
-| ------------ | ---------------------------------------------------------------------------- | --------------------------------------------------- | ------ | ---- |
-| onCheck      | 绘图选中（这是一个内部事件，后面可能会有较大调整）                           | `(index:number) => void`                            | `-`    |      |
-| onMarkChange | 绘图完成事件，绘图添加、修改时触发（这是一个内部事件，后面可能会有较大调整） | `(page: number, markData: ShapeDataType[]) => void` | `-`    |      |
+| 属性名称       | 描述                     | 类型                                                                                                       | 默认值  | 版本 |
+| -------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------- | ------- | ---- |
+| defaultData    | 默认的绘图数据           | `ShapeDataType[][]`                                                                                        | -       |      |
+| data           | 绘图数据                 | `ShapeDataType[][]`                                                                                        | -       |      |
+| onDataChange   | 绘图数据变化时的回调函数 | `(data: ShapeDataType[][], action: 'add' / 'change' / 'delete', pageIndex: number, index: number) => void` | -       |      |
+| disabledButton | 是否禁用按钮             | `boolean`                                                                                                  | `false` |      |
+| autoCheck      | 是否自动选中             | `boolean`                                                                                                  | `true`  |      |
+| onChangeStart  | 开始绘图时的回调函数     | `(pageIndex: number, index: number) => void`                                                               | -       |      |
+| defaultChecked | 默认选中的区域           | `[number, number]`                                                                                         | -       |      |
+| checked        | 选中的区域               | `[number, number]`                                                                                         | -       |      |
+| onCheck        | 选中区域变化时的回调函数 | `(checked: [number, number]) => void`                                                                      | -       |      |
 
 ### PDFPainterPluginHandle
 
-| 方法名称         | 描述                   | 类型                                                        | 版本 |
-| ---------------- | ---------------------- | ----------------------------------------------------------- | ---- |
-| getAllMarkData   | 获取所有标注内容       | `() => ShapeDataType[][]`                                   |      |
-| setMarkData      | 设置某一页的标注内容   | `(page: number, markData: ShapeDataType[]) => void`         |      |
-| setAllMarkData   | 设置所有页面的标注内容 | `(markData: ShapeDataType[][]) => void`                     |      |
-| clearAllMarkData | 清除所有页面的标注内容 | `() => void`                                                |      |
-| drawMark         | 开始绘图               | `(shapeType: ShapeType, attr: Record<string, any>) => void` |      |
-| cancelDraw       | 取消绘图               | `() => void`                                                |      |
-| cancelCheck      | 取消所有选中           | `() => void`                                                |      |
+| 方法名称   | 描述     | 类型                                                        | 版本 |
+| ---------- | -------- | ----------------------------------------------------------- | ---- |
+| drawMark   | 开始绘图 | `(shapeType: ShapeType, attr: Record<string, any>) => void` |      |
+| cancelDraw | 取消绘图 | `() => void`                                                |      |

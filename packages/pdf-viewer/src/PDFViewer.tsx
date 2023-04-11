@@ -3,7 +3,7 @@ import { clamp, roundBy } from '@orca-fe/tools';
 import { useDebounceEffect, useDebounceFn, useEventListener, useMemoizedFn, useSetState } from 'ahooks';
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useGetState, useSizeListener } from '@orca-fe/hooks';
-import type { PageViewport, PDFViewerHandle, RenderPageCoverFnType, PDFViewerInternalStateType } from './context';
+import type { PageViewport, PDFViewerHandle, RenderPageCoverFnType, PDFViewerInternalStateType, SourceType } from './context';
 import PDFViewerContext, { PDFToolbarContext } from './context';
 import PDFPage from './PDFPage';
 import * as _pdfJS from '../pdfjs-build/pdf.cjs';
@@ -108,6 +108,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     mousePositionBeforeWheel?: { x: number; y: number; zoom: number };
     zooming: boolean;
     size?: { width: number; height: number };
+    file?: SourceType;
   }>({
     zooming: false,
   });
@@ -233,6 +234,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     }
   });
 
+  const getFileSource = useMemoizedFn<PDFViewerHandle['getFileSource']>(() => _this.file);
   const close = useMemoizedFn<PDFViewerHandle['close']>(async () => {
     if (_this.pdfDoc) {
       try {
@@ -243,6 +245,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
         console.error('pdfDoc destory failed');
       }
     }
+    _this.file = undefined;
     _this.pdfDoc = undefined;
     setPages([]);
   });
@@ -272,6 +275,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
           );
           if (key !== _this.pdfLoadingKey) return;
           setPages(allPages);
+          _this.file = pdfContent;
           if (title != null) {
             setTitle(title);
           }
@@ -484,6 +488,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       scrollTo,
       setTitle,
       getRoot,
+      getFileSource,
     }),
     [],
   );

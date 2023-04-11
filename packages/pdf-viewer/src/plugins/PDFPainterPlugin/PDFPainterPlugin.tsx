@@ -47,15 +47,36 @@ const propsDef: PropsType[] = [
   },
 ];
 
+/**
+ * PDFPainterPlugin 绘图插件属性
+ */
 export interface PDFPainterPluginProps {
+
+  /** 默认选中的区域 */
   defaultChecked?: [number, number];
+
+  /** 选中的区域 */
   checked?: [number, number];
+
+  /** 选中区域变化时的回调函数 */
   onCheck?: (checked: [number, number]) => void;
+
+  /** 默认的绘图数据 */
   defaultData?: ShapeDataType[][];
+
+  /** 绘图数据 */
   data?: ShapeDataType[][];
+
+  /** 绘图数据变化时的回调函数 */
   onDataChange?: (data: ShapeDataType[][], action: 'add' | 'change' | 'delete', pageIndex: number, index: number) => void;
+
+  /** 是否禁用按钮 */
   disabledButton?: boolean;
+
+  /** 是否自动选中 */
   autoCheck?: boolean;
+
+  /** 开始绘图时的回调函数 */
   onChangeStart?: (pageIndex: number, index: number) => void;
 }
 

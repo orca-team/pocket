@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import ReactDOM from 'react-dom';
 import type { SetState } from 'ahooks/es/useSetState';
 
+export type SourceType = string | URL | ArrayBuffer;
+
 /**
  * PDF 控制器
  * 用于控制 PDF 阅读器，进行基础操作
@@ -9,7 +11,7 @@ import type { SetState } from 'ahooks/es/useSetState';
 export type PDFViewerHandle = {
 
   /** 加载文件，支持 url / 文件 / ArrayBuffer */
-  load: (file: string | URL | File | ArrayBuffer, title?: string) => Promise<void>;
+  load: (file: SourceType | File, title?: string) => Promise<void>;
 
   /** 关闭文件，恢复初始状态 */
   close: () => Promise<void>;
@@ -38,6 +40,8 @@ export type PDFViewerHandle = {
   setTitle: (title: React.ReactNode) => void;
 
   getRoot: () => HTMLElement | null;
+
+  getFileSource: () => SourceType | null | undefined;
 };
 
 export type PageViewport = {
