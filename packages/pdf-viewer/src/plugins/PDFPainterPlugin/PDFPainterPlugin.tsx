@@ -78,6 +78,8 @@ export interface PDFPainterPluginProps {
 
   /** 开始绘图时的回调函数 */
   onChangeStart?: (pageIndex: number, index: number) => void;
+
+  buttonName?: string;
 }
 
 type PainterRefType = {
@@ -90,7 +92,7 @@ const drawingNamePDFPainterPlugin = 'PDFPainterPlugin';
  * PDFPainterPlugin 绘图插件
  */
 const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPluginProps>((props, pRef) => {
-  const { disabledButton, autoCheck = true, onChangeStart = ef } = props;
+  const { disabledButton, autoCheck = true, onChangeStart = ef, buttonName = '绘图' } = props;
   const styles = useStyle();
 
   const { internalState, setInternalState } = useContext(PDFViewerContext);
@@ -228,7 +230,7 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
                   }}
                   icon={<IconAddShape />}
                 >
-                  绘图
+                  {buttonName}
                 </ToolbarButton>
               </span>
             </Trigger>

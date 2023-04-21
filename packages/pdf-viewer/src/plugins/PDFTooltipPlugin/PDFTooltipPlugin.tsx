@@ -50,12 +50,15 @@ export interface PDFTooltipPluginProps {
 
   /** 开始更改时的回调函数 */
   onChangeStart?: (pageIndex: number, index: number) => void;
+
+  /** 按钮名称 */
+  buttonName?: string;
 }
 
 const drawingNamePDFTooltipPlugin = 'PDFTooltipPlugin';
 
 const PDFTooltipPlugin = React.forwardRef<PDFTooltipPluginHandle, PDFTooltipPluginProps>((props, pRef) => {
-  const { autoCheck = true, initialAttr, onChangeStart = ef } = props;
+  const { autoCheck = true, initialAttr, onChangeStart = ef, buttonName = '批注' } = props;
   const renderPageCover = usePageCoverRenderer();
 
   const { pdfViewer, internalState, setInternalState } = useContext(PDFViewerContext);
@@ -102,7 +105,7 @@ const PDFTooltipPlugin = React.forwardRef<PDFTooltipPluginHandle, PDFTooltipPlug
           }}
           icon={<IconAddTooltip />}
         >
-          批注
+          {buttonName}
         </ToolbarButton>
       </ToolbarPortal>
       {renderPageCover((pageIndex, { viewport, zoom }) => (
