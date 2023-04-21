@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.8.2
+
+### Patch Changes
+
+- feat: 两个组件支持修改按钮名称
+
 ## 1.8.1
 
 ### Patch Changes
