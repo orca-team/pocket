@@ -66,6 +66,8 @@ import type { SliderProps } from './slider';
 import Slider from './slider';
 import type { LoadingDivProps } from './loading-div';
 import LoadingDiv from './loading-div';
+import type { SvgIconProps } from './svg-icon';
+import SvgIcon from './svg-icon';
 
 export type {
   EqRatioBoxProps,
@@ -108,6 +110,7 @@ export type {
   TooltipProps,
   SliderProps,
   LoadingDivProps,
+  SvgIconProps,
 };
 
 export {
@@ -145,4 +148,5 @@ export {
   Tooltip,
   Slider,
   LoadingDiv,
+  SvgIcon,
 };

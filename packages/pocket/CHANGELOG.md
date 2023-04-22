@@ -1,5 +1,16 @@
 # @orca-fe/pocket
 
+## 2.1.0
+
+### Minor Changes
+
+- feat: SvgIcon
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/pocket@2.1.0
+
 ## 2.0.3
 
 ### Patch Changes
