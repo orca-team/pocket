@@ -24,10 +24,10 @@ group:
 
 ## API
 
-| 属性            | 说明                       | 类型                                  | 默认值 |
-| --------------- | -------------------------- | ------------------------------------- | ------ |
-| size            | 大小                       | number \| string                      | -      |
-| color           | 整体颜色                   | string                                | -      |
-| icon            | 图标配置                   | IconDataType                          | -      |
-| customPathProps | 覆盖自定义图标的 path 属性 | React.SVGAttributes<SVGPathElement>[] | -      |
-| spinning        | 是否旋转                   | boolean                               | false  |
+| 属性            | 说明                       | 类型                                    | 默认值 |
+| --------------- | -------------------------- | --------------------------------------- | ------ |
+| size            | 大小                       | `number \| string`                      | -      |
+| color           | 整体颜色                   | `string`                                | -      |
+| icon            | 图标配置                   | `IconDataType`                          | -      |
+| customPathProps | 覆盖自定义图标的 path 属性 | `React.SVGAttributes<SVGPathElement>[]` | -      |
+| spinning        | 是否旋转                   | `boolean`                               | false  |

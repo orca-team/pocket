@@ -111,7 +111,7 @@ export const iconTrackPointRed = {
   ],
 };
 
-export const iconInConversation = {
+export const iconChat = {
   name: 'iconInConversation',
   viewBox: '0 0 1024 1024',
   paths: [
@@ -133,7 +133,7 @@ export const iconList = [
   iconWorld,
   iconRoom,
   iconThing,
-  iconInConversation,
+  iconChat,
   iconTrackPointRed,
   iconLocationPointBlue,
   iconLocationPointRed,
