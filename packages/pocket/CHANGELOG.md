@@ -1,5 +1,13 @@
 # @orca-fe/pocket
 
+## 2.1.1
+
+### Patch Changes
+
+- feat: SvgIcon fill = currentColor
+- Updated dependencies
+  - @orca-fe/pocket@2.1.1
+
 ## 2.1.0
 
 ### Minor Changes
