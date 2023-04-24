@@ -8,6 +8,7 @@ export default createUseStyles(
     root: {
       position: 'relative',
       fontSize: 16,
+      fill: 'currentColor',
       width: '1em',
       height: '1em',
     },
