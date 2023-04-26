@@ -130,6 +130,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
               <PopupBox
                 onClick={(e) => {
                   e.stopPropagation();
+                  e.preventDefault();
                 }}
               >
                 <SimplePropsEditor

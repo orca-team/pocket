@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react';
 import { EditableDiv } from '@orca-fe/pocket';
 import cn from 'classnames';
 import { usePan } from '@orca-fe/hooks';
-import useStyles from './PDFTooltip.style';
 import type { TooltipDataType } from '../def';
+import useStyles from './PDFTooltip.style';
 
 const ef = () => {};
 
@@ -168,11 +168,13 @@ const PDFTooltip = (props: PDFTooltipProps) => {
       </svg>
       <div ref={boxRef} className={styles.box}>
         <EditableDiv
+          className={styles.input}
           transparent
           editing={editing}
           onEditChange={(editing) => {
             setEditing(editable && editing);
           }}
+          breakWord
           value={data.value}
           onChange={(value) => {
             onChange({

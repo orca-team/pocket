@@ -6,6 +6,7 @@ export default createUseStyles(
   {
     root: {
       minWidth: '0.6em',
+      padding: [0, 2],
 
       '& pre': {
         overflow: 'hidden',
@@ -23,13 +24,18 @@ export default createUseStyles(
     editing: {
       border: '2px solid #1199ff',
       borderRadius: '4px',
-      paddingLeft: '2px',
-      paddingRight: '2px',
+
       textOverflow: 'initial !important',
       cursor: 'initial',
-      '&:not(.transparent)': {
+      '&:not($transparent)': {
         backgroundColor: '#ffffff',
         color: '#333333',
+      },
+    },
+    transparent: {},
+    breakWord: {
+      '& > pre': {
+        wordWrap: 'break-word',
       },
     },
 

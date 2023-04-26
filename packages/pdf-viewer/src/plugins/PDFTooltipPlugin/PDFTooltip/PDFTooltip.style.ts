@@ -25,9 +25,15 @@ export default createUseStyles(
     box: {
       cursor: 'move',
       border: '1px solid var(--pdf-tooltip-color)',
-      padding: [4, 8],
     },
-
+    input: {
+      '&.editable-div-root': {
+        padding: [4, 8],
+        '& pre': {
+          fontFamily: 'system-ui',
+        },
+      },
+    },
     disabled: {
       opacity: 0.7,
       pointerEvents: 'none',

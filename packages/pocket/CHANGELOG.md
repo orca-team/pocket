@@ -1,5 +1,13 @@
 # @orca-fe/pocket
 
+## 2.1.3
+
+### Patch Changes
+
+- fix: PDFTooltip 编辑体验
+- Updated dependencies
+  - @orca-fe/pocket@2.1.3
+
 ## 2.1.2
 
 ### Patch Changes

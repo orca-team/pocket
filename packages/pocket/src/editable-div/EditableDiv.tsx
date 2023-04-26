@@ -28,6 +28,8 @@ export interface EditableDivProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   compact?: boolean;
   trigger?: 'dblclick' | 'click' | 'mouseup' | 'mousedown' | 'focus';
   transparent?: boolean;
+  stopPropagationWhenEditing?: boolean;
+  breakWord?: boolean;
 }
 
 const EditableDiv = React.forwardRef<HTMLDivElement, EditableDivProps>((props, pRef) => {
@@ -41,6 +43,8 @@ const EditableDiv = React.forwardRef<HTMLDivElement, EditableDivProps>((props, p
     compact,
     trigger = 'dblclick',
     transparent,
+    stopPropagationWhenEditing,
+    breakWord,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -91,6 +95,9 @@ const EditableDiv = React.forwardRef<HTMLDivElement, EditableDivProps>((props, p
   useEventListener(
     'keydown',
     (e: KeyboardEvent) => {
+      if (editing) {
+        e.stopPropagation();
+      }
       const { key, ctrlKey, altKey, shiftKey } = e;
 
       if (key === 'Escape') {
@@ -134,6 +141,7 @@ const EditableDiv = React.forwardRef<HTMLDivElement, EditableDivProps>((props, p
         [styles.editing]: editing,
         [styles.compact]: compact,
         [styles.transparent]: transparent,
+        [styles.breakWord]: breakWord,
       })} ${className}`}
       {...otherProps}
     >

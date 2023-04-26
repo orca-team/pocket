@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 1.4.5
+
+### Patch Changes
+
+- fix: PDFTooltip 编辑体验
+
 ## 1.4.4
 
 ### Patch Changes

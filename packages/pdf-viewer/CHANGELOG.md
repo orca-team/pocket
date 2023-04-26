@@ -1,5 +1,13 @@
 # @orca-fe/pdf-viewer
 
+## 1.8.8
+
+### Patch Changes
+
+- fix: PDFTooltip 编辑体验
+- Updated dependencies
+  - @orca-fe/pocket@2.1.3
+
 ## 1.8.7
 
 ### Patch Changes
