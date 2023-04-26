@@ -1,12 +1,6 @@
 # @orca-fe/pdf-viewer
 
-## 2.0.0
-
-### Major Changes
-
-- fix: 复制事件
-
-## 1.8.6
+## 1.8.7
 
 ### Patch Changes
 
