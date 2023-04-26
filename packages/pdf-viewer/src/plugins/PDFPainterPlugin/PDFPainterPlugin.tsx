@@ -7,6 +7,7 @@ import { useControllableValue, useMemoizedFn } from 'ahooks';
 import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
 import { changeArr } from '@orca-fe/tools';
 import produce from 'immer';
+import rfdc from 'rfdc';
 import ToolbarPortal from '../../ToolbarPortal';
 import { IconAddShape, IconEllipse, IconFreedom, IconLine, IconRectangle } from '../../icon/icon';
 import ToolbarButton from '../../ToolbarButton';
@@ -15,6 +16,8 @@ import SimplePropsEditor from '../SimplePropsEditor';
 import PopupBox from '../PopupBox';
 import type { PropsType } from '../SimplePropsEditor/def';
 import useStyle from './PDFPainterPlugin.style';
+
+const deepClone = rfdc();
 
 export type { PainterRef, ShapeDataType, ShapeType };
 
@@ -286,7 +289,12 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
                 offset: [0, -5],
               }}
               popup={(
-                <PopupBox style={{ pointerEvents: 'initial' }}>
+                <PopupBox
+                  style={{ pointerEvents: 'initial' }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
                   <SimplePropsEditor
                     value={{
                       stroke: shape['stroke'],
@@ -314,7 +322,8 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
                       getPopupContainer: () => _painter.refs[pageIndex]?.getRoot() ?? document.body,
                       popupAlign: {
                         overflow: {
-                          adjustY: false,
+                          adjustY: true,
+                          shiftX: true,
                         },
                       },
                     }}
@@ -334,13 +343,31 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
                           produce(dataList, (_dataList) => {
                             if (_dataList[pageIndex]) {
                               // eslint-disable-next-line no-param-reassign
-                              _dataList[pageIndex].push(_dataList[pageIndex][index]);
+                              const shape = deepClone(_dataList[pageIndex][index]);
+                              const offset = 16;
+                              switch (shape.type) {
+                                case 'line':
+                                  shape.point1 = shape.point1.map(v => v + offset) as typeof shape.point1;
+                                  shape.point2 = shape.point2.map(v => v + offset) as typeof shape.point2;
+                                  break;
+                                case 'line-path':
+                                  shape.points = shape.points.map(p => [p[0] + offset, p[1] + offset]);
+                                  break;
+                                case 'ellipse':
+                                case 'rectangle':
+                                  shape.x += offset;
+                                  shape.y += offset;
+                                  break;
+                              }
+                              _dataList[pageIndex].push(shape);
                             }
                           }),
                           'add',
                           pageIndex,
                           index,
                         );
+
+                        setChecked([pageIndex, dataList[pageIndex].length]);
                       }}
                       style={{ color: '#333' }}
                     >

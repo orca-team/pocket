@@ -150,7 +150,7 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1(jss@10.10.0)
       '@orca-fe/pocket':
-        specifier: ^2.1.0
+        specifier: ^2.1.1
         version: link:../pocket
       '@orca-fe/simple-jss':
         specifier: ^0.0.1
@@ -196,13 +196,13 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1(jss@10.10.0)
       '@orca-fe/painter':
-        specifier: ^1.4.2
+        specifier: ^1.4.3
         version: link:../painter
       '@orca-fe/pdfjs-dist-browserify':
         specifier: ^3.2.147
         version: registry.npmjs.org/@orca-fe/pdfjs-dist-browserify@3.2.147
       '@orca-fe/pocket':
-        specifier: ^2.1.0
+        specifier: ^2.1.1
         version: link:../pocket
       '@orca-fe/simple-jss':
         specifier: ^0.0.1
@@ -245,7 +245,7 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       '@orca-fe/pocket':
-        specifier: ^2.1.0
+        specifier: ^2.1.1
         version: 'link:'
       '@orca-fe/tools':
         specifier: ^0.8.1

@@ -57,7 +57,6 @@ export default createUseStyles(
       boxShadow: '0 0 12px rgba(125, 125, 125, 0.3)',
       backgroundColor: '#222222',
       borderRadius: '12px',
-      width: '232px',
 
       '& .react-colorful__pointer': {
         width: 18,

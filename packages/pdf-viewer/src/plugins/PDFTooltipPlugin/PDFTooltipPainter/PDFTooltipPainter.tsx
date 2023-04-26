@@ -127,7 +127,11 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
             popupVisible={!changing && !item.disabled && checked === index}
             getPopupContainer={getPopupContainer}
             popup={(
-              <PopupBox>
+              <PopupBox
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
                 <SimplePropsEditor
                   value={{ fontSize, color }}
                   propsDef={propsDef}

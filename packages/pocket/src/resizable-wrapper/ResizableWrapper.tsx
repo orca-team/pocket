@@ -143,7 +143,7 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
             [styles.handleVerticalTop]: verticalPosition === 'top',
           })}
           draggable
-          onDragStart={(e) => {
+          onMouseDown={(e) => {
             e.preventDefault();
             if (height != null) {
               setDragging({
@@ -162,7 +162,7 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
             [styles.handleHorizontalLeft]: horizontalPosition === 'left',
           })}
           draggable
-          onDragStart={(e) => {
+          onMouseDown={(e) => {
             e.preventDefault();
             if (width != null) {
               setDragging({
