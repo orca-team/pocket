@@ -149,7 +149,7 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
                   <IconButton
                     size="small"
                     onClick={() => {
-                      setData(data => [...data, { ...item, x: item.x + 10, y: item.y + 40 }], 'change', index);
+                      setData(data => [...data, { ...item, x: item.x + 10, y: item.y + 40 }], 'add', data.length);
                       check(data.length);
                     }}
                     style={{ color: '#333' }}

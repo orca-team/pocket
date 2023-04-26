@@ -364,7 +364,7 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
                           }),
                           'add',
                           pageIndex,
-                          index,
+                          dataList.length,
                         );
 
                         setChecked([pageIndex, dataList[pageIndex].length]);
