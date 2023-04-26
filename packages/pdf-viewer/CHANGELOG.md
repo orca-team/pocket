@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.8.6
+
+### Patch Changes
+
+- fix: 复制事件参数传递有误
+
 ## 1.8.5
 
 ### Patch Changes
