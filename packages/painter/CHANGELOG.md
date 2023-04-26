@@ -1,5 +1,13 @@
 # @orca-fe/painter
 
+## 1.4.4
+
+### Patch Changes
+
+- fix: PDFPainter 屬性編輯器面板的點擊事件
+- Updated dependencies
+  - @orca-fe/pocket@2.1.2
+
 ## 1.4.3
 
 ### Patch Changes
