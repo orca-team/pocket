@@ -68,6 +68,10 @@ import type { LoadingDivProps } from './loading-div';
 import LoadingDiv from './loading-div';
 import type { SvgIconProps } from './svg-icon';
 import SvgIcon from './svg-icon';
+import type { VirtualCalendarProps, VirtualCalendarRefType, CardCalendarProps } from './virtual-calendar';
+import VirtualCalendar, { useCalendarRef, CardCalendar } from './virtual-calendar';
+import type { WeeklyCalendarProps } from './weekly-calendar';
+import WeeklyCalendar from './weekly-calendar';
 
 export type {
   EqRatioBoxProps,
@@ -111,6 +115,10 @@ export type {
   SliderProps,
   LoadingDivProps,
   SvgIconProps,
+  VirtualCalendarProps,
+  VirtualCalendarRefType,
+  CardCalendarProps,
+  WeeklyCalendarProps,
 };
 
 export {
@@ -149,4 +157,8 @@ export {
   Slider,
   LoadingDiv,
   SvgIcon,
+  VirtualCalendar,
+  useCalendarRef,
+  CardCalendar,
+  WeeklyCalendar,
 };
