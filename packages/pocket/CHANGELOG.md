@@ -1,5 +1,16 @@
 # @orca-fe/pocket
 
+## 2.2.0
+
+### Minor Changes
+
+- feat: VirtualCalendar & WeeklyCalendar
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/pocket@2.2.0
+
 ## 2.1.3
 
 ### Patch Changes
