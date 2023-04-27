@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.8.9
+
+### Patch Changes
+
+- fix: tooltip-style
+
 ## 1.8.8
 
 ### Patch Changes

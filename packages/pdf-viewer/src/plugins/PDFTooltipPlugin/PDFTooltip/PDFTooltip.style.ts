@@ -29,6 +29,7 @@ export default createUseStyles(
     input: {
       '&.editable-div-root': {
         padding: [4, 8],
+        minHeight: '1.5em',
         '& pre': {
           fontFamily: 'system-ui',
         },
