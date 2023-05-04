@@ -1,4 +1,5 @@
 import jssAutoPrefix from '@orca-fe/jss-plugin-auto-prefix';
+import type { JssStyle } from 'jss';
 import { createUseStyles } from '../utils/jss';
 
 const prefix = 'context-menu';
@@ -69,15 +70,15 @@ export default createUseStyles(
       flex: 1,
     },
     icon: {
-      extend: [styleNoWrap, styleCenter],
+      extend: [styleNoWrap, styleCenter] as JssStyle,
       width: 25,
     },
     arrow: {
-      extend: [styleNoWrap, styleCenter],
+      extend: [styleNoWrap, styleCenter] as JssStyle,
       width: 25,
     },
     extra: {
-      extend: [styleNoWrap, styleCenter],
+      extend: [styleNoWrap, styleCenter] as JssStyle,
       color: 'rgba(0, 0, 0, 0.45)',
     },
   },

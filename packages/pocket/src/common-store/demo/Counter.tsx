@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './Counter.less';
+import styles from './Counter.module.less';
 import CounterStore from './CounterStore';
 
 export interface CounterProps extends React.HTMLAttributes<HTMLDivElement> {

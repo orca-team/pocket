@@ -10,6 +10,7 @@ module.exports = {
           ['@orca-fe/pdf-viewer', './packages/pdf-viewer/src'],
           ['@orca-fe/painter', './packages/painter/src'],
           ['@orca-fe/transformer', './packages/transformer/src'],
+          ['@orca-fe/dnd', './packages/dnd/src'],
         ],
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
       },

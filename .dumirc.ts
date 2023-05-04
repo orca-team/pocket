@@ -21,6 +21,7 @@ export default defineConfig({
     '@orca-fe/pocket': resolve('packages', 'pocket', 'src'),
     '@orca-fe/tools': resolve('packages', 'tools', 'src'),
     '@orca-fe/transformer': resolve('packages', 'transformer', 'src'),
+    '@orca-fe/dnd': resolve('packages', 'dnd', 'src'),
   },
 
   resolve: {
@@ -31,6 +32,7 @@ export default defineConfig({
       { type: 'pro-component/painter', dir: 'packages/painter/src' },
       { type: 'pro-component/pdf-viewer', dir: 'packages/pdf-viewer/src' },
       { type: 'pro-component/transformer', dir: 'packages/transformer/src' },
+      { type: 'pro-component/dnd', dir: 'packages/dnd/src' },
     ],
   },
 

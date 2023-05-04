@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.5.1
+
+### Patch Changes
+
+- feat: update package.json
+
 ## 1.5.0
 
 ### Minor Changes

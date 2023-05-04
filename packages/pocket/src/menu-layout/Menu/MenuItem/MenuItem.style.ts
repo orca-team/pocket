@@ -1,4 +1,5 @@
 import jssAutoPrefix from '@orca-fe/jss-plugin-auto-prefix';
+import type { JssStyle } from 'jss';
 import { createUseStyles } from '../../../utils/jss';
 
 export const prefix = 'orca-menu-item';
@@ -84,7 +85,7 @@ export default createUseStyles(
     },
     checked: {},
     root: {
-      extend: [colorTransitionStyle],
+      extend: [colorTransitionStyle] as JssStyle,
       position: 'relative',
       alignItems: 'center',
       height: '100%',
@@ -105,7 +106,7 @@ export default createUseStyles(
           },
         },
       },
-
+      orcaMenuSubMenu: {},
       [`&.${prefix}-theme-light`]: {
         '& $link': {
           color: 'rgba(0, 0, 0, 0.65)',
@@ -172,7 +173,7 @@ export default createUseStyles(
     },
 
     link: {
-      extend: [colorTransitionStyle],
+      extend: [colorTransitionStyle] as JssStyle,
       boxSizing: 'border-box',
       position: 'relative',
       width: '100%',

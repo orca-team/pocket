@@ -1,5 +1,11 @@
 # @orca-fe/tools
 
+## 0.8.2
+
+### Patch Changes
+
+- feat: update package.json
+
 ## 0.8.1
 
 ### Patch Changes
