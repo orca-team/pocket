@@ -26,7 +26,10 @@ lalala
 
 ### TransformerBox
 
-| 属性名称 | 描述                                         | 类型      | 默认值  | 版本号 |
-| -------- | -------------------------------------------- | --------- | ------- | ------ |
-| disabled | 是否禁用                                     | `boolean` | `false` |        |
-| checked  | 是否选中状态，选中状态下，才可以进行边框调整 | `boolean` | `false` |        |
+| 属性名称     | 描述               | 类型     | 默认值 | 版本号 |
+| ------------ | ------------------ | -------- | ------ | ------ |
+| defaultData  | 默认数据（非受控） | Object[] | []     |        |
+| data         | 数据               | Object[] | []     |        |
+| onChange     | 数据变化事件       | function | -      |        |
+| children     | 渲染自定义子节点   | function | -      |        |
+| customHandle | 是否自定义拖拽按钮 | boolean  | false  |        |
