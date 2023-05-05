@@ -11,11 +11,13 @@ title: DnD 拖拽
 
 `yarn add @orca-fe/dnd`
 
-# SortableList 可拖拽列表
+基于 [dnd-kit](https://dndkit.com/) 实现的更贴合业务功能开发的组件集合
+
+# SortableList 可拖拽排序列表
 
 ## 功能简介
 
-lalala
+可拖拽排序列表，最简单的拖拽排序实现。
 
 ## 示例
 
