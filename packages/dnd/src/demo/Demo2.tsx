@@ -3,10 +3,9 @@
  * description: 开启 `customHandle` 并使用 `SortHandle` 包裹自定义拖拽按钮。注意：`SortHandle` 包裹的组件需要能够响应 `onPointerDown` 事件
  */
 import React, { useState } from 'react';
-import { SortableList } from '@orca-fe/dnd';
+import { SortableList, SortHandle } from '@orca-fe/dnd';
 import { IconButton } from '@orca-fe/pocket';
 import { MenuOutlined } from '@ant-design/icons';
-import { SortHandle } from '../SortableList';
 
 const defaultData = [
   { title: 'title1', content: 'content1' },
