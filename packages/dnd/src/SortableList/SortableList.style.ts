@@ -9,6 +9,7 @@ export default createUseStyles(
       position: 'relative',
     },
     item: {
+      touchAction: 'none',
       transform: 'translate(var(--translate-x), var(--translate-y))',
       transition: 'var(--transition)',
     },
