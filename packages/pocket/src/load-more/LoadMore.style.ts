@@ -1,5 +1,5 @@
-import { createUseStyles } from '@orca-fe/simple-jss';
 import jssAutoPrefix from '@orca-fe/jss-plugin-auto-prefix';
+import { createUseStyles } from '../utils/jss';
 
 const prefix = 'orca-load-more';
 
