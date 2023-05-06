@@ -20,6 +20,7 @@ import HotkeyManagerContext from './hotkey-manager/HotkeyManagerContext';
 import useGetState from './useGetState';
 import useMergedRefs from './useMergedRefs';
 import useCombineKeyListener from './useCombineKeyListener';
+import useLoadMore from './useLoadMore';
 
 export {
   useWindowSize,
@@ -39,6 +40,7 @@ export {
   useGetState,
   useMergedRefs,
   useCombineKeyListener,
+  useLoadMore,
 
   // events
   useEventEmitter,
