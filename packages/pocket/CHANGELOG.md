@@ -1,5 +1,17 @@
 # @orca-fe/pocket
 
+## 2.3.0
+
+### Minor Changes
+
+- feat: useLoadMore & LoadMore
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/pocket@2.3.0
+  - @orca-fe/hooks@1.6.0
+
 ## 2.2.1
 
 ### Patch Changes

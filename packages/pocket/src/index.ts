@@ -72,6 +72,8 @@ import type { VirtualCalendarProps, VirtualCalendarRefType, CardCalendarProps } 
 import VirtualCalendar, { useCalendarRef, CardCalendar } from './virtual-calendar';
 import type { WeeklyCalendarProps } from './weekly-calendar';
 import WeeklyCalendar from './weekly-calendar';
+import type { LoadMoreProps } from './load-more';
+import LoadMore from './load-more';
 
 export type {
   EqRatioBoxProps,
@@ -119,6 +121,7 @@ export type {
   VirtualCalendarRefType,
   CardCalendarProps,
   WeeklyCalendarProps,
+  LoadMoreProps,
 };
 
 export {
@@ -161,4 +164,5 @@ export {
   useCalendarRef,
   CardCalendar,
   WeeklyCalendar,
+  LoadMore,
 };
