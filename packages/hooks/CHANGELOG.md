@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.6.1
+
+### Patch Changes
+
+- fix: useLoadMore export
+
 ## 1.6.0
 
 ### Minor Changes
