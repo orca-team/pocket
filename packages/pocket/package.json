@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/pocket",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "UI components by orca-team",
   "keywords": [
     "react",
@@ -39,9 +39,9 @@
     "clear": "rimraf lib es"
   },
   "dependencies": {
-    "@orca-fe/hooks": "^1.6.0",
+    "@orca-fe/hooks": "^1.6.1",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
-    "@orca-fe/pocket": "^2.3.0",
+    "@orca-fe/pocket": "^2.3.1",
     "@orca-fe/tools": "^0.8.2",
     "@rc-component/trigger": "1.5.8",
     "@types/react-window": "^1.8.5",
