@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import type { IconButtonProps } from '@orca-fe/pocket';
 import { useEventListener } from 'ahooks';
 import { FolderOpenOutlined } from '@ant-design/icons';
-import ToolbarButton from '../ToolbarButton';
+import { IconButton } from '@orca-fe/pocket';
 
 const ef = () => {};
 
@@ -11,11 +11,7 @@ export interface OpenFileButtonProps extends IconButtonProps {
 }
 
 const OpenFileButton = (props: OpenFileButtonProps) => {
-  const {
-    onOpenFile = ef,
-    children = <FolderOpenOutlined />,
-    ...otherProps
-  } = props;
+  const { onOpenFile = ef, children = <FolderOpenOutlined />, ...otherProps } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -46,7 +42,9 @@ const OpenFileButton = (props: OpenFileButtonProps) => {
           display: 'none',
         }}
       />
-      <ToolbarButton ref={buttonRef} icon={children} {...otherProps} />
+      <IconButton ref={buttonRef} {...otherProps}>
+        {children}
+      </IconButton>
     </span>
   );
 };

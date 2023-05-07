@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import PdfViewer, { PDFPainterPlugin, PDFTooltipPlugin, usePdfViewerRef } from '@orca-fe/pdf-viewer';
+import PdfViewer, { PDFOpenFileButtonPlugin, PDFPainterPlugin, PDFTooltipPlugin, usePdfViewerRef } from '@orca-fe/pdf-viewer';
 
 const Demo1 = () => {
   const pdfViewerRef = usePdfViewerRef();
@@ -24,7 +24,8 @@ const Demo1 = () => {
           }
         }}
       />
-      <PdfViewer ref={pdfViewerRef} title="标题" style={{ height: 600 }}>
+      <PdfViewer ref={pdfViewerRef} title="标题" dropFile style={{ height: 600 }}>
+        <PDFOpenFileButtonPlugin />
         <PDFPainterPlugin />
         <PDFTooltipPlugin />
       </PdfViewer>

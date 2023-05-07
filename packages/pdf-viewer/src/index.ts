@@ -4,6 +4,7 @@ import OpenFileButton from './OpenFileButton';
 import PDFViewer from './PDFViewer';
 import PDFPainterPlugin from './plugins/PDFPainterPlugin';
 import PDFTooltipPlugin from './plugins/PDFTooltipPlugin';
+import PDFOpenFileButtonPlugin from './plugins/PDFOpenFileButtonPlugin';
 import type { ToolbarButtonProps } from './ToolbarButton';
 import ToolbarButton from './ToolbarButton';
 import ToolbarPortal from './ToolbarPortal';
@@ -35,3 +36,7 @@ export * from './plugins/PDFPainterPlugin';
 export { PDFTooltipPlugin };
 
 export type * from './plugins/PDFTooltipPlugin';
+
+export { PDFOpenFileButtonPlugin };
+
+export type * from './plugins/PDFOpenFileButtonPlugin';

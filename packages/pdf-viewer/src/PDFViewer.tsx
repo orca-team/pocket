@@ -3,6 +3,7 @@ import { clamp, roundBy } from '@orca-fe/tools';
 import { useDebounceEffect, useDebounceFn, useEventListener, useMemoizedFn, useSetState } from 'ahooks';
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useGetState, useSizeListener } from '@orca-fe/hooks';
+import cn from 'classnames';
 import type { PDFDocumentProxy } from '@orca-fe/pdfjs-dist-browserify';
 import { getDocument } from '@orca-fe/pdfjs-dist-browserify';
 import * as pdfjsWorker from '@orca-fe/pdfjs-dist-browserify/build/pdf.worker';
@@ -58,6 +59,9 @@ export interface PDFViewerProps extends Omit<React.HTMLAttributes<HTMLDivElement
 
   /** 缩放事件 */
   onZoomChange?: (zoom: number) => void;
+
+  /** 是否支持拖拽打开文件 */
+  dropFile?: boolean;
 }
 
 const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef) => {
@@ -76,6 +80,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     hideToolbar,
     defaultTitle,
     defaultZoom = 'autoWidth',
+    dropFile,
     ...otherProps
   } = props;
 
@@ -87,7 +92,12 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
 
   const styles = useStyle();
 
+  // 最外层的根节点
   const rootRef = useRef<HTMLDivElement>(null);
+  // 包裹页面部分的 body（带滚动条）
+  const [bodyRef, setBodyRef] = useState<HTMLDivElement | null>(null);
+
+  // 页面容器（随页面长度）
   const pageContainerRef = useRef<HTMLDivElement>(null);
 
   const [current, setCurrent] = useState(0);
@@ -452,6 +462,50 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     { target: pageContainerRef },
   );
 
+  // 拖拽并打开文件
+  useEventListener(
+    'dragenter',
+    (ev) => {
+      (ev.currentTarget as HTMLElement).setAttribute('over', '1');
+    },
+    { target: bodyRef },
+  );
+  useEventListener(
+    'dragleave',
+    (ev) => {
+      (ev.currentTarget as HTMLElement).removeAttribute('over');
+    },
+    { target: bodyRef },
+  );
+  useEventListener(
+    'dragover',
+    (ev) => {
+      if (dropFile) {
+        ev.preventDefault();
+        ev.stopPropagation();
+      }
+    },
+    { target: bodyRef },
+  );
+  useEventListener(
+    'drop',
+    (ev) => {
+      (ev.currentTarget as HTMLElement).removeAttribute('over');
+      if (dropFile) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        if (ev.dataTransfer) {
+          const { files } = ev.dataTransfer;
+          if (files.length > 0) {
+            const [file] = files;
+            if (file.name.endsWith('.pdf')) load(file);
+          }
+        }
+      }
+    },
+    { target: bodyRef },
+  );
+
   /* 工具栏 */
   const [toolbarLeftDom, setToolbarLeftDom] = useState<HTMLDivElement | null>(null);
   const [toolbarRightDom, setToolbarRightDom] = useState<HTMLDivElement | null>(null);
@@ -517,8 +571,9 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
           pdfViewer: pdfViewerHandle,
           internalState,
           setInternalState,
+          bodyElement: bodyRef,
         }),
-        [loading, pages, viewports, zoom, current, pageCoverRefs, internalState],
+        [loading, pages, viewports, zoom, current, pageCoverRefs, internalState, bodyRef],
       )}
     >
       <PDFToolbarContext.Provider
@@ -546,7 +601,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
               setToolbarRightDom(dom);
             }}
           />
-          <div className={styles.pagesOuter}>
+          <div ref={setBodyRef} className={cn(styles.pagesOuter, { [styles.droppable]: dropFile })}>
             <div
               ref={pageContainerRef}
               className={styles.pages}
@@ -583,7 +638,13 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
 
           {/* 页码 */}
           {pages.length > 0 && (
-            <ZoomAndPageController className={styles.pageController} max={2 ** maxZoom} min={2 ** minZoom} zoomMode={zoomMode} onZoomModeChange={setZoomMode} />
+            <ZoomAndPageController
+              className={styles.pageController}
+              max={2 ** maxZoom}
+              min={2 ** minZoom}
+              zoomMode={zoomMode}
+              onZoomModeChange={setZoomMode}
+            />
           )}
         </div>
       </PDFToolbarContext.Provider>
