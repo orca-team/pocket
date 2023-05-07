@@ -67,6 +67,7 @@ title: PDF 阅读器 PdfViewer
 | disabledPluginPainter(deprecated at `1.0.0`) | 禁用内置的绘图插件                                                                                                      | `boolean`                                                                                   | `false`       | `0.4.4` |
 | disabledPluginTooltip(deprecated at `1.0.0`) | 禁用内置的批注插件                                                                                                      | `boolean`                                                                                   | `false`       | `0.4.4` |
 | onZoomChange                                 | 缩放事件                                                                                                                | `(zoom: number) => void`                                                                    | `-`           | `0.4.5` |
+| dropFile                                     | 是否支持拖拽打开文件                                                                                                    | `boolean`                                                                                   | `false`       | `1.9.0` |
 
 ### PDFViewerHandle
 
