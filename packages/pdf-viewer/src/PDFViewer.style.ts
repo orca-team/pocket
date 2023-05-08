@@ -11,6 +11,7 @@ export default createUseStyles(
       overflow: 'hidden',
       border: '1px solid #DDD',
       userSelect: 'none',
+      boxSizing: 'border-box',
 
       '& .pdf-viewer-default-empty-tips': {
         pointerEvents: 'none',
@@ -79,6 +80,20 @@ export default createUseStyles(
       bottom: 24,
       left: '50%',
       transform: 'translateX(-50%)',
+    },
+    droppable: {
+      '&[over]:after': {
+        pointerEvents: 'none',
+        boxSizing: 'border-box',
+        border: '1px solid #19f',
+        content: '\'\'',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0,129,255,0.3)',
+      },
     },
   },
   {

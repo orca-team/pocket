@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.9.0
+
+### Minor Changes
+
+- feat: 添加打开文件插件
+
 ## 1.8.16
 
 ### Patch Changes

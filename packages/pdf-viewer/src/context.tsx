@@ -86,6 +86,7 @@ export type PDFViewerContextType = {
   pdfViewer: PDFViewerHandle;
   forceUpdate: () => void;
   pageCoverRefs: (HTMLDivElement | null)[];
+  bodyElement: HTMLDivElement | null;
   viewports: PageViewport[];
   internalState: PDFViewerInternalStateType;
   setInternalState: SetState<PDFViewerInternalStateType>;
@@ -102,10 +103,17 @@ const PDFViewerContext = React.createContext<PDFViewerContextType>({
   internalState: {
     drawingPluginName: '',
   },
+  bodyElement: null,
   setInternalState: () => {},
   pdfViewer: {
     async load() {},
     async close() {},
+    getFileSource() {
+      return null;
+    },
+    getPDFInstance() {
+      return undefined;
+    },
     changePage() {},
     getZoom() {
       return 0;
