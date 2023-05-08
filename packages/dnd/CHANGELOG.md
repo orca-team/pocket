@@ -1,5 +1,11 @@
 # @orca-fe/dnd
 
+## 0.1.0
+
+### Minor Changes
+
+- feat: SortableListHelper
+
 ## 0.0.4
 
 ### Patch Changes
