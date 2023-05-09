@@ -89,7 +89,7 @@ export interface SortableListHelperProps<T extends Object> extends DndContextPro
   onDragStartIndex?(index: number): void;
 
   /** 自定义 key 管理器 */
-  keyManager?: KeyManager<T>;
+  keyManager?: KeyManager<T> | string;
 }
 
 /**
@@ -111,7 +111,10 @@ const SortableListHelper = <T extends Object>(props: SortableListHelperProps<T>)
   );
 
   // 通过映射的方式，实现无需传递 key 也可实现排序
-  const [keyMgr] = useState(() => keyManager ?? new KeyManager<T>());
+  const [keyMgr] = useState(() => {
+    if (typeof keyManager === 'string') return new KeyManager<T>(keyManager);
+    return keyManager ?? new KeyManager<T>();
+  });
 
   const keys = useMemo(() => keyMgr.getKeys(data), [data]);
 

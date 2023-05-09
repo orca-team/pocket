@@ -41,7 +41,7 @@ type SortableItemChildren<T> = React.ReactNode | ((item: T, index: number, args?
 | onChange     | 数据变化事件       | `(data: T[], from: number, to: number, originData: T[]) => void` | -      |        |
 | children     | 渲染自定义子节点   | `SortableItemChildren`                                           | -      |        |
 | customHandle | 是否自定义拖拽按钮 | `boolean`                                                        | false  |        |
-| keyManager   | 自定义 key 管理器  | `KeyManager<T>`                                                  | -      |        |
+| keyManager   | 自定义 key 管理器  | `KeyManager<T>` \| `string`                                      | -      |        |
 
 ## SortHandle
 
@@ -65,5 +65,5 @@ type SortableItemChildren<T> = React.ReactNode | ((item: T, index: number, args?
 | onChange         | 数据变化事件       | `(data: T[], from: number, to: number, originData: T[]) => void` | -      |        |
 | children         | 子节点             | `ReactNode`                                                      | -      |        |
 | customHandle     | 是否自定义拖拽按钮 | `boolean`                                                        | false  |        |
-| keyManager       | 自定义 key 管理器  | `KeyManager<T>`                                                  | -      |        |
+| keyManager       | 自定义 key 管理器  | `KeyManager<T>` \| `string`                                      | -      |        |
 | onDragStartIndex | 拖拽开始时的下标   | `(index: number) => void`                                        | -      |        |

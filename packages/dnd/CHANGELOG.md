@@ -1,5 +1,11 @@
 # @orca-fe/dnd
 
+## 0.2.0
+
+### Minor Changes
+
+- feat: do not use KeyManager
+
 ## 0.1.0
 
 ### Minor Changes

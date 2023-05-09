@@ -53,7 +53,7 @@ export interface SortableListProps<T extends Object> extends Omit<React.HTMLAttr
   customHandle?: boolean;
 
   /** 自定义 key 管理器 */
-  keyManager?: KeyManager<T>;
+  keyManager?: KeyManager<T> | string;
 }
 
 const SortableList = <T extends Object>(props: SortableListProps<T>) => {
@@ -68,7 +68,10 @@ const SortableList = <T extends Object>(props: SortableListProps<T>) => {
   const activeItem = data[activeIndex];
 
   // 通过映射的方式，实现无需传递 key 也可实现排序
-  const [keyMgr] = useState(() => keyManager ?? new KeyManager<T>());
+  const [keyMgr] = useState(() => {
+    if (typeof keyManager === 'string') return new KeyManager<T>(keyManager);
+    return keyManager ?? new KeyManager<T>();
+  });
 
   const keys = useMemo(() => keyMgr.getKeys(data), [data]);
 
