@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/tools",
-  "version": "0.8.2",
+  "version": "0.9.0",
   "description": "front-end tools",
   "keywords": [
     "tools",
@@ -31,7 +31,8 @@
   },
   "scripts": {
     "build": "father build",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0",

@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/pocket",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "UI components by orca-team",
   "keywords": [
     "react",
@@ -36,13 +36,14 @@
     "build": "father build",
     "prepublishOnly": "npm run build",
     "autod": "autod",
+    "test": "jest --passWithNoTests",
     "clear": "rimraf lib es"
   },
   "dependencies": {
     "@orca-fe/hooks": "^1.6.1",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
-    "@orca-fe/pocket": "^2.3.2",
-    "@orca-fe/tools": "^0.8.2",
+    "@orca-fe/pocket": "^2.3.3",
+    "@orca-fe/tools": "^0.9.0",
     "@rc-component/trigger": "1.5.8",
     "@types/react-window": "^1.8.5",
     "ahooks": "^3.7.6",

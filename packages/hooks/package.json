@@ -29,6 +29,7 @@
   "scripts": {
     "build": "father build",
     "prepublishOnly": "npm run build",
+    "test": "jest --passWithNoTests",
     "clear": "rimraf lib"
   },
   "dependencies": {

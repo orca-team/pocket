@@ -7,6 +7,7 @@
     "preserveSymlinks": true,
     "importHelpers": true,
     "jsx": "react",
+    "allowJs": true,
     "esModuleInterop": true,
     "declaration": true,
     "noImplicitAny": false,
@@ -28,7 +29,7 @@
     "outDir": "./lib",
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*", "packages/**/*", ".eslintrc.cjs", "checkDep.ts", ".dumi/**/*", ".dumirc.ts"],
+  "include": ["src/**/*", "packages/**/*", ".eslintrc.cjs", "checkDep.ts", ".dumi/**/*", ".dumirc.ts", "jest.config.cjs"],
   "exclude": ["node_modules", "lib", "es", "dist", "typings", "**/__test__", "test", "docs", "tests"],
   "ts-node": {
     "esm": true,

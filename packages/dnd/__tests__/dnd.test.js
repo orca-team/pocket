@@ -1,5 +1,5 @@
 'use strict';
 
-describe('@orca-fe/pocket', () => {
+describe('@orca-fe/dnd', () => {
   it('needs tests', () => {});
 });
