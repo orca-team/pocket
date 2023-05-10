@@ -26,7 +26,7 @@ export default () => {
   const [data, setData] = useState(defaultData);
 
   return (
-    <SortableListHelper customHandle data={data} onChange={setData}>
+    <SortableListHelper keyManager="key" customHandle data={data} onChange={setData}>
       <Table
         columns={[
           {

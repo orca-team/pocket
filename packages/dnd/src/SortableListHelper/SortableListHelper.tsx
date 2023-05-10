@@ -49,6 +49,7 @@ export const SortableListHelperItem = (props: SortableListHelperItemProps) => {
 
   return (
     <SortableItemContext.Provider
+      key={keys[row]}
       value={{
         sortable,
         row,
