@@ -16,7 +16,9 @@ export default createUseStyles(
     handle: {
       cursor: 'move',
     },
-    dragging: {},
+    dragging: {
+      zIndex: 1,
+    },
   },
   {
     classNamePrefix: prefix,

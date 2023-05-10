@@ -1,5 +1,11 @@
 # @orca-fe/dnd
 
+## 0.3.0
+
+### Minor Changes
+
+- feat: add SortableListHelperDragSort
+
 ## 0.2.1
 
 ### Patch Changes
