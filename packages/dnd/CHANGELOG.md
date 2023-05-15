@@ -1,5 +1,11 @@
 # @orca-fe/dnd
 
+## 0.2.2
+
+### Patch Changes
+
+- feat: update dependencies
+
 ## 0.2.1
 
 ### Patch Changes

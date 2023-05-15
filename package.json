@@ -68,7 +68,7 @@
   "devDependencies": {
     "@orca-fe/eslint-config": "^2.3.3",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
-    "@orca-fe/simple-jss": "^0.0.1",
+    "@orca-fe/simple-jss": "^0.0.2",
     "@types/file-saver": "^2.0.5",
     "@types/inquirer": "^9.0.3",
     "@types/jest": "^29.5.1",

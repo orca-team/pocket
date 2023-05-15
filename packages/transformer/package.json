@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/transformer",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "Transformer Container",
   "keywords": [
     "react",
@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
-    "@orca-fe/simple-jss": "^0.0.1",
+    "@orca-fe/simple-jss": "^0.0.2",
     "ahooks": "^3.7.6",
     "classnames": "^2.3.2",
     "gl-matrix": "^3.4.3",

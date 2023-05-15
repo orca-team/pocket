@@ -1,12 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, {
-  useDebugValue,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { Classes, Styles, StyleSheetFactoryOptions, Plugin } from 'jss';
 import { create, getDynamicStyles } from 'jss';
 import preset from 'jss-preset-default';
@@ -25,9 +18,7 @@ interface CreateUseStylesOptions extends BaseOptions {
   plugins?: Plugin[];
 }
 
-const useIsomorphicEffect = isSSR
-  ? React.useInsertionEffect || useLayoutEffect
-  : useEffect;
+const useIsomorphicEffect = isSSR ? React.useInsertionEffect || useLayoutEffect : useEffect;
 
 let index = 0;
 const getSheetIndex = () => index++;
@@ -53,7 +44,7 @@ export default function createUseStyles<C extends string = string, Props = any>(
   styles: Styles<C, Props>,
   options: CreateUseStylesOptions = {},
 ): (data?: Props) => Classes<C> {
-  const { index = getSheetIndex(), name = '', plugins = [] } = options;
+  const { index = getSheetIndex(), name = '', plugins = [], ...otherProps } = options;
 
   const key = {};
 
@@ -65,6 +56,7 @@ export default function createUseStyles<C extends string = string, Props = any>(
     index,
     meta: `${name ? `${name}-` : ''}-jss-default`,
     link: false,
+    ...otherProps,
   });
 
   return function useStyles(data?: Props) {
@@ -152,10 +144,7 @@ export default function createUseStyles<C extends string = string, Props = any>(
       };
     }, []);
 
-    const classes = useMemo<Classes<C>>(
-      () => mergeClasses(sheet.classes, dynamicSheet?.classes),
-      [sheet, dynamicSheet],
-    );
+    const classes = useMemo<Classes<C>>(() => mergeClasses(sheet.classes, dynamicSheet?.classes), [sheet, dynamicSheet]);
 
     useDebugValue(classes);
 
