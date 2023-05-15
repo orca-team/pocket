@@ -44,8 +44,11 @@ export default function createUseStyles<C extends string = string, Props = any>(
   styles: Styles<C, Props>,
   options: CreateUseStylesOptions = {},
 ): (data?: Props) => Classes<C> {
-  const { index = getSheetIndex(), name = '', plugins = [], ...otherProps } = options;
-
+  const { index = getSheetIndex(), plugins = [], classNamePrefix: _classNamePrefix = '', ...otherProps } = options;
+  let classNamePrefix = _classNamePrefix;
+  if (classNamePrefix && !classNamePrefix.endsWith('-')) {
+    classNamePrefix += '-';
+  }
   const key = {};
 
   const jss = create(preset());
@@ -54,8 +57,9 @@ export default function createUseStyles<C extends string = string, Props = any>(
   const dynamicStyles = getDynamicStyles(styles as Styles);
   const sheet = jss.createStyleSheet(styles, {
     index,
-    meta: `${name ? `${name}-` : ''}-jss-default`,
+    meta: `${_classNamePrefix}-jss-default`,
     link: false,
+    classNamePrefix,
     ...otherProps,
   });
 
@@ -88,7 +92,7 @@ export default function createUseStyles<C extends string = string, Props = any>(
       if (!dynamicStyles) return null;
       const dynamicSheet = jss.createStyleSheet(dynamicStyles, {
         index,
-        meta: `${name ? `${name}-` : ''}-jss-dynamic`,
+        meta: `${_classNamePrefix}-jss-dynamic`,
         link: true,
       });
 

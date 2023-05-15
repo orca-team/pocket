@@ -1,5 +1,14 @@
 # @orca-fe/painter
 
+## 1.4.14
+
+### Patch Changes
+
+- feat: update dependencies
+- Updated dependencies
+  - @orca-fe/transformer@0.3.8
+  - @orca-fe/pocket@2.3.5
+
 ## 1.4.13
 
 ### Patch Changes
