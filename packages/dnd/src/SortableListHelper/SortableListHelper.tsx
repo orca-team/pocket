@@ -1,7 +1,7 @@
 import type { ComponentClass, FunctionComponent, HTMLAttributes, ReactNode, ReactHTML } from 'react';
 import React, { createContext, createElement, useContext, useMemo, useState } from 'react';
-import type { DndContextProps } from '@dnd-kit/core';
-import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import type { DndContextProps, DragOverlayProps } from '@dnd-kit/core';
+import { closestCenter, DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { useControllableValue } from 'ahooks';
 import cn from 'classnames';
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -12,6 +12,26 @@ import useStyles from './SortableListHelper.style';
 const eArr = [];
 
 const ef = () => undefined;
+
+type DragOverlayContextType = {
+  item: any;
+  index: number;
+};
+
+const DragOverlayContext = React.createContext<DragOverlayContextType>({
+  item: undefined,
+  index: -1,
+});
+
+export const SortableListHelperDragSort = (
+  props: Omit<DragOverlayProps, 'children'> & {
+    children: (data: any, index: number) => ReactNode;
+  },
+) => {
+  const { children = () => null, ...otherProps } = props;
+  const { item, index } = useContext(DragOverlayContext);
+  return <DragOverlay {...otherProps}>{children(item, index)}</DragOverlay>;
+};
 
 type SortableListHelperContextType = {
   keys: string[];
@@ -104,6 +124,10 @@ const SortableListHelper = <T extends Object>(props: SortableListHelperProps<T>)
     defaultValuePropName: 'defaultData',
     valuePropName: 'data',
   });
+
+  const [activeIndex, setActiveIndex] = useState<number>(-1);
+  const activeItem = data[activeIndex];
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     // useSensor(KeyboardSensor, {
@@ -131,20 +155,24 @@ const SortableListHelper = <T extends Object>(props: SortableListHelperProps<T>)
 
   return (
     <SortableListHelperContext.Provider value={useMemo(() => ({ keys, data, customHandle }), [keys, data, customHandle])}>
-      <DndContext
-        onDragStart={(event) => {
-          onDragStartIndex(keys.indexOf(`${event.active.id}`));
-          onDragStart?.(event);
-        }}
-        onDragEnd={handleDragEnd}
-        {...otherProps}
-        collisionDetection={closestCenter}
-        sensors={sensors}
-      >
-        <SortableContext items={keys} strategy={verticalListSortingStrategy}>
-          {children}
-        </SortableContext>
-      </DndContext>
+      <DragOverlayContext.Provider value={useMemo(() => ({ item: activeItem, index: activeIndex }), [activeItem, activeIndex])}>
+        <DndContext
+          onDragStart={(event) => {
+            const index = keys.indexOf(`${event.active.id}`);
+            onDragStartIndex(index);
+            setActiveIndex(index);
+            onDragStart?.(event);
+          }}
+          onDragEnd={handleDragEnd}
+          {...otherProps}
+          collisionDetection={closestCenter}
+          sensors={sensors}
+        >
+          <SortableContext items={keys} strategy={verticalListSortingStrategy}>
+            {children}
+          </SortableContext>
+        </DndContext>
+      </DragOverlayContext.Provider>
     </SortableListHelperContext.Provider>
   );
 };

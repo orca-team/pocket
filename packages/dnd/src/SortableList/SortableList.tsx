@@ -1,12 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import cn from 'classnames';
-import { DragOverlay } from '@dnd-kit/core';
 import { useControllableValue } from 'ahooks';
 import useStyles from './SortableList.style';
 import { SortableItemContext } from '../utils/SortHandle';
 import type { SortableItemChildren } from '../utils/defs';
 import type { SortableListHelperItemProps } from '../SortableListHelper';
-import SortableListHelper, { SortableListHelperItem } from '../SortableListHelper';
+import SortableListHelper, { SortableListHelperDragSort, SortableListHelperItem } from '../SortableListHelper';
 import KeyManager from '../KeyManager';
 
 const eArr = [];
@@ -64,8 +63,6 @@ const SortableList = <T extends Object>(props: SortableListProps<T>) => {
     defaultValuePropName: 'defaultData',
     valuePropName: 'data',
   });
-  const [activeIndex, setActiveIndex] = useState<number>(-1);
-  const activeItem = data[activeIndex];
 
   // 通过映射的方式，实现无需传递 key 也可实现排序
   const [keyMgr] = useState(() => {
@@ -77,22 +74,15 @@ const SortableList = <T extends Object>(props: SortableListProps<T>) => {
 
   return (
     <div className={cn(styles.root, className)} {...otherProps}>
-      <SortableListHelper
-        customHandle={customHandle}
-        data={data}
-        onChange={setData}
-        onDragStartIndex={(index) => {
-          setActiveIndex(index);
-        }}
-      >
+      <SortableListHelper customHandle={customHandle} data={data} onChange={setData}>
         {data.map((item, index) => (
           <SortableItem<T> key={keys[index]} row={index}>
             {children}
           </SortableItem>
         ))}
-        <DragOverlay className={cn({ [styles.handle]: !customHandle })}>
-          {activeItem != null && (typeof children === 'function' ? children(activeItem, activeIndex) : children)}
-        </DragOverlay>
+        <SortableListHelperDragSort className={cn({ [styles.handle]: !customHandle })}>
+          {(activeItem, activeIndex) => activeItem != null && (typeof children === 'function' ? children(activeItem, activeIndex) : children)}
+        </SortableListHelperDragSort>
       </SortableListHelper>
     </div>
   );

@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/dnd",
-  "version": "0.2.2",
+  "version": "0.3.1",
   "description": "A collection of commonly used drag-and-drop functions",
   "keywords": [
     "react",
