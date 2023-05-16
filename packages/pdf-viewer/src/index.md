@@ -92,23 +92,23 @@ export default () => {
 };
 ```
 
-| 方法名称                                | 描述                             | 类型                                                              | 版本                      |
-| --------------------------------------- | -------------------------------- | ----------------------------------------------------------------- | ------------------------- |
-| load                                    | 加载文件                         | `(file: ArrayBuffer, title?:string) => Promise<void>`             | `0.2.0` 增加 `title` 属性 |
-| close                                   | 关闭文件                         | `() => void`                                                      | `0.1.0`                   |
-| setZoom                                 | 设置缩放级别                     | `(zoom: number) => void`                                          |                           |
-| getZoom                                 | 取得当前缩放级别                 | `() => number`                                                    |                           |
-| changePage                              | 翻页（从 0 开始）                | `(pageIndex: number, anim?: boolean) => void`                     |                           |
-| scrollTo                                | 控制页面滚动到特定未知           | 同 `HTMLElement.scrollTo`                                         |                           |
-| getCurrentPage                          | 获取当前窗口中的页码，从 0 开始  | `() => number`                                                    |                           |
-| getPageCount                            | 获取当前页面数量                 | `() => number`                                                    |                           |
-| getPageBlob                             | 获取页面的渲染信息（图片二进制） | `(index: number, options?: { scale?: number },) => Promise<Blob>` |                           |
-| getAllMarkData(deprecated at `1.0.0`)   | 获取当前页面中所有的标注数据     | `() => ShapeDataType[][]`                                         | `0.0.5`                   |
-| setMarkData(deprecated at `1.0.0`)      | 更新某一页的标注数据             | `(page: number, markData: ShapeDataType[]) => void`               | `0.0.5`                   |
-| setAllMarkData(deprecated at `1.0.0`)   | 更新所有页面的标注数据           | `(markData: ShapeDataType[][]) => void`                           | `0.0.5`                   |
-| clearAllMarkData(deprecated at `1.0.0`) | 清除所有页面的标注数据           | `() => void`                                                      | `0.0.6`                   |
-| setTitle                                | 设置文件标题                     | `(title: string) => void`                                         | `0.2.0`                   |
-| getFileSource                           | 获取当前加载的文件资源           | `() => string / URL / ArrayBuffer / undefined`                    | `1.7.0`                   |
+| 方法名称                                | 描述                             | 类型                                                                                          | 版本                      |
+| --------------------------------------- | -------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------- |
+| load                                    | 加载文件                         | `(file: ArrayBuffer, options?: {title?: string, resetScrollTop?: boolean }) => Promise<void>` | `0.2.0` 增加 `title` 属性 |
+| close                                   | 关闭文件                         | `() => void`                                                                                  | `0.1.0`                   |
+| setZoom                                 | 设置缩放级别                     | `(zoom: number) => void`                                                                      |                           |
+| getZoom                                 | 取得当前缩放级别                 | `() => number`                                                                                |                           |
+| changePage                              | 翻页（从 0 开始）                | `(pageIndex: number, anim?: boolean) => void`                                                 |                           |
+| scrollTo                                | 控制页面滚动到特定未知           | 同 `HTMLElement.scrollTo`                                                                     |                           |
+| getCurrentPage                          | 获取当前窗口中的页码，从 0 开始  | `() => number`                                                                                |                           |
+| getPageCount                            | 获取当前页面数量                 | `() => number`                                                                                |                           |
+| getPageBlob                             | 获取页面的渲染信息（图片二进制） | `(index: number, options?: { scale?: number },) => Promise<Blob>`                             |                           |
+| getAllMarkData(deprecated at `1.0.0`)   | 获取当前页面中所有的标注数据     | `() => ShapeDataType[][]`                                                                     | `0.0.5`                   |
+| setMarkData(deprecated at `1.0.0`)      | 更新某一页的标注数据             | `(page: number, markData: ShapeDataType[]) => void`                                           | `0.0.5`                   |
+| setAllMarkData(deprecated at `1.0.0`)   | 更新所有页面的标注数据           | `(markData: ShapeDataType[][]) => void`                                                       | `0.0.5`                   |
+| clearAllMarkData(deprecated at `1.0.0`) | 清除所有页面的标注数据           | `() => void`                                                                                  | `0.0.6`                   |
+| setTitle                                | 设置文件标题                     | `(title: string) => void`                                                                     | `0.2.0`                   |
+| getFileSource                           | 获取当前加载的文件资源           | `() => string / URL / ArrayBuffer / undefined`                                                | `1.7.0`                   |
 
 ## API - PDFTooltipPlugin
 

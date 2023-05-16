@@ -258,7 +258,10 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     _this.pdfDoc = undefined;
     setPages([]);
   });
-  const load = useMemoizedFn<PDFViewerHandle['load']>(async (file, title) => {
+  const load = useMemoizedFn<PDFViewerHandle['load']>(async (file, _options = {}) => {
+    const options = typeof _options === 'string' ? { title: _options } : _options;
+    const { title, resetScrollTop = true } = options || {};
+
     const key = `${Date.now()}_${Math.random()}`;
     _this.pdfLoadingKey = key;
     setLoading(true);
@@ -288,7 +291,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
           setTitle(title);
         }
         const dom = pageContainerRef.current;
-        if (dom) {
+        if (dom && resetScrollTop) {
           dom.scrollTop = 0;
         }
       }
