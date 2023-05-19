@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.11.2
+
+### Patch Changes
+
+- feat: onPageChange
+
 ## 1.11.1
 
 ### Patch Changes

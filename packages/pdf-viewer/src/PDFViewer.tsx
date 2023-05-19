@@ -46,6 +46,9 @@ export interface PDFViewerProps extends Omit<React.HTMLAttributes<HTMLDivElement
   /** 页面滚动事件 */
   onPageScroll?: React.UIEventHandler<HTMLDivElement>;
 
+  /** 页面变化事件 */
+  onPageChange?: (page: number) => void;
+
   /** 渲染自定义页面覆盖物 */
   renderPageCover?: RenderPageCoverFnType;
 
@@ -85,6 +88,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     defaultZoom = 'autoWidth',
     dropFile,
     pdfJsParams,
+    onPageChange = ef,
     ...otherProps
   } = props;
 
@@ -124,6 +128,10 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   }>({
     zooming: false,
   });
+
+  useEffect(() => {
+    onPageChange(current);
+  }, [current]);
 
   const [, setForceUpdateCount] = useState(0);
   const forceUpdate = useMemoizedFn(() => {
