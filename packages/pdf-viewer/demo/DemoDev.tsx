@@ -24,7 +24,7 @@ const Demo1 = () => {
           }
         }}
       />
-      <PdfViewer ref={pdfViewerRef} title="标题" dropFile style={{ height: 600 }}>
+      <PdfViewer ref={pdfViewerRef} title="标题" dropFile pdfJsParams={{ cMapUrl: '/pdfjs-bcmaps/' }} style={{ height: 600 }}>
         <PDFOpenFileButtonPlugin />
         <PDFPainterPlugin />
         <PDFTooltipPlugin />

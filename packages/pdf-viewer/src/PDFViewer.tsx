@@ -7,6 +7,7 @@ import cn from 'classnames';
 import type { PDFDocumentProxy } from '@orca-fe/pdfjs-dist-browserify';
 import { getDocument } from '@orca-fe/pdfjs-dist-browserify';
 import * as pdfjsWorker from '@orca-fe/pdfjs-dist-browserify/build/pdf.worker';
+import type { DocumentInitParameters } from '@orca-fe/pdfjs-dist-browserify/types/src/display/api';
 import type { PageViewport, PDFViewerHandle, RenderPageCoverFnType, PDFViewerInternalStateType, SourceType } from './context';
 import PDFViewerContext, { PDFToolbarContext } from './context';
 import PDFPage from './PDFPage';
@@ -62,6 +63,8 @@ export interface PDFViewerProps extends Omit<React.HTMLAttributes<HTMLDivElement
 
   /** 是否支持拖拽打开文件 */
   dropFile?: boolean;
+
+  pdfJsParams?: DocumentInitParameters;
 }
 
 const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef) => {
@@ -81,6 +84,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     defaultTitle,
     defaultZoom = 'autoWidth',
     dropFile,
+    pdfJsParams,
     ...otherProps
   } = props;
 
@@ -272,7 +276,12 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     if (key !== _this.pdfLoadingKey) return;
 
     try {
-      const pdfDoc = await getDocument(pdfContent).promise;
+      const pdfDoc = await getDocument({
+        enableXfa: true,
+        ...pdfJsParams,
+        url: typeof pdfContent === 'string' || pdfContent instanceof URL ? pdfContent : undefined,
+        data: typeof pdfContent === 'string' || pdfContent instanceof URL ? undefined : pdfContent,
+      }).promise;
       if (pdfDoc) {
         _this.pdfDoc = pdfDoc;
         const pageLength = pdfDoc.numPages;

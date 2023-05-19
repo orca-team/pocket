@@ -4,11 +4,7 @@
  */
 
 import React from 'react';
-import PdfViewer, {
-  OpenFileButton,
-  ToolbarPortal,
-  usePdfViewerRef,
-} from '@orca-fe/pdf-viewer';
+import PdfViewer, { OpenFileButton, ToolbarPortal, usePdfViewerRef } from '@orca-fe/pdf-viewer';
 import { IconButton } from '@orca-fe/pocket';
 import { InfoOutlined } from '@ant-design/icons';
 import { message } from 'antd';
@@ -17,7 +13,7 @@ const Page = () => {
   const pdfViewerRef = usePdfViewerRef();
   return (
     <div>
-      <PdfViewer ref={pdfViewerRef} style={{ height: 600 }}>
+      <PdfViewer ref={pdfViewerRef} pdfJsParams={{ cMapUrl: '/pdfjs-bcmaps/' }} style={{ height: 600 }}>
         {/* 在左侧添加一个打开文件的按钮 */}
         <ToolbarPortal placement="left">
           <OpenFileButton

@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.11.0
+
+### Minor Changes
+
+- feat: pdf add cmap
+
 ## 1.10.0
 
 ### Minor Changes

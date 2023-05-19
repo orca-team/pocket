@@ -23,7 +23,7 @@ const Page = () => {
           }
         }}
       />
-      <PdfViewer ref={pdfViewerRef} style={{ height: 600 }} />
+      <PdfViewer ref={pdfViewerRef} pdfJsParams={{ cMapUrl: '/pdfjs-bcmaps/' }} style={{ height: 600 }} />
     </div>
   );
 };

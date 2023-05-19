@@ -4,12 +4,7 @@
  */
 
 import React from 'react';
-import PdfViewer, {
-  OpenFileButton,
-  ToolbarButton,
-  ToolbarPortal,
-  usePdfViewerRef,
-} from '@orca-fe/pdf-viewer';
+import PdfViewer, { OpenFileButton, ToolbarButton, ToolbarPortal, usePdfViewerRef } from '@orca-fe/pdf-viewer';
 import { Tooltip } from 'antd';
 import { ClearOutlined, ImportOutlined, SaveOutlined } from '@ant-design/icons';
 import saveAs from 'file-saver';
@@ -43,7 +38,7 @@ const Page = () => {
   };
   return (
     <div>
-      <PdfViewer ref={pdfViewerRef} style={{ height: 600 }}>
+      <PdfViewer ref={pdfViewerRef} pdfJsParams={{ cMapUrl: '/pdfjs-bcmaps/' }} style={{ height: 600 }}>
         <ToolbarPortal placement="left">
           <OpenFileButton
             onOpenFile={(file) => {
