@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/pdf-viewer",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "description": "PDF Viewer",
   "keywords": [
     "react",

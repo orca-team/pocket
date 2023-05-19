@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.11.1
+
+### Patch Changes
+
+- fix: pdf getCurrent no latest
+
 ## 1.11.0
 
 ### Minor Changes

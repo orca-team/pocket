@@ -104,7 +104,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   // 页面容器（随页面长度）
   const pageContainerRef = useRef<HTMLDivElement>(null);
 
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent, getCurrent] = useGetState(0);
 
   const [zoom, setZoom, getZoom] = useGetState(typeof defaultZoom === 'number' ? defaultZoom : 0);
 
@@ -313,7 +313,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     const dom = pageContainerRef.current;
     if (dom) dom.scrollTo(...args);
   });
-  const getCurrentPage = useMemoizedFn<PDFViewerHandle['getCurrentPage']>(() => current);
+  const getCurrentPage = useMemoizedFn<PDFViewerHandle['getCurrentPage']>(() => getCurrent());
   const getPageCount = useMemoizedFn<PDFViewerHandle['getPageCount']>(() => getPages().length);
   const getRoot = useMemoizedFn<PDFViewerHandle['getRoot']>(() => rootRef.current);
 
