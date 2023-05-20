@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.11.3
+
+### Patch Changes
+
+- fix: pdf-viewer data undefined
+
 ## 1.11.2
 
 ### Patch Changes
