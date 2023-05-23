@@ -284,12 +284,16 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     if (key !== _this.pdfLoadingKey) return;
 
     try {
-      const pdfDoc = await getDocument({
+      const pdfJsGetDocumentParams: DocumentInitParameters = {
         enableXfa: true,
         ...pdfJsParams,
-        url: typeof pdfContent === 'string' || pdfContent instanceof URL ? pdfContent : undefined,
-        data: typeof pdfContent === 'string' || pdfContent instanceof URL ? undefined : pdfContent,
-      }).promise;
+      };
+      if (typeof pdfContent === 'string' || pdfContent instanceof URL) {
+        pdfJsGetDocumentParams.url = pdfContent;
+      } else {
+        pdfJsGetDocumentParams.data = pdfContent;
+      }
+      const pdfDoc = await getDocument(pdfJsGetDocumentParams).promise;
       if (pdfDoc) {
         _this.pdfDoc = pdfDoc;
         const pageLength = pdfDoc.numPages;
