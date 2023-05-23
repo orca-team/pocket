@@ -1,5 +1,13 @@
 # @orca-fe/pocket
 
+## 2.3.6
+
+### Patch Changes
+
+- fix: CardCalendar.style
+- Updated dependencies
+  - @orca-fe/pocket@2.3.6
+
 ## 2.3.5
 
 ### Patch Changes
