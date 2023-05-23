@@ -38,8 +38,54 @@ export default createUseStyles(
       '& .virtual-calendar-date-cell-checked': dateCellStyle,
       '& .virtual-calendar-date-cell-checked:hover': dateCellStyle,
       '& .virtual-calendar-date-cell-checked.virtual-calendar-date-cell-current-month': dateCellStyle,
-    },
 
+      // 可選中模式下的效果
+      '&$checkable': {
+        '&$checkModeDay': {
+          '& $date': {
+            '&:hover': {
+              '& $dateStr::before': {
+                backgroundColor: 'var(--virtual-calendar-hover-color)',
+                opacity: '1',
+              },
+            },
+          },
+
+          '& .virtual-calendar-date-cell-checked': {
+            '& $date': {
+              '&, &:hover': {
+                '& $dateStr': {
+                  color: 'var(--virtual-calendar-text-color-checked)',
+                  '&::before': {
+                    backgroundColor: 'var(--virtual-calendar-primary-color)',
+                    opacity: '1',
+                  },
+                },
+              },
+            },
+          },
+        },
+
+        '&$checkModeWeek': {
+          '& .virtual-calendar-week-root': {
+            '&::before': {
+              backgroundColor: 'var(--virtual-calendar-primary-color)',
+            },
+            '&:hover': {
+              '&::before': {
+                opacity: '0.1',
+              },
+            },
+            '&.virtual-calendar-week-checked': {
+              '&::before': {
+                opacity: '0.2',
+              },
+            },
+          },
+        },
+      },
+    },
+    checkable: {},
     date: {},
 
     dateStr: {
@@ -71,7 +117,7 @@ export default createUseStyles(
     },
 
     checkModeWeek: {
-      '.virtual-calendar-week-root': {
+      '& .virtual-calendar-week-root': {
         '&::before': {
           content: '\' \'',
           position: 'absolute',
@@ -82,51 +128,6 @@ export default createUseStyles(
           borderRadius: '1em',
           opacity: '0',
           transition: 'opacity 300ms, background-color 300ms',
-        },
-      },
-    },
-
-    // 可選中模式下的效果
-    checkable: {
-      '&$checkModeDay': {
-        '& $date': {
-          '&:hover': {
-            '& $date-str::before': {
-              backgroundColor: 'var(--virtual-calendar-hover-color)',
-              opacity: '1',
-            },
-          },
-        },
-
-        '& .virtual-calendar-date-cell-checked': {
-          '& $date': {
-            '&, &:hover': {
-              $dateStr: {
-                color: 'var(--virtual-calendar-text-color-checked)',
-
-                '&::before': {
-                  backgroundColor: 'var(--virtual-calendar-primary-color)',
-                  opacity: '1',
-                },
-              },
-            },
-          },
-        },
-      },
-
-      '&$checkModeWeek': {
-        '& .virtual-calendar-week-root': {
-          '&:hover': {
-            '&::before': {
-              opacity: '0.15',
-            },
-          },
-
-          '&.virtual-calendar-week-checked': {
-            '&::before': {
-              opacity: '0.2',
-            },
-          },
         },
       },
     },

@@ -25,7 +25,15 @@ const CardCalendar = React.forwardRef<VirtualCalendarRefType, CardCalendarProps>
   return (
     <VirtualCalendar
       ref={ref}
-      className={cn(styles.root, { [styles.checkModeWeek]: checkMode === 'week', [styles.checkModeDay]: checkMode === 'day' }, className)}
+      className={cn(
+        styles.root,
+        {
+          [styles.checkModeWeek]: checkMode === 'week',
+          [styles.checkModeDay]: checkMode === 'day',
+          [styles.checkable]: !!checkMode,
+        },
+        className,
+      )}
       rowHeight={rowHeight}
       monthFormat={monthFormat}
       weekHeaderFormat={weekHeaderFormat}
