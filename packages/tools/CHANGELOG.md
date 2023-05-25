@@ -1,5 +1,11 @@
 # @orca-fe/tools
 
+## 0.9.1
+
+### Patch Changes
+
+- update dependencies
+
 ## 0.9.0
 
 ### Minor Changes

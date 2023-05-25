@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.12.0
+
+### Minor Changes
+
+- upgrade pdfjs-dist
+
 ## 1.11.4
 
 ### Patch Changes
