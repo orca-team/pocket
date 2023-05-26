@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.12.2
+
+### Patch Changes
+
+- fix: className
+
 ## 1.12.1
 
 ### Patch Changes

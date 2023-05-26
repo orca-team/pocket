@@ -645,7 +645,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                   <div key={pageIndex} className={styles.pageContainer} style={{ width, height, marginBottom: gap }}>
                     {shouldRender && (
                       <>
-                        <PDFPage clapssName={styles.page} index={pageIndex} zoom={zoom} render={shouldRender} />
+                        <PDFPage className={styles.page} index={pageIndex} zoom={zoom} render={shouldRender} />
                         <div ref={node => (pageCoverRefs[pageIndex] = node)} className={styles.pageCover} />
                         <div className={styles.pageCover}>{renderPageCover(pageIndex, { viewport, zoom })}</div>
                       </>
