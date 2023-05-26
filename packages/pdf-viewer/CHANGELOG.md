@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.12.1
+
+### Patch Changes
+
+- fix: Painter 插件会遮挡其它插件的问题
+
 ## 1.12.0
 
 ### Minor Changes

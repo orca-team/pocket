@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import PdfViewer, { usePdfViewerRef } from '@orca-fe/pdf-viewer';
+import PdfViewer, { PDFPainterPlugin, PDFTooltipPlugin, usePdfViewerRef } from '@orca-fe/pdf-viewer';
 
 const Page = () => {
   const pdfViewerRef = usePdfViewerRef();
@@ -23,7 +23,10 @@ const Page = () => {
           }
         }}
       />
-      <PdfViewer ref={pdfViewerRef} pdfJsParams={{ cMapUrl: '/pdfjs-bcmaps/' }} style={{ height: 600 }} />
+      <PdfViewer ref={pdfViewerRef} pdfJsParams={{ cMapUrl: '/pdfjs-bcmaps/' }} style={{ height: 600 }}>
+        <PDFTooltipPlugin />
+        <PDFPainterPlugin />
+      </PdfViewer>
     </div>
   );
 };
