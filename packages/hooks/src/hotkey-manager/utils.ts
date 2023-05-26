@@ -7,16 +7,36 @@ export function isMac() {
   return info?.os === 'Mac OS' || info?.os === 'darwin';
 }
 
+const fnKeysOrder = {
+  Command: 1,
+  Ctrl: 2,
+  Alt: 3,
+  Shift: 4,
+};
+
+/**
+ * 格式化快捷键字符串，按顺序排列功能键
+ * @param hotkeyStr
+ */
+export function formatHotKeyStr(hotkeyStr: string) {
+  const hotkeyArr = hotkeyStr.split('+');
+  const fnKeys: string[] = [];
+  const normalKeys: string[] = [];
+  for (const key of hotkeyArr) {
+    if (fnKeysOrder[key]) {
+      fnKeys.push(key);
+    } else {
+      normalKeys.push(key || '+');
+    }
+  }
+  return [...fnKeys.sort((a, b) => fnKeysOrder[a] - fnKeysOrder[b]), ...normalKeys].join('+');
+}
+
 export function toHotkeyStr(event: React.KeyboardEvent | KeyboardEvent) {
   const { metaKey, ctrlKey, altKey, shiftKey, key } = event;
-  if (
-    key === 'Command' ||
-    key === 'Control' ||
-    key === 'Meta' ||
-    key === 'Shift' ||
-    key === 'Alt'
-  )
+  if (key === 'Command' || key === 'Control' || key === 'Meta' || key === 'Shift' || key === 'Alt') {
     return '';
+  }
   const keyArr: string[] = [];
   if (isMac()) {
     if (metaKey) {
@@ -28,7 +48,7 @@ export function toHotkeyStr(event: React.KeyboardEvent | KeyboardEvent) {
     if (ctrlKey) {
       keyArr.push('Ctrl');
     }
-    if (key.length === 1) {
+    if (/^[a-z]$/.test(key)) {
       keyArr.push(key.toUpperCase());
     } else {
       keyArr.push(key);
@@ -43,7 +63,7 @@ export function toHotkeyStr(event: React.KeyboardEvent | KeyboardEvent) {
     if (altKey) {
       keyArr.push('Alt');
     }
-    if (key.length === 1) {
+    if (/^[a-z]$/.test(key)) {
       keyArr.push(key.toUpperCase());
     } else {
       keyArr.push(key);
@@ -64,15 +84,9 @@ export function isInput(element: HTMLElement) {
 }
 
 type HotkeyDefType = string | string[];
-export type HotkeyDefsType = Record<
-  string,
-  [HotkeyDefType] | [HotkeyDefType, HotkeyDefType]
->;
+export type HotkeyDefsType = Record<string, [HotkeyDefType] | [HotkeyDefType, HotkeyDefType]>;
 
-function smartForEach<T>(
-  arr: T | T[],
-  callback: (item: T, index: number) => void,
-) {
+function smartForEach<T>(arr: T | T[], callback: (item: T, index: number) => void) {
   if (Array.isArray(arr)) {
     arr.forEach(callback);
   } else {
@@ -90,17 +104,13 @@ export function createHotkeyCache(hotkey: HotkeyDefsType) {
     const [winKeys, macKeys = winKeys] = commands;
     smartForEach(winKeys, (hotKey) => {
       if (hotkeyMapping.has(hotKey)) {
-        console.warn(
-          `Duplicate hot-key '${hotKey}' for command [${hotkeyName}]`,
-        );
+        console.warn(`Duplicate hot-key '${hotKey}' for command [${hotkeyName}]`);
       } else {
         hotkeyMapping.set(hotKey, hotkeyName);
       }
       if (!macKeys) {
         if (macHotkeyMapping.has(hotKey)) {
-          console.warn(
-            `Duplicate hot-key '${hotKey}' for command(Mac) [${hotkeyName}]`,
-          );
+          console.warn(`Duplicate hot-key '${hotKey}' for command(Mac) [${hotkeyName}]`);
         } else {
           macHotkeyMapping.set(hotKey, hotkeyName);
         }
@@ -110,9 +120,7 @@ export function createHotkeyCache(hotkey: HotkeyDefsType) {
     if (macKeys) {
       smartForEach(macKeys, (hotKey) => {
         if (macHotkeyMapping.has(hotKey)) {
-          console.warn(
-            `Duplicate hot-key '${hotKey}' for command(Mac) [${hotkeyName}]`,
-          );
+          console.warn(`Duplicate hot-key '${hotKey}' for command(Mac) [${hotkeyName}]`);
         } else {
           macHotkeyMapping.set(hotKey, hotkeyName);
         }

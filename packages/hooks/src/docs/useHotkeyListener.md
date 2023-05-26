@@ -13,10 +13,17 @@ group:
 ```tsx
 import React from 'react';
 import { useHotkeyListener } from '@orca-fe/hooks';
+import { message } from 'antd';
 
 export default () => {
   useHotkeyListener('delete', () => {
-    console.log('delete');
+    message.info('delete');
+  });
+  useHotkeyListener('Ctrl+X', () => {
+    message.info('Ctrl+X');
+  });
+  useHotkeyListener('Ctrl+Shift+C', () => {
+    message.info('Ctrl+Shift+C');
   });
   return <div>Demo</div>;
 };

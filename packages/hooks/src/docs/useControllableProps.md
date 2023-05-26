@@ -12,7 +12,7 @@ group:
 
 ## 使用方式：
 
-```js
+```ts | pure
 import { useControlledProps } from "@orca-fe/hooks";
 
 const FuncComp = (props) => {

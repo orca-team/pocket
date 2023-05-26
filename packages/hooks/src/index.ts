@@ -14,9 +14,8 @@ import useNextTick, { useLayoutNextTick } from './useNextTick';
 import usePan from './usePan';
 import useService from './useService';
 import useInterval from './useInterval';
-import useHotkeyListener from './hotkey-manager/useHotkeyListener';
+import useHotkeyListener from './useHotkeyListener';
 import HotkeyManager from './hotkey-manager';
-import HotkeyManagerContext from './hotkey-manager/HotkeyManagerContext';
 import useGetState from './useGetState';
 import useMergedRefs from './useMergedRefs';
 import useCombineKeyListener from './useCombineKeyListener';
@@ -61,5 +60,4 @@ export {
   // hotkey
   useHotkeyListener,
   HotkeyManager,
-  HotkeyManagerContext,
 };
