@@ -18,6 +18,10 @@ export type HotkeyActionType = {
   input?: boolean;
   // 事件传递，默认不开启，事件被第一个监听器捕获之后就不会继续传递
   through?: boolean;
+  // 优先级
+  order?: number;
+  // 临时禁用
+  disabled?: boolean;
 };
 
 /**
@@ -49,6 +53,8 @@ const handleKeyDown = (e: KeyboardEvent) => {
 
   // 在监听器中查找 action
   for (const action of actionStack) {
+    // 禁用的监听器，跳过
+    if (action.disabled) continue;
     // 匹配事件名称（允许直接匹配）
     if (hotkeyName === action.hotkeyName || hotkeyStr === action.hotkeyName) {
       const triggerTarget = e.target as HTMLElement;
@@ -99,35 +105,41 @@ const registerHotkeyAction = (action) => {
     window.addEventListener('keydown', handleKeyDown);
   }
   actionStack.unshift(action);
+  actionStack.sort((a, b) => (b.order ?? 0) - (a.order ?? 0));
   return () => {
     unregisterHotkeyAction(action);
   };
 };
 
 const useHotkeyListener = (
-  hotkeyName: HotkeyActionType['hotkeyName'],
+  _hotkeyName: string | [string, string],
   action: HotkeyActionType['action'],
   options: Omit<HotkeyActionType, 'hotkeyName' | 'action'> = {},
 ) => {
   const getOptionTarget = useMemoizedFn(() => options.target?.());
   const memoAction = useMemoizedFn(action);
 
+  const [isMacEnv] = useState(() => isMac());
+
   const [actionObject] = useState<HotkeyActionType>({
     action: memoAction,
-    hotkeyName,
+    hotkeyName: '',
     target: getOptionTarget,
   });
+
+  const hotkeyName = (Array.isArray(_hotkeyName) ? _hotkeyName : [_hotkeyName, _hotkeyName])[isMacEnv ? 1 : 0];
 
   actionObject.hotkeyName = useMemo(() => formatHotKeyStr(hotkeyName), [hotkeyName]);
   actionObject.input = options.input;
   actionObject.through = options.through;
+  actionObject.disabled = options.disabled;
 
   useEffect(() => {
     registerHotkeyAction(actionObject);
     return () => {
       unregisterHotkeyAction(actionObject);
     };
-  }, []);
+  }, [actionObject.order]);
 };
 
 /**

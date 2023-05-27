@@ -18,7 +18,7 @@ const fnKeysOrder = {
  * 格式化快捷键字符串，按顺序排列功能键
  * @param hotkeyStr
  */
-export function formatHotKeyStr(hotkeyStr: string) {
+export function formatHotKeyStr(hotkeyStr: string = '') {
   const hotkeyArr = hotkeyStr.split('+');
   const fnKeys: string[] = [];
   const normalKeys: string[] = [];
