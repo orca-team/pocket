@@ -12,6 +12,12 @@ group:
 
 `0.10.x`
 
-> 该 hook 还在实验阶段，请谨慎使用。
+包裹异步接口，并实现 loading，结果，异常等状态管理。
 
-TODO
+```ts | pure
+import { useService } from '@orca-fe/hooks';
+
+const getUserInfo = () => axios.get('/api/user').then((resp) => resp.data);
+
+const getUserInfoService = useService(getUserInfo);
+```

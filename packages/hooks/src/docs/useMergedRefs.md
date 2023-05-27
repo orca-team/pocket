@@ -26,11 +26,11 @@ export default forwardRef<HTMLDivElement, Props>((props, ref) => {
 上的一些属性。你是不是会直接取用这个 `ref` 变量呢？
 
 但要注意的是，这里的 `ref` 是由外部使用者传入的，我们不知道使用者是传入了一个函数，或者一个 `Ref` 对象，或者他根本没有传入
-ref，那么 `ref` 的值就是 undefined。
+ref，那么 `ref` 的值则可能是 undefined。
 
-所以你可能想要在内部自己定义一个 `RefObject`，比如：
+所以你只能在内部自己定义一个 `RefObject`，比如：
 
-```ts
+```ts | pure
 import { useRef } from 'react';
 
 const rootRef = useRef<HTMLDivElement>();
@@ -38,9 +38,9 @@ const rootRef = useRef<HTMLDivElement>();
 
 但是 `<div></div>` 只能接收一个 `ref` 属性啊。
 
-所以我们可以写成这样。
+所以我们需要让这两个 ref 都能够传递到 element 上，就可以写成这样：
 
-```tsx
+```tsx | pure
 import React, { forwardRef, useEffect } from 'react';
 import { useMergedRefs } from '@orca-fe/hooks';
 

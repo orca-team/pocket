@@ -19,7 +19,7 @@ export type HotkeyActionType = {
   // 事件传递，默认不开启，事件被第一个监听器捕获之后就不会继续传递
   through?: boolean;
   // 优先级
-  order?: number;
+  priority?: number;
   // 临时禁用
   disabled?: boolean;
 };
@@ -80,7 +80,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
           }
         }
       }
-      const through = action.action(e) ?? action.through;
+      const through = action.action(e) ?? action.through ?? true;
 
       if (!through) {
         // 不传递事件，中断，并标记事件已被触发
@@ -105,7 +105,7 @@ const registerHotkeyAction = (action) => {
     window.addEventListener('keydown', handleKeyDown);
   }
   actionStack.unshift(action);
-  actionStack.sort((a, b) => (b.order ?? 0) - (a.order ?? 0));
+  actionStack.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
   return () => {
     unregisterHotkeyAction(action);
   };
@@ -133,13 +133,14 @@ const useHotkeyListener = (
   actionObject.input = options.input;
   actionObject.through = options.through;
   actionObject.disabled = options.disabled;
+  actionObject.priority = options.priority;
 
   useEffect(() => {
     registerHotkeyAction(actionObject);
     return () => {
       unregisterHotkeyAction(actionObject);
     };
-  }, [actionObject.order]);
+  }, [actionObject.priority]);
 };
 
 /**
