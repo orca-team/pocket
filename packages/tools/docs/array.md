@@ -108,21 +108,14 @@ export default () => {
 遍历数组并提取对象的 key，生成 Set 集合用于查询缓存，比如，用于判断名称是否重复。
 
 ```ts
-type Arr2KeysCallback<T> = (
-  item: T,
-  index: number,
-  array: T[],
-) => string | number;
+type Arr2KeysCallback<T> = (item: T, index: number, array: T[]) => string | number;
 
 /**
  * 遍历数组，并获取 键值缓存
  * @param arr 数组
  * @param callback 回调函数，用于获取指定键值，默认取 item.key
  */
-export function arr2Keys<T>(
-  arr: T[],
-  callback: PickKeyCallback<T> = (item) => item['key'],
-): Set<string | number>;
+export function arr2Keys<T>(arr: T[], callback: PickKeyCallback<T> = (item) => item['key']): Set<string | number>;
 ```
 
 ```tsx
@@ -200,11 +193,7 @@ export default () => {
                 >
                   <Input />
                 </Form.Item>
-                <Form.Item
-                  name="name"
-                  label="name"
-                  rules={[{ required: true }]}
-                >
+                <Form.Item name="name" label="name" rules={[{ required: true }]}>
                   <Input />
                 </Form.Item>
                 <Button type="primary" htmlType="submit">
@@ -233,10 +222,7 @@ export default () => {
  * @param arr 数组
  * @param callback 回调函数，用于获取指定键值，默认取 item.key
  */
-export function arr2KeyValues<T>(
-  arr: T[],
-  callback: Arr2KeysCallback<T> = (item) => item['key'],
-): Map<string | number, T>;
+export function arr2KeyValues<T>(arr: T[], callback: Arr2KeysCallback<T> = (item) => item['key']): Map<string | number, T>;
 ```
 
 ```tsx
@@ -267,10 +253,7 @@ const arr = [
 ];
 
 export default () => {
-  const dictMapping = useMemo(
-    () => arr2KeyValues(dict, (item) => item.code),
-    [dict],
-  );
+  const dictMapping = useMemo(() => arr2KeyValues(dict, (item) => item.code), [dict]);
   const columns: ColumnsType<any> = [
     {
       key: 'id',

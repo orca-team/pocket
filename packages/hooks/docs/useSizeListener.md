@@ -40,10 +40,7 @@ export default () => {
 
 ```ts
 function useSizeDebounceListener(
-  callback: (
-    size: { width: number; height: number },
-    scale?: { x: number; y: number },
-  ) => void,
+  callback: (size: { width: number; height: number }, scale?: { x: number; y: number }) => void,
   target: BasicTarget,
   debounceInterval = 300,
 ): void;

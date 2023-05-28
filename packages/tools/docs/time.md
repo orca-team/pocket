@@ -18,10 +18,7 @@ group:
  * @param input 需要格式化的时间
  * @param nowInput 指定对比的时间，默认为当前时间
  */
-function smartDateFromNow(
-  input: moment.MomentInput,
-  nowInput?: moment.MomentInput,
-): string;
+function smartDateFromNow(input: moment.MomentInput, nowInput?: moment.MomentInput): string;
 ```
 
 ```tsx
@@ -56,24 +53,14 @@ export default () => (
 
 ```ts
 type DateRange = { start?: moment.Moment; end?: moment.Moment };
-type DateRangeStrType =
-  | 'minute'
-  | 'hour'
-  | 'day'
-  | 'week'
-  | 'month'
-  | 'season'
-  | 'year';
+type DateRangeStrType = 'minute' | 'hour' | 'day' | 'week' | 'month' | 'season' | 'year';
 
 /**
  * 获取时间范围
  * @param type 范围类型 分钟，小时，日，周，季度，年
  * @param todayInput 指定范围依据的时间，默认为当前时间
  */
-function getDateRange(
-  type: DateRangeStrType,
-  todayInput?: moment.MomentInput,
-): DateRange;
+function getDateRange(type: DateRangeStrType, todayInput?: moment.MomentInput): DateRange;
 ```
 
 ```tsx
@@ -82,9 +69,7 @@ import moment from 'moment';
 import { getDateRange, DateRange } from '@orca-fe/tools';
 
 function formatRange(range: DateRange) {
-  return `${range.start?.format('YYYY-MM-DD HH:mm:ss')} ~ ${range.end?.format(
-    'YYYY-MM-DD HH:mm:ss',
-  )}`;
+  return `${range.start?.format('YYYY-MM-DD HH:mm:ss')} ~ ${range.end?.format('YYYY-MM-DD HH:mm:ss')}`;
 }
 
 export default () => (

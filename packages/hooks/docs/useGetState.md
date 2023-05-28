@@ -65,10 +65,7 @@ export default () => {
 
   return (
     <>
-      <div>
-        本案例分别在组件中通过 普通函数直接获取 (getCount1) 和 getState
-        (getCount2) 获取，请打开控制台查看 getCount1 和 getCount2 的差别
-      </div>
+      <div>本案例分别在组件中通过 普通函数直接获取 (getCount1) 和 getState (getCount2) 获取，请打开控制台查看 getCount1 和 getCount2 的差别</div>
       <div>当前组件的值为：</div>
       <Comp
         ref={ref}

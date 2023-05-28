@@ -41,6 +41,7 @@ export interface ServiceHandler<Args extends any[], Result> {
   /** 修改接口的结果 */
   mutate: (result: SetStateAction<Result>) => void;
 
+  /** 取消本次未完成的请求 */
   cancel: () => void;
 }
 
@@ -205,7 +206,8 @@ export function useService<Args extends any[], ServiceResult = any, Result = Fet
             onSuccess(formattedData, args);
           }
         } else if (typeof onError === 'function') {
-          onError(new Error('result is undefined'), args);
+          // 暂时禁用 onError 的触发逻辑，数据问题不做 Error 处理
+          // onError(new Error('result is undefined'), args);
         }
         if (typeof onFinish === 'function') {
           onFinish(res, args);

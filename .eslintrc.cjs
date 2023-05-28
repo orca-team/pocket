@@ -23,5 +23,7 @@ module.exports = {
     '@typescript-eslint/consistent-type-exports': ['error'],
     'max-len': ['error', 160],
     'react/jsx-max-depth': ['off'],
+    'react/react-in-jsx-scope': 'off',
+    'react/prop-types': 'off',
   },
 };

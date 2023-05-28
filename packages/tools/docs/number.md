@@ -99,11 +99,7 @@ export default () => {
   return (
     <div>
       {[100, 1, 1.1, 1.5, 1.24, 2.342, 0.3546, 0.1254151].map((value) => {
-        return (
-          <div key={value}>{`${value} 的小数长度为 ${decimalLength(
-            value,
-          )}`}</div>
-        );
+        return <div key={value}>{`${value} 的小数长度为 ${decimalLength(value)}`}</div>;
       })}
     </div>
   );
@@ -146,13 +142,7 @@ export default () => {
 
   return (
     <div>
-      <Slider
-        min={-100}
-        max={100}
-        step={0.01}
-        value={value}
-        onChange={setValue}
-      />
+      <Slider min={-100} max={100} step={0.01} value={value} onChange={setValue} />
       <div>调整值以查看不同函数下的表现</div>
       <div>{`origin value: ${value}`}</div>
       <div>{`round by 1: ${round1(value)}`}</div>
@@ -186,9 +176,7 @@ export default () => {
   return (
     <div>
       <Slider min={-360} max={360} step={1} value={value} onChange={setValue} />
-      <div>
-        调整值以查看不同函数下的表现，基于60°取整，蓝色指针是当前角度，黄色指针是取整后的角度
-      </div>
+      <div>调整值以查看不同函数下的表现，基于60°取整，蓝色指针是当前角度，黄色指针是取整后的角度</div>
       <Clock p1={value} p2={round(value)} />
       <p />
       <div>下面是增加了偏移后的对比</div>

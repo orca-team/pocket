@@ -27,12 +27,12 @@ export default defineConfig({
   resolve: {
     atomDirs: [
       { type: 'component', dir: 'packages/pocket/src' },
-      { type: 'hooks', dir: 'packages/hooks/src/docs' },
-      { type: 'tools', dir: 'packages/tools/src/docs' },
-      { type: 'pro-component/painter', dir: 'packages/painter/src' },
-      { type: 'pro-component/pdf-viewer', dir: 'packages/pdf-viewer/src' },
-      { type: 'pro-component/transformer', dir: 'packages/transformer/src' },
-      { type: 'pro-component/dnd', dir: 'packages/dnd/src' },
+      { type: 'hooks', dir: 'packages/hooks/docs' },
+      { type: 'tools', dir: 'packages/tools/docs' },
+      { type: 'pro-component/painter', dir: 'packages/painter/docs' },
+      { type: 'pro-component/pdf-viewer', dir: 'packages/pdf-viewer/docs' },
+      { type: 'pro-component/transformer', dir: 'packages/transformer/docs' },
+      { type: 'pro-component/dnd', dir: 'packages/dnd/docs' },
     ],
   },
 

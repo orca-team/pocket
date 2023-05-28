@@ -32,10 +32,7 @@ export default () => {
     setCount(count + 1);
   }, rootRef);
   return (
-    <div
-      ref={rootRef}
-      style={{ height: 200, width: 300, backgroundColor: '#ccf' }}
-    >
+    <div ref={rootRef} style={{ height: 200, width: 300, backgroundColor: '#ccf' }}>
       Click Me {count}
     </div>
   );

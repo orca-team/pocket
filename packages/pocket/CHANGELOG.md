@@ -1,5 +1,13 @@
 # @orca-fe/pocket
 
+## 2.3.8
+
+### Patch Changes
+
+- update dependencies
+- Updated dependencies
+  - @orca-fe/pocket@2.3.8
+
 ## 2.3.7
 
 ### Patch Changes

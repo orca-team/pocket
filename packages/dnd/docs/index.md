@@ -24,8 +24,8 @@ toc: content
 
 ### 示例
 
-<code src="./demo/SortableList/Demo1.tsx"></code>
-<code src="./demo/SortableList/Demo2.tsx"></code>
+<code src="../demo/SortableList/Demo1.tsx"></code>
+<code src="../demo/SortableList/Demo2.tsx"></code>
 
 ### API
 
@@ -55,7 +55,7 @@ type SortableItemChildren<T> = React.ReactNode | ((item: T, index: number, args?
 
 ### 示例
 
-<code src="./demo/SortableListHelper/Demo3.tsx"></code>
+<code src="../demo/SortableListHelper/Demo3.tsx"></code>
 
 ### API
 

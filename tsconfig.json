@@ -6,7 +6,7 @@
     "lib": ["DOM", "ESNext"],
     "preserveSymlinks": true,
     "importHelpers": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "allowJs": true,
     "esModuleInterop": true,
     "declaration": true,

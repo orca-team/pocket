@@ -18,10 +18,7 @@ group:
  * @param obj 对象本身
  * @param callback 过滤器回调
  */
-function objFilter<T extends Object>(
-  obj: T,
-  callback: (key: string, value: any) => boolean,
-): Object;
+function objFilter<T extends Object>(obj: T, callback: (key: string, value: any) => boolean): Object;
 ```
 
 ```tsx
@@ -44,9 +41,7 @@ export default () => (
     原始对象：
     <ReactJson src={originObject} />
     过滤 undefined 后的值：
-    <ReactJson
-      src={objFilter(originObject, (key, value) => value !== undefined)}
-    />
+    <ReactJson src={objFilter(originObject, (key, value) => value !== undefined)} />
   </div>
 );
 ```
@@ -59,10 +54,7 @@ export default () => (
  * @param obj 对象本身
  * @param callback 遍历回调
  */
-function objMap<T extends Object>(
-  obj: T,
-  callback: (key: string, value: any) => any,
-): Object;
+function objMap<T extends Object>(obj: T, callback: (key: string, value: any) => any): Object;
 ```
 
 ```tsx

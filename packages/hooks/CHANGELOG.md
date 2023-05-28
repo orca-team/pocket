@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.7.0
+
+### Minor Changes
+
+- feat: useService
+
 ## 1.6.2
 
 ### Patch Changes

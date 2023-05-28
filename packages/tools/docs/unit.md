@@ -102,10 +102,7 @@ export default () => (
  * @param rules 自定义规则
  * @param options 其他转换选项
  */
-function createCovertUnitFn(
-  rules: ConvertRule[],
-  options: ConvertOptions = {},
-): ConvertUnitFn;
+function createCovertUnitFn(rules: ConvertRule[], options: ConvertOptions = {}): ConvertUnitFn;
 ```
 
 ### 类型定义
