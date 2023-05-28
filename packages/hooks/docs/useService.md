@@ -55,28 +55,28 @@ function useService(serviceFn: () => Promise<Result>, options: UseServiceOptions
 
 | 属性              | 说明                                                                      | 类型                                                                                                     | 默认值 | 版本 |
 | ----------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------ | ---- |
-| manual            | 是否手动发起第一次请求                                                    | `boolean`                                                                                                | false  | '-'  |
-| pollingInterval   | 轮询间隔，单位毫秒，如果不传，则不会轮询                                  | `number`                                                                                                 | -      | '-'  |
-| pollingWhenHidden | 在页面隐藏时，是否继续轮询                                                | `boolean`                                                                                                | false  | '-'  |
-| keepSuccessData   | 如果请求失败(onError)，是否维持之前的结果，默认为 true                    | `boolean`                                                                                                | true   | '-'  |
-| initialData       | 默认结果                                                                  | `any`                                                                                                    | -      | '-'  |
-| defaultParams     | 初始化时的参数                                                            | `any[]`                                                                                                  | -      | '-'  |
-| onSuccess         | 请求成功时的回调事件                                                      | `(data: Result, params: Args) => void`                                                                   | -      | '-'  |
-| onFinish          | 請求結束后的回調事件（不論數據處理是否正常）                              | `(data: ServiceResult, params: Args) => void`                                                            | -      | '-'  |
-| onError           | 请求失败时的回调事件                                                      | `(error: Error, params: Args) => void`                                                                   | -      | '-'  |
-| cacheKey          | 请求缓存的标识                                                            | `string`                                                                                                 | -      | '-'  |
-| formatter         | 对结果进行格式化处理（默认会取出 result.data)                             | `(res: ServiceResult) => Result`                                                                         | -      | '-'  |
-| stateMgr          | 状态管理器，如果传入，则会使用传入的状态管理器，否则使用内部的 `useState` | `{ state: ServiceState<Args, Result>; setState: Dispatch<SetStateAction<ServiceState<Args, Result>>>; }` | -      | '-'  |
+| manual            | 是否手动发起第一次请求                                                    | `boolean`                                                                                                | false  | `-`  |
+| pollingInterval   | 轮询间隔，单位毫秒，如果不传，则不会轮询                                  | `number`                                                                                                 | -      | `-`  |
+| pollingWhenHidden | 在页面隐藏时，是否继续轮询                                                | `boolean`                                                                                                | false  | `-`  |
+| keepSuccessData   | 如果请求失败(onError)，是否维持之前的结果，默认为 true                    | `boolean`                                                                                                | true   | `-`  |
+| initialData       | 默认结果                                                                  | `any`                                                                                                    | -      | `-`  |
+| defaultParams     | 初始化时的参数                                                            | `any[]`                                                                                                  | -      | `-`  |
+| onSuccess         | 请求成功时的回调事件                                                      | `(data: Result, params: Args) => void`                                                                   | -      | `-`  |
+| onFinish          | 請求結束后的回調事件（不論數據處理是否正常）                              | `(data: ServiceResult, params: Args) => void`                                                            | -      | `-`  |
+| onError           | 请求失败时的回调事件                                                      | `(error: Error, params: Args) => void`                                                                   | -      | `-`  |
+| cacheKey          | 请求缓存的标识                                                            | `string`                                                                                                 | -      | `-`  |
+| formatter         | 对结果进行格式化处理（默认会取出 result.data)                             | `(res: ServiceResult) => Result`                                                                         | -      | `-`  |
+| stateMgr          | 状态管理器，如果传入，则会使用传入的状态管理器，否则使用内部的 `useState` | `{ state: ServiceState<Args, Result>; setState: Dispatch<SetStateAction<ServiceState<Args, Result>>>; }` | -      | `-`  |
 
 ### ServiceHandler 返回值
 
-| 属性    | 说明                             | 类型                                           | 版本 |
-| ------- | -------------------------------- | ---------------------------------------------- | ---- |
-| run     | 【function】发起新的请求         | `(...args: Args) => Promise<Result\|undefined` | '-'  |
-| data    | 本次请求的结果                   | `any`                                          | '-'  |
-| error   | 异常（如果报错）                 | `Error`                                        | '-'  |
-| loading | 正在请求状态                     | `boolean`                                      | '-'  |
-| params  | 本次请求所使用的参数             | `any[] \| undefined`                           | '-'  |
-| refresh | 【function】刷新上一次请求       | `() => Promise<Result \| undefined>`           | '-'  |
-| mutate  | 【function】修改接口的结果       | `(result: SetStateAction<Result>) => void`     | '-'  |
-| cancel  | 【function】取消本次未完成的请求 | `() => void`                                   | '-'  |
+| 属性    | 说明                             | 类型                                            | 版本 |
+| ------- | -------------------------------- | ----------------------------------------------- | ---- |
+| run     | 【function】发起新的请求         | `(...args: Args) => Promise<Result\|undefined>` | `-`  |
+| data    | 本次请求的结果                   | `any`                                           | `-`  |
+| error   | 异常（如果报错）                 | `Error`                                         | `-`  |
+| loading | 正在请求状态                     | `boolean`                                       | `-`  |
+| params  | 本次请求所使用的参数             | `any[] \| undefined`                            | `-`  |
+| refresh | 【function】刷新上一次请求       | `() => Promise<Result \| undefined>`            | `-`  |
+| mutate  | 【function】修改接口的结果       | `(result: SetStateAction<Result>) => void`      | `-`  |
+| cancel  | 【function】取消本次未完成的请求 | `() => void`                                    | `-`  |
