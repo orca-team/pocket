@@ -24,7 +24,7 @@ jobs:
           npm i pnpm -g
           pnpm i
       - name: publish
-        run: npm run pub
+        run: npm run pub:only
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
