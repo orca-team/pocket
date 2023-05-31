@@ -32,7 +32,9 @@ export default createUseStyles(
         width: 'auto',
       },
     },
-    autoWidth: {},
+    autoWidth: {
+      padding: '0px 16px',
+    },
     checked: {},
     disabled: {
       cursor: 'default',
@@ -56,7 +58,6 @@ export default createUseStyles(
       minWidth: '22px',
       height: '22px',
     },
-
     middle: {
       width: '32px',
       minWidth: '32px',
@@ -67,7 +68,6 @@ export default createUseStyles(
       width: '36px',
       minWidth: '36px',
       height: '36px',
-      padding: '0px 16px',
       fontSize: '22px',
     },
   },

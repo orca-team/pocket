@@ -1,5 +1,13 @@
 # @orca-fe/pocket
 
+## 2.3.9
+
+### Patch Changes
+
+- fix IconButton padding
+- Updated dependencies
+  - @orca-fe/pocket@2.3.9
+
 ## 2.3.8
 
 ### Patch Changes
