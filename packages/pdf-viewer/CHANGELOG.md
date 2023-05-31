@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.12.4
+
+### Patch Changes
+
+- feat: update dependencies
+
 ## 1.12.3
 
 ### Patch Changes

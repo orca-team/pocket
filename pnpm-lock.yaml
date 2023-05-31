@@ -269,8 +269,8 @@ importers:
         specifier: ^1.4.17
         version: link:../painter
       '@orca-fe/pdfjs-dist-browserify':
-        specifier: 3.7.107
-        version: 3.7.107
+        specifier: ^3.8.24
+        version: 3.8.24
       '@orca-fe/pocket':
         specifier: ^2.3.8
         version: link:../pocket
@@ -2425,9 +2425,8 @@ packages:
       prefix-classnames: 0.0.7
       react: 18.2.0
 
-  /@orca-fe/pdfjs-dist-browserify@3.7.107:
-    resolution: {integrity: sha512-CHnmoZU/LN0Lr8l/P8LIB8lIByTumVbq5Cf7Rpi2zeQdk1CqJM9NTVkrp1IjFqlP+e6C3JjO+1o4WmII1dxXkQ==}
-    engines: {node: '>=18'}
+  /@orca-fe/pdfjs-dist-browserify@3.8.24:
+    resolution: {integrity: sha512-XpALTNNQfxriZKJKD4WLoszXWeQnN3ELQsaxhAW0bCalWfVLuGalH2bQJP0xSb1PphWlxHPT3HIhZC8V6LSUHQ==}
     optionalDependencies:
       path2d-polyfill: 2.0.1
     dev: false
