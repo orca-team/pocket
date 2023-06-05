@@ -175,10 +175,12 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   // 获取每一页的 viewport 信息
   const viewports = useMemo(
     () =>
-      pages.map((page) => {
-        const viewport = page.getViewport({ scale: 1 }) as PageViewport;
-        return viewport;
-      }),
+      pages
+        .map((page) => {
+          const viewport = page.getViewport({ scale: 1 }) as PageViewport;
+          return viewport;
+        })
+        .filter(v => !!v),
     [pages],
   );
 
