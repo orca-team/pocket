@@ -178,7 +178,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       pages.map((page) => {
         const viewport = page.getViewport({ scale: 1 }) as PageViewport;
         return viewport;
-      })[pages],
+      }),
+    [pages],
   );
 
   // 根据 viewport 信息生成每一页的实际位置信息

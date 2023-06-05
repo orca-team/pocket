@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.12.9
+
+### Patch Changes
+
+- fix: viewport maybe undefined
+
 ## 1.12.8
 
 ### Patch Changes
