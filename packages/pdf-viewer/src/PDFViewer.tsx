@@ -175,13 +175,10 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   // 获取每一页的 viewport 信息
   const viewports = useMemo(
     () =>
-      pages
-        .map((page) => {
-          const viewport = page.getViewport({ scale: 1 }) as PageViewport;
-          return viewport;
-        })
-        .filter(v => !!v),
-    [pages],
+      pages.map((page) => {
+        const viewport = page.getViewport({ scale: 1 }) as PageViewport;
+        return viewport;
+      })[pages],
   );
 
   // 根据 viewport 信息生成每一页的实际位置信息
@@ -649,7 +646,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                       <>
                         <PDFPage className={styles.page} index={pageIndex} zoom={zoom} render={shouldRender} />
                         <div ref={node => (pageCoverRefs[pageIndex] = node)} className={styles.pageCover} />
-                        {!!viewport && <div className={styles.pageCover}>{renderPageCover(pageIndex, { viewport, zoom })}</div>}
+                        <div className={styles.pageCover}>{renderPageCover(pageIndex, { viewport, zoom })}</div>
                       </>
                     )}
                   </div>

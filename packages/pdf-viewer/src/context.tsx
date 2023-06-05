@@ -164,10 +164,9 @@ export function usePageCoverRenderer() {
     pageCoverRefs.map((dom, pageIndex) => {
       if (loading) return null;
       if (!dom) return null;
-      const node = callback(pageIndex, {
-        viewport: viewports[pageIndex],
-        zoom,
-      });
+      const viewport = viewports[pageIndex];
+      if (!viewport) return null;
+      const node = callback(pageIndex, { viewport, zoom });
       return <React.Fragment key={pageIndex}>{ReactDOM.createPortal(node, dom)}</React.Fragment>;
     });
 }
