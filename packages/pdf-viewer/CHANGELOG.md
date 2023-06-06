@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.12.13
+
+### Patch Changes
+
+- fix: clearTitle when close
+
 ## 1.12.12
 
 ### Patch Changes

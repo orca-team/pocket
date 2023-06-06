@@ -264,6 +264,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
         _this.pdfLoadingKey = undefined;
         await _this.pdfDoc.destroy();
         setLoading(false);
+        setTitle(undefined);
       } catch (err) {
         console.error('pdfDoc destory failed');
       }
@@ -680,6 +681,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     </PDFViewerContext.Provider>
   );
 });
+
 PDFViewer.displayName = 'PDFViewer';
 
 export const usePdfViewerRef = () => useRef<PDFViewerHandle>(null);
