@@ -22,6 +22,7 @@ export default createUseStyles(
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
+      userSelect: 'text',
     },
     left: {
       padding: '0 12px',

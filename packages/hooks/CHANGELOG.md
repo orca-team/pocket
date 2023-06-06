@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.8.0
+
+### Minor Changes
+
+- feat: useAutoScroll
+
 ## 1.7.0
 
 ### Minor Changes

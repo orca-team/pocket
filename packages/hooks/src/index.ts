@@ -20,6 +20,7 @@ import useGetState from './useGetState';
 import useMergedRefs from './useMergedRefs';
 import useCombineKeyListener from './useCombineKeyListener';
 import useLoadMore from './useLoadMore';
+import useAutoScroll from './useAutoScroll';
 
 export {
   useWindowSize,
@@ -40,6 +41,7 @@ export {
   useMergedRefs,
   useCombineKeyListener,
   useLoadMore,
+  useAutoScroll,
 
   // events
   useEventEmitter,

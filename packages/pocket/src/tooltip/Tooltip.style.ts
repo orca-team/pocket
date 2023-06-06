@@ -14,13 +14,13 @@ export default createUseStaticCss(`
 .${prefixCls}-zoom-enter,
 .${prefixCls}-zoom-appear {
   opacity: 0;
-  animation-duration: 0.3s;
+  animation-duration: 0.2s;
   animation-fill-mode: both;
   animation-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
   animation-play-state: paused;
 }
 .${prefixCls}-zoom-leave {
-  animation-duration: 0.3s;
+  animation-duration: 0.2s;
   animation-fill-mode: both;
   animation-timing-function: cubic-bezier(0.6, -0.3, 0.74, 0.05);
   animation-play-state: paused;
@@ -38,7 +38,7 @@ export default createUseStaticCss(`
   0% {
     opacity: 0;
     transform-origin: 50% 50%;
-    transform: scale(0, 0);
+    transform: scale(0.8, 0.8);
   }
   100% {
     opacity: 1;
@@ -55,7 +55,7 @@ export default createUseStaticCss(`
   100% {
     opacity: 0;
     transform-origin: 50% 50%;
-    transform: scale(0, 0);
+    transform: scale(0.8, 0.8);
   }
 }
 .${prefixCls} {
@@ -66,6 +66,7 @@ export default createUseStaticCss(`
   font-size: 12px;
   line-height: 1.5;
   opacity: 0.9;
+  box-sizing: border-box;
 }
 .${prefixCls}-hidden {
   display: none;
@@ -99,6 +100,7 @@ export default createUseStaticCss(`
   border-radius: 6px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.17);
   min-height: 34px;
+  box-sizing: border-box;
 }
 .${prefixCls}-arrow {
   position: absolute;

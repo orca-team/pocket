@@ -1,4 +1,8 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 importers:
 
@@ -205,13 +209,13 @@ importers:
         specifier: ^4.7.0
         version: 4.7.0(react-dom@18.2.0)(react@18.2.0)
       '@orca-fe/hooks':
-        specifier: ^1.7.0
+        specifier: ^1.8.0
         version: link:../hooks
       '@orca-fe/jss-plugin-auto-prefix':
         specifier: ^0.0.1
         version: 0.0.1(jss@10.10.0)(react@18.2.0)
       '@orca-fe/pocket':
-        specifier: ^2.3.9
+        specifier: ^2.3.10
         version: link:../pocket
       '@orca-fe/simple-jss':
         specifier: ^0.0.3
@@ -220,7 +224,7 @@ importers:
         specifier: ^0.9.1
         version: link:../tools
       '@orca-fe/transformer':
-        specifier: ^0.3.10
+        specifier: ^0.3.11
         version: link:../transformer
       ahooks:
         specifier: ^3.7.7
@@ -260,19 +264,19 @@ importers:
         specifier: ^4.7.0
         version: 4.7.0(react-dom@18.2.0)(react@18.2.0)
       '@orca-fe/hooks':
-        specifier: ^1.7.0
+        specifier: ^1.8.0
         version: link:../hooks
       '@orca-fe/jss-plugin-auto-prefix':
         specifier: ^0.0.1
         version: 0.0.1(jss@10.10.0)(react@18.2.0)
       '@orca-fe/painter':
-        specifier: ^1.4.18
+        specifier: ^1.4.19
         version: link:../painter
       '@orca-fe/pdfjs-dist-browserify':
         specifier: ^3.8.24
         version: 3.8.24
       '@orca-fe/pocket':
-        specifier: ^2.3.9
+        specifier: ^2.3.10
         version: link:../pocket
       '@orca-fe/simple-jss':
         specifier: ^0.0.3
@@ -327,13 +331,13 @@ importers:
         specifier: ^4.7.0
         version: 4.7.0(react-dom@18.2.0)(react@18.2.0)
       '@orca-fe/hooks':
-        specifier: ^1.7.0
+        specifier: ^1.8.0
         version: link:../hooks
       '@orca-fe/jss-plugin-auto-prefix':
         specifier: ^0.0.1
         version: 0.0.1(jss@10.10.0)(react@18.2.0)
       '@orca-fe/pocket':
-        specifier: ^2.3.9
+        specifier: ^2.3.10
         version: 'link:'
       '@orca-fe/tools':
         specifier: ^0.9.1
@@ -457,7 +461,7 @@ importers:
   packages/transformer:
     dependencies:
       '@orca-fe/hooks':
-        specifier: ^1.7.0
+        specifier: ^1.8.0
         version: link:../hooks
       '@orca-fe/jss-plugin-auto-prefix':
         specifier: ^0.0.1

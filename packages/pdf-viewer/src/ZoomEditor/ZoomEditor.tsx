@@ -1,8 +1,7 @@
 import React from 'react';
-import { SimpleNumberInput } from '@orca-fe/pocket';
+import { SimpleNumberInput, Tooltip } from '@orca-fe/pocket';
 import { CaretDownOutlined } from '@ant-design/icons';
 import { useControllableValue } from 'ahooks';
-import { Dropdown, Menu } from 'antd';
 import useStyles from './ZoomEditor.style';
 
 const ef = () => {};
@@ -34,88 +33,90 @@ const ZoomEditor = (props: ZoomEditorProps) => {
 
   return (
     <div className={`${styles.root} ${className}`} {...otherProps}>
-      <Dropdown
+      <Tooltip
+        placement="top"
+        showArrow={false}
         overlay={(
-          <Menu>
-            <Menu.Item
+          <div className={styles.menu}>
+            <div
               onClick={() => {
                 onZoomModeChange(false);
                 setValue(25 / 100);
               }}
             >
               25%
-            </Menu.Item>
-            <Menu.Item
+            </div>
+            <div
               onClick={() => {
                 onZoomModeChange(false);
                 setValue(50 / 100);
               }}
             >
               50%
-            </Menu.Item>
-            <Menu.Item
+            </div>
+            <div
               onClick={() => {
                 onZoomModeChange(false);
                 setValue(75 / 100);
               }}
             >
               75%
-            </Menu.Item>
-            <Menu.Item
+            </div>
+            <div
               onClick={() => {
                 onZoomModeChange(false);
                 setValue(100 / 100);
               }}
             >
               100%
-            </Menu.Item>
-            <Menu.Item
+            </div>
+            <div
               onClick={() => {
                 onZoomModeChange(false);
                 setValue(125 / 100);
               }}
             >
               125%
-            </Menu.Item>
-            <Menu.Item
+            </div>
+            <div
               onClick={() => {
                 onZoomModeChange(false);
                 setValue(150 / 100);
               }}
             >
               150%
-            </Menu.Item>
-            <Menu.Item
+            </div>
+            <div
               onClick={() => {
                 onZoomModeChange(false);
                 setValue(200 / 100);
               }}
             >
               200%
-            </Menu.Item>
-            <Menu.Item
+            </div>
+            <div
               onClick={() => {
                 onZoomModeChange(false);
                 setValue(400 / 100);
               }}
             >
               400%
-            </Menu.Item>
-            <Menu.Item
+            </div>
+            <div
               onClick={() => {
                 onZoomModeChange('autoWidth');
               }}
             >
               自动宽度
-            </Menu.Item>
-            <Menu.Item
+            </div>
+            <div
               onClick={() => {
                 onZoomModeChange('autoHeight');
               }}
             >
               自动高度
-            </Menu.Item>
-          </Menu>
+            </div>
+          </div>
         )}
       >
         <div className={styles.zoomControl}>
@@ -141,7 +142,7 @@ const ZoomEditor = (props: ZoomEditorProps) => {
           )}
           <CaretDownOutlined className={styles.icon} />
         </div>
-      </Dropdown>
+      </Tooltip>
     </div>
   );
 };

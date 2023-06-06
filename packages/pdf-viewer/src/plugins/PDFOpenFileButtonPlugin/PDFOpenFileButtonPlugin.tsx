@@ -14,7 +14,9 @@ const PDFOpenFileButtonPlugin = (props: PdfOpenFileButtonPluginProps) => {
       <OpenFileButton
         onOpenFile={(file) => {
           if (file.name.endsWith('.pdf')) {
-            pdfViewer.load(file);
+            pdfViewer.load(file, {
+              title: file.name,
+            });
           }
         }}
       />

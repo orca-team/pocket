@@ -6,8 +6,12 @@ export default createUseStyles(
   {
     root: {
       padding: '2px 4px',
-      backgroundColor: '#eee',
       borderRadius: '4px',
+
+      '& $text': {
+        color: 'inherit',
+        textDecoration: 'none',
+      },
     },
     zoomControl: {
       display: 'flex',
@@ -16,12 +20,21 @@ export default createUseStyles(
       marginLeft: '4px',
       marginRight: '4px',
     },
-    text: {
-      color: 'inherit',
-      textDecoration: 'none',
-    },
+    text: {},
     icon: {
       cursor: 'pointer',
+    },
+    menu: {
+      position: 'relative',
+      '& > *': {
+        cursor: 'pointer',
+        padding: [2, 8],
+        borderRadius: 4,
+        textAlign: 'center',
+        '&:hover': {
+          backgroundColor: 'rgba(125,125,125,0.5)',
+        },
+      },
     },
   },
   {
