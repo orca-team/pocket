@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.12.11
+
+### Patch Changes
+
+- feat: add pluginLoad
+
 ## 1.12.10
 
 ### Patch Changes

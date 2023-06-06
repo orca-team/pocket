@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { clamp, roundBy } from '@orca-fe/tools';
-import { useDebounceEffect, useDebounceFn, useEventListener, useMemoizedFn, useSetState } from 'ahooks';
+import { useCounter, useDebounceEffect, useDebounceFn, useEventListener, useMemoizedFn, useSetState } from 'ahooks';
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useGetState, useSizeListener } from '@orca-fe/hooks';
 import cn from 'classnames';
@@ -151,6 +151,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   const [pages, setPages, getPages] = useGetState<any[]>([]);
 
   const [loading, setLoading] = useState(false);
+
+  const [pluginLoading, { inc: pluginLoad, dec: pluginLoaded }] = useCounter(0);
 
   const setZoomWithScrollLock = useMemoizedFn((newZoom: number) => {
     const zoom = getZoom();
@@ -565,6 +567,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       getRoot,
       getFileSource,
       getPDFInstance,
+      pluginLoad,
+      pluginLoaded,
     }),
     [],
   );
@@ -585,6 +589,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       value={useMemo(
         () => ({
           loading,
+          pluginLoading,
           pages,
           viewports,
           zoom,
@@ -597,7 +602,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
           setInternalState,
           bodyElement: bodyRef,
         }),
-        [loading, pages, viewports, zoom, current, pageCoverRefs, internalState, bodyRef],
+        [loading, pluginLoading, pages, viewports, zoom, current, pageCoverRefs, internalState, bodyRef],
       )}
     >
       <PDFToolbarContext.Provider
@@ -635,7 +640,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                 '--pdf-viewer-page-scale': scale,
               }}
             >
-              {viewports.length === 0 && !loading && emptyTips}
+              {viewports.length === 0 && !loading && !pluginLoading && emptyTips}
               {viewports.map((viewport, pageIndex) => {
                 const shouldRender = pageIndex >= renderRange[0] && pageIndex <= renderRange[1];
                 const width = `calc(var(--scale-factor) * ${Math.floor(viewport.width)}px)`;
@@ -654,7 +659,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                 );
               })}
             </div>
-            {loading && loadingTips}
+            {loading && !!pluginLoading && loadingTips}
 
             {/* 绘图的工具栏渲染 */}
             {children}

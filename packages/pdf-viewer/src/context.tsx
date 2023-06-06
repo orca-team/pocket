@@ -50,6 +50,8 @@ export type PDFViewerHandle = {
   getFileSource: () => SourceType | null | undefined;
 
   getPDFInstance: () => PDFDocumentProxy | undefined;
+  pluginLoad: () => void;
+  pluginLoaded: () => void;
 };
 
 export type PageViewport = {
@@ -85,6 +87,7 @@ export type PDFViewerInternalStateType = Record<string, any> & {
 
 export type PDFViewerContextType = {
   loading: boolean;
+  pluginLoading: number;
   pages: any[];
   current: number;
   zoom: number;
@@ -99,6 +102,7 @@ export type PDFViewerContextType = {
 
 const PDFViewerContext = React.createContext<PDFViewerContextType>({
   loading: false,
+  pluginLoading: 0,
   pages: [],
   viewports: [],
   current: 1,
