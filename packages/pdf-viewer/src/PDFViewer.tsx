@@ -659,7 +659,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                 );
               })}
             </div>
-            {loading && !!pluginLoading && loadingTips}
+            {(loading || !!pluginLoading) && loadingTips}
 
             {/* 绘图的工具栏渲染 */}
             {children}
