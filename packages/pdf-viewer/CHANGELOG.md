@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.12.12
+
+### Patch Changes
+
+- fix: loading
+
 ## 1.12.11
 
 ### Patch Changes
