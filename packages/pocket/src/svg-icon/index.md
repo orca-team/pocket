@@ -1,8 +1,6 @@
 ---
 title: SvgIcon 图标组件
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: 基础组件
   path: /base

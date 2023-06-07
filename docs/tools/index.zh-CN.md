@@ -1,7 +1,7 @@
 ---
 nav:
   title: 工具
-  order: 2
+  order: 5
 ---
 
 ![npm](https://img.shields.io/npm/v/@orca-fe/tools.svg)

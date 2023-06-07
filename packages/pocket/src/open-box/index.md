@@ -1,8 +1,6 @@
 ---
 title: OpenBox 展开收起容器
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: 基础组件
   path: /base
@@ -52,19 +50,11 @@ const Demo = (props) => {
   const [open, setOpen] = useState(false);
   return (
     <div>
-      <Button onClick={() => setOpen(!open)}>
-        {open ? '收起' : '展开更多'}
-      </Button>
-      <OpenBox
-        height={50}
-        open={open}
-        style={{ border: '1px solid #CCCCCC', lineHeight: '50px' }}
-      >
+      <Button onClick={() => setOpen(!open)}>{open ? '收起' : '展开更多'}</Button>
+      <OpenBox height={50} open={open} style={{ border: '1px solid #CCCCCC', lineHeight: '50px' }}>
         <div>我是第一行内容</div>
         <div>更多的内容</div>
-        <div>
-          更多的内容更多的内容更多的内容更多的内容更多的内容更多的内容更多的内容更多的内容更多的内容更多的内容更多的内容更多的内容
-        </div>
+        <div>更多的内容更多的内容更多的内容更多的内容更多的内容更多的内容更多的内容更多的内容更多的内容更多的内容更多的内容更多的内容</div>
         <div>更多的内容</div>
         <div>更多的内容</div>
         <div>更多的内容</div>

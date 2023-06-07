@@ -1,8 +1,6 @@
 ---
 title: useEventEmitter 事件管理器
-nav:
-  title: Hooks
-  path: /hooks
+
 group:
   title: hooks
   path: /base

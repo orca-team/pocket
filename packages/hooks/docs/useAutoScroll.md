@@ -1,8 +1,6 @@
 ---
 title: useAutoScroll
-nav:
-  title: Hooks
-  path: /hooks
+
 group:
   title: hooks
   path: /base

@@ -1,7 +1,7 @@
 ---
 nav:
   title: Hooks
-  order: 1
+  order: 2
 ---
 
 ![npm](https://img.shields.io/npm/v/@orca-fe/hooks.svg)

@@ -1,8 +1,6 @@
 ---
 title: EqRatioImg 等比缩放图片
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: 基础组件
   path: /base

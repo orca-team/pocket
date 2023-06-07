@@ -1,8 +1,6 @@
 ---
 title: ViewportSensor 视图管理工具
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: 基础组件
   path: /base

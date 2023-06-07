@@ -8,7 +8,7 @@ nav:
 
 # 介绍
 
-这是一个对 `antd` 组件库的扩展。
+这是一个基于 `react` 的组件库。
 
 ## 安装依赖
 
@@ -37,3 +37,9 @@ export default () => {
 ### 样式引入
 
 样式已全部使用 `jss` 的方式引入，不再需要额外引入
+
+## 3.0 重要更新
+
+移除了所有和 `antd` 相关的组件，并将它们归入 `@orca-fe/antd-plus`。
+
+组件包含了： `Dialog` `DialogForm` `JsonSchemaEditor` `ModalForm` `TabsLayout` `UcInput` `WeeklyCalendar`

@@ -1,8 +1,6 @@
 ---
 title: useStaticClick 静态单击事件
-nav:
-  title: Hooks
-  path: /hooks
+
 group:
   title: hooks
   path: /base

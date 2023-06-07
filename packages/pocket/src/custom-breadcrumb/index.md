@@ -1,8 +1,6 @@
 ---
 title: CustomBreadcrumb 自定义面包屑
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: 基础组件
   path: /base

@@ -1,8 +1,6 @@
 ---
-title: [ Dev ]LoadMore 动态加载更多
-nav:
-  title: Pocket 组件
-  path: /component
+title: LoadMore 动态加载更多
+
 group:
   title: 基础组件
   path: /base

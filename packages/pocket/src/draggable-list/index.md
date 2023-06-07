@@ -1,8 +1,6 @@
 ---
 title: DraggableList 可拖拽列表
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: Layout
   path: /layout

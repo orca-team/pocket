@@ -6,16 +6,14 @@ const prefix = 'zoom-and-page-controller';
 export default createUseStyles(
   {
     root: {
-      padding: [0, 16],
+      padding: [12, 16],
       backgroundColor: 'rgba(0,0,0,0.7)',
       borderRadius: 4,
       display: 'flex',
-      alignItems: 'center',
       gap: 4,
-      height: 40,
       color: '#fff',
       whiteSpace: 'nowrap',
-
+      alignItems: 'baseline',
       '& .ant-input': {
         color: '#fff',
       },
@@ -26,11 +24,15 @@ export default createUseStyles(
       },
     },
     input: {
+      fontSize: 16,
+      paddingTop: 0,
+      paddingBottom: 0,
+      border: '1px solid #999',
       backgroundColor: 'rgba(255, 255, 255, 0.1)',
       textAlign: 'center',
-      border: 'none',
       borderRadius: 4,
       color: '#fff',
+      outline: 'none',
     },
     zoomEditor: {
       marginLeft: 8,

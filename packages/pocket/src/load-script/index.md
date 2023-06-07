@@ -1,8 +1,6 @@
 ---
 title: LoadScript 动态加载脚本
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: 基础组件
   path: /base

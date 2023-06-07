@@ -1,8 +1,6 @@
 ---
 title: CommonStore 通用Store
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: 组件工具
   path: /utils

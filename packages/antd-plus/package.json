@@ -1,0 +1,63 @@
+{
+  "name": "@orca-fe/antd-plus",
+  "version": "0.0.1",
+  "description": "Transformer Container",
+  "keywords": [
+    "react",
+    "antd",
+    "antd-plus",
+    "orca-fe",
+    "orca",
+    "orca-team"
+  ],
+  "author": "NicoKam",
+  "homepage": "https://orca.nicokam.work/",
+  "license": "MIT",
+  "types": "es/index.d.ts",
+  "module": "es/index.js",
+  "main": "lib/index.js",
+  "files": [
+    "dist",
+    "es",
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orca-team/pocket.git"
+  },
+  "scripts": {
+    "build": "father build",
+    "prepublishOnly": "npm run build",
+    "autod": "autod",
+    "clear": "rimraf lib es"
+  },
+  "dependencies": {
+    "@orca-fe/hooks": "^1.8.0",
+    "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
+    "@orca-fe/tools": "^0.9.1",
+    "ahooks": "^3.7.7",
+    "classnames": "^2.3.2",
+    "json5": "^2.2.3",
+    "lunar-javascript": "^1.6.2",
+    "moment": "^2.29.4",
+    "prefix-classnames": "^0.0.7",
+    "react-custom-scrollbars-2": "^4.5.0",
+    "rfdc": "^1.3.0"
+  },
+  "peerDependencies": {
+    "@ant-design/icons": "^5.1.3",
+    "antd": ">=4.23.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.7",
+    "autod": "^3.1.2",
+    "dayjs": "^1.11.8",
+    "jss": "^10.10.0"
+  }
+}

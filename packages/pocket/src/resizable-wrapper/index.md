@@ -1,8 +1,6 @@
 ---
 title: ResizeWrapper 容器大小调整
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: 基础组件
   path: /base
@@ -31,25 +29,11 @@ export default () => (
       overflow: 'hidden',
     }}
   >
-    <ResizableWrapper
-      minWidth={100}
-      defaultWidth={150}
-      horizontal
-      horizontalPosition="right"
-      style={{ backgroundColor: '#CFC' }}
-    >
+    <ResizableWrapper minWidth={100} defaultWidth={150} horizontal horizontalPosition="right" style={{ backgroundColor: '#CFC' }}>
       你可以拖拽右侧调整容器大小
     </ResizableWrapper>
-    <div style={{ flex: 1, height: '100%', backgroundColor: '#CCF' }}>
-      center
-    </div>
-    <ResizableWrapper
-      minWidth={100}
-      defaultWidth={100}
-      horizontal
-      horizontalPosition="left"
-      style={{ backgroundColor: '#FCC' }}
-    >
+    <div style={{ flex: 1, height: '100%', backgroundColor: '#CCF' }}>center</div>
+    <ResizableWrapper minWidth={100} defaultWidth={100} horizontal horizontalPosition="left" style={{ backgroundColor: '#FCC' }}>
       你可以拖拽左侧调整容器大小
     </ResizableWrapper>
   </div>
@@ -96,9 +80,7 @@ export default () => {
       >
         {width > 50 ? '展开的左侧面板' : '收起'}
       </ResizableWrapper>
-      <div style={{ flex: 1, height: '100%', backgroundColor: '#CCF' }}>
-        center
-      </div>
+      <div style={{ flex: 1, height: '100%', backgroundColor: '#CCF' }}>center</div>
     </div>
   );
 };

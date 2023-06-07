@@ -18,6 +18,7 @@
     "rootDir": ".",
     "paths": {
       "@orca-fe/pocket": ["./packages/pocket/src"],
+      "@orca-fe/antd-plus": ["./packages/antd-plus/src"],
       "@orca-fe/tools": ["./packages/tools/src"],
       "@orca-fe/hooks": ["./packages/hooks/src"],
       "@orca-fe/pdf-viewer": ["./packages/pdf-viewer/src"],

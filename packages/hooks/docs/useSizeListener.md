@@ -1,8 +1,6 @@
 ---
 title: useSizeListener 监听元素尺寸变化
-nav:
-  title: Hooks
-  path: /hooks
+
 group:
   title: hooks
   path: /base

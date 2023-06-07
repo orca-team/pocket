@@ -1,8 +1,6 @@
 ---
 title: BorderSliceImg 图片边框组件
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: 基础组件
   path: /base
@@ -26,17 +24,14 @@ import React, { useState } from 'react';
 import { BorderSliceImg } from '@orca-fe/pocket';
 import { Slider } from 'antd';
 
-const imgSrc =
-  'http://d-eye-test.oss-cn-guangzhou.aliyuncs.com/upload/e112805d4c6f48dc8177551562d130cc.png';
+const imgSrc = 'http://d-eye-test.oss-cn-guangzhou.aliyuncs.com/upload/e112805d4c6f48dc8177551562d130cc.png';
 
 export default () => {
   const [width, setWidth] = useState(800);
   const [height, setHeight] = useState(500);
 
   return (
-    <div
-      style={{ backgroundColor: '#202020', color: '#ffffff', padding: '16px' }}
-    >
+    <div style={{ backgroundColor: '#202020', color: '#ffffff', padding: '16px' }}>
       <p>这是一张示例图片</p>
       <p>
         <img src={imgSrc} style={{ width: '100%', maxWidth: 1440 }} />
@@ -72,8 +67,7 @@ import React, { useState } from 'react';
 import { BorderSliceImg } from '@orca-fe/pocket';
 import { Slider } from 'antd';
 
-const imgSrc =
-  'http://d-eye-test.oss-cn-guangzhou.aliyuncs.com/upload/e112805d4c6f48dc8177551562d130cc.png';
+const imgSrc = 'http://d-eye-test.oss-cn-guangzhou.aliyuncs.com/upload/e112805d4c6f48dc8177551562d130cc.png';
 
 export default () => {
   const [sliceTop, setSliceTop] = useState(100);
@@ -84,9 +78,7 @@ export default () => {
   const [height, setHeight] = useState(300);
 
   return (
-    <div
-      style={{ backgroundColor: '#202020', color: '#ffffff', padding: '16px' }}
-    >
+    <div style={{ backgroundColor: '#202020', color: '#ffffff', padding: '16px' }}>
       sliceTop:
       <Slider value={sliceTop} min={0} max={500} onChange={setSliceTop} />
       sliceRight:

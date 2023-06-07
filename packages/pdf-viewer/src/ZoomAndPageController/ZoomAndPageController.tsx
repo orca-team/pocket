@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { UcInput } from '@orca-fe/pocket';
 import type { ZoomEditorProps } from '../ZoomEditor';
 import ZoomEditor from '../ZoomEditor';
 import PDFViewerContext from '../context';
+import UcInput from '../UcInput';
 import useStyles from './ZoomAndPageController.style';
 
 export interface ZoomAndPageControllerProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -20,8 +20,7 @@ const ZoomAndPageController = (props: ZoomAndPageControllerProps) => {
     <div className={`${styles.root} ${className}`} {...otherProps}>
       <UcInput
         className={styles.input}
-        value={current + 1}
-        size="small"
+        value={`${current + 1}`}
         style={{ width: 40 }}
         onKeyDown={(e) => {
           if (!e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey) {

@@ -1,8 +1,6 @@
 ---
 title: Unit 单位转换
-nav:
-  title: Tools
-  path: /tools
+
 group:
   title: 基础工具
   path: /base

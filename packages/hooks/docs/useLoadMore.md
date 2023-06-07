@@ -1,8 +1,6 @@
 ---
 title: useLoadMore 加载更多
-nav:
-  title: Hooks
-  path: /hooks
+
 group:
   title: hooks
   path: /base

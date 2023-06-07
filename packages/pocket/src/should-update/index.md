@@ -1,8 +1,6 @@
 ---
 title: shouldUpdate 是否重新渲染
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: 高阶组件
   path: /hoc

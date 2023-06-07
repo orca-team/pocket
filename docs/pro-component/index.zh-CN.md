@@ -1,7 +1,7 @@
 ---
 nav:
   title: 重型组件
-  order: 3
+  order: 10
 ---
 
 # 介绍

@@ -1,8 +1,6 @@
 ---
 title: LoadingDiv 加载中容器
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: 基础组件
   path: /base

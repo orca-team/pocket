@@ -1,8 +1,6 @@
 ---
 title: useInterval 定时器
-nav:
-  title: Hooks
-  path: /hooks
+
 group:
   title: hooks
   path: /base

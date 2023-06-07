@@ -1,8 +1,6 @@
 ---
 title: SimpleNumberInput 简易数字输入框
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: 基础组件
   path: /base
@@ -64,12 +62,7 @@ export default () => {
   return (
     <div>
       <div>{`value: ${value}`}</div>
-      <SimpleNumberInput
-        value={value}
-        onChange={setValue}
-        triggerOnDrag={false}
-        min={-10}
-      />
+      <SimpleNumberInput value={value} onChange={setValue} triggerOnDrag={false} min={-10} />
     </div>
   );
 };

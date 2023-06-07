@@ -35,8 +35,12 @@
     "test": "jest --passWithNoTests"
   },
   "dependencies": {
-    "@babel/runtime": "^7.21.5",
     "immer": "^9.0.21"
   },
-  "gitHead": "0f38f477546c9603891bad4b0c847554147262df"
+  "gitHead": "0f38f477546c9603891bad4b0c847554147262df",
+  "peerDependencies": {
+    "ahooks": ">=3.2.0",
+    "moment": ">=2.29.0"
+  },
+  "devDependencies": {}
 }

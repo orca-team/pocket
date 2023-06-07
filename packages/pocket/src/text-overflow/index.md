@@ -1,8 +1,6 @@
 ---
 title: TextOverflow 溢出文本滚动
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: 基础组件
   path: /base
@@ -27,13 +25,8 @@ export default () => {
     <div style={{ width: 400, border: '1px solid #DDDDDD' }}>
       <TextOverflow>当容器无法完整显示内容时，进行来回滚动展示</TextOverflow>
       <TextOverflow align="center">内容居中</TextOverflow>
-      <TextOverflow align="right">
-        内容右对齐，你只能通过 align 调整
-      </TextOverflow>
-      <TextOverflow>
-        填入内容，当容器无法完整显示内容时，进行来回滚动展示
-        填入内容，当容器无法完整显示内容时，进行来回滚动展示
-      </TextOverflow>
+      <TextOverflow align="right">内容右对齐，你只能通过 align 调整</TextOverflow>
+      <TextOverflow>填入内容，当容器无法完整显示内容时，进行来回滚动展示 填入内容，当容器无法完整显示内容时，进行来回滚动展示</TextOverflow>
     </div>
   );
 };

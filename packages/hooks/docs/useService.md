@@ -1,8 +1,6 @@
 ---
 title: useService 接口管理
-nav:
-  title: Hooks
-  path: /hooks
+
 group:
   title: hooks
   path: /base

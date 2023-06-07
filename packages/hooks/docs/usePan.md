@@ -1,8 +1,6 @@
 ---
 title: usePan 拖拽平移
-nav:
-  title: Hooks
-  path: /hooks
+
 group:
   title: hooks
   path: /base

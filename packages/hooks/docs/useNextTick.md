@@ -1,8 +1,6 @@
 ---
 title: useNextTick 下一帧
-nav:
-  title: Hooks
-  path: /hooks
+
 group:
   title: hooks
   path: /base

@@ -8,7 +8,7 @@ nav:
 
 # Introduction
 
-This is an extend-lib to the `antd` component library.
+This is a library of components based on `react`.
 
 ## Installation
 
@@ -37,3 +37,9 @@ export default () => {
 ### Styles
 
 The styles have all been imported using `jss`, no additional import is required
+
+## 3.0 Updates
+
+Moved all components into `@orca-fe/antd-plus` which depend on `antd`.
+
+Components include: `Dialog` `DialogForm` `JsonSchemaEditor` `ModalForm` `TabsLayout` `UcInput` `WeeklyCalendar`

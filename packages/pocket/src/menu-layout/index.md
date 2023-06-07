@@ -1,8 +1,6 @@
 ---
 title: MenuLayout 菜单布局
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: Layout
   path: /layout

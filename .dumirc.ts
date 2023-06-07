@@ -19,6 +19,7 @@ export default defineConfig({
     '@orca-fe/painter': resolve('packages', 'painter', 'src'),
     '@orca-fe/pdf-viewer': resolve('packages', 'pdf-viewer', 'src'),
     '@orca-fe/pocket': resolve('packages', 'pocket', 'src'),
+    '@orca-fe/antd-plus': resolve('packages', 'antd-plus', 'src'),
     '@orca-fe/tools': resolve('packages', 'tools', 'src'),
     '@orca-fe/transformer': resolve('packages', 'transformer', 'src'),
     '@orca-fe/dnd': resolve('packages', 'dnd', 'src'),
@@ -27,6 +28,7 @@ export default defineConfig({
   resolve: {
     atomDirs: [
       { type: 'component', dir: 'packages/pocket/src' },
+      { type: 'antd-plus', dir: 'packages/antd-plus/src' },
       { type: 'hooks', dir: 'packages/hooks/docs' },
       { type: 'tools', dir: 'packages/tools/docs' },
       { type: 'pro-component/painter', dir: 'packages/painter/docs' },

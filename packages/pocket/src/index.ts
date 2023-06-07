@@ -27,12 +27,8 @@ import type { ToastProps } from './toast';
 import Toast from './toast';
 import type { ResizableWrapperProps } from './resizable-wrapper';
 import ResizableWrapper from './resizable-wrapper';
-import type { UcInputProps } from './uc-input';
-import UcInput from './uc-input';
 import type { SimpleNumberInputProps } from './simple-number-input';
 import SimpleNumberInput from './simple-number-input';
-import type { TabConfigType, TabsLayoutProps } from './tabs-layout';
-import TabsLayout from './tabs-layout';
 import type { TextOverflowProps } from './text-overflow';
 import TextOverflow from './text-overflow';
 import type { BorderSliceImgProps } from './border-slice-img';
@@ -41,21 +37,13 @@ import type { UseViewportType, Viewport, ViewportSensorProps } from './viewport-
 import ViewportSensor from './viewport-sensor';
 import type { RulerGroupProps, RulerProps } from './ruler-group';
 import { RulerGroup } from './ruler-group';
-import type { JsonSchemaEditorProps, JsonValueType } from './json-schema-editor';
-import JsonSchemaEditor from './json-schema-editor';
 import type { IconButtonProps } from './icon-button';
 import IconButton from './icon-button';
 import type { JsonViewerProps } from './json-viewer';
 import JsonViewer from './json-viewer';
 import type { EditableDivProps } from './editable-div';
 import EditableDiv from './editable-div';
-import type { DialogProps } from './dialog';
-import Dialog from './dialog';
 import CommonStore from './common-store';
-import type { DialogFormProps } from './dialog-form';
-import DialogForm from './dialog-form';
-import type { ModalFormProps } from './modal-form';
-import ModalForm from './modal-form';
 import ReactScript from './react-script';
 import type { ReactScriptProps } from './react-script/ReactScript';
 import type { TriggerProps } from './trigger';
@@ -70,10 +58,10 @@ import type { SvgIconProps } from './svg-icon';
 import SvgIcon from './svg-icon';
 import type { VirtualCalendarProps, VirtualCalendarRefType, CardCalendarProps } from './virtual-calendar';
 import VirtualCalendar, { useCalendarRef, CardCalendar } from './virtual-calendar';
-import type { WeeklyCalendarProps } from './weekly-calendar';
-import WeeklyCalendar from './weekly-calendar';
 import type { LoadMoreProps } from './load-more';
 import LoadMore from './load-more';
+import type { SimpleFormProps, SimpleFormItemProps } from './simple-form';
+import SimpleForm from './simple-form';
 
 export type {
   EqRatioBoxProps,
@@ -91,25 +79,17 @@ export type {
   DraggableListProps,
   ToastProps,
   ResizableWrapperProps,
-  UcInputProps,
   SimpleNumberInputProps,
   TextOverflowProps,
-  TabsLayoutProps,
-  TabConfigType,
   BorderSliceImgProps,
   ViewportSensorProps,
   UseViewportType,
   Viewport,
   RulerGroupProps,
   RulerProps,
-  JsonSchemaEditorProps,
-  JsonValueType,
   IconButtonProps,
   JsonViewerProps,
   EditableDivProps,
-  DialogProps,
-  ModalFormProps,
-  DialogFormProps,
   BreadCrumbProps,
   ReactScriptProps,
   TriggerProps,
@@ -120,8 +100,9 @@ export type {
   VirtualCalendarProps,
   VirtualCalendarRefType,
   CardCalendarProps,
-  WeeklyCalendarProps,
   LoadMoreProps,
+  SimpleFormProps,
+  SimpleFormItemProps,
 };
 
 export {
@@ -140,20 +121,14 @@ export {
   DraggableList,
   Toast,
   ResizableWrapper,
-  UcInput,
   SimpleNumberInput,
   TextOverflow,
-  TabsLayout,
   BorderSliceImg,
   ViewportSensor,
   RulerGroup,
-  JsonSchemaEditor,
   IconButton,
   JsonViewer,
   EditableDiv,
-  Dialog,
-  ModalForm,
-  DialogForm,
   CommonStore,
   Trigger,
   Tooltip,
@@ -163,6 +138,6 @@ export {
   VirtualCalendar,
   useCalendarRef,
   CardCalendar,
-  WeeklyCalendar,
   LoadMore,
+  SimpleForm,
 };

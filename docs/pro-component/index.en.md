@@ -1,7 +1,7 @@
 ---
 nav:
   title: ProComponents
-  order: 3
+  order: 10
 ---
 
 # Introduction

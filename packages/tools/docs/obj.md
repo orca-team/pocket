@@ -1,8 +1,6 @@
 ---
 title: Object 对象相关
-nav:
-  title: Tools
-  path: /tools
+
 group:
   title: 基础工具
   path: /base

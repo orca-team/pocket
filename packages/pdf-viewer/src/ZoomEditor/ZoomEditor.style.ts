@@ -11,6 +11,9 @@ export default createUseStyles(
       '& $text': {
         color: 'inherit',
         textDecoration: 'none',
+        '&.simple-number-input-editable': {
+          color: '#fff',
+        },
       },
     },
     zoomControl: {

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Form } from 'antd';
-import { Slider } from '@orca-fe/pocket';
+import { SimpleForm, Slider } from '@orca-fe/pocket';
 import type { ColorPickerProps } from '@orca-fe/painter';
 import { ColorPicker } from '@orca-fe/painter';
 import useStyles from './SimplePropsEditor.style';
@@ -8,8 +7,7 @@ import type { PropsType } from './def';
 
 const ef = () => {};
 
-export interface SimplePropsEditorProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+export interface SimplePropsEditorProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   propsDef?: PropsType[];
   value?: Record<string, any>;
   onChange?: (value: Record<string, any>) => void;
@@ -23,17 +21,10 @@ export interface SimplePropsEditorProps
  * @constructor
  */
 const SimplePropsEditor = (props: SimplePropsEditorProps) => {
-  const {
-    className = '',
-    propsDef = [],
-    value,
-    onChange = ef,
-    colorTriggerProps,
-    ...otherProps
-  } = props;
+  const { className = '', propsDef = [], value, onChange = ef, colorTriggerProps, ...otherProps } = props;
   const styles = useStyles();
   return (
-    <Form
+    <SimpleForm
       initialValues={value}
       onValuesChange={(_, value) => {
         onChange(value);
@@ -64,7 +55,7 @@ const SimplePropsEditor = (props: SimplePropsEditorProps) => {
                 })(),
               }}
             >
-              <Form.Item noStyle name={key}>
+              <SimpleForm.Item name={key}>
                 {(() => {
                   switch (type) {
                     case 'number':
@@ -72,23 +63,17 @@ const SimplePropsEditor = (props: SimplePropsEditorProps) => {
                     case 'font':
                       return 'fontEditor';
                     case 'color':
-                      return (
-                        <ColorPicker
-                          size={24}
-                          triggerProps={colorTriggerProps}
-                          {...otherProps}
-                        />
-                      );
+                      return <ColorPicker size={24} triggerProps={colorTriggerProps} {...otherProps} />;
                     default:
                       return 'Unknown Editor';
                   }
                 })()}
-              </Form.Item>
+              </SimpleForm.Item>
             </div>
           </React.Fragment>
         ))}
       </div>
-    </Form>
+    </SimpleForm>
   );
 };
 

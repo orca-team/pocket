@@ -1,8 +1,6 @@
 ---
 title: useGetState 获取状态
-nav:
-  title: Hooks
-  path: /hooks
+
 group:
   title: hooks
   path: /base

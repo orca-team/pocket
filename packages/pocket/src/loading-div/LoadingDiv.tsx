@@ -1,4 +1,3 @@
-import { Spin } from 'antd';
 import React from 'react';
 import cn from 'classnames';
 import useStyle from './LoadingDiv.style';
@@ -19,7 +18,7 @@ export interface LoadingDivProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const LoadingDiv = (props: LoadingDivProps) => {
-  const { className = '', children, loadingComponent = <Spin />, absolute, loading, loadingBackgroundColor, ...otherProps } = props;
+  const { className = '', children, loadingComponent = 'loading...', absolute, loading, loadingBackgroundColor, ...otherProps } = props;
   const styles = useStyle();
   return (
     <div

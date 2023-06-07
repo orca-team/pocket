@@ -1,8 +1,6 @@
 ---
 title: Flop 翻牌器
-nav:
-  title: Pocket 组件
-  path: /component
+
 group:
   title: 基础组件
   path: /base

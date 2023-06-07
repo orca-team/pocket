@@ -1,5 +1,19 @@
 # @orca-fe/pdf-viewer
 
+## 1.13.0
+
+### Minor Changes
+
+- feat: remove antd dependencies
+
+## 1.12.14
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/pocket@3.0.0
+  - @orca-fe/painter@1.4.20
+
 ## 1.12.13
 
 ### Patch Changes

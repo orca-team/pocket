@@ -6,6 +6,7 @@ module.exports = {
         map: [
           ['@orca-fe/hooks', './packages/hooks/src'],
           ['@orca-fe/pocket', './packages/pocket/src'],
+          ['@orca-fe/antd-plus', './packages/antd-plus/src'],
           ['@orca-fe/tools', './packages/tools/src'],
           ['@orca-fe/pdf-viewer', './packages/pdf-viewer/src'],
           ['@orca-fe/painter', './packages/painter/src'],
@@ -25,5 +26,6 @@ module.exports = {
     'react/jsx-max-depth': ['off'],
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
+    'react/destructuring-assignment': 'off',
   },
 };

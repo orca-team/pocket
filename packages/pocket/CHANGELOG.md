@@ -1,5 +1,11 @@
 # @orca-fe/pocket
 
+## 3.0.0
+
+### Major Changes
+
+- feat: remove all antd dependencies
+
 ## 2.3.10
 
 ### Patch Changes
