@@ -1,5 +1,11 @@
 # @orca-fe/tools
 
+## 0.9.2
+
+### Patch Changes
+
+- fix: remove all pocket direct dependencies
+
 ## 0.9.1
 
 ### Patch Changes

@@ -4,12 +4,12 @@ import { CaretRightFilled, CloseOutlined, MenuOutlined, PlusOutlined } from '@an
 import { Checkbox, Dropdown, Menu, Select, Tooltip } from 'antd';
 import { insertArr, removeArrIndex } from '@orca-fe/tools';
 import cn from 'classnames';
+import { OpenBox } from '@orca-fe/pocket';
 import DraggableList from './DraggableListNoKey';
 import IconButton from './IconButton';
 import { defaultValueFromJsonSchema, toTypeScriptDefinition } from './utils';
 import type { BaseType, JsonValueType } from './defs';
 import UcInput from '../uc-input/UcInput';
-import OpenBox from '../../../pocket/src/open-box/OpenBox';
 import useStyles from './JsonSchemaEditor.style';
 
 export type { JsonValueType };

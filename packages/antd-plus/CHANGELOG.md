@@ -1,5 +1,13 @@
 # @orca-fe/painter
 
+## 0.0.2
+
+### Patch Changes
+
+- fix: remove all pocket direct dependencies
+- Updated dependencies
+  - @orca-fe/tools@0.9.2
+
 ## 0.3.11
 
 ### Patch Changes

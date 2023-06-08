@@ -1,5 +1,5 @@
 import jssAutoPrefix from '@orca-fe/jss-plugin-auto-prefix';
-import { createUseStyles } from '../../../pocket/src/utils/jss';
+import { createUseStyles } from '@orca-fe/simple-jss';
 
 const prefix = 'json-schema-editor';
 

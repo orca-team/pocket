@@ -144,6 +144,12 @@ importers:
       '@orca-fe/jss-plugin-auto-prefix':
         specifier: ^0.0.1
         version: 0.0.1(jss@10.10.0)(react@18.2.0)
+      '@orca-fe/pocket':
+        specifier: ^3.0.0
+        version: link:../pocket
+      '@orca-fe/simple-jss':
+        specifier: ^0.0.3
+        version: 0.0.3(react@18.2.0)
       '@orca-fe/tools':
         specifier: ^0.9.1
         version: link:../tools

@@ -5,7 +5,7 @@ import { CloseOutlined } from '@ant-design/icons';
 import { Button, Space } from 'antd';
 import { useDebounceFn, useEventListener } from 'ahooks';
 import cn from 'classnames';
-import { isInBy } from '../../../pocket/src/utils/isIn';
+import { isInBy } from '@orca-fe/tools';
 import useDraggable from './useDraggable';
 import useStyles from './Dialog.style';
 
