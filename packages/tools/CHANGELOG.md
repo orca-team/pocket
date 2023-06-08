@@ -1,5 +1,11 @@
 # @orca-fe/tools
 
+## 0.9.3
+
+### Patch Changes
+
+- fix: export isIn
+
 ## 0.9.2
 
 ### Patch Changes

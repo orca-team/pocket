@@ -4,7 +4,7 @@
  * @param classNames
  * @param parent
  */
-export default function isIn(dom: HTMLElement, classNames: string | string[], parent = document.body) {
+export function isIn(dom: HTMLElement, classNames: string | string[], parent = document.body) {
   let cName = classNames;
   if (typeof classNames === 'string') {
     cName = [classNames];
