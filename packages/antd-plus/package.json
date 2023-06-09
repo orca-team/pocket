@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/antd-plus",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Transformer Container",
   "keywords": [
     "react",
@@ -51,7 +51,7 @@
     "rfdc": "^1.3.0"
   },
   "peerDependencies": {
-    "@ant-design/icons": "^5.1.3",
+    "@ant-design/icons": ">=4.8.0",
     "antd": ">=4.23.0",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
