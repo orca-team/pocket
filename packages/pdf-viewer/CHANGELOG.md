@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.14.0
+
+### Minor Changes
+
+- feat: 国际化支持
+
 ## 1.13.2
 
 ### Patch Changes

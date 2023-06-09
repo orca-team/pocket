@@ -15,13 +15,23 @@ import { findSortedArr } from './utils';
 import ZoomAndPageController from './ZoomAndPageController';
 import PDFToolbar from './PDFToolbar';
 import useStyle from './PDFViewer.style';
+import type { LocaleType } from './locale/context';
+import { LocaleContext, useLocale } from './locale/context';
+import zhCN from './locale/zh_CN';
 
 const ef = () => undefined;
 
 const round001 = roundBy(0.001);
-const defaultLoadingTips = <div className="pdf-viewer-default-loading-tips">正在打开文件...</div>;
 
-const defaultEmptyTips = <div className="pdf-viewer-default-empty-tips">请打开一个 PDF 文件</div>;
+const DefaultLoadingTips = () => {
+  const [l] = useLocale(zhCN);
+  return <div className="pdf-viewer-default-loading-tips">{l.loadingTips}</div>;
+};
+
+const DefaultEmptyTips = () => {
+  const [l] = useLocale(zhCN);
+  return <div className="pdf-viewer-default-empty-tips">{l.loadTips}</div>;
+};
 
 export interface PDFViewerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
 
@@ -68,6 +78,8 @@ export interface PDFViewerProps extends Omit<React.HTMLAttributes<HTMLDivElement
   dropFile?: boolean;
 
   pdfJsParams?: DocumentInitParameters;
+
+  locale?: LocaleType;
 }
 
 const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef) => {
@@ -80,8 +92,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     onZoomChange = ef,
     onPageScroll,
     children,
-    emptyTips = defaultEmptyTips,
-    loadingTips = defaultLoadingTips,
+    emptyTips = <DefaultEmptyTips />,
+    loadingTips = <DefaultLoadingTips />,
     title: _title,
     hideToolbar,
     defaultTitle,
@@ -89,6 +101,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     dropFile,
     pdfJsParams,
     onPageChange = ef,
+    locale,
     ...otherProps
   } = props;
 
@@ -586,99 +599,101 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   }));
 
   return (
-    <PDFViewerContext.Provider
-      value={useMemo(
-        () => ({
-          loading,
-          pluginLoading,
-          pages,
-          viewports,
-          zoom,
-          current,
-          changePage,
-          forceUpdate,
-          pageCoverRefs,
-          pdfViewer: pdfViewerHandle,
-          internalState,
-          setInternalState,
-          bodyElement: bodyRef,
-        }),
-        [loading, pluginLoading, pages, viewports, zoom, current, pageCoverRefs, internalState, bodyRef],
-      )}
-    >
-      <PDFToolbarContext.Provider
+    <LocaleContext.Provider value={useLocale(zhCN, locale)[0]}>
+      <PDFViewerContext.Provider
         value={useMemo(
           () => ({
-            toolbarRightDom,
-            toolbarLeftDom,
-            removeCenterToolbarId,
-            centerToolbarIds,
-            addCenterToolbarId,
+            loading,
+            pluginLoading,
+            pages,
+            viewports,
+            zoom,
+            current,
+            changePage,
+            forceUpdate,
+            pageCoverRefs,
+            pdfViewer: pdfViewerHandle,
+            internalState,
+            setInternalState,
+            bodyElement: bodyRef,
           }),
-          [toolbarRightDom, toolbarLeftDom, centerToolbarIds],
+          [loading, pluginLoading, pages, viewports, zoom, current, pageCoverRefs, internalState, bodyRef],
         )}
       >
-        <div ref={rootRef} className={`${styles.root} ${className}`} {...otherProps}>
-          <PDFToolbar
-            hide={hideToolbar}
-            title={loading ? '' : title}
-            className={styles.toolbar}
-            leftRef={(dom) => {
-              setToolbarLeftDom(dom);
-            }}
-            centerIds={centerToolbarIds}
-            rightRef={(dom) => {
-              setToolbarRightDom(dom);
-            }}
-          />
-          <div ref={setBodyRef} className={cn(styles.pagesOuter, { [styles.droppable]: dropFile })}>
-            <div
-              ref={pageContainerRef}
-              className={styles.pages}
-              onScroll={onPageScroll}
-              style={{
-                '--scale-factor': scale,
-                '--pdf-viewer-page-scale': scale,
-              }}
-            >
-              {viewports.length === 0 && !loading && !pluginLoading && emptyTips}
-              {viewports.map((viewport, pageIndex) => {
-                const shouldRender = pageIndex >= renderRange[0] && pageIndex <= renderRange[1];
-                const width = `calc(var(--scale-factor) * ${Math.floor(viewport.width)}px)`;
-                const height = `calc(var(--scale-factor) * ${Math.floor(viewport.height)}px)`;
-                const gap = `calc(var(--scale-factor) * ${pageGap}px)`;
-                return (
-                  <div key={pageIndex} className={styles.pageContainer} style={{ width, height, marginBottom: gap }}>
-                    {shouldRender && (
-                      <>
-                        <PDFPage className={styles.page} index={pageIndex} zoom={zoom} render={shouldRender} />
-                        <div ref={node => (pageCoverRefs[pageIndex] = node)} className={styles.pageCover} />
-                        <div className={styles.pageCover}>{renderPageCover(pageIndex, { viewport, zoom })}</div>
-                      </>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-            {(loading || !!pluginLoading) && loadingTips}
-
-            {/* 绘图的工具栏渲染 */}
-            {children}
-          </div>
-
-          {/* 页码 */}
-          {pages.length > 0 && (
-            <ZoomAndPageController
-              className={styles.pageController}
-              max={2 ** maxZoom}
-              min={2 ** minZoom}
-              zoomMode={zoomMode}
-              onZoomModeChange={setZoomMode}
-            />
+        <PDFToolbarContext.Provider
+          value={useMemo(
+            () => ({
+              toolbarRightDom,
+              toolbarLeftDom,
+              removeCenterToolbarId,
+              centerToolbarIds,
+              addCenterToolbarId,
+            }),
+            [toolbarRightDom, toolbarLeftDom, centerToolbarIds],
           )}
-        </div>
-      </PDFToolbarContext.Provider>
-    </PDFViewerContext.Provider>
+        >
+          <div ref={rootRef} className={`${styles.root} ${className}`} {...otherProps}>
+            <PDFToolbar
+              hide={hideToolbar}
+              title={loading ? '' : title}
+              className={styles.toolbar}
+              leftRef={(dom) => {
+                setToolbarLeftDom(dom);
+              }}
+              centerIds={centerToolbarIds}
+              rightRef={(dom) => {
+                setToolbarRightDom(dom);
+              }}
+            />
+            <div ref={setBodyRef} className={cn(styles.pagesOuter, { [styles.droppable]: dropFile })}>
+              <div
+                ref={pageContainerRef}
+                className={styles.pages}
+                onScroll={onPageScroll}
+                style={{
+                  '--scale-factor': scale,
+                  '--pdf-viewer-page-scale': scale,
+                }}
+              >
+                {viewports.length === 0 && !loading && !pluginLoading && emptyTips}
+                {viewports.map((viewport, pageIndex) => {
+                  const shouldRender = pageIndex >= renderRange[0] && pageIndex <= renderRange[1];
+                  const width = `calc(var(--scale-factor) * ${Math.floor(viewport.width)}px)`;
+                  const height = `calc(var(--scale-factor) * ${Math.floor(viewport.height)}px)`;
+                  const gap = `calc(var(--scale-factor) * ${pageGap}px)`;
+                  return (
+                    <div key={pageIndex} className={styles.pageContainer} style={{ width, height, marginBottom: gap }}>
+                      {shouldRender && (
+                        <>
+                          <PDFPage className={styles.page} index={pageIndex} zoom={zoom} render={shouldRender} />
+                          <div ref={node => (pageCoverRefs[pageIndex] = node)} className={styles.pageCover} />
+                          <div className={styles.pageCover}>{renderPageCover(pageIndex, { viewport, zoom })}</div>
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              {(loading || !!pluginLoading) && loadingTips}
+
+              {/* 绘图的工具栏渲染 */}
+              {children}
+            </div>
+
+            {/* 页码 */}
+            {pages.length > 0 && (
+              <ZoomAndPageController
+                className={styles.pageController}
+                max={2 ** maxZoom}
+                min={2 ** minZoom}
+                zoomMode={zoomMode}
+                onZoomModeChange={setZoomMode}
+              />
+            )}
+          </div>
+        </PDFToolbarContext.Provider>
+      </PDFViewerContext.Provider>
+    </LocaleContext.Provider>
   );
 });
 

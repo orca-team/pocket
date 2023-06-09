@@ -13,26 +13,12 @@ import TooltipCreator from '../TooltipCreator';
 import SimplePropsEditor from '../../SimplePropsEditor';
 import type { PropsType } from '../../SimplePropsEditor/def';
 import PopupBox from '../../PopupBox';
+import { useLocale } from '../../../locale/context';
+import zhCN from '../../../locale/zh_CN';
 
 const eArr = [];
 
 const ef = () => undefined;
-
-const propsDef: PropsType[] = [
-  {
-    key: 'color',
-    type: 'color',
-    name: '顏色',
-  },
-  {
-    key: 'fontSize',
-    type: 'number',
-    min: 10,
-    max: 50,
-    step: 1,
-    name: '字號',
-  },
-];
 
 export interface PDFTooltipPainterProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultChecked' | 'onChange'> {
   drawing?: boolean;
@@ -69,6 +55,24 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
     ...otherProps
   } = props;
   const styles = useStyles();
+
+  const [l] = useLocale(zhCN);
+
+  const propsDef: PropsType[] = [
+    {
+      key: 'color',
+      type: 'color',
+      name: l.color,
+    },
+    {
+      key: 'fontSize',
+      type: 'number',
+      min: 10,
+      max: 50,
+      step: 1,
+      name: l.fontSize,
+    },
+  ];
 
   const [changing, setChanging] = useState(false);
 

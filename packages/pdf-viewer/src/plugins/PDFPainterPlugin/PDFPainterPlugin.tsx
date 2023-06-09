@@ -16,6 +16,8 @@ import SimplePropsEditor from '../SimplePropsEditor';
 import PopupBox from '../PopupBox';
 import type { PropsType } from '../SimplePropsEditor/def';
 import useStyle from './PDFPainterPlugin.style';
+import { useLocale } from '../../locale/context';
+import zhCN from '../../locale/zh_CN';
 
 const deepClone = rfdc();
 
@@ -33,22 +35,6 @@ export type PDFPainterPluginHandle = {
 const eArr = [];
 
 const ef = () => {};
-
-const propsDef: PropsType[] = [
-  {
-    key: 'stroke',
-    type: 'color',
-    name: '颜色',
-  },
-  {
-    key: 'strokeWidth',
-    type: 'number',
-    min: 0.1,
-    max: 20,
-    step: 0.1,
-    name: '边框',
-  },
-];
 
 /**
  * PDFPainterPlugin 绘图插件属性
@@ -95,10 +81,27 @@ const drawingNamePDFPainterPlugin = 'PDFPainterPlugin';
  * PDFPainterPlugin 绘图插件
  */
 const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPluginProps>((props, pRef) => {
-  const { disabledButton, autoCheck = true, onChangeStart = ef, buttonName = '绘图' } = props;
+  const [l] = useLocale(zhCN);
+  const { disabledButton, autoCheck = true, onChangeStart = ef, buttonName = l.paint } = props;
   const styles = useStyle();
 
   const { internalState, setInternalState } = useContext(PDFViewerContext);
+
+  const propsDef: PropsType[] = [
+    {
+      key: 'stroke',
+      type: 'color',
+      name: l.color,
+    },
+    {
+      key: 'strokeWidth',
+      type: 'number',
+      min: 0.1,
+      max: 20,
+      step: 0.1,
+      name: l.border,
+    },
+  ];
 
   const [checked, setChecked] = useControllableValue<[number, number] | undefined>(props, {
     defaultValuePropName: 'defaultChecked',

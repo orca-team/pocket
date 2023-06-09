@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react';
 import { usePan } from '@orca-fe/hooks';
 import useStyle from './TooltipCreator.style';
 import type { TooltipDataType } from '../def';
+import { useLocale } from '../../../locale/context';
+import zhCN from '../../../locale/zh_CN';
 
 const ef = () => {};
 
@@ -16,6 +18,8 @@ export interface ShapeCreatorProps extends React.HTMLAttributes<HTMLDivElement> 
 const TooltipCreator = (props: ShapeCreatorProps) => {
   const { className = '', onCreate = ef, onDrawing = ef, onCancel, pointMapping = a => a, initialAttr = {}, ...otherProps } = props;
   const styles = useStyle();
+
+  const [l] = useLocale(zhCN);
 
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -41,7 +45,7 @@ const TooltipCreator = (props: ShapeCreatorProps) => {
       y: y2 - 16,
       pointX: x1,
       pointY: y1,
-      value: '请输入内容',
+      value: l.inputPlaceHolder || '请输入内容',
       ...initialAttr,
       type: 'tooltip',
     };

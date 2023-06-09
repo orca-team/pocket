@@ -9,6 +9,8 @@ import PDFTooltipPainter from './PDFTooltipPainter';
 import PDFViewerContext, { usePageCoverRenderer } from '../../context';
 import ToolbarPortal from '../../ToolbarPortal';
 import type { TooltipDataType } from './def';
+import { useLocale } from '../../locale/context';
+import zhCN from '../../locale/zh_CN';
 
 const eArr = [];
 const ef = () => undefined;
@@ -58,7 +60,8 @@ export interface PDFTooltipPluginProps {
 const drawingNamePDFTooltipPlugin = 'PDFTooltipPlugin';
 
 const PDFTooltipPlugin = React.forwardRef<PDFTooltipPluginHandle, PDFTooltipPluginProps>((props, pRef) => {
-  const { autoCheck = true, initialAttr, onChangeStart = ef, buttonName = '批注' } = props;
+  const [l] = useLocale(zhCN);
+  const { autoCheck = true, initialAttr, onChangeStart = ef, buttonName = l.tooltip } = props;
   const renderPageCover = usePageCoverRenderer();
 
   const { pdfViewer, internalState, setInternalState } = useContext(PDFViewerContext);

@@ -3,6 +3,7 @@ import { SimpleNumberInput, Tooltip } from '@orca-fe/pocket';
 import { CaretDownOutlined } from '@ant-design/icons';
 import { useControllableValue } from 'ahooks';
 import useStyles from './ZoomEditor.style';
+import { useLocale } from '../locale/context';
 
 const ef = () => {};
 
@@ -30,6 +31,8 @@ const ZoomEditor = (props: ZoomEditorProps) => {
   } = props;
   const styles = useStyles();
   const [value = 1, setValue] = useControllableValue(props);
+
+  const [l] = useLocale();
 
   return (
     <div className={`${styles.root} ${className}`} {...otherProps}>
@@ -107,14 +110,14 @@ const ZoomEditor = (props: ZoomEditorProps) => {
                 onZoomModeChange('autoWidth');
               }}
             >
-              自动宽度
+              {l.autoWidth}
             </div>
             <div
               onClick={() => {
                 onZoomModeChange('autoHeight');
               }}
             >
-              自动高度
+              {l.autoHeight}
             </div>
           </div>
         )}
@@ -122,8 +125,8 @@ const ZoomEditor = (props: ZoomEditorProps) => {
         <div className={styles.zoomControl}>
           {zoomMode ? (
             {
-              autoWidth: '自动宽度',
-              autoHeight: '自动高度',
+              autoWidth: l.autoWidth,
+              autoHeight: l.autoHeight,
             }[zoomMode]
           ) : (
             <>
