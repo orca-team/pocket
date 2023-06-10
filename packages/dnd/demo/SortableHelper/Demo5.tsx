@@ -1,12 +1,13 @@
 /**
- * title: 基础用法
- * description: 通过 children 渲染列表项
+ * title: 垂直列表布局 使用 SortableHelper 实现
+ * description: 需要传递 `strategy` 属性为垂直列表
  */
 import React, { useState } from 'react';
-import { SortableListHelper, SortableHelperItem, SortHandle } from '@orca-fe/dnd';
+import { SortableHelper, SortableHelperItem, SortHandle } from '@orca-fe/dnd';
 import { Table } from 'antd';
 import { IconButton } from '@orca-fe/pocket';
 import { MenuOutlined } from '@ant-design/icons';
+import { verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 const Row = (props) => {
   const { 'data-row-index': row = -1 } = props;
@@ -26,7 +27,7 @@ export default () => {
   const [data, setData] = useState(defaultData);
 
   return (
-    <SortableListHelper keyManager="key" customHandle data={data} onChange={setData}>
+    <SortableHelper keyManager="key" customHandle data={data} onChange={setData} strategy={verticalListSortingStrategy}>
       <Table
         columns={[
           {
@@ -50,6 +51,6 @@ export default () => {
           },
         }}
       />
-    </SortableListHelper>
+    </SortableHelper>
   );
 };

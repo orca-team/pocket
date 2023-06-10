@@ -1,5 +1,11 @@
 # @orca-fe/dnd
 
+## 1.0.0
+
+### Major Changes
+
+- feat: 抽象出 SortableHelper 支持网格排序
+
 ## 0.3.3
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 import { createUseStyles } from '@orca-fe/simple-jss';
 import jssAutoPrefix from '@orca-fe/jss-plugin-auto-prefix';
 
-const prefix = 'orca-sortable-list-helper';
+const prefix = 'orca-sortable-helper';
 
 export default createUseStyles(
   {

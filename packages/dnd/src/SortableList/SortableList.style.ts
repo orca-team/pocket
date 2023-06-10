@@ -7,7 +7,7 @@ export default createUseStyles(
   {
     root: {
       position: 'relative',
-      '& .orca-sortable-list-helper-dragging': {
+      '& .orca-sortable-helper-dragging': {
         opacity: 0.4,
       },
     },

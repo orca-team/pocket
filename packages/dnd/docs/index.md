@@ -14,7 +14,15 @@ toc: content
 
 `yarn add @orca-fe/dnd`
 
-基于 [dnd-kit](https://dndkit.com/) 实现的更贴合业务功能开发的组件集合
+基于 [dnd-kit](https://dndkit.com/) 实现的更贴合业务功能开发的组件集合。
+
+目前已经实现了：
+
+- [x] SortableList 可拖拽排序列表（[简单纵向列表排序](#packages-dnd-docs-demo-demo1)）
+- [x] SortableListHelper 拖拽排序列表（[复杂列表拖拽排序](#packages-dnd-docs-demo-demo3)）
+- [x] SortableHelper 通用拖拽排序（[网格布局拖拽](#packages-dnd-docs-demo-demo4)）
+
+<code src="../demo/DemoDev.tsx"></code>
 
 ## SortableList 可拖拽排序列表
 
@@ -67,3 +75,33 @@ type SortableItemChildren<T> = React.ReactNode | ((item: T, index: number, args?
 | customHandle     | 是否自定义拖拽按钮 | `boolean`                                                        | false  |        |
 | keyManager       | 自定义 key 管理器  | `KeyManager<T>` \| `string`                                      | -      |        |
 | onDragStartIndex | 拖拽开始时的下标   | `(index: number) => void`                                        | -      |        |
+
+## SortableHelper
+
+`1.0.0`
+
+在 `1.0.0` 版本中，增加了网格布局支持，并进一步抽象了 `SortableListHelper`，变成了 `SortableHelper`
+，它允许你传入拖拽排序策略，支持[文档参考](https://docs.dndkit.com/presets/sortable/sortable-context#strategy)：
+
+- `rectSortingStrategy` 顺序网格布局（默认）
+- `verticalListSortingStrategy` 纵向列表
+- `horizontalListSortingStrategy` 横向列表
+- `rectSwappingStrategy` 交换网格布局
+
+### 示例
+
+<code src="../demo/SortableHelper/Demo4.tsx"></code>
+<code src="../demo/SortableHelper/Demo5.tsx"></code>
+
+### API
+
+| 属性名称         | 描述               | 类型                                                             | 默认值 | 版本号 |
+| ---------------- | ------------------ | ---------------------------------------------------------------- | ------ | ------ |
+| data             | 数据               | `Object[]`                                                       | []     |        |
+| onChange         | 数据变化事件       | `(data: T[], from: number, to: number, originData: T[]) => void` | -      |        |
+| children         | 子节点             | `ReactNode`                                                      | -      |        |
+| customHandle     | 是否自定义拖拽按钮 | `boolean`                                                        | false  |        |
+| keyManager       | 自定义 key 管理器  | `KeyManager<T>` \| `string`                                      | -      |        |
+| onDragStartIndex | 拖拽开始时的下标   | `(index: number) => void`                                        | -      |        |
+| strategy         | 拖拽策略           | 从 `@dnd-kits/core` 获得 `strategy`                              | -      |        |
+| disabled         | 是否禁用拖拽       | `boolean`                                                        | false  | 1.0.0  |

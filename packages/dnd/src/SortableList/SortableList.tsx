@@ -1,33 +1,34 @@
 import React, { useMemo, useState } from 'react';
 import cn from 'classnames';
 import { useControllableValue } from 'ahooks';
+import { verticalListSortingStrategy } from '@dnd-kit/sortable';
 import useStyles from './SortableList.style';
 import { SortableItemContext } from '../utils/SortHandle';
 import type { SortableItemChildren } from '../utils/defs';
-import type { SortableListHelperItemProps } from '../SortableListHelper';
-import SortableListHelper, { SortableListHelperDragSort, SortableListHelperItem } from '../SortableListHelper';
 import KeyManager from '../KeyManager';
+import type { SortableHelperItemProps } from '../SortableHelper';
+import SortableHelper, { SortableHelperDragSort, SortableHelperItem } from '../SortableHelper';
 
 const eArr = [];
 
-interface SortableItemProps<T> extends Omit<SortableListHelperItemProps, 'children'> {
+interface SortableItemProps<T> extends Omit<SortableHelperItemProps, 'children'> {
   children?: SortableItemChildren<T>;
 }
 
 /**
  * 可排序列表的子项
  */
-function SortableItem<T>(props: SortableItemProps<T>) {
+function SortableListItem<T>(props: SortableItemProps<T>) {
   const { children = null, ...otherProps } = props;
 
   return (
-    <SortableListHelperItem {...otherProps}>
+    <SortableHelperItem {...otherProps}>
       {typeof children === 'function' ? (
         <SortableItemContext.Consumer>{({ item, sortable, row }) => children(item, row, sortable || undefined)}</SortableItemContext.Consumer>
       ) : (
         children
       )}
-    </SortableListHelperItem>
+    </SortableHelperItem>
   );
 }
 
@@ -74,16 +75,16 @@ const SortableList = <T extends Object>(props: SortableListProps<T>) => {
 
   return (
     <div className={cn(styles.root, className)} {...otherProps}>
-      <SortableListHelper customHandle={customHandle} data={data} onChange={setData}>
+      <SortableHelper customHandle={customHandle} data={data} onChange={setData} strategy={verticalListSortingStrategy}>
         {data.map((item, index) => (
-          <SortableItem<T> key={keys[index]} row={index}>
+          <SortableListItem<T> key={keys[index]} row={index}>
             {children}
-          </SortableItem>
+          </SortableListItem>
         ))}
-        <SortableListHelperDragSort className={cn({ [styles.handle]: !customHandle })}>
+        <SortableHelperDragSort className={cn({ [styles.handle]: !customHandle })}>
           {(activeItem, activeIndex) => activeItem != null && (typeof children === 'function' ? children(activeItem, activeIndex) : children)}
-        </SortableListHelperDragSort>
-      </SortableListHelper>
+        </SortableHelperDragSort>
+      </SortableHelper>
     </div>
   );
 };
