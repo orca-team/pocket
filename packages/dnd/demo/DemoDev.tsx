@@ -1,6 +1,6 @@
 /**
  * title: Demo
- * dev: true
+ * debug: true
  */
 import React, { useState } from 'react';
 import { SortableHelper, SortableHelperItem } from '@orca-fe/dnd';
