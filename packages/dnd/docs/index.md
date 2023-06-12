@@ -3,7 +3,6 @@ nav:
   title: 重型组件
   path: /pro-component
 title: DnD 拖拽
-toc: content
 ---
 
 # DnD 拖拽组件
