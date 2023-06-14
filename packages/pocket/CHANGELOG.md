@@ -1,5 +1,11 @@
 # @orca-fe/pocket
 
+## 3.0.3
+
+### Patch Changes
+
+- SvgIcon add minWidth minHeight
+
 ## 3.0.2
 
 ### Patch Changes

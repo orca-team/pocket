@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/pocket",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "UI components by orca-team",
   "keywords": [
     "react",
@@ -77,7 +77,8 @@
   "devDependencies": {
     "@types/react": "^18.2.7",
     "autod": "^3.1.2",
-    "countup.js": "^2.6.2"
+    "countup.js": "^2.6.2",
+    "jss": "^10.10.0"
   },
   "gitHead": "0f38f477546c9603891bad4b0c847554147262df"
 }

@@ -11,6 +11,8 @@ export default createUseStyles(
       fill: 'currentColor',
       width: '1em',
       height: '1em',
+      minWidth: '1em',
+      minHeight: '1em',
     },
     '@keyframes anim-spinning': {
       from: {
