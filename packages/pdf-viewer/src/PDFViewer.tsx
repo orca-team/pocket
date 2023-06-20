@@ -299,7 +299,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       if (pdfContent instanceof Promise) {
         pdfContent = await pdfContent;
       }
-      if (pdfContent instanceof File) {
+      if (pdfContent instanceof Blob) {
         pdfContent = await pdfContent.arrayBuffer();
       }
 

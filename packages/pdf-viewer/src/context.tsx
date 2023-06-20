@@ -17,7 +17,7 @@ export type LoadOptions = {
 export type PDFViewerHandle = {
 
   /** 加载文件，支持 url / 文件 / ArrayBuffer */
-  load: (file: Promise<SourceType | File> | SourceType | File, options?: LoadOptions) => Promise<void>;
+  load: (file: Promise<SourceType | Blob> | SourceType | Blob, options?: LoadOptions) => Promise<void>;
 
   /** 关闭文件，恢复初始状态 */
   close: () => Promise<void>;

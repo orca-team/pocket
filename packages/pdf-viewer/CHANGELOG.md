@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.15.1
+
+### Patch Changes
+
+- feat: change File type to Blob
+
 ## 1.15.0
 
 ### Minor Changes
