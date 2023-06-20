@@ -293,13 +293,19 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     const key = `${Date.now()}_${Math.random()}`;
     _this.pdfLoadingKey = key;
     setLoading(true);
-    let pdfContent = file;
-    if (pdfContent instanceof File) {
-      pdfContent = await pdfContent.arrayBuffer();
-    }
-    if (key !== _this.pdfLoadingKey) return;
 
     try {
+      let pdfContent = file;
+      if (pdfContent instanceof Promise) {
+        pdfContent = await pdfContent;
+      }
+      if (pdfContent instanceof File) {
+        pdfContent = await pdfContent.arrayBuffer();
+      }
+
+      // key 不一致，说明已经有更新的 load 请求。
+      if (key !== _this.pdfLoadingKey) return;
+
       const pdfJsGetDocumentParams: DocumentInitParameters = {
         enableXfa: true,
         ...pdfJsParams,

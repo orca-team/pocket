@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.15.0
+
+### Minor Changes
+
+- feat: pdf-viewer 支持 Promise 参数
+
 ## 1.14.1
 
 ### Patch Changes

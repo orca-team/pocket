@@ -17,7 +17,7 @@ export type LoadOptions = {
 export type PDFViewerHandle = {
 
   /** 加载文件，支持 url / 文件 / ArrayBuffer */
-  load: (file: SourceType | File, options?: LoadOptions) => Promise<void>;
+  load: (file: Promise<SourceType | File> | SourceType | File, options?: LoadOptions) => Promise<void>;
 
   /** 关闭文件，恢复初始状态 */
   close: () => Promise<void>;
@@ -140,6 +140,8 @@ const PDFViewerContext = React.createContext<PDFViewerContextType>({
     setZoom() {},
     setTitle() {},
     getRoot: () => null,
+    pluginLoad() {},
+    pluginLoaded() {},
   },
 });
 
