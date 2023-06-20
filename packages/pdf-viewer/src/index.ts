@@ -1,3 +1,4 @@
+import type {} from 'jss';
 import type { PDFViewerContextType } from './context';
 import PDFViewerContext, { usePageCoverRenderer } from './context';
 import OpenFileButton from './OpenFileButton';
