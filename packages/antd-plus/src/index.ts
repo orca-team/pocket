@@ -1,3 +1,4 @@
+import type {} from 'jss';
 import type { DialogFormProps } from './dialog-form';
 import DialogForm from './dialog-form';
 import type { ModalFormProps } from './modal-form';

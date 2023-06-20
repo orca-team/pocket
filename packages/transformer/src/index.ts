@@ -1,3 +1,4 @@
+import type {} from 'jss';
 import TransformerBox from './TransformerBox';
 import type { TransformerBoxProps } from './TransformerBox';
 import TransformerLine from './TransformerLine';

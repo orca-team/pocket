@@ -1,3 +1,4 @@
+import type {} from 'jss';
 import type { ColorPickerProps } from './ColorPicker';
 import ColorPicker from './ColorPicker';
 import Painter from './Painter';

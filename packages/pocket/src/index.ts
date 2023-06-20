@@ -1,3 +1,4 @@
+import type {} from 'jss';
 import type { EqRatioBoxProps } from './eq-ratio-box';
 import EqRatioBox from './eq-ratio-box';
 import type { ImgProps } from './img';

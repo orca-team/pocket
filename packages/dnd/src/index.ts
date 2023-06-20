@@ -1,3 +1,4 @@
+import type {} from 'jss';
 import SortableHelper from './SortableHelper';
 import SortableList from './SortableList';
 import SortableListHelper from './SortableListHelper';
