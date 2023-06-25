@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 1.4.24
+
+### Patch Changes
+
+- update dependencies
+
 ## 1.4.23
 
 ### Patch Changes

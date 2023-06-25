@@ -1,8 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import type { ForwardedRef } from 'react';
+import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 import { Transition } from 'react-transition-group';
 import { useBoolean, useClickAway, useEventListener } from 'ahooks-v2';
 import ReactDOM from 'react-dom';
 import cn from 'classnames';
+import { useMergedRefs } from '@orca-fe/hooks';
 import useStyles from './ContextMenu.style';
 
 const arrowPath =
@@ -178,7 +180,7 @@ export interface ContextMenuProps<T extends ContextMenuItemType> extends React.H
   disabled?: boolean;
 }
 
-const ContextMenu = <T extends ContextMenuItemType>(props: ContextMenuProps<T>) => {
+const ContextMenu = <T extends ContextMenuItemType>(props: ContextMenuProps<T>, pRef: ForwardedRef<HTMLDivElement>) => {
   const {
     className = '',
     data = eArr,
@@ -210,6 +212,7 @@ const ContextMenu = <T extends ContextMenuItemType>(props: ContextMenuProps<T>) 
 
   const rootRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const mergedRef = useMergedRefs(rootRef, pRef);
 
   // hide menu
   useClickAway(() => {
@@ -251,7 +254,7 @@ const ContextMenu = <T extends ContextMenuItemType>(props: ContextMenuProps<T>) 
   });
 
   return (
-    <div ref={rootRef} className={`${styles.root} ${className}`} {...otherProps} onContextMenu={handleContextMenu}>
+    <div ref={mergedRef} className={`${styles.root} ${className}`} {...otherProps} onContextMenu={handleContextMenu}>
       {children}
       <Transition key={`${position?.left},${position?.top}`} appear unmountOnExit in={visible && bounds != null} timeout={300}>
         {state =>
@@ -282,4 +285,4 @@ const ContextMenu = <T extends ContextMenuItemType>(props: ContextMenuProps<T>) 
   );
 };
 
-export default ContextMenu;
+export default forwardRef(ContextMenu) as typeof ContextMenu;

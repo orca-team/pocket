@@ -1,5 +1,16 @@
 # @orca-fe/pdf-viewer
 
+## 1.16.0
+
+### Minor Changes
+
+- feat: add ContextMenu allow download file
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/pocket@3.1.0
+
 ## 1.15.1
 
 ### Patch Changes

@@ -47,6 +47,9 @@ importers:
       father:
         specifier: ^4.2.3
         version: 4.2.3(@types/node@18.16.17)(styled-components@5.3.11)(webpack@5.84.1)
+      file-saver:
+        specifier: ^2.0.5
+        version: 2.0.5
       gh-pages:
         specifier: ^5.0.0
         version: 5.0.0
@@ -108,9 +111,6 @@ importers:
       eslint:
         specifier: ^8.42.0
         version: 8.42.0
-      file-saver:
-        specifier: ^2.0.5
-        version: 2.0.5
       globby:
         specifier: ^13.1.4
         version: 13.1.4
@@ -145,7 +145,7 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1(jss@10.10.0)(react@18.2.0)
       '@orca-fe/pocket':
-        specifier: ^3.0.3
+        specifier: ^3.1.0
         version: link:../pocket
       '@orca-fe/simple-jss':
         specifier: ^0.0.3
@@ -282,7 +282,7 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1(jss@10.10.0)(react@18.2.0)
       '@orca-fe/pocket':
-        specifier: ^3.0.3
+        specifier: ^3.1.0
         version: link:../pocket
       '@orca-fe/simple-jss':
         specifier: ^0.0.3
@@ -337,13 +337,13 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1(jss@10.10.0)(react@18.2.0)
       '@orca-fe/painter':
-        specifier: ^1.4.23
+        specifier: ^1.4.24
         version: link:../painter
       '@orca-fe/pdfjs-dist-browserify':
         specifier: ^3.8.24
         version: 3.8.24
       '@orca-fe/pocket':
-        specifier: ^3.0.3
+        specifier: ^3.1.0
         version: link:../pocket
       '@orca-fe/simple-jss':
         specifier: ^0.0.3
@@ -8299,7 +8299,7 @@ packages:
 
   /file-saver@2.0.5:
     resolution: {integrity: sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==}
-    dev: true
+    dev: false
 
   /file-system-cache@2.0.0:
     resolution: {integrity: sha512-QlYut2ZtxRgdW/dboSmiKZWM8FsnpLaLI549hN/RWgwn3FawSil7Jc2n7nFHheclvYxa4LJqwEOvNUYv9VsCXg==}

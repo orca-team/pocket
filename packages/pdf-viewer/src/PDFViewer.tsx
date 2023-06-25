@@ -8,6 +8,9 @@ import type { PDFDocumentProxy } from '@orca-fe/pdfjs-dist-browserify';
 import { getDocument } from '@orca-fe/pdfjs-dist-browserify';
 import * as pdfjsWorker from '@orca-fe/pdfjs-dist-browserify/build/pdf.worker';
 import type { DocumentInitParameters } from '@orca-fe/pdfjs-dist-browserify/types/src/display/api';
+import { ContextMenu } from '@orca-fe/pocket';
+import { saveAs } from 'file-saver';
+import { DownloadOutlined } from '@ant-design/icons';
 import type { PageViewport, PDFViewerHandle, RenderPageCoverFnType, PDFViewerInternalStateType, SourceType } from './context';
 import PDFViewerContext, { PDFToolbarContext } from './context';
 import PDFPage from './PDFPage';
@@ -134,9 +137,16 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   const [_this] = useState<{
     pdfLoadingKey?: string;
     pdfDoc?: PDFDocumentProxy;
-    mousePositionBeforeWheel?: { x: number; y: number; zoom: number };
+    mousePositionBeforeWheel?: {
+      x: number;
+      y: number;
+      zoom: number;
+    };
     zooming: boolean;
-    size?: { width: number; height: number };
+    size?: {
+      width: number;
+      height: number;
+    };
     file?: SourceType;
   }>({
     zooming: false,
@@ -422,6 +432,18 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     { wait: 280 },
   );
 
+  const downloadPdf = useMemoizedFn(async () => {
+    const doc = _this.pdfDoc;
+    if (doc) {
+      const data = await doc.getData();
+      const blob = new Blob([data.buffer], { type: 'application/pdf' });
+      let fileTitle = typeof title === 'string' ? title : 'download.pdf';
+      if (!fileTitle.endsWith('.pdf')) fileTitle += '.pdf';
+      const file = new File([blob], fileTitle, { type: 'application/pdf' });
+      saveAs(file, fileTitle);
+    }
+  });
+
   // 监听滚动事件，并更新需要展示的页面范围（虚拟列表）
   useEventListener(
     'scroll',
@@ -652,10 +674,24 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
               }}
             />
             <div ref={setBodyRef} className={cn(styles.pagesOuter, { [styles.droppable]: dropFile })}>
-              <div
+              <ContextMenu
                 ref={pageContainerRef}
                 className={styles.pages}
                 onScroll={onPageScroll}
+                mainMenuMinWidth={200}
+                data={[
+                  {
+                    key: 'download',
+                    icon: <DownloadOutlined />,
+                    text: '下载当前文档',
+                    disabled: pages.length <= 0,
+                  },
+                ]}
+                onMenuClick={(menu) => {
+                  if (menu.key === 'download') {
+                    downloadPdf();
+                  }
+                }}
                 style={{
                   '--scale-factor': scale,
                   '--pdf-viewer-page-scale': scale,
@@ -679,7 +715,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                     </div>
                   );
                 })}
-              </div>
+              </ContextMenu>
               {(loading || !!pluginLoading) && loadingTips}
 
               {/* 绘图的工具栏渲染 */}
