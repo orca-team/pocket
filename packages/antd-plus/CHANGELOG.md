@@ -1,5 +1,13 @@
 # @orca-fe/painter
 
+## 0.0.7
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/tools@0.10.0
+  - @orca-fe/pocket@3.1.1
+
 ## 0.0.6
 
 ### Patch Changes

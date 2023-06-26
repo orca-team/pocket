@@ -1,5 +1,12 @@
 # @orca-fe/pocket
 
+## 3.1.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/tools@0.10.0
+
 ## 3.1.0
 
 ### Minor Changes

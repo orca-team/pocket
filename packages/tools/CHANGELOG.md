@@ -1,5 +1,11 @@
 # @orca-fe/tools
 
+## 0.10.0
+
+### Minor Changes
+
+- feat: treeFilter
+
 ## 0.9.3
 
 ### Patch Changes

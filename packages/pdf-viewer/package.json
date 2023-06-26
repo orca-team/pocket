@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/pdf-viewer",
-  "version": "1.16.1",
+  "version": "1.16.2",
   "description": "PDF Viewer",
   "keywords": [
     "react",
@@ -40,11 +40,11 @@
   "dependencies": {
     "@orca-fe/hooks": "^1.8.0",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
-    "@orca-fe/painter": "^1.4.24",
+    "@orca-fe/painter": "^1.4.25",
     "@orca-fe/pdfjs-dist-browserify": "^3.8.24",
-    "@orca-fe/pocket": "^3.1.0",
+    "@orca-fe/pocket": "^3.1.1",
     "@orca-fe/simple-jss": "^0.0.3",
-    "@orca-fe/tools": "^0.9.3",
+    "@orca-fe/tools": "^0.10.0",
     "ahooks": "^3.7.7",
     "classnames": "^2.3.2",
     "immer": "^9.0.21",
