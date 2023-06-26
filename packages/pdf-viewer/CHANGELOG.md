@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.16.1
+
+### Patch Changes
+
+- fix: dependencies: file-saver
+
 ## 1.16.0
 
 ### Minor Changes
