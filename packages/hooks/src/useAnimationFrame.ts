@@ -9,7 +9,7 @@ export type UseAnimationFrameOptions = {
 
 const useAnimationFrame = (callback = (ms: number, stepMs: number) => {}, options: UseAnimationFrameOptions = {}) => {
   const { manual } = options;
-  const cb = useMemoizedFn(callback);
+  const callbackMemorizedFn = useMemoizedFn(callback);
   const [_this] = useState({ timer: 0, running: false });
 
   const [running, setRunning] = useState(false);
@@ -27,7 +27,7 @@ const useAnimationFrame = (callback = (ms: number, stepMs: number) => {}, option
     setRunning(true);
     const runTimer = () => {
       _this.timer = window.requestAnimationFrame((ms) => {
-        cb(ms, ms - lastTime);
+        callbackMemorizedFn(ms, ms - lastTime);
         lastTime = ms;
         runTimer();
       });
