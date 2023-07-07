@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.16.4
+
+### Patch Changes
+
+- feat: getPageBlob 增加 outputScale 配置
+
 ## 1.16.3
 
 ### Patch Changes
