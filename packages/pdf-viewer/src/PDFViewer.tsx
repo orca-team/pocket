@@ -363,7 +363,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
 
   // 獲取頁面的圖片
   const getPageBlob = useMemoizedFn<PDFViewerHandle['getPageBlob']>(async (index, options = {}) => {
-    const { scale = 2 } = options;
+    const { scale = 1, outputScale = 2 } = options;
     const pages = getPages();
     if (index < 0 || index >= pages.length) return null;
     const canvas = document.createElement('canvas');
@@ -372,7 +372,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       canvas.style.display = 'none';
       const page = pages[index];
       const viewport = page.getViewport({
-        scale: scale * window.devicePixelRatio,
+        scale,
       });
       const context = canvas.getContext('2d');
       if (context) {
@@ -383,6 +383,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
         const task = page.render({
           canvasContext: context,
           viewport,
+          transform: [outputScale, 0, 0, outputScale, 0, 0],
         });
         await task.promise;
         const blob = await new Promise<Blob | null>((resolve) => {

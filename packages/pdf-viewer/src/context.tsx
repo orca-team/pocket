@@ -41,7 +41,13 @@ export type PDFViewerHandle = {
   getPageCount: () => number;
 
   /** 获取某一页的 PDF 图像内容（Blob） */
-  getPageBlob: (index: number, options?: { scale?: number }) => Promise<Blob | null>;
+  getPageBlob: (
+    index: number,
+    options?: {
+      scale?: number;
+      outputScale?: number;
+    },
+  ) => Promise<Blob | null>;
 
   setTitle: (title: React.ReactNode) => void;
 
