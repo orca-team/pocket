@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-import pc from 'prefix-classnames';
+// import pc from 'prefix-classnames';
 import { CloseOutlined } from '@ant-design/icons';
 import { Button, Space } from 'antd';
 import { useDebounceFn, useEventListener } from 'ahooks';
@@ -9,7 +9,7 @@ import { isInBy } from '@orca-fe/tools';
 import useDraggable from './useDraggable';
 import useStyles from './Dialog.style';
 
-const px = pc('orca-dialog');
+// const px = pc('orca-dialog');
 
 const ef = () => {};
 
@@ -190,7 +190,7 @@ const Dialog = (props: DialogProps) => {
     <span className={cn(styles.wrapper, { [styles.hidden]: !show })} style={{ zIndex }} {...rootProps}>
       <div
         ref={rootRef}
-        className={`${cn(styles.root, px(`size-${size}`), { [styles.dragging]: dragging })} ${className}`}
+        className={`${cn(styles.root, styles[size], { [styles.dragging]: dragging })} ${className}`}
         style={{
           ...style,
           width,

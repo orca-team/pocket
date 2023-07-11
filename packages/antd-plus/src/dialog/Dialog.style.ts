@@ -30,7 +30,7 @@ export default createUseStyles(
       border: '1px solid transparent',
     },
 
-    sizeMiddle: {
+    middle: {
       header: {
         padding: '0 20px',
         height: '40px',
@@ -41,7 +41,7 @@ export default createUseStyles(
       },
     },
 
-    sizeSmall: {
+    small: {
       '& $header': {
         padding: '0 16px',
         height: 32,
