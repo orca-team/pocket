@@ -31,12 +31,12 @@ export default createUseStyles(
     },
 
     middle: {
-      header: {
+      '& $header': {
         padding: '0 20px',
         height: '40px',
       },
 
-      body: {
+      '& $body': {
         padding: '16px 20px',
       },
     },

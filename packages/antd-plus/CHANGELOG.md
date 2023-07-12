@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.0.9
+
+### Patch Changes
+
+- fix: Dialog size
+
 ## 0.0.8
 
 ### Patch Changes
