@@ -13,7 +13,7 @@ export type HotkeyActionType = {
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   action: (event: KeyboardEvent) => void | boolean;
   // 监听对象
-  target?: () => HTMLElement | undefined;
+  target?: () => HTMLElement | undefined | null;
   // 是否监听 input
   input?: boolean;
   // 事件传递，默认不开启，事件被第一个监听器捕获之后就不会继续传递

@@ -28,6 +28,10 @@ export default createUseStyles(
       flexDirection: 'column',
       opacity: '1',
       border: '1px solid transparent',
+
+      '&:focus': {
+        outline: 'none',
+      },
     },
 
     middle: {

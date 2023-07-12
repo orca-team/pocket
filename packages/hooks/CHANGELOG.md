@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.8.1
+
+### Patch Changes
+
+- feat: add Dialog close by Escape
+
 ## 1.8.0
 
 ### Minor Changes

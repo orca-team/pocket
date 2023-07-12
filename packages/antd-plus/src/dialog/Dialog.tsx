@@ -5,7 +5,7 @@ import { Button, Space } from 'antd';
 import { useDebounceFn, useEventListener, useMemoizedFn } from 'ahooks';
 import cn from 'classnames';
 import { isInBy } from '@orca-fe/tools';
-import { useEffectWithTarget, usePan } from '@orca-fe/hooks';
+import { useEffectWithTarget, useHotkeyListener, usePan } from '@orca-fe/hooks';
 import useStyles from './Dialog.style';
 
 // const px = pc('orca-dialog');
@@ -169,6 +169,16 @@ const Dialog = (props: DialogProps) => {
     rootRef,
   );
 
+  useHotkeyListener(
+    'Escape',
+    () => {
+      if (open) {
+        onClose();
+      }
+    },
+    { target: () => rootRef.current },
+  );
+
   const triggerAfterClose = useDebounceFn(
     () => {
       if (destroyOnClose) {
@@ -201,6 +211,10 @@ const Dialog = (props: DialogProps) => {
     if (open) {
       setTimeout(() => {
         setShow(open);
+        const dom = rootRef.current;
+        if (dom) {
+          dom.focus();
+        }
       }, 0);
 
       // reset position
@@ -233,6 +247,7 @@ const Dialog = (props: DialogProps) => {
   return ReactDOM.createPortal(
     <span className={cn(styles.wrapper, { [styles.hidden]: !show })} style={{ zIndex }}>
       <div
+        tabIndex={-1}
         ref={rootRef}
         className={`${cn(styles.root, styles[size], { [styles.dragging]: dragging })} ${className}`}
         style={{

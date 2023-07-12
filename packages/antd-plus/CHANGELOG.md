@@ -1,5 +1,13 @@
 # @orca-fe/painter
 
+## 0.1.1
+
+### Patch Changes
+
+- feat: add Dialog close by Escape
+- Updated dependencies
+  - @orca-fe/hooks@1.8.1
+
 ## 0.1.0
 
 ### Minor Changes
