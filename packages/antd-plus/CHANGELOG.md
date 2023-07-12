@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.1.0
+
+### Minor Changes
+
+- feat: add Dialog drag limit
+
 ## 0.0.9
 
 ### Patch Changes

@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-// import pc from 'prefix-classnames';
 import { CloseOutlined } from '@ant-design/icons';
 import { Button, Space } from 'antd';
-import { useDebounceFn, useEventListener } from 'ahooks';
+import { useDebounceFn, useEventListener, useMemoizedFn } from 'ahooks';
 import cn from 'classnames';
 import { isInBy } from '@orca-fe/tools';
-import useDraggable from './useDraggable';
+import { useEffectWithTarget, usePan } from '@orca-fe/hooks';
 import useStyles from './Dialog.style';
 
 // const px = pc('orca-dialog');
@@ -73,6 +72,9 @@ export interface DialogProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
 
   /** 修改 body 的 样式 */
   bodyStyle?: React.CSSProperties;
+
+  /** 位置变化事件 */
+  onPositionChange?: (position: { left: number; top: number }) => void;
 }
 
 const Dialog = (props: DialogProps) => {
@@ -100,6 +102,7 @@ const Dialog = (props: DialogProps) => {
     zIndex,
     bodyStyle,
     bodyClassname = '',
+    onPositionChange = ef,
     ...otherProps
   } = props;
 
@@ -108,10 +111,63 @@ const Dialog = (props: DialogProps) => {
   const [dragging, setDragging] = useState(false);
   const [show, setShow] = useState(false);
 
+  const rootRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+
   const [{ centerLeft, centerTop }] = useState(() => ({
     centerLeft: Math.round(0.5 * (window.innerWidth - width)),
     centerTop: Math.round(0.5 * (window.innerHeight - (typeof height === 'string' ? 500 : height))),
   }));
+
+  const [_this] = useState({
+    startTop: center ? centerTop : top,
+    top: center ? centerTop : top,
+    startLeft: center ? centerLeft : left,
+    left: center ? centerLeft : left,
+  });
+
+  const updateBounds = useMemoizedFn((limit = true) => {
+    const dom = rootRef.current;
+    if (dom) {
+      if (limit) {
+        _this.top = Math.max(0, Math.min(_this.top, window.innerHeight - 50));
+        _this.left = Math.max(100 - dom.offsetWidth, Math.min(_this.left, window.innerWidth - 100));
+      }
+      Object.assign(dom.style, {
+        left: `${_this.left}px`,
+        top: `${_this.top}px`,
+        width: `${width}px`,
+        height: typeof height === 'string' ? height : `${height}px`,
+      });
+    }
+  });
+
+  usePan(({ ev, offset, start, finish }) => {
+    if (start) {
+      _this.startTop = _this.top;
+      _this.startLeft = _this.left;
+      setDragging(true);
+    }
+
+    _this.top = _this.startTop + offset[1];
+    _this.left = _this.startLeft + offset[0];
+    updateBounds(finish);
+    if (finish) {
+      setDragging(false);
+      onPositionChange({
+        left: _this.left,
+        top: _this.top,
+      });
+    }
+  }, headerRef);
+
+  useEffectWithTarget(
+    () => {
+      updateBounds();
+    },
+    [],
+    rootRef,
+  );
 
   const triggerAfterClose = useDebounceFn(
     () => {
@@ -122,8 +178,6 @@ const Dialog = (props: DialogProps) => {
     },
     { wait: 100 },
   );
-
-  const rootRef = useRef<HTMLDivElement>(null);
 
   useEventListener(
     'transitionend',
@@ -139,18 +193,6 @@ const Dialog = (props: DialogProps) => {
     { target: rootRef },
   );
 
-  const [{ rootProps, handleProps }] = useDraggable({
-    defaultY: center ? centerTop : top,
-    defaultX: center ? centerLeft : left,
-    customHandler: true,
-    onDragStart() {
-      setDragging(true);
-    },
-    onDragEnd() {
-      setDragging(false);
-    },
-  });
-
   if (open) {
     openRef.value = open;
   }
@@ -160,6 +202,8 @@ const Dialog = (props: DialogProps) => {
       setTimeout(() => {
         setShow(open);
       }, 0);
+
+      // reset position
     } else {
       setShow(open);
     }
@@ -187,7 +231,7 @@ const Dialog = (props: DialogProps) => {
   if (!openRef.value) return <>{null}</>;
 
   return ReactDOM.createPortal(
-    <span className={cn(styles.wrapper, { [styles.hidden]: !show })} style={{ zIndex }} {...rootProps}>
+    <span className={cn(styles.wrapper, { [styles.hidden]: !show })} style={{ zIndex }}>
       <div
         ref={rootRef}
         className={`${cn(styles.root, styles[size], { [styles.dragging]: dragging })} ${className}`}
@@ -199,7 +243,7 @@ const Dialog = (props: DialogProps) => {
         {...otherProps}
       >
         <div
-          {...handleProps}
+          ref={headerRef}
           className={styles.header}
           onMouseDown={(e) => {
             if (isInBy(e.target as HTMLElement, node => node.tagName === 'BUTTON')) {

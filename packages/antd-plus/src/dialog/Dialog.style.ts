@@ -20,7 +20,7 @@ export default createUseStyles(
       fontSize: '14px',
       boxShadow: '0 0 32px rgba(50, 50, 50, 0.5)',
       borderRadius: '4px',
-      transition: 'box-shadow 300ms, transform 300ms, opacity 300ms',
+      transition: 'box-shadow 200ms, transform 200ms, opacity 200ms',
       overflowX: 'hidden',
       transformOrigin: 'center',
       transform: 'scale(1)',
@@ -77,7 +77,7 @@ export default createUseStyles(
       borderBottom: '1px solid #DDDDDD',
       display: 'flex',
       alignItems: 'center',
-      transition: 'padding 300ms, height 300ms',
+      transition: 'padding 200ms, height 200ms',
     },
 
     title: {
@@ -91,7 +91,7 @@ export default createUseStyles(
       flex: 1,
       overflow: 'hidden',
       padding: 24,
-      transition: 'padding 300ms, height 300ms',
+      transition: 'padding 200ms, height 200ms',
 
       '& $scrollable': {
         overflow: 'auto',
@@ -102,7 +102,7 @@ export default createUseStyles(
       flexShrink: 0,
       borderTop: '1px solid #DDDDDD',
       padding: '12px 16px',
-      transition: 'padding 300ms',
+      transition: 'padding 200ms',
     },
 
     buttons: {
@@ -119,7 +119,7 @@ export default createUseStyles(
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: 'transparent',
-      transition: 'color 300ms, background-color 300ms',
+      transition: 'color 200ms, background-color 200ms',
 
       '&:hover': {
         backgroundColor: 'rgba(125, 125, 125, 0.3)',
@@ -143,7 +143,7 @@ export default createUseStyles(
       height: '100%',
       pointerEvents: 'none',
       opacity: 0,
-      transition: 'opacity 300ms',
+      transition: 'opacity 200ms',
       zIndex: -1,
     },
 
