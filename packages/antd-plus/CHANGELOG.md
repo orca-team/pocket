@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.1.5
+
+### Patch Changes
+
+- fix: updateBounds when dialog open
+
 ## 0.1.4
 
 ### Patch Changes

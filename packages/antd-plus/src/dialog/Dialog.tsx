@@ -212,6 +212,7 @@ const Dialog = (props: DialogProps) => {
       setTimeout(() => {
         setShow(open);
         const dom = rootRef.current;
+        updateBounds();
         if (dom) {
           dom.focus();
         }
