@@ -1,5 +1,11 @@
 # @orca-fe/pocket
 
+## 3.1.4
+
+### Patch Changes
+
+- fix: ContextMenu event may not trigger
+
 ## 3.1.3
 
 ### Patch Changes

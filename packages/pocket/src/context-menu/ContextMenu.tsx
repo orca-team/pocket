@@ -195,7 +195,13 @@ const ContextMenu = <T extends ContextMenuItemType>(props: ContextMenuProps<T>, 
   } = props;
   const styles = useStyles();
   const triggerTarget = useRef(document.body);
-  const [position, setPosition] = useState<{ left: number; top: number } | undefined>();
+  const [position, setPosition] = useState<
+    | {
+        left: number;
+        top: number;
+      }
+    | undefined
+  >();
   const [visible, setVisible] = useState(false);
 
   const bounds = useMemo(
@@ -221,27 +227,31 @@ const ContextMenu = <T extends ContextMenuItemType>(props: ContextMenuProps<T>, 
     }
   }, menuRef);
 
-  const handleContextMenu = (event: React.MouseEvent) => {
-    // check is prevented
-    if (event.defaultPrevented) {
-      if (visible) {
-        setVisible(false);
+  useEventListener(
+    'contextmenu',
+    (event: MouseEvent) => {
+      // check is prevented
+      if (event.defaultPrevented) {
+        if (visible) {
+          setVisible(false);
+        }
+        return;
       }
-      return;
-    }
-    if (disabled) return;
-    if (event.shiftKey) return;
-    event.preventDefault();
-    if (event.target instanceof HTMLElement) {
-      triggerTarget.current = event.target;
-    }
-    const { clientX, clientY } = event;
-    setPosition({
-      left: clientX,
-      top: clientY,
-    });
-    setVisible(true);
-  };
+      if (disabled) return;
+      if (event.shiftKey) return;
+      event.preventDefault();
+      if (event.target instanceof HTMLElement) {
+        triggerTarget.current = event.target;
+      }
+      const { clientX, clientY } = event;
+      setPosition({
+        left: clientX,
+        top: clientY,
+      });
+      setVisible(true);
+    },
+    { target: rootRef },
+  );
 
   useEventListener('contextmenu', (event) => {
     if (menuRef.current?.contains(event.target as Node)) {
@@ -254,7 +264,7 @@ const ContextMenu = <T extends ContextMenuItemType>(props: ContextMenuProps<T>, 
   });
 
   return (
-    <div ref={mergedRef} className={`${styles.root} ${className}`} {...otherProps} onContextMenu={handleContextMenu}>
+    <div ref={mergedRef} className={`${styles.root} ${className}`} {...otherProps}>
       {children}
       <Transition key={`${position?.left},${position?.top}`} appear unmountOnExit in={visible && bounds != null} timeout={300}>
         {state =>
