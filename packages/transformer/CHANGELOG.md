@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.3.17
+
+### Patch Changes
+
+- feat: image add delete button
+
 ## 0.3.16
 
 ### Patch Changes

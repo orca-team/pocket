@@ -15,7 +15,7 @@ const Page = () => {
     <div>
       <PdfViewer ref={pdfViewerRef} pdfJsParams={{ cMapUrl: '/pdfjs-bcmaps/' }} style={{ height: 600 }}>
         {/* 在左侧添加一个打开文件的按钮 */}
-        <ToolbarPortal placement="left">
+        <ToolbarPortal placement="left" alwaysShow>
           <OpenFileButton
             onOpenFile={(file) => {
               const pdfViewer = pdfViewerRef.current;
@@ -26,7 +26,7 @@ const Page = () => {
           />
         </ToolbarPortal>
         {/* 在右侧添加一个自定义按钮 */}
-        <ToolbarPortal placement="right">
+        <ToolbarPortal placement="right" alwaysShow>
           <IconButton
             onClick={() => {
               message.info('你点击了自定义按钮');

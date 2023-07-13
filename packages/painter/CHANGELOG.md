@@ -1,5 +1,13 @@
 # @orca-fe/painter
 
+## 1.4.29
+
+### Patch Changes
+
+- feat: image add delete button
+- Updated dependencies
+  - @orca-fe/transformer@0.3.17
+
 ## 1.4.28
 
 ### Patch Changes

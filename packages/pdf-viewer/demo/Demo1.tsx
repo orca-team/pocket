@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import PdfViewer, { PDFPainterPlugin, PDFTooltipPlugin, usePdfViewerRef } from '@orca-fe/pdf-viewer';
+import PdfViewer, { PDFOpenFileButtonPlugin, PDFPainterPlugin, PDFTooltipPlugin, usePdfViewerRef } from '@orca-fe/pdf-viewer';
 
 const Page = () => {
   const pdfViewerRef = usePdfViewerRef();
@@ -24,6 +24,7 @@ const Page = () => {
         }}
       />
       <PdfViewer ref={pdfViewerRef} pdfJsParams={{ cMapUrl: '/pdfjs-bcmaps/' }} style={{ height: 600 }}>
+        <PDFOpenFileButtonPlugin />
         <PDFTooltipPlugin />
         <PDFPainterPlugin />
       </PdfViewer>

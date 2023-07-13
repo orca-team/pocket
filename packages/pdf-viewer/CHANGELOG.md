@@ -1,5 +1,13 @@
 # @orca-fe/pdf-viewer
 
+## 1.16.8
+
+### Patch Changes
+
+- feat: image add delete button
+- Updated dependencies
+  - @orca-fe/painter@1.4.29
+
 ## 1.16.7
 
 ### Patch Changes

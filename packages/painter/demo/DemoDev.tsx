@@ -72,7 +72,7 @@ const Demo1 = () => {
       >
         Add Image
       </Button>
-      <Painter ref={painterRef} data={data} onDataChange={setData} style={{ height: 400 }} />
+      <Painter ref={painterRef} data={data} onDataChange={setData} renderTransformingRect={shape => <div>1</div>} style={{ height: 400 }} />
     </div>
   );
 };

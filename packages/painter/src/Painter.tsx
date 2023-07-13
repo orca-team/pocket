@@ -335,7 +335,12 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
             '--transformer-layout-scale': 'var(--scale-factor)',
           }}
         >
-          {item => <Img className={styles.img} src={item.src} />}
+          {(item, index) => (
+            <>
+              {index === checkedImage && renderTransformingRect(item as any as T, imageIndexMap[index])}
+              <Img className={styles.img} src={item.src} />
+            </>
+          )}
         </TransformerLayout>
         <ShapesRenderContainer
           ref={shapeRendererRef}
@@ -363,7 +368,7 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
               dataIndex,
             );
           }}
-          renderTransformingRect={renderTransformingRect as PainterProps<GraphShapeType>['renderTransformingRect']}
+          renderTransformingRect={(item, index) => renderTransformingRect(item, shapeIndexMap[index])}
         />
       </TransformerBoxContext.Provider>
       {drawMode && (

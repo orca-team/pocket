@@ -283,126 +283,136 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
               return undefined;
             });
           }}
-          renderTransformingRect={(shape, index) => (
-            <Trigger
-              popupVisible={!shape.disabled}
-              getPopupContainer={dom => dom}
-              popupAlign={{
-                points: ['bl', 'tl'],
-                offset: [0, -5],
-              }}
-              popup={(
-                <PopupBox
-                  style={{ pointerEvents: 'initial' }}
-                  onClick={(e) => {
-                    e.stopPropagation();
+          renderTransformingRect={(shape, index) => {
+            // 是否圖片類型
+            const isImage = shape.type === 'image';
+            const deleteButton = (
+              <IconButton
+                size="small"
+                onClick={() => {
+                  // 删除
+                  setDataList(
+                    produce(dataList, (_dataList) => {
+                      if (_dataList[pageIndex]) {
+                        // eslint-disable-next-line no-param-reassign
+                        _dataList[pageIndex].splice(index, 1);
+                      }
+                    }),
+                    'delete',
+                    pageIndex,
+                    index,
+                  );
+                }}
+                style={{ color: '#C00' }}
+              >
+                <DeleteOutlined />
+              </IconButton>
+            );
+            const shapePopup = (
+              <PopupBox
+                style={{ pointerEvents: 'initial' }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                <SimplePropsEditor
+                  value={{
+                    stroke: shape['stroke'],
+                    strokeWidth: shape['strokeWidth'],
+                  }}
+                  propsDef={propsDef}
+                  onChange={(newProps) => {
+                    const newShape = {
+                      ...shape,
+                      ...newProps,
+                    };
+                    setDataList(
+                      produce(dataList, (_dataList) => {
+                        if (_dataList[pageIndex]) {
+                          // eslint-disable-next-line no-param-reassign
+                          _dataList[pageIndex][index] = newShape;
+                        }
+                      }),
+                      'change',
+                      pageIndex,
+                      index,
+                    );
+                  }}
+                  colorTriggerProps={{
+                    getPopupContainer: () => _painter.refs[pageIndex]?.getRoot() ?? document.body,
+                    popupAlign: {
+                      overflow: {
+                        adjustY: true,
+                        shiftX: true,
+                      },
+                    },
+                  }}
+                />
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
                   }}
                 >
-                  <SimplePropsEditor
-                    value={{
-                      stroke: shape['stroke'],
-                      strokeWidth: shape['strokeWidth'],
-                    }}
-                    propsDef={propsDef}
-                    onChange={(newProps) => {
-                      const newShape = {
-                        ...shape,
-                        ...newProps,
-                      };
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      // 复制
                       setDataList(
                         produce(dataList, (_dataList) => {
                           if (_dataList[pageIndex]) {
                             // eslint-disable-next-line no-param-reassign
-                            _dataList[pageIndex][index] = newShape;
+                            const shape = deepClone(_dataList[pageIndex][index]);
+                            const offset = 16;
+                            switch (shape.type) {
+                              case 'line':
+                                shape.point1 = shape.point1.map(v => v + offset) as typeof shape.point1;
+                                shape.point2 = shape.point2.map(v => v + offset) as typeof shape.point2;
+                                break;
+                              case 'line-path':
+                                shape.points = shape.points.map(p => [p[0] + offset, p[1] + offset]);
+                                break;
+                              case 'ellipse':
+                              case 'rectangle':
+                                shape.x += offset;
+                                shape.y += offset;
+                                break;
+                            }
+                            _dataList[pageIndex].push(shape);
                           }
                         }),
-                        'change',
+                        'add',
                         pageIndex,
-                        index,
+                        dataList[pageIndex].length,
                       );
-                    }}
-                    colorTriggerProps={{
-                      getPopupContainer: () => _painter.refs[pageIndex]?.getRoot() ?? document.body,
-                      popupAlign: {
-                        overflow: {
-                          adjustY: true,
-                          shiftX: true,
-                        },
-                      },
-                    }}
-                  />
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'flex-end',
-                    }}
-                  >
-                    <IconButton
-                      size="small"
-                      onClick={() => {
-                        // 复制
-                        setDataList(
-                          produce(dataList, (_dataList) => {
-                            if (_dataList[pageIndex]) {
-                              // eslint-disable-next-line no-param-reassign
-                              const shape = deepClone(_dataList[pageIndex][index]);
-                              const offset = 16;
-                              switch (shape.type) {
-                                case 'line':
-                                  shape.point1 = shape.point1.map(v => v + offset) as typeof shape.point1;
-                                  shape.point2 = shape.point2.map(v => v + offset) as typeof shape.point2;
-                                  break;
-                                case 'line-path':
-                                  shape.points = shape.points.map(p => [p[0] + offset, p[1] + offset]);
-                                  break;
-                                case 'ellipse':
-                                case 'rectangle':
-                                  shape.x += offset;
-                                  shape.y += offset;
-                                  break;
-                              }
-                              _dataList[pageIndex].push(shape);
-                            }
-                          }),
-                          'add',
-                          pageIndex,
-                          dataList[pageIndex].length,
-                        );
 
-                        setChecked([pageIndex, dataList[pageIndex].length]);
-                      }}
-                      style={{ color: '#333' }}
-                    >
-                      <CopyOutlined />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      onClick={() => {
-                        // 删除
-                        setDataList(
-                          produce(dataList, (_dataList) => {
-                            if (_dataList[pageIndex]) {
-                              // eslint-disable-next-line no-param-reassign
-                              _dataList[pageIndex].splice(index, 1);
-                            }
-                          }),
-                          'delete',
-                          pageIndex,
-                          index,
-                        );
-                      }}
-                      style={{ color: '#C00' }}
-                    >
-                      <DeleteOutlined />
-                    </IconButton>
-                  </div>
-                </PopupBox>
-              )}
-            >
-              <div style={{ width: '100%', height: '100%' }} />
-            </Trigger>
-          )}
+                      setChecked([pageIndex, dataList[pageIndex].length]);
+                    }}
+                    style={{ color: '#333' }}
+                  >
+                    <CopyOutlined />
+                  </IconButton>
+                  {deleteButton}
+                </div>
+              </PopupBox>
+            );
+
+            const imagePopup = <div style={{ borderRadius: 4, backgroundColor: 'rgba(180,180,180,0.1)' }}>{deleteButton}</div>;
+            return (
+              <Trigger
+                popupVisible={!shape.disabled}
+                getPopupContainer={dom => dom}
+                popupAlign={{
+                  points: isImage ? ['tl', 'tr'] : ['bl', 'tl'],
+                  offset: isImage ? [5, -5] : [0, -5],
+                }}
+                popup={isImage ? imagePopup : shapePopup}
+              >
+                <div style={{ position: 'absolute', width: '100%', height: '100%' }} />
+              </Trigger>
+            );
+          }}
         />
       ))}
     </>
