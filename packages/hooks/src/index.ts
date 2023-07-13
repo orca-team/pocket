@@ -21,6 +21,7 @@ import useMergedRefs from './useMergedRefs';
 import useCombineKeyListener from './useCombineKeyListener';
 import useLoadMore from './useLoadMore';
 import useAutoScroll from './useAutoScroll';
+import useWheel from './useWheel';
 
 export {
   useWindowSize,
@@ -42,6 +43,7 @@ export {
   useCombineKeyListener,
   useLoadMore,
   useAutoScroll,
+  useWheel,
 
   // events
   useEventEmitter,
