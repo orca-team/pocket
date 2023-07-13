@@ -294,7 +294,7 @@ importers:
         specifier: ^0.10.0
         version: link:../tools
       '@orca-fe/transformer':
-        specifier: ^0.3.16
+        specifier: ^0.3.17
         version: link:../transformer
       ahooks:
         specifier: ^3.7.8
@@ -340,7 +340,7 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1(jss@10.10.0)(react@18.2.0)
       '@orca-fe/painter':
-        specifier: ^1.4.28
+        specifier: ^1.4.29
         version: link:../painter
       '@orca-fe/pdfjs-dist-browserify':
         specifier: ^3.8.24
