@@ -241,6 +241,8 @@ const Dialog = (props: DialogProps) => {
     </Space>
   );
 
+  const realFooter = footer !== undefined ? footer : defaultFooter;
+
   // eslint-disable-next-line react/jsx-no-useless-fragment
   if (!openRef.value) return <>{null}</>;
 
@@ -276,9 +278,11 @@ const Dialog = (props: DialogProps) => {
         <div className={`${cn(styles.body, { [styles.scrollable]: scrollable })} ${bodyClassname}`} style={bodyStyle}>
           {children}
         </div>
-        <div className={styles.footer} style={{ textAlign: footerAlign }}>
-          {footer !== undefined ? footer : defaultFooter}
-        </div>
+        {!!realFooter && (
+          <div className={styles.footer} style={{ textAlign: footerAlign }}>
+            {realFooter}
+          </div>
+        )}
       </div>
     </span>,
     getContainer(),
