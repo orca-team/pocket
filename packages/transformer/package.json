@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/transformer",
-  "version": "0.3.15",
+  "version": "0.3.16",
   "description": "Transformer Container",
   "keywords": [
     "react",
@@ -37,12 +37,12 @@
   "dependencies": {
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
     "@orca-fe/simple-jss": "^0.0.3",
-    "ahooks": "^3.7.7",
+    "ahooks": "^3.7.8",
     "classnames": "^2.3.2",
     "gl-matrix": "^3.4.3",
     "prefix-classnames": "^0.0.7",
-    "tslib": "^2.5.2",
-    "@orca-fe/hooks": "^1.8.1",
+    "tslib": "^2.6.0",
+    "@orca-fe/hooks": "^1.8.2",
     "@orca-fe/tools": "^0.10.0"
   },
   "peerDependencies": {
@@ -50,7 +50,7 @@
     "react-dom": ">=16.8.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.7",
+    "@types/react": "^18.2.14",
     "autod": "^3.1.2",
     "jss": "^10.10.0"
   }
