@@ -14,6 +14,10 @@ group:
 
 <code title="基本使用" src="../demo/useWheel/basic.tsx"></code>
 
+## 结合 useManualScroll 实现滚轮事件的横向滚动
+
+<code title="上下滚轮实现横向滚动" src="../demo/useWheel/horizScroll.tsx"></code>
+
 ## API
 
 ```ts | pure

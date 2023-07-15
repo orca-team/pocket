@@ -18,7 +18,7 @@ export default () => {
       <div ref={ref} style={{ width: 200, height: 200, margin: '12px 0', border: '1px solid #000' }} />
       <div>
         <div>{`滚轮状态: ${rolling ? '滚动中' : '已停止'}`}</div>
-        <div>{`滚动方向: ${dirTextMap[direction] ?? '-'}`}</div>
+        <div>{`滚动方向: ${direction ? dirTextMap[direction] : '-'}`}</div>
         <div>{`本次滚动量：${movement}`}</div>
         <div>{`累计滚动距离: ${distance}`}</div>
       </div>
