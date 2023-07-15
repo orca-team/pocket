@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.8.3
+
+### Patch Changes
+
+- feat: `useManualScroll` & `useWheel` hook
+
 ## 1.8.2
 
 ### Patch Changes
