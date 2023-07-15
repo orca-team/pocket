@@ -22,6 +22,7 @@ import useCombineKeyListener from './useCombineKeyListener';
 import useLoadMore from './useLoadMore';
 import useAutoScroll from './useAutoScroll';
 import useWheel from './useWheel';
+import useManualScroll from './useManualScroll';
 
 export {
   useWindowSize,
@@ -43,6 +44,7 @@ export {
   useCombineKeyListener,
   useLoadMore,
   useAutoScroll,
+  useManualScroll,
   useWheel,
 
   // events
