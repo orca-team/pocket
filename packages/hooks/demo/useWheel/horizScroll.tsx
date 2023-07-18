@@ -4,7 +4,7 @@ import { useWheel, useManualScroll } from '@orca-fe/hooks';
 export default () => {
   // 容器 ref
   const ref = useRef<HTMLDivElement>(null);
-  const manualScroll = useManualScroll(ref, { scrollStep: 400 });
+  const manualScroll = useManualScroll(ref, { defaultScrollStep: 300 });
   const wheelState = useWheel(ref);
 
   useEffect(() => {

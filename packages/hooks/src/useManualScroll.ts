@@ -1,6 +1,7 @@
 import { useBoolean, useMemoizedFn, useScroll, useSize, useThrottleFn } from 'ahooks';
 import { useEffect, useRef } from 'react';
 import { round } from 'lodash-es';
+import type { ScrollListenController } from 'ahooks/lib/useScroll';
 import type { BasicTarget } from './utils/domTarget';
 import { getTargetElement } from './utils/domTarget';
 import useAnimationFrame from './useAnimationFrame';
@@ -13,11 +14,14 @@ export type ManualScrollDirection = typeof MANUAL_SCROLL_UP | typeof MANUAL_SCRO
 
 export type UseManualScrollOptions = {
 
-  /** 每次触发的滚动量 */
-  scrollStep?: number;
+  /** 默认触发的滚动量 */
+  defaultScrollStep?: number;
 
   /** 滚动时长，单位毫秒 */
   duration?: number;
+
+  /** 控制是否更新滚动信息（同 useScroll） */
+  shouldUpdate?: ScrollListenController;
 };
 
 // 基准帧间隔
@@ -25,17 +29,20 @@ const baseFrameInterval = 16.67;
 
 type ManualScrollState = {
 
-  /** 当前滚动距离 */
-  scrollDistance: number;
-
   /** 上一帧的时间 */
   lastFrameTime: number | null;
 
   /** 已执行的动画时长 */
   animDuration: number;
 
-  /** 滚动方向 */
+  /** 当前滚动量 */
+  scrollStep: number;
+
+  /** 当前滚动方向 */
   direction: ManualScrollDirection | null;
+
+  /** 当前累计滚动距离 */
+  scrollDistance: number;
 
   /** 滚动偏移的误差值 */
   scrollOffset: {
@@ -47,23 +54,23 @@ type ManualScrollState = {
 const isHorizScroll = (direction: ManualScrollDirection) => direction === MANUAL_SCROLL_LEFT || direction === MANUAL_SCROLL_RIGHT;
 
 export default function useManualScroll(target: BasicTarget, options: UseManualScrollOptions = {}) {
-  const { scrollStep = 200, duration = 300 } = options;
-  const baseFrameStep = scrollStep / (duration / baseFrameInterval);
+  const { defaultScrollStep = 200, duration = 300, shouldUpdate = () => true } = options;
 
   const _this = useRef<ManualScrollState>({
     scrollDistance: 0,
     lastFrameTime: null,
     animDuration: 0,
     direction: null,
+    scrollStep: defaultScrollStep,
     scrollOffset: { x: 0, y: 0 },
   }).current;
 
   const [scrolling, { setTrue: startScrolling, setFalse: stopScrolling }] = useBoolean(false);
 
-  const position = useScroll(target);
-  const size = useSize(target);
-
   const dom = getTargetElement(target);
+  const size = useSize(target);
+  const position = useScroll(target, shouldUpdate);
+
   const scrollToLeft = position?.left === 0;
   const scrollToRight = Math.ceil((position?.left ?? 0) + (size?.width ?? 0)) >= (dom?.scrollWidth ?? 0);
   const scrollToTop = position?.top === 0;
@@ -74,19 +81,21 @@ export default function useManualScroll(target: BasicTarget, options: UseManualS
     if (!_this.lastFrameTime) {
       _this.lastFrameTime = frameTime;
     }
-    const _frameInterval = ms - _this.lastFrameTime || baseFrameInterval;
+    const frameInterval = ms - _this.lastFrameTime || baseFrameInterval;
 
-    return _this.animDuration + _frameInterval > duration ? duration - _this.animDuration : _frameInterval;
+    return _this.animDuration + frameInterval > duration ? duration - _this.animDuration : frameInterval;
   });
 
   // 获取当前帧滚动量
   const currentFrameStep = useMemoizedFn((frameInterval: number) => {
+    // 基准帧滚动量
+    const baseFrameStep = _this.scrollStep / (duration / baseFrameInterval);
     // 帧间隔偏差比例
     const deviationRatio = frameInterval / baseFrameInterval;
     // 当前帧滚动量
     const frameStep = deviationRatio * baseFrameStep;
 
-    return _this.scrollDistance + frameStep > scrollStep ? scrollStep - _this.scrollDistance : frameStep;
+    return _this.scrollDistance + frameStep > _this.scrollStep ? _this.scrollStep - _this.scrollDistance : frameStep;
   });
 
   const rafHandler = useAnimationFrame(
@@ -95,7 +104,7 @@ export default function useManualScroll(target: BasicTarget, options: UseManualS
         stopScrolling();
         return;
       }
-      // 帧间隔
+      // 当前帧间隔
       const frameInterval = currentFrameInterval(ms, frameTime);
       // 当前帧滚动量
       const frameStep = currentFrameStep(frameInterval);
@@ -137,8 +146,9 @@ export default function useManualScroll(target: BasicTarget, options: UseManualS
     { manual: true },
   );
 
-  const run = (direction: ManualScrollDirection) => {
+  const run = (direction: ManualScrollDirection, scrollStep: number = defaultScrollStep) => {
     _this.direction = direction;
+    _this.scrollStep = scrollStep;
 
     if (direction === MANUAL_SCROLL_LEFT && scrollToLeft) return;
     if (direction === MANUAL_SCROLL_RIGHT && scrollToRight) return;
@@ -174,10 +184,11 @@ export default function useManualScroll(target: BasicTarget, options: UseManualS
   }, [scrolling]);
 
   return {
-    run: useMemoizedFn(throttleRun),
+    position,
     scrollToLeft,
     scrollToRight,
     scrollToTop,
     scrollToBottom,
+    run: useMemoizedFn(throttleRun),
   };
 }
