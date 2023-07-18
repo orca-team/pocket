@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.8.4
+
+### Patch Changes
+
+- feat: improve & optimize the `useManualScroll` hook
+
 ## 1.8.3
 
 ### Patch Changes
