@@ -9,6 +9,7 @@ on:
       - master
     paths:
       - 'packages/*/package.json'
+      - 'pnpm-lock.yaml'
 
 jobs:
   replace-package-json-and-publish:
