@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.8.5
+
+### Patch Changes
+
+- fix: incorrect scroll value when changes the direction at the boundary
+
 ## 1.8.4
 
 ### Patch Changes

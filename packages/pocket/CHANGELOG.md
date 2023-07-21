@@ -1,5 +1,11 @@
 # @orca-fe/pocket
 
+## 3.1.7
+
+### Patch Changes
+
+- update dependencies
+
 ## 3.1.6
 
 ### Patch Changes
