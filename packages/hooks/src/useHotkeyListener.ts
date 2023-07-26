@@ -48,8 +48,14 @@ export const actionStack: HotkeyActionType[] = [];
 
 const handleKeyDown = (e: KeyboardEvent) => {
   const hotkeyStr = toHotkeyStr(e);
+  if (!hotkeyStr) return;
   const keyMapping = isMac() ? mapping.macHotkeyMapping : mapping.hotkeyMapping;
   const hotkeyName = keyMapping.get(hotkeyStr);
+
+  if (window.sessionStorage.useHotkeyListenerDebug) {
+    console.warn('hotkeyStr', hotkeyStr);
+    console.warn('hotkeyName', hotkeyName);
+  }
 
   // 在监听器中查找 action
   for (const action of actionStack) {

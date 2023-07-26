@@ -42,11 +42,11 @@ export function toHotkeyStr(event: React.KeyboardEvent | KeyboardEvent) {
     if (metaKey) {
       keyArr.push('Command');
     }
-    if (shiftKey) {
-      keyArr.push('Shift');
-    }
     if (ctrlKey) {
       keyArr.push('Ctrl');
+    }
+    if (shiftKey) {
+      keyArr.push('Shift');
     }
     if (/^[a-z]$/.test(key)) {
       keyArr.push(key.toUpperCase());
@@ -69,7 +69,7 @@ export function toHotkeyStr(event: React.KeyboardEvent | KeyboardEvent) {
       keyArr.push(key);
     }
   }
-  return keyArr.join('+');
+  return formatHotKeyStr(keyArr.join('+'));
 }
 
 export function divOnlyFilter(e: KeyboardEvent) {

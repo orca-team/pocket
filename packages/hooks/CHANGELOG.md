@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.8.6
+
+### Patch Changes
+
+- fix: useHotkeyListener not work under mac
+
 ## 1.8.5
 
 ### Patch Changes
