@@ -1,5 +1,11 @@
 # @orca-fe/pocket
 
+## 3.1.9
+
+### Patch Changes
+
+- fix: absMode LoadingDiv preventPointer
+
 ## 3.1.8
 
 ### Patch Changes
