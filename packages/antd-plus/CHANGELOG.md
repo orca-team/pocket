@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.2.0
+
+### Minor Changes
+
+- feat: FormItemMapping & ValueMapping
+
 ## 0.1.10
 
 ### Patch Changes

@@ -4,6 +4,7 @@ title: TabsLayout 多页签布局
 group:
   title: Layout
   path: /layout
+  order: 10
 ---
 
 # TabsLayout 多页签布局

@@ -13,6 +13,10 @@ import type { WeeklyCalendarProps } from './weekly-calendar';
 import WeeklyCalendar from './weekly-calendar';
 import type { TabConfigType, TabsLayoutProps } from './tabs-layout';
 import TabsLayout from './tabs-layout';
+import type { FormItemMappingProps, FormItemMappingValueProps } from './form-item-mapping';
+import { FormItemMappingValue, FormItemMapping } from './form-item-mapping';
+import type { ValueMappingProps, createValueMappedOptions } from './value-mapping';
+import { ValueMapping, createValueMappedComponent } from './value-mapping';
 
 export type {
   JsonSchemaEditorProps,
@@ -24,5 +28,21 @@ export type {
   WeeklyCalendarProps,
   TabsLayoutProps,
   TabConfigType,
+  FormItemMappingProps,
+  FormItemMappingValueProps,
+  ValueMappingProps,
+  createValueMappedOptions,
 };
-export { ModalForm, DialogForm, JsonSchemaEditor, UcInput, Dialog, WeeklyCalendar, TabsLayout };
+export {
+  ModalForm,
+  DialogForm,
+  JsonSchemaEditor,
+  UcInput,
+  Dialog,
+  WeeklyCalendar,
+  TabsLayout,
+  FormItemMappingValue,
+  FormItemMapping,
+  ValueMapping,
+  createValueMappedComponent,
+};
