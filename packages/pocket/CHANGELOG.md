@@ -1,5 +1,11 @@
 # @orca-fe/pocket
 
+## 3.2.0
+
+### Minor Changes
+
+- feat: Flop 移除 react-countup 直接使用 countup.js
+
 ## 3.1.9
 
 ### Patch Changes

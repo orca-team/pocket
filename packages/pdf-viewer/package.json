@@ -42,7 +42,7 @@
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
     "@orca-fe/painter": "^1.4.34",
     "@orca-fe/pdfjs-dist-browserify": "^3.8.24",
-    "@orca-fe/pocket": "^3.1.9",
+    "@orca-fe/pocket": "^3.2.0",
     "@orca-fe/simple-jss": "^0.0.3",
     "@orca-fe/tools": "^0.10.0",
     "ahooks": "^3.7.8",

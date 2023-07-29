@@ -10,6 +10,7 @@ export default createUseStyles(
         whiteSpace: 'nowrap',
       },
     },
+    countup: {},
   },
   {
     classNamePrefix: prefix,

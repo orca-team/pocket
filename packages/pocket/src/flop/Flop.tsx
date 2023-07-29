@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
-import CountUp from 'react-countup';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { CountUp } from 'countup.js';
 import type { ConvertOptions, ConvertRule } from '@orca-fe/tools';
 import { createCovertUnitFn, createUnitValue } from '@orca-fe/tools';
+import { useUpdateEffect } from 'ahooks';
 import useStyles from './Flop.style';
 
 function decimalLength(num: number, max = 10) {
@@ -60,6 +61,9 @@ export interface FlopProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'p
     | (ConvertOptions & {
         rules?: ConvertRule[];
       });
+
+  /** 起始数值 */
+  start?: number;
 }
 
 const Flop = React.forwardRef<HTMLSpanElement, FlopProps>((props, ref) => {
@@ -75,6 +79,7 @@ const Flop = React.forwardRef<HTMLSpanElement, FlopProps>((props, ref) => {
     suffixProps,
     convertUnit,
     decimalsMaxLength = 4,
+    start = 0,
     ...otherProps
   } = props;
   const styles = useStyles();
@@ -92,10 +97,38 @@ const Flop = React.forwardRef<HTMLSpanElement, FlopProps>((props, ref) => {
     return convertUnitFn(_value.toFixed(decimalsMaxLength));
   }, [_value, convertUnit, convertUnitFn]);
 
+  const countupRef = useRef<HTMLSpanElement>(null);
+
+  const [_this] = useState({
+    countup: undefined as CountUp | undefined,
+  });
+
+  useEffect(() => {
+    const countUpDom = countupRef.current;
+    if (countUpDom) {
+      if (!_this.countup) {
+        _this.countup = new CountUp(countUpDom, valueUnit.value, {
+          startVal: start,
+          duration,
+          separator,
+          decimalPlaces: decimals ?? decimalLength(valueUnit.value),
+        });
+        _this.countup.start();
+      }
+    }
+  }, []);
+
+  useUpdateEffect(() => {
+    if (_this.countup) {
+      _this.countup.update(valueUnit.value);
+    }
+  }, [valueUnit.value]);
+
   return (
     <span ref={ref} className={`${styles.root} ${className}`} {...otherProps}>
       {prefix}
-      <CountUp
+      <span ref={countupRef} className={styles.countup} style={numStyle} />
+      {/* <CountUp
         style={numStyle}
         separator={separator}
         start={0}
@@ -103,7 +136,7 @@ const Flop = React.forwardRef<HTMLSpanElement, FlopProps>((props, ref) => {
         preserveValue
         duration={duration}
         decimals={decimals ?? decimalLength(valueUnit.value)}
-      />
+      />*/}
       {typeof suffix === 'function' ? (
         suffix(valueUnit.unit)
       ) : (
