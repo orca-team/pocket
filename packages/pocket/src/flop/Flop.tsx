@@ -114,15 +114,32 @@ const Flop = React.forwardRef<HTMLSpanElement, FlopProps>((props, ref) => {
           decimalPlaces: decimals ?? decimalLength(valueUnit.value),
         });
         _this.countup.start();
+        window.countup = _this.countup;
       }
     }
   }, []);
 
   useUpdateEffect(() => {
+    if (_this.countup?.options) {
+      _this.countup.options.duration = duration;
+      _this.countup.reset();
+    }
+  }, [duration]);
+
+  useUpdateEffect(() => {
+    if (_this.countup?.options) {
+      _this.countup.options.separator = separator;
+    }
+  }, [separator]);
+
+  useUpdateEffect(() => {
     if (_this.countup) {
+      if (_this.countup.options) {
+        _this.countup.options.decimalPlaces = decimals ?? decimalLength(valueUnit.value);
+      }
       _this.countup.update(valueUnit.value);
     }
-  }, [valueUnit.value]);
+  }, [valueUnit]);
 
   return (
     <span ref={ref} className={`${styles.root} ${className}`} {...otherProps}>

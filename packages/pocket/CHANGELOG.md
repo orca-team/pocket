@@ -1,5 +1,11 @@
 # @orca-fe/pocket
 
+## 3.2.1
+
+### Patch Changes
+
+- fix: Flop 組件在格式化后可能出现不重新渲染的 bug
+
 ## 3.2.0
 
 ### Minor Changes
