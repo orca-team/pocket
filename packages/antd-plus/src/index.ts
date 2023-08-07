@@ -17,6 +17,8 @@ import type { FormItemMappingProps, FormItemMappingValueProps } from './form-ite
 import { FormItemMappingValue, FormItemMapping } from './form-item-mapping';
 import type { ValueMappingProps, createValueMappedOptions } from './value-mapping';
 import { ValueMapping, createValueMappedComponent } from './value-mapping';
+import type { FormItemListenerProps } from './form-item-listener';
+import FormItemListener from './form-item-listener';
 
 export type {
   JsonSchemaEditorProps,
@@ -32,6 +34,7 @@ export type {
   FormItemMappingValueProps,
   ValueMappingProps,
   createValueMappedOptions,
+  FormItemListenerProps,
 };
 export {
   ModalForm,
@@ -45,4 +48,5 @@ export {
   FormItemMapping,
   ValueMapping,
   createValueMappedComponent,
+  FormItemListener,
 };

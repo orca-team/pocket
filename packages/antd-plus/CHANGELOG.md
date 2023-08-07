@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.3.0
+
+### Minor Changes
+
+- feat: FormItemListener
+
 ## 0.2.1
 
 ### Patch Changes

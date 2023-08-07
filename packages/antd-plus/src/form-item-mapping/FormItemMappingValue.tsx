@@ -1,13 +1,14 @@
 import { useMemoizedFn } from 'ahooks';
 import type { ReactElement } from 'react';
 import { cloneElement, isValidElement, useContext, useMemo } from 'react';
+import type { NamePath } from 'antd/lib/form/interface';
 import FormItemMapping from './FormItemMapping';
 import { PassPropsContext } from './PassPropsElement';
 
 export interface FormItemMappingValueProps {
 
   /** 外部（表单）与内部（组件）字段的映射关系 */
-  valueMapping: Record<string, string | string[]>;
+  valueMapping: Record<string, NamePath>;
 
   /** 属性名 默认为 `value` */
   valuePropName?: string;
@@ -42,6 +43,10 @@ const ObjectValueTransfer = (props: FormItemMappingValueProps) => {
       if (typeof fn === 'function') {
         fn(value);
       }
+      if (isValidElement(children)) {
+        const originOnChange = children.props?.[trigger];
+        if (typeof originOnChange === 'function') originOnChange(value);
+      }
     });
   });
 
@@ -60,7 +65,7 @@ export function FormItemMappingValue(props: FormItemMappingValueProps) {
 
   // 根據 valueMapping 自動生成事件
   const triggerMapping = useMemo(() => {
-    const triggerMapping: Record<string, string | string[]> = {};
+    const triggerMapping: Record<string, NamePath> = {};
     Object.keys(valueMapping).forEach((key) => {
       triggerMapping[`trigger_${key}`] = valueMapping[key];
     });

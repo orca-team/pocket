@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import { Form } from 'antd';
+import type { NamePath } from 'antd/lib/form/interface';
 import { PassPropsElement, PassPropsInject } from './PassPropsElement';
 
 const eObj = {};
@@ -7,10 +8,10 @@ const eObj = {};
 export type FormItemMappingProps = {
 
   /** 屬性名稱映射 */
-  valueMapping?: Record<string, string | string[]>;
+  valueMapping?: Record<string, NamePath>;
 
   /** 事件映射 */
-  triggerMapping?: Record<string, string | string[]>;
+  triggerMapping?: Record<string, NamePath>;
 
   /** 是否注入到子組件中，如果需要開發者自行更改注入方式，可以設置爲 false */
   inject?: boolean;
@@ -21,12 +22,7 @@ export type FormItemMappingProps = {
 
 // 從表單中取得多個屬性，並將它們注入到子組件中，支持屬性名稱映射
 export function FormItemMapping(props: FormItemMappingProps) {
-  const {
-    valueMapping = eObj as Record<string, string | string[]>,
-    triggerMapping = eObj as Record<string, string | string[]>,
-    children,
-    inject = true,
-  } = props;
+  const { valueMapping = eObj as Record<string, NamePath>, triggerMapping = eObj as Record<string, NamePath>, children, inject = true } = props;
 
   if (children == null) return null;
 
