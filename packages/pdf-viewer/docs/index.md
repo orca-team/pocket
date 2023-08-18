@@ -72,7 +72,7 @@ title: PDF 阅读器 PdfViewer
 | dropFile                                     | 是否支持拖拽打开文件                                                                                                    | `boolean`                                                                                   | `false`                                | `1.9.0`  |
 | onPageChange                                 | 翻页事件                                                                                                                | `(page: number) => void`                                                                    | `-`                                    | `1.11.2` |
 | pdfJsParams                                  | 额外的 pdfjs 参数，具体参数可(查看这里)[https://mozilla.github.io/pdf.js/api/draft/module-pdfjsLib.html]                | `object`                                                                                    | `-`                                    | `1.11.0` |
-| outputScale                                  | 渲染頁面的缩放级别                                                                                                      | `number`                                                                                    | `Math.max(window.devicePixelRatio, 2)` | `1.17.0` |
+| outputScale                                  | 渲染頁面的缩放级别                                                                                                      | `number`                                                                                    | `Math.max(window.devicePixelRatio, 1)` | `1.17.0` |
 
 ### PDFViewerHandle
 

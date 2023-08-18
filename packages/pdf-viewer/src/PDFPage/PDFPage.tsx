@@ -6,7 +6,7 @@ import type { PageViewport } from '../context';
 import PDFViewerContext from '../context';
 import useStyle from './PDFPage.style';
 
-const globalOutputScale = Math.max(window.devicePixelRatio, 2);
+const globalOutputScale = Math.max(window.devicePixelRatio, 1);
 
 const defaultMaxPixel = 14745600;
 
