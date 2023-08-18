@@ -1,18 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useDebounceFn, useMemoizedFn, useUpdateEffect } from 'ahooks';
-import React, {
-  useContext,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { floorBy } from '@orca-fe/tools';
 import type { PageViewport } from '../context';
 import PDFViewerContext from '../context';
 import useStyle from './PDFPage.style';
 
-const outputScale = window.devicePixelRatio || 1;
+const globalOutputScale = Math.max(window.devicePixelRatio, 2);
 
 const defaultMaxPixel = 14745600;
 
@@ -23,17 +17,11 @@ export interface PdfPageProps extends React.HTMLAttributes<HTMLDivElement> {
   render?: boolean;
   zoom?: number;
   maxPixel?: number;
+  outputScale?: number;
 }
 
 const PDFPage = (props: PdfPageProps) => {
-  const {
-    className = '',
-    index,
-    render,
-    zoom = 0,
-    maxPixel = defaultMaxPixel,
-    ...otherProps
-  } = props;
+  const { className = '', index, render, zoom = 0, maxPixel = defaultMaxPixel, outputScale = globalOutputScale, ...otherProps } = props;
   const styles = useStyle();
 
   const rootRef = useRef<HTMLDivElement>(null);
@@ -82,8 +70,7 @@ const PDFPage = (props: PdfPageProps) => {
       canvas.hidden = true;
       const context = canvas.getContext('2d', { alpha: false });
       if (context) {
-        const transform =
-          outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
+        const transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
 
         if (_this.task && typeof _this.task.cancel === 'function') {
           _this.task.cancel();
@@ -109,9 +96,7 @@ const PDFPage = (props: PdfPageProps) => {
               _this.canvasList.forEach((node) => {
                 if (node !== canvas) root.removeChild(node);
               });
-              _this.canvasList = _this.canvasList.filter(
-                node => node === canvas,
-              );
+              _this.canvasList = _this.canvasList.filter(node => node === canvas);
             }
           })
           .catch((err) => {
@@ -133,13 +118,7 @@ const PDFPage = (props: PdfPageProps) => {
     renderPdfDebounce.run();
   }, [realScale]);
 
-  return (
-    <div
-      ref={rootRef}
-      className={`${styles.root} ${className}`}
-      {...otherProps}
-    />
-  );
+  return <div ref={rootRef} className={`${styles.root} ${className}`} {...otherProps} />;
 };
 
 export default PDFPage;

@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.17.0
+
+### Minor Changes
+
+- feat: PDFViewer 增加 outputScale 屬性
+
 ## 1.16.14
 
 ### Patch Changes

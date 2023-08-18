@@ -83,6 +83,8 @@ export interface PDFViewerProps extends Omit<React.HTMLAttributes<HTMLDivElement
   pdfJsParams?: DocumentInitParameters;
 
   locale?: LocaleType;
+
+  outputScale?: number;
 }
 
 const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef) => {
@@ -105,6 +107,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     pdfJsParams,
     onPageChange = ef,
     locale,
+    outputScale,
     ...otherProps
   } = props;
 
@@ -708,7 +711,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                     <div key={pageIndex} className={styles.pageContainer} style={{ width, height, marginBottom: gap }}>
                       {shouldRender && (
                         <>
-                          <PDFPage className={styles.page} index={pageIndex} zoom={zoom} render={shouldRender} />
+                          <PDFPage className={styles.page} outputScale={outputScale} index={pageIndex} zoom={zoom} render={shouldRender} />
                           <div ref={node => (pageCoverRefs[pageIndex] = node)} className={styles.pageCover} />
                           <div className={styles.pageCover}>{renderPageCover(pageIndex, { viewport, zoom })}</div>
                         </>
