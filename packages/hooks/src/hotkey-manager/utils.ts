@@ -33,7 +33,13 @@ export function formatHotKeyStr(hotkeyStr: string = '') {
 }
 
 export function toHotkeyStr(event: React.KeyboardEvent | KeyboardEvent) {
-  const { metaKey, ctrlKey, altKey, shiftKey, key } = event;
+  const { metaKey, ctrlKey, altKey, shiftKey, key: _key, keyCode } = event;
+  let key = _key;
+  // 如果是數字或字母，使用 fromCharCode 的方式
+  if ((keyCode >= 0x30 && keyCode <= 0x39) || (keyCode >= 0x41 && keyCode <= 0x5a)) {
+    key = String.fromCharCode(keyCode);
+  }
+
   if (key === 'Command' || key === 'Control' || key === 'Meta' || key === 'Shift' || key === 'Alt') {
     return '';
   }
