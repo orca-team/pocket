@@ -1,5 +1,13 @@
 # @orca-fe/pocket
 
+## 3.2.2
+
+### Patch Changes
+
+- update dependencies
+- Updated dependencies
+  - @orca-fe/hooks@1.8.8
+
 ## 3.2.1
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @orca-fe/painter
 
+## 0.3.22
+
+### Patch Changes
+
+- update dependencies
+- Updated dependencies
+  - @orca-fe/hooks@1.8.8
+
 ## 0.3.21
 
 ### Patch Changes

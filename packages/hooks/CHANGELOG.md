@@ -1,5 +1,17 @@
 # @orca-fe/hooks
 
+## 1.8.8
+
+### Patch Changes
+
+- update dependencies
+
+## 1.8.7
+
+### Patch Changes
+
+- fix: 使用 keyCode 的判斷方式，解決不同地區鍵盤輸入的字符不一致的問題
+
 ## 1.8.6
 
 ### Patch Changes
