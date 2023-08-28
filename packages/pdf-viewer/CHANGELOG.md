@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.18.0
+
+### Minor Changes
+
+- feat: 更新 pdf-view 默認縮放級別，優化縮放使默認顯示效果更佳清晰
+
 ## 1.17.1
 
 ### Patch Changes

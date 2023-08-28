@@ -1,9 +1,4 @@
-export function findSortedArr(
-  arr: number[],
-  value: number,
-  start = 0,
-  end = arr.length,
-) {
+export function findSortedArr(arr: number[], value: number, start = 0, end = arr.length) {
   const index = Math.floor((start + end) / 2);
   if (arr[end - 1] < value) return end;
   if (index === start) {
@@ -19,4 +14,12 @@ export function findSortedArr(
   if (index === 0) return 0;
   if (arr[index - 1] < value) return index;
   return findSortedArr(arr, value, start, index);
+}
+
+export class PixelsPerInch {
+  static CSS = 96.0;
+
+  static PDF = 72.0;
+
+  static PDF_TO_CSS_UNITS = this.CSS / this.PDF;
 }

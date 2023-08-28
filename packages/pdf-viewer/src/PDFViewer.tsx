@@ -14,7 +14,7 @@ import { DownloadOutlined } from '@ant-design/icons';
 import type { PageViewport, PDFViewerHandle, RenderPageCoverFnType, PDFViewerInternalStateType, SourceType } from './context';
 import PDFViewerContext, { PDFToolbarContext } from './context';
 import PDFPage from './PDFPage';
-import { findSortedArr } from './utils';
+import { findSortedArr, PixelsPerInch } from './utils';
 import ZoomAndPageController from './ZoomAndPageController';
 import PDFToolbar from './PDFToolbar';
 import useStyle from './PDFViewer.style';
@@ -192,7 +192,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       setZoom(newZoom);
       const pageDom = pageContainerRef.current;
       if (pageDom) {
-        pageDom.style.setProperty('--scale-factor', `${2 ** newZoom}`);
+        pageDom.style.setProperty('--scale-factor', `${2 ** newZoom * PixelsPerInch.PDF_TO_CSS_UNITS}`);
       }
       dom.scrollTop = newScrollTop;
       dom.scrollLeft = newScrollLeft;
@@ -240,9 +240,9 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       if (zoomMode && _this.size && maxWidth && pageMaxHeight) {
         if (zoomMode === 'autoWidth') {
           // 调整缩放级别，使其与容器宽度匹配
-          newZoom = Math.log2((_this.size.width - 32) / pageMaxWidth);
+          newZoom = Math.log2((_this.size.width - 32) / PixelsPerInch.PDF_TO_CSS_UNITS / pageMaxWidth);
         } else if (zoomMode === 'autoHeight') {
-          newZoom = Math.log2((_this.size.height - 32) / pageMaxHeight);
+          newZoom = Math.log2((_this.size.height - 32) / PixelsPerInch.PDF_TO_CSS_UNITS / pageMaxHeight);
         }
       }
 
@@ -501,7 +501,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
 
           const pageDom = pageContainerRef.current;
           if (pageDom) {
-            pageDom.style.setProperty('--scale-factor', `${2 ** newZoom}`);
+            pageDom.style.setProperty('--scale-factor', `${2 ** newZoom * PixelsPerInch.PDF_TO_CSS_UNITS}`);
           }
           dom.scrollTop = newScrollTop;
           dom.scrollLeft = newScrollLeft;
@@ -697,8 +697,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                   }
                 }}
                 style={{
-                  '--scale-factor': scale,
-                  '--pdf-viewer-page-scale': scale,
+                  '--scale-factor': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
+                  '--pdf-viewer-page-scale': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
                 }}
               >
                 {viewports.length === 0 && !loading && !pluginLoading && emptyTips}

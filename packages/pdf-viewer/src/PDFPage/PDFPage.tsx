@@ -5,6 +5,7 @@ import { floorBy } from '@orca-fe/tools';
 import type { PageViewport } from '../context';
 import PDFViewerContext from '../context';
 import useStyle from './PDFPage.style';
+import { PixelsPerInch } from '../utils';
 
 const globalOutputScale = Math.max(window.devicePixelRatio, 1);
 
@@ -26,7 +27,7 @@ const PDFPage = (props: PdfPageProps) => {
 
   const rootRef = useRef<HTMLDivElement>(null);
 
-  const scale = 2 ** zoom;
+  const scale = 2 ** zoom * PixelsPerInch.PDF_TO_CSS_UNITS;
 
   const [_this] = useState<{
     task?: any;
@@ -62,11 +63,8 @@ const PDFPage = (props: PdfPageProps) => {
 
     if (!render) return;
     if (canvas && page) {
-      // const viewport = page.getViewport({
-      //   scale: Math.min(4 * outputScale, scale),
-      // }) as PageViewport;
-      canvas.width = Math.round(viewport.width * outputScale);
-      canvas.height = Math.round(viewport.height * outputScale);
+      canvas.width = Math.ceil(viewport.width * outputScale);
+      canvas.height = Math.ceil(viewport.height * outputScale);
       canvas.hidden = true;
       const context = canvas.getContext('2d', { alpha: false });
       if (context) {
