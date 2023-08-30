@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.18.2
+
+### Patch Changes
+
+- fix: PDFViewer 修改縮放比例後，插件錯位的 bug
+
 ## 1.18.1
 
 ### Patch Changes
