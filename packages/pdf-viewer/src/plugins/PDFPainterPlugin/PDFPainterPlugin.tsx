@@ -251,8 +251,8 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
           className={`${styles.painter} ${drawing ? styles.drawing : ''}`}
           style={{
             height: '100%',
-            '--painter-scale': 'var(--scale-factor, 1)',
-            '--transformer-layout-scale': 'var(--scale-factor, 1)',
+            '--painter-scale': 'var(--scale-factor-origin, 1)',
+            '--transformer-layout-scale': 'var(--scale-factor-origin, 1)',
           }}
           zoom={zoom}
           defaultDrawMode={drawing ? drawMode : undefined}

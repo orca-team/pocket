@@ -140,16 +140,22 @@ const PDFTooltip = (props: PDFTooltipProps) => {
       draggable={false}
       style={{
         ...style,
-        left: `calc(var(--scale-factor) * ${data.x}px)`,
-        top: `calc(var(--scale-factor) * ${data.y}px)`,
+        left: `calc(var(--scale-factor-origin) * ${data.x}px)`,
+        top: `calc(var(--scale-factor-origin) * ${data.y}px)`,
         width: data.width,
-        transform: 'scale(var(--scale-factor))',
+        transform: 'scale(var(--scale-factor-origin))',
         transformOrigin: '0 0',
         '--pdf-tooltip-color': color,
       }}
       {...otherProps}
     >
-      <svg className={styles.svg} version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" style={{ width: data.width }}>
+      <svg
+        className={styles.svg}
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+        style={{ width: data.width }}
+      >
         <path
           d={(isLeft ? ['M 0 10', 'l -16 0', `L ${pointX} ${pointY}`] : [`M ${data.width} 10`, 'l 16 0', `L ${pointX} ${pointY}`]).join(' ')}
           style={{

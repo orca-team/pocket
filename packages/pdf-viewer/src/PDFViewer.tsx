@@ -698,6 +698,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                 }}
                 style={{
                   '--scale-factor': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
+                  '--scale-factor-origin': scale,
                   '--pdf-viewer-page-scale': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
                 }}
               >
