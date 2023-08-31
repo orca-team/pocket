@@ -2,6 +2,7 @@
 import React, { useContext, useImperativeHandle } from 'react';
 import { useControllableValue, useMemoizedFn } from 'ahooks';
 import { changeArr } from '@orca-fe/tools';
+import { useHotkeyListener } from '@orca-fe/hooks';
 import ToolbarButton from '../../ToolbarButton';
 import { IconAddTooltip } from '../../icon/icon';
 import type { PDFTooltipPainterProps } from './PDFTooltipPainter';
@@ -97,6 +98,18 @@ const PDFTooltipPlugin = React.forwardRef<PDFTooltipPluginHandle, PDFTooltipPlug
     drawTooltip,
     cancelDraw,
   }));
+
+  useHotkeyListener('Escape', () => {
+    if (checked) {
+      setChecked(undefined);
+      return false;
+    }
+    if (drawing) {
+      cancelDraw();
+      return false;
+    }
+    return true;
+  });
 
   return (
     <>

@@ -8,6 +8,7 @@ import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
 import { changeArr } from '@orca-fe/tools';
 import produce from 'immer';
 import rfdc from 'rfdc';
+import { useHotkeyListener } from '@orca-fe/hooks';
 import ToolbarPortal from '../../ToolbarPortal';
 import { IconAddShape, IconEllipse, IconFreedom, IconLine, IconRectangle } from '../../icon/icon';
 import ToolbarButton from '../../ToolbarButton';
@@ -133,6 +134,18 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
 
   const [_painter] = useState<PainterRefType>({
     refs: [],
+  });
+
+  useHotkeyListener('Escape', () => {
+    if (checked) {
+      setChecked(undefined);
+      return false;
+    }
+    if (drawing) {
+      setDrawing(false);
+      return false;
+    }
+    return true;
   });
 
   const renderPageCover = usePageCoverRenderer();

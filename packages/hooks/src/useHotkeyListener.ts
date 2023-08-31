@@ -2,6 +2,7 @@ import { useMemoizedFn } from 'ahooks';
 import { useEffect, useMemo, useState } from 'react';
 import type { HotkeyDefsType } from './hotkey-manager/utils';
 import { createHotkeyCache, formatHotKeyStr, isInput, isMac, toHotkeyStr } from './hotkey-manager/utils';
+import { registerGlobal } from './utils/syncGlobal';
 
 /**
  * 快捷键对象
@@ -117,6 +118,13 @@ const registerHotkeyAction = (action) => {
   };
 };
 
+// 将内容挂载到 window 上，避免多个包重复，导致无法共享，重复触发等问题
+const globalObj = registerGlobal('__orca-hooks-useHotkeyListener-global', {
+  mapping,
+  unregisterHotkeyAction,
+  registerHotkeyAction,
+});
+
 const useHotkeyListener = (
   _hotkeyName: string | [string, string],
   action: HotkeyActionType['action'],
@@ -142,9 +150,9 @@ const useHotkeyListener = (
   actionObject.priority = options.priority;
 
   useEffect(() => {
-    registerHotkeyAction(actionObject);
+    globalObj.registerHotkeyAction(actionObject);
     return () => {
-      unregisterHotkeyAction(actionObject);
+      globalObj.unregisterHotkeyAction(actionObject);
     };
   }, [actionObject.priority]);
 };
@@ -155,8 +163,8 @@ const useHotkeyListener = (
  */
 useHotkeyListener.updateHotkeyDefs = (hotkeys: HotkeyDefsType) => {
   const { hotkeyMapping, macHotkeyMapping } = createHotkeyCache(hotkeys);
-  mapping.hotkeyMapping = hotkeyMapping;
-  mapping.macHotkeyMapping = macHotkeyMapping;
+  globalObj.mapping.hotkeyMapping = hotkeyMapping;
+  globalObj.mapping.macHotkeyMapping = macHotkeyMapping;
 };
 
 export default useHotkeyListener;
