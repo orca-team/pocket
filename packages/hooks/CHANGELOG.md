@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.9.0
+
+### Minor Changes
+
+- feat: useHotkeyListener 支持全局互斥；pdf-viewer 支持 Escape 取消插件状态
+
 ## 1.8.8
 
 ### Patch Changes

@@ -1,5 +1,18 @@
 # @orca-fe/pdf-viewer
 
+## 1.19.0
+
+### Minor Changes
+
+- feat: useHotkeyListener 支持全局互斥；pdf-viewer 支持 Escape 取消插件状态
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/hooks@1.9.0
+  - @orca-fe/painter@1.4.37
+  - @orca-fe/pocket@3.2.3
+
 ## 1.18.2
 
 ### Patch Changes
