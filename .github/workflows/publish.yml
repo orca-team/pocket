@@ -25,9 +25,9 @@ jobs:
       - name: install dependencies
         run: |
           npm i pnpm -g
-          pnpm i
+          pnpm i --no-frozen-lockfile
       - name: publish
-        run: npm run pub:only
+        run: npm run pub:only > publish_log.txt
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
