@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.9.1
+
+### Patch Changes
+
+- fix: registerGlobal throw error
+
 ## 1.9.0
 
 ### Minor Changes
