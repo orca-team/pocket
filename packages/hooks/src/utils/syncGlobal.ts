@@ -10,7 +10,7 @@ export function registerGlobal<T>(key: string | symbol, value: T): T {
   }
   // 已存在内容
   const originValue = window[key];
-  if (typeof originValue === value) {
+  if (typeof originValue === typeof value) {
     return originValue;
   }
   throw new Error(`Global key ${key.toString()} conflict! Please check your value type`);
