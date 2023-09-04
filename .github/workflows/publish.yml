@@ -27,7 +27,13 @@ jobs:
           npm i pnpm -g
           pnpm i --no-frozen-lockfile
       - name: publish
-        run: npm run pub:only > publish_log.txt
+        run: npm run pub:only | tee log.txt
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+      - name: emit log
+        if: always()
+        run: |
+          ./emit-log.sh
+        env:
+          DING_TOKEN: ${{secrets.DING_TOKEN}}
