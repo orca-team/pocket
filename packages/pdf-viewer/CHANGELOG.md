@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.19.2
+
+### Patch Changes
+
+- fix: 修復默認改動縮放比後，渲染位置識別出現問題
+
 ## 1.19.1
 
 ### Patch Changes

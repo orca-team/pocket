@@ -221,7 +221,9 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     let maxWidth = 0;
     let pageMaxWidth = 0;
     let pageMaxHeight = 0;
-    const topArr = viewports.map(({ height, width }) => {
+    const topArr = viewports.map(({ height: _height, width: _width }) => {
+      const width = _width * PixelsPerInch.PDF_TO_CSS_UNITS;
+      const height = _height * PixelsPerInch.PDF_TO_CSS_UNITS;
       const _top = top;
       top += Math.floor(height + pageGap) * scale;
       maxWidth = Math.max(width * scale, maxWidth);
@@ -240,9 +242,9 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       if (zoomMode && _this.size && maxWidth && pageMaxHeight) {
         if (zoomMode === 'autoWidth') {
           // 调整缩放级别，使其与容器宽度匹配
-          newZoom = Math.log2((_this.size.width - 32) / PixelsPerInch.PDF_TO_CSS_UNITS / pageMaxWidth);
+          newZoom = Math.log2((_this.size.width - 32) / pageMaxWidth);
         } else if (zoomMode === 'autoHeight') {
-          newZoom = Math.log2((_this.size.height - 32) / PixelsPerInch.PDF_TO_CSS_UNITS / pageMaxHeight);
+          newZoom = Math.log2((_this.size.height - 32) / pageMaxHeight);
         }
       }
 
