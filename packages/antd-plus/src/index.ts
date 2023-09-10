@@ -19,6 +19,8 @@ import type { ValueMappingProps, createValueMappedOptions } from './value-mappin
 import { ValueMapping, createValueMappedComponent } from './value-mapping';
 import type { FormItemListenerProps } from './form-item-listener';
 import FormItemListener from './form-item-listener';
+import type { FormCollectionProps } from './form-collection';
+import FormCollection from './form-collection';
 
 export type {
   JsonSchemaEditorProps,
@@ -35,6 +37,7 @@ export type {
   ValueMappingProps,
   createValueMappedOptions,
   FormItemListenerProps,
+  FormCollectionProps,
 };
 export {
   ModalForm,
@@ -49,4 +52,5 @@ export {
   ValueMapping,
   createValueMappedComponent,
   FormItemListener,
+  FormCollection,
 };

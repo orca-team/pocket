@@ -44,6 +44,7 @@
     "ahooks": "^3.7.8",
     "classnames": "^2.3.2",
     "json5": "^2.2.3",
+    "lodash-es": "^4.17.21",
     "lunar-javascript": "^1.6.2",
     "moment": "^2.29.4",
     "prefix-classnames": "^0.0.7",
