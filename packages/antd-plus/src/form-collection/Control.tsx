@@ -18,7 +18,7 @@ export interface FormCollectionControlProps {
 const Control = (props: FormCollectionControlProps) => {
   const { name, children } = props;
   const { formCollection } = React.useContext(FormCollectionContext);
-  const { setForm, removeFrom } = (formCollection as InternalFormCollectionInstance).getInternalHooks(INTERNAL_HOOK_SECRET)!;
+  const { setForm, removeForm } = (formCollection as InternalFormCollectionInstance).getInternalHooks(INTERNAL_HOOK_SECRET)!;
 
   const [form] = Form.useForm();
 
@@ -27,7 +27,7 @@ const Control = (props: FormCollectionControlProps) => {
   });
 
   useUnmount(() => {
-    removeFrom(name);
+    removeForm(name);
   });
 
   return React.isValidElement(children) ? React.cloneElement<any>(children, { form }) : <>{children}</>;

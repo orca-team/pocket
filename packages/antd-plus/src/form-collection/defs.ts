@@ -29,7 +29,7 @@ export const INTERNAL_HOOK_SECRET = 'INTERNAL_HOOK_SECRET';
 
 export interface FormCollectionInternalHooks {
   setForm: (formName: string, form: FormInstance) => void;
-  removeFrom: (formName) => void;
+  removeForm: (formName) => void;
 }
 
 export type InternalFormCollectionInstance = FormCollectionInstance & {

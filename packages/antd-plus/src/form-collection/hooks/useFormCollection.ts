@@ -74,7 +74,7 @@ export class FormCollectionStore {
     if (secret === INTERNAL_HOOK_SECRET) {
       return {
         setForm: this.setForm,
-        removeFrom: this.removeForm,
+        removeForm: this.removeForm,
       };
     }
 
