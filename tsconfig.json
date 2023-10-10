@@ -15,6 +15,8 @@
     "strict": true,
     "skipLibCheck": true,
     "rootDir": ".",
+    "outDir": "./lib",
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "@orca-fe/pocket": ["./packages/pocket/src"],
       "@orca-fe/antd-plus": ["./packages/antd-plus/src"],
@@ -25,9 +27,7 @@
       "@orca-fe/transformer": ["./packages/transformer/src"],
       "@orca-fe/dnd": ["./packages/dnd/src"],
       "@@/*": [".dumi/tmp/*"]
-    },
-    "outDir": "./lib",
-    "allowSyntheticDefaultImports": true
+    }
   },
   "include": ["src", "packages", ".eslintrc.cjs", "checkDep.ts", ".dumi/**/*", ".dumirc.ts", "jest.config.cjs"],
   "ts-node": {

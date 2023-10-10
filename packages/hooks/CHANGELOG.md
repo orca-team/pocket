@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.9.2
+
+### Patch Changes
+
+- fix: export UseServiceContext
+
 ## 1.9.1
 
 ### Patch Changes

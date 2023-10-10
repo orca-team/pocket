@@ -218,14 +218,16 @@ export function useService<Args extends any[], ServiceResult = any, Result = Fet
       return formattedData;
     } catch (error: any) {
       console.error(error);
-      _this.loading = false;
-      setState({
-        data: undefined,
-        error,
-        loading: false,
-      });
-      if (typeof onError === 'function') {
-        onError(error, args);
+      if (_this.ticket === ticket) {
+        _this.loading = false;
+        setState({
+          data: undefined,
+          error,
+          loading: false,
+        });
+        if (typeof onError === 'function') {
+          onError(error, args);
+        }
       }
     }
     return undefined;

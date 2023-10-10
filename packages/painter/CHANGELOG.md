@@ -1,5 +1,14 @@
 # @orca-fe/painter
 
+## 1.4.39
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/hooks@1.9.2
+  - @orca-fe/pocket@3.2.5
+  - @orca-fe/transformer@0.3.25
+
 ## 1.4.38
 
 ### Patch Changes
