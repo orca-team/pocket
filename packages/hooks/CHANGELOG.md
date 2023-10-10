@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.10.0
+
+### Minor Changes
+
+- feat: 增加 throwOnError 选项
+
 ## 1.9.2
 
 ### Patch Changes
