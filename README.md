@@ -9,7 +9,7 @@ A React-biased front-end collection, including UI components, hooks, and common-
 [![npm version](https://badge.fury.io/js/%40orca-fe%2Fpocket.svg)](https://badge.fury.io/js/%40orca-fe%2Fpocket)
 [![Build Status](https://travis-ci.com/orca-team/orca-fe-pocket.svg?branch=master)](https://travis-ci.com/orca-team/orca-fe-pocket)
 
-![orca-pocket-readmd.png](/assets-readme/orca-pocket-readmd.png)
+![orca-pocket-readmd.png](./public/assets-readme/orca-pocket-readmd.png)
 
 Visit here for more details:
 
