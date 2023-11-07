@@ -12,7 +12,7 @@ import useEffectWithTarget, { useLayoutEffectWithTarget } from './useEffectWithT
 import useStaticClick from './useStaticClick';
 import useNextTick, { useLayoutNextTick } from './useNextTick';
 import usePan from './usePan';
-import useService from './useService';
+import useService, { UseServiceContext } from './useService';
 import useInterval from './useInterval';
 import useHotkeyListener from './useHotkeyListener';
 import HotkeyManager from './hotkey-manager';
@@ -38,6 +38,7 @@ export {
   useLayoutNextTick,
   usePan,
   useService,
+  UseServiceContext,
   useInterval,
   useGetState,
   useMergedRefs,

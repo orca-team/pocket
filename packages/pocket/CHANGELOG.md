@@ -1,10 +1,18 @@
 # @orca-fe/pocket
 
+## 3.2.6
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/hooks@1.10.0
+
 ## 3.2.5
 
 ### Patch Changes
 
-- fix: resizable-wrapper add cover to fix iframe event
+- Updated dependencies
+  - @orca-fe/hooks@1.9.2
 
 ## 3.2.4
 

@@ -3,6 +3,9 @@
 # 取出 log.txt 的文件内容
 log=$(cat log.txt|grep 'New tag:')
 
+# 将换行符替换为两个换行符
+log=$(echo "$log"|sed 's/\n/\\n\\n/g')
+
 # 如果 log.txt 为空
 if [ -z "$log" ]; then
   curl "https://oapi.dingtalk.com/robot/send?access_token=${DING_TOKEN}" \

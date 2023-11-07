@@ -58,6 +58,9 @@ export interface ContextOptions {
 
   /** 如果请求失败，是否维持之前的结果，默认为 true */
   keepSuccessData?: boolean;
+
+  /** 如果請求的結果是 Error 則視為拋出異常。 */
+  throwOnError?: boolean;
 }
 
 export const UseServiceContext = React.createContext<ContextOptions>({});
@@ -138,6 +141,7 @@ export function useService<Args extends any[], ServiceResult = any, Result = Fet
     pollingWhenHidden = false,
     stateMgr,
     onFinish,
+    throwOnError = true,
   } = { ...globalOptions, ...options };
 
   const service = useMemoizedFn(_service);
@@ -190,6 +194,9 @@ export function useService<Args extends any[], ServiceResult = any, Result = Fet
     try {
       const res = await service(...args);
       let formattedData = formatter(res) as Result | undefined;
+      if (throwOnError && formattedData instanceof Error) {
+        throw formattedData;
+      }
       if (keepSuccessData && formattedData == null) {
         formattedData = data;
       }
@@ -218,14 +225,24 @@ export function useService<Args extends any[], ServiceResult = any, Result = Fet
       return formattedData;
     } catch (error: any) {
       console.error(error);
-      _this.loading = false;
-      setState({
-        data: undefined,
-        error,
-        loading: false,
-      });
-      if (typeof onError === 'function') {
-        onError(error, args);
+      if (_this.ticket === ticket) {
+        _this.loading = false;
+        if (keepSuccessData) {
+          setState({
+            error,
+            loading: false,
+          });
+        } else {
+          setState({
+            error,
+            loading: false,
+            data: undefined,
+          });
+        }
+
+        if (typeof onError === 'function') {
+          onError(error, args);
+        }
       }
     }
     return undefined;
