@@ -1,5 +1,11 @@
 # @orca-fe/pocket
 
+## 3.2.10
+
+### Patch Changes
+
+- fix: resizable-wrapper horizontal cover
+
 ## 3.2.9
 
 ### Patch Changes

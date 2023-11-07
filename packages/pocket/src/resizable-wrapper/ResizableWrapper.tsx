@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { useEventListener } from 'ahooks';
+import { useEventListener, useMemoizedFn } from 'ahooks';
 import { useControllableProps, useSizeListener } from '@orca-fe/hooks';
 import { clamp } from '@orca-fe/tools';
 import cn from 'classnames';
@@ -131,6 +131,25 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
     }
   }, rootRef);
 
+  const showCover = useMemoizedFn(() => {
+    // create cover
+    if (!_this.cover && cover) {
+      _this.cover = document.createElement('div');
+      _this.cover.style.position = 'fixed';
+      _this.cover.style.top = '0';
+      _this.cover.style.left = '0';
+      _this.cover.style.right = '0';
+      _this.cover.style.bottom = '0';
+      _this.cover.style.zIndex = typeof cover === 'object' && cover.zIndex != null ? cover.zIndex.toString() : '99999';
+      if (horizontal) {
+        _this.cover.style.cursor = 'ew-resize';
+      } else if (vertical) {
+        _this.cover.style.cursor = 'ns-resize';
+      }
+      document.body.appendChild(_this.cover);
+    }
+  });
+
   return (
     <div
       ref={rootRef}
@@ -163,23 +182,7 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
                 initialNum: height,
                 initialMouse: e.clientY,
               });
-            }
-
-            // create cover
-            if (!_this.cover && cover) {
-              _this.cover = document.createElement('div');
-              _this.cover.style.position = 'fixed';
-              _this.cover.style.top = '0';
-              _this.cover.style.left = '0';
-              _this.cover.style.right = '0';
-              _this.cover.style.bottom = '0';
-              _this.cover.style.zIndex = typeof cover === 'object' && cover.zIndex != null ? cover.zIndex.toString() : '99999';
-              if (horizontal) {
-                _this.cover.style.cursor = 'ew-resize';
-              } else if (vertical) {
-                _this.cover.style.cursor = 'ns-resize';
-              }
-              document.body.appendChild(_this.cover);
+              showCover();
             }
           }}
         />
@@ -199,6 +202,7 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
                 initialNum: width,
                 initialMouse: e.clientX,
               });
+              showCover();
             }
           }}
         />
