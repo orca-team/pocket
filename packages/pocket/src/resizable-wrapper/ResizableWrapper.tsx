@@ -34,7 +34,7 @@ export interface ResizableWrapperProps extends React.HTMLAttributes<HTMLDivEleme
  * @constructor
  */
 const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
-  const { defaultWidth, cover, defaultHeight } = props;
+  const { defaultWidth, defaultHeight } = props;
   const [
     {
       className = '',
@@ -53,6 +53,7 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
       minWidth,
       maxHeight,
       maxWidth,
+      cover,
       ...otherProps
     },
     changeProps,
