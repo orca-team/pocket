@@ -1,5 +1,11 @@
 # @orca-fe/pocket
 
+## 3.2.8
+
+### Patch Changes
+
+- fix: resizable-wrapper cover may not remove
+
 ## 3.2.7
 
 ### Patch Changes

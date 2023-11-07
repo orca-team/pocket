@@ -101,11 +101,11 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
   useEventListener('pointerup', () => {
     if (dragging) {
       setDragging(null);
-      // remove cover
-      if (_this.cover) {
-        document.body.removeChild(_this.cover);
-        _this.cover = undefined;
-      }
+    }
+    // remove cover
+    if (_this.cover) {
+      document.body.removeChild(_this.cover);
+      _this.cover = undefined;
     }
     if (_this.size) {
       if (triggerOnResize) {
