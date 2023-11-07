@@ -1,5 +1,11 @@
 # @orca-fe/pocket
 
+## 3.2.9
+
+### Patch Changes
+
+- fix: resizable-wrapper cover listen wrong event
+
 ## 3.2.8
 
 ### Patch Changes

@@ -122,23 +122,6 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
 
   useEventListener('pointerdown', () => {
     _this.size = undefined;
-
-    // create cover
-    if (!_this.cover && cover) {
-      _this.cover = document.createElement('div');
-      _this.cover.style.position = 'fixed';
-      _this.cover.style.top = '0';
-      _this.cover.style.left = '0';
-      _this.cover.style.right = '0';
-      _this.cover.style.bottom = '0';
-      _this.cover.style.zIndex = typeof cover === 'object' && cover.zIndex != null ? cover.zIndex.toString() : '99999';
-      if (horizontal) {
-        _this.cover.style.cursor = 'ew-resize';
-      } else if (vertical) {
-        _this.cover.style.cursor = 'ns-resize';
-      }
-      document.body.appendChild(_this.cover);
-    }
   });
 
   useSizeListener(() => {
@@ -180,6 +163,23 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
                 initialNum: height,
                 initialMouse: e.clientY,
               });
+            }
+
+            // create cover
+            if (!_this.cover && cover) {
+              _this.cover = document.createElement('div');
+              _this.cover.style.position = 'fixed';
+              _this.cover.style.top = '0';
+              _this.cover.style.left = '0';
+              _this.cover.style.right = '0';
+              _this.cover.style.bottom = '0';
+              _this.cover.style.zIndex = typeof cover === 'object' && cover.zIndex != null ? cover.zIndex.toString() : '99999';
+              if (horizontal) {
+                _this.cover.style.cursor = 'ew-resize';
+              } else if (vertical) {
+                _this.cover.style.cursor = 'ns-resize';
+              }
+              document.body.appendChild(_this.cover);
             }
           }}
         />
