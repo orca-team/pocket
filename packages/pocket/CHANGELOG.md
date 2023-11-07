@@ -1,5 +1,11 @@
 # @orca-fe/pocket
 
+## 3.2.5
+
+### Patch Changes
+
+- fix: resizable-wrapper add cover to fix iframe event
+
 ## 3.2.4
 
 ### Patch Changes

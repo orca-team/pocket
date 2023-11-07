@@ -21,6 +21,11 @@ export interface ResizableWrapperProps extends React.HTMLAttributes<HTMLDivEleme
   verticalPosition?: 'top' | 'bottom';
   horizontalPosition?: 'left' | 'right';
   triggerOnResize?: boolean;
+  cover?:
+    | boolean
+    | {
+        zIndex?: number;
+      };
 }
 
 /**
@@ -29,7 +34,7 @@ export interface ResizableWrapperProps extends React.HTMLAttributes<HTMLDivEleme
  * @constructor
  */
 const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
-  const { defaultWidth, defaultHeight } = props;
+  const { defaultWidth, cover, defaultHeight } = props;
   const [
     {
       className = '',
@@ -66,6 +71,8 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
 
   const [_this] = useState<{
     size?: { width: number; height: number };
+    // 用于添加到 body 上，覆盖屏幕，确保拖拽时可以监听到事件
+    cover?: HTMLDivElement;
   }>({});
 
   const [dragging, setDragging] = useState<{
@@ -94,6 +101,11 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
   useEventListener('pointerup', () => {
     if (dragging) {
       setDragging(null);
+      // remove cover
+      if (_this.cover) {
+        document.body.removeChild(_this.cover);
+        _this.cover = undefined;
+      }
     }
     if (_this.size) {
       if (triggerOnResize) {
@@ -110,6 +122,23 @@ const ResizableWrapper = (props: ResizableWrapperProps, pRef) => {
 
   useEventListener('pointerdown', () => {
     _this.size = undefined;
+
+    // create cover
+    if (!_this.cover && cover) {
+      _this.cover = document.createElement('div');
+      _this.cover.style.position = 'fixed';
+      _this.cover.style.top = '0';
+      _this.cover.style.left = '0';
+      _this.cover.style.right = '0';
+      _this.cover.style.bottom = '0';
+      _this.cover.style.zIndex = typeof cover === 'object' && cover.zIndex != null ? cover.zIndex.toString() : '99999';
+      if (horizontal) {
+        _this.cover.style.cursor = 'ew-resize';
+      } else if (vertical) {
+        _this.cover.style.cursor = 'ns-resize';
+      }
+      document.body.appendChild(_this.cover);
+    }
   });
 
   useSizeListener(() => {
