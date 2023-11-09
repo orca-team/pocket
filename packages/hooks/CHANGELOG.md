@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.10.1
+
+### Patch Changes
+
+- fix: add missing `usePromisifyModal().ok`
+
 ## 1.10.0
 
 ### Minor Changes

@@ -156,7 +156,7 @@ export default function usePromisifyModal(options: UsePromisifyModalOptions = {}
     instance,
   );
 
-  return { show, hide, instance: instanceWithContext, resume, minimize };
+  return { show, hide, instance: instanceWithContext, resume, minimize, ok };
 }
 
 export const usePromisifyDrawer = (options: UsePromisifyModalOptions = {}) =>
