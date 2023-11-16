@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/painter",
-  "version": "1.4.46",
+  "version": "1.4.47",
   "description": "Konva Painter",
   "keywords": [
     "react",
@@ -39,7 +39,7 @@
   "dependencies": {
     "@orca-fe/hooks": "^1.10.1",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
-    "@orca-fe/pocket": "^3.2.12",
+    "@orca-fe/pocket": "^3.3.0",
     "@orca-fe/simple-jss": "^0.0.3",
     "@orca-fe/tools": "^0.10.0",
     "ahooks": "^3.7.8",

@@ -1,5 +1,11 @@
 # @orca-fe/pocket
 
+## 3.3.0
+
+### Minor Changes
+
+- feat: PDFViewer ContextMenu 插件
+
 ## 3.2.12
 
 ### Patch Changes

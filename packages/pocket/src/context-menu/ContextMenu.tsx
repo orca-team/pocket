@@ -34,6 +34,7 @@ export type ContextMenuItemType = {
   disabled?: boolean;
   icon?: React.ReactChild;
   extra?: React.ReactChild;
+  onClick?: (e: React.MouseEvent) => void;
 };
 export type ContextMenuItemWithSplitType = ContextMenuItemType | 'split-line';
 
@@ -49,7 +50,7 @@ export type MenuItemProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'children
   Omit<ContextMenuItemType, 'key'> & {
     menuKey: string;
     hasIcon?: boolean;
-    onMenuClick?: (menu: ContextMenuItemType) => void;
+    onMenuClick?: (menu: ContextMenuItemType, event: React.MouseEvent) => void;
   };
 
 export const MenuItem = (props: MenuItemProps) => {
@@ -102,7 +103,7 @@ export const MenuItem = (props: MenuItemProps) => {
 export interface MenuContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   bounds?: Bounds;
   data?: ContextMenuItemWithSplitType[];
-  onMenuClick?: (menu: ContextMenuItemType) => void;
+  onMenuClick?: (menu: ContextMenuItemType, event: React.MouseEvent) => void;
 }
 
 export const MenuContainer = (props: MenuContainerProps) => {
@@ -159,7 +160,8 @@ export const MenuContainer = (props: MenuContainerProps) => {
               event.stopPropagation();
               if (Array.isArray(item.children)) return;
               if (!item.disabled) {
-                onMenuClick(item);
+                onMenuClick(item, event);
+                item.onClick?.(event);
               }
             }}
             key={index}
@@ -171,8 +173,8 @@ export const MenuContainer = (props: MenuContainerProps) => {
 };
 
 export interface ContextMenuProps<T extends ContextMenuItemType> extends React.HTMLAttributes<HTMLDivElement> {
-  data?: (T | 'split-line')[];
-  onMenuClick?: (menu: T) => void;
+  data?: (T | 'split-line')[] | ((el: HTMLElement | null) => (T | 'split-line')[]);
+  onMenuClick?: (menu: T, event: React.MouseEvent) => void;
   getContainer?: (element: HTMLElement) => HTMLElement;
   menuContainerClassName?: string;
   mainMenuMinWidth?: number;
@@ -202,6 +204,10 @@ const ContextMenu = <T extends ContextMenuItemType>(props: ContextMenuProps<T>, 
       }
     | undefined
   >();
+  const [_this] = useState({
+    lastTriggerElement: null as HTMLElement | null,
+  });
+
   const [visible, setVisible] = useState(false);
 
   const bounds = useMemo(
@@ -224,6 +230,7 @@ const ContextMenu = <T extends ContextMenuItemType>(props: ContextMenuProps<T>, 
   useClickAway(() => {
     if (visible) {
       setVisible(false);
+      _this.lastTriggerElement = null;
     }
   }, menuRef);
 
@@ -234,6 +241,7 @@ const ContextMenu = <T extends ContextMenuItemType>(props: ContextMenuProps<T>, 
       if (event.defaultPrevented) {
         if (visible) {
           setVisible(false);
+          _this.lastTriggerElement = null;
         }
         return;
       }
@@ -249,6 +257,7 @@ const ContextMenu = <T extends ContextMenuItemType>(props: ContextMenuProps<T>, 
         top: clientY,
       });
       setVisible(true);
+      _this.lastTriggerElement = event.target as HTMLElement;
     },
     { target: rootRef },
   );
@@ -260,6 +269,7 @@ const ContextMenu = <T extends ContextMenuItemType>(props: ContextMenuProps<T>, 
     // check is container
     if (!rootRef.current?.contains(event.target as Node)) {
       setVisible(false);
+      _this.lastTriggerElement = null;
     }
   });
 
@@ -280,11 +290,12 @@ const ContextMenu = <T extends ContextMenuItemType>(props: ContextMenuProps<T>, 
               <MenuContainer
                 className={menuContainerClassName}
                 bounds={bounds}
-                data={data}
+                data={typeof data === 'function' ? data(_this.lastTriggerElement) : data}
                 style={{ minWidth: mainMenuMinWidth }}
-                onMenuClick={(item) => {
-                  onMenuClick(item as T);
+                onMenuClick={(item, e) => {
+                  onMenuClick(item as T, e);
                   setVisible(false);
+                  _this.lastTriggerElement = null;
                 }}
               />
             </div>,

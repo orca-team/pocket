@@ -5,6 +5,9 @@ import OpenFileButton from './OpenFileButton';
 import PDFViewer from './PDFViewer';
 import PDFPainterPlugin from './plugins/PDFPainterPlugin';
 import PDFTooltipPlugin from './plugins/PDFTooltipPlugin';
+import PDFContextMenuPlugin from './plugins/PDFContextMenuPlugin';
+import PDFContextPrintPlugin from './plugins/PDFContextPrintPlugin';
+
 import PDFOpenFileButtonPlugin from './plugins/PDFOpenFileButtonPlugin';
 import type { ToolbarButtonProps } from './ToolbarButton';
 import ToolbarButton from './ToolbarButton';
@@ -41,3 +44,6 @@ export type * from './plugins/PDFTooltipPlugin';
 export { PDFOpenFileButtonPlugin };
 
 export type * from './plugins/PDFOpenFileButtonPlugin';
+
+export { PDFContextPrintPlugin, PDFContextMenuPlugin };
+export type * from './plugins/PDFContextMenuPlugin';

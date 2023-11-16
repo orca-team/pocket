@@ -11,6 +11,7 @@ import type { DocumentInitParameters } from '@orca-fe/pdfjs-dist-browserify/type
 import { ContextMenu } from '@orca-fe/pocket';
 import { saveAs } from 'file-saver';
 import { DownloadOutlined } from '@ant-design/icons';
+import type { ContextMenuItemType } from '@orca-fe/pocket';
 import type { PageViewport, PDFViewerHandle, RenderPageCoverFnType, PDFViewerInternalStateType, SourceType } from './context';
 import PDFViewerContext, { PDFToolbarContext } from './context';
 import PDFPage from './PDFPage';
@@ -21,6 +22,7 @@ import useStyle from './PDFViewer.style';
 import type { LocaleType } from './locale/context';
 import { LocaleContext, useLocale } from './locale/context';
 import zhCN from './locale/zh_CN';
+import useCollector from './useCollector';
 
 const ef = () => undefined;
 
@@ -151,8 +153,10 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       height: number;
     };
     file?: SourceType;
+    contextMenu: ContextMenuItemType[];
   }>({
     zooming: false,
+    contextMenu: [],
   });
 
   useEffect(() => {
@@ -632,6 +636,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     drawingPluginName: '',
   }));
 
+  const menuCollector = useCollector<ContextMenuItemType & { order?: number }>();
+
   return (
     <LocaleContext.Provider value={useLocale(zhCN, locale)[0]}>
       <PDFViewerContext.Provider
@@ -650,6 +656,8 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
             internalState,
             setInternalState,
             bodyElement: bodyRef,
+            onMenuCollect: menuCollector.on,
+            offMenuCollect: menuCollector.off,
           }),
           [loading, pluginLoading, pages, viewports, zoom, current, pageCoverRefs, internalState, bodyRef],
         )}
@@ -685,19 +693,18 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                 className={styles.pages}
                 onScroll={onPageScroll}
                 mainMenuMinWidth={200}
-                data={[
-                  {
-                    key: 'download',
-                    icon: <DownloadOutlined />,
-                    text: '下载当前文档',
-                    disabled: pages.length <= 0,
-                  },
-                ]}
-                onMenuClick={(menu) => {
-                  if (menu.key === 'download') {
-                    downloadPdf();
-                  }
-                }}
+                data={() =>
+                  [
+                    {
+                      key: 'download',
+                      icon: <DownloadOutlined />,
+                      text: '下载当前文档',
+                      disabled: pages.length <= 0,
+                      onClick() {
+                        downloadPdf();
+                      },
+                    },
+                  ].concat(menuCollector.collect().sort((a, b) => (a.order || 0) - (b.order || 0)))}
                 style={{
                   '--scale-factor': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
                   '--scale-factor-origin': scale,

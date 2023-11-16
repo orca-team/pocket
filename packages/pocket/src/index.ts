@@ -14,7 +14,7 @@ import type { BreadCrumbProps } from './custom-breadcrumb/Breadcrumb';
 import type { BreadCrumbMenuType } from './custom-breadcrumb/BreadcrumbContext';
 import type { ErrorCatcherProps } from './error-catcher';
 import ErrorCatcher from './error-catcher';
-import type { ContextMenuItemWithSplitType, ContextMenuProps } from './context-menu';
+import type { ContextMenuItemWithSplitType, ContextMenuProps, ContextMenuItemType } from './context-menu';
 import ContextMenu from './context-menu';
 import shouldUpdate from './should-update';
 import type { EqRatioImgProps } from './eq-ratio-img';
@@ -72,6 +72,7 @@ export type {
   ImgProps,
   ContextMenuProps,
   ContextMenuItemWithSplitType,
+  ContextMenuItemType,
   ErrorCatcherProps,
   CustomBreadCrumbProps,
   BreadCrumbMenuType,

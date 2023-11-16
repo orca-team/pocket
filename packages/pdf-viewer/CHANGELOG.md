@@ -1,5 +1,17 @@
 # @orca-fe/pdf-viewer
 
+## 1.20.0
+
+### Minor Changes
+
+- feat: PDFViewer ContextMenu 插件
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/pocket@3.3.0
+  - @orca-fe/painter@1.4.47
+
 ## 1.19.10
 
 ### Patch Changes

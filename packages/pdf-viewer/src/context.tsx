@@ -104,6 +104,11 @@ export type PDFViewerContextType = {
   viewports: PageViewport[];
   internalState: PDFViewerInternalStateType;
   setInternalState: SetState<PDFViewerInternalStateType>;
+
+  // 注册菜单采集器事件
+  onMenuCollect: (callback: (...args: any[]) => any) => void;
+  // 卸载菜单采集器事件
+  offMenuCollect: (callback: (...args: any[]) => any) => void;
 };
 
 const PDFViewerContext = React.createContext<PDFViewerContextType>({
@@ -120,6 +125,8 @@ const PDFViewerContext = React.createContext<PDFViewerContextType>({
   },
   bodyElement: null,
   setInternalState: () => {},
+  onMenuCollect: () => {},
+  offMenuCollect: () => {},
   pdfViewer: {
     async load() {},
     async close() {},
