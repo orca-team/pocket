@@ -12,5 +12,7 @@ const zhCN: LocaleType = {
   paint: '绘图',
   tooltip: '批注',
   inputPlaceHolder: '请输入内容',
+  downloadCurrentFile: '下载当前文档',
+  printCurrentFile: '打印当前文档',
 };
 export default zhCN;

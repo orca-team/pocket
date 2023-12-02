@@ -638,8 +638,9 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
 
   const menuCollector = useCollector<ContextMenuItemType & { order?: number }>();
 
+  const mergedLocale = useLocale(zhCN, locale)[0];
   return (
-    <LocaleContext.Provider value={useLocale(zhCN, locale)[0]}>
+    <LocaleContext.Provider value={mergedLocale}>
       <PDFViewerContext.Provider
         value={useMemo(
           () => ({
@@ -698,7 +699,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                     {
                       key: 'download',
                       icon: <DownloadOutlined />,
-                      text: '下载当前文档',
+                      text: mergedLocale.downloadCurrentFile || '下载当前文件',
                       disabled: pages.length <= 0,
                       onClick() {
                         downloadPdf();

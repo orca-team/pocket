@@ -12,6 +12,8 @@ export type LocaleType = {
   tooltip?: string;
   inputPlaceHolder?: string;
   fontSize?: string;
+  downloadCurrentFile?: string;
+  printCurrentFile?: string;
 };
 
 export const LocaleContext = createContext<LocaleType | undefined>(undefined);

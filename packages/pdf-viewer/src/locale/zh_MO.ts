@@ -12,6 +12,8 @@ const zhMO: LocaleType = {
   paint: '繪圖',
   tooltip: '批註',
   inputPlaceHolder: '請輸入內容',
+  downloadCurrentFile: '下載當前文檔',
+  printCurrentFile: '列印當前文檔',
 };
 
 export default zhMO;

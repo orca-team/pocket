@@ -1,5 +1,17 @@
 # @orca-fe/pdf-viewer
 
+## 1.21.0
+
+### Minor Changes
+
+- chore: pdf-viewer locale
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/pocket@3.3.1
+  - @orca-fe/painter@1.4.48
+
 ## 1.20.0
 
 ### Minor Changes

@@ -34,7 +34,7 @@ export type ContextMenuItemType = {
   disabled?: boolean;
   icon?: React.ReactChild;
   extra?: React.ReactChild;
-  onClick?: (e: React.MouseEvent) => void;
+  onClick?: (e: React.MouseEvent) => any;
 };
 export type ContextMenuItemWithSplitType = ContextMenuItemType | 'split-line';
 
