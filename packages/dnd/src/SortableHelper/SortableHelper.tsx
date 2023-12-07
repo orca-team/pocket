@@ -176,9 +176,9 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
             onDragStart?.(event);
           }}
           onDragEnd={handleDragEnd}
-          {...otherProps}
           collisionDetection={closestCenter}
           sensors={sensors}
+          {...otherProps}
         >
           <SortableContext items={keys} strategy={strategy} disabled={disabled}>
             {children}
