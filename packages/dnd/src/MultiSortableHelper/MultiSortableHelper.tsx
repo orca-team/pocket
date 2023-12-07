@@ -33,7 +33,7 @@ export interface MultiSortableHelperProps<T extends Object> extends DndContextPr
 }
 
 function MultiSortableHelper<T extends Object>(props: MultiSortableHelperProps<T>) {
-  const { data: nouse, onChange, strategy, disabledRootSortable, ...otherProps } = props;
+  const { data: nouse, onChange, strategy, disabledRootSortable, children, ...otherProps } = props;
 
   const [data = eArr, setData] = useControllableValue<T[]>(props, {
     trigger: 'onChange',
@@ -70,7 +70,9 @@ function MultiSortableHelper<T extends Object>(props: MultiSortableHelperProps<T
       sensors={sensors}
       {...otherProps}
     >
-      <SortableContext items={rootKeys} strategy={strategy} disabled={disabledRootSortable} />
+      <SortableContext items={rootKeys} strategy={strategy} disabled={disabledRootSortable}>
+        {children}
+      </SortableContext>
     </DndContext>
   );
 }

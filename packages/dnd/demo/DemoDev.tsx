@@ -19,7 +19,7 @@ export default () => {
   const [data, setData] = useState(defaultData);
   return (
     <SortableHelper keyManager="key" data={data} onChange={setData}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
+      <div style={{}}>
         {data.map(({ key, content, title, color }, index) => (
           <SortableHelperItem key={key} row={index} style={{ backgroundColor: color }}>
             <div>{title}</div>
