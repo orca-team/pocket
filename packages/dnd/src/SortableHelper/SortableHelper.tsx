@@ -1,11 +1,12 @@
 import type { ComponentClass, FunctionComponent, HTMLAttributes, ReactHTML, ReactNode } from 'react';
-import React, { createContext, createElement, useContext, useMemo, useState } from 'react';
+import React, { createElement, useContext, useMemo, useState } from 'react';
 import type { DndContextProps, DragOverlayProps } from '@dnd-kit/core';
 import { closestCenter, DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { useControllableValue } from 'ahooks';
 import cn from 'classnames';
 import type { SortableContextProps } from '@dnd-kit/sortable';
 import { arrayMove, SortableContext, useSortable } from '@dnd-kit/sortable';
+import { SortableHelperContext } from '../context';
 import KeyManager from '../KeyManager';
 import { SortableItemContext } from '../utils/SortHandle';
 import useStyles from './SortableHelper.style';
@@ -14,36 +15,15 @@ const eArr = [];
 
 const ef = () => undefined;
 
-type DragOverlayContextType = {
-  item: any;
-  index: number;
-};
-
-const DragOverlayContext = React.createContext<DragOverlayContextType>({
-  item: undefined,
-  index: -1,
-});
-
 export const SortableHelperDragSort = (
   props: Omit<DragOverlayProps, 'children'> & {
     children: (data: any, index: number) => ReactNode;
   },
 ) => {
   const { children = () => null, ...otherProps } = props;
-  const { item, index } = useContext(DragOverlayContext);
-  return <DragOverlay {...otherProps}>{children(item, index)}</DragOverlay>;
+  const { activeItem, activeIndex } = useContext(SortableHelperContext);
+  return <DragOverlay {...otherProps}>{children(activeItem, activeIndex)}</DragOverlay>;
 };
-
-type SortableHelperContextType = {
-  keys: string[];
-  data: any[];
-  customHandle: boolean;
-};
-const SortableHelperContext = createContext<SortableHelperContextType>({
-  keys: [],
-  data: [],
-  customHandle: false,
-});
 
 export interface SortableHelperItemProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
@@ -125,7 +105,7 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
     customHandle = false,
     onDragStartIndex = ef,
     onDragStart,
-    keyManager,
+    keyManager: _keyManager,
     strategy,
     disabled,
     ...otherProps
@@ -137,6 +117,7 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
     valuePropName: 'data',
   });
 
+  const [activeIndexPath, setActiveIndexPath] = useState<number[]>([]);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
   const activeItem = data[activeIndex];
 
@@ -148,43 +129,60 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
   );
 
   // 通过映射的方式，实现无需传递 key 也可实现排序
-  const [keyMgr] = useState(() => {
-    if (typeof keyManager === 'string') return new KeyManager<T>(keyManager);
-    return keyManager ?? new KeyManager<T>();
+  const [keyManager] = useState(() => {
+    if (typeof _keyManager === 'string') return new KeyManager<T>(_keyManager);
+    return _keyManager ?? new KeyManager<T>();
   });
 
-  const keys = useMemo(() => keyMgr.getKeys(data), [data]);
+  // 最外层的 keys
+  const rootKeys = useMemo(() => keyManager.getKeys(data), [data]);
 
   function handleDragEnd(event) {
     const { active, over } = event;
     if (active.id !== over.id) {
-      const oldIndex = keys.indexOf(active.id);
-      const newIndex = keys.indexOf(over.id);
+      const oldIndex = rootKeys.indexOf(active.id);
+      const newIndex = rootKeys.indexOf(over.id);
 
       setData(data => arrayMove(data, oldIndex, newIndex), oldIndex, newIndex, data);
     }
+    setActiveIndex(-1);
+    setActiveIndexPath([]);
   }
 
   return (
-    <SortableHelperContext.Provider value={useMemo(() => ({ keys, data, customHandle }), [keys, data, customHandle])}>
-      <DragOverlayContext.Provider value={useMemo(() => ({ item: activeItem, index: activeIndex }), [activeItem, activeIndex])}>
-        <DndContext
-          onDragStart={(event) => {
-            const index = keys.indexOf(`${event.active.id}`);
-            onDragStartIndex(index);
-            setActiveIndex(index);
-            onDragStart?.(event);
-          }}
-          onDragEnd={handleDragEnd}
-          collisionDetection={closestCenter}
-          sensors={sensors}
-          {...otherProps}
-        >
-          <SortableContext items={keys} strategy={strategy} disabled={disabled}>
-            {children}
-          </SortableContext>
-        </DndContext>
-      </DragOverlayContext.Provider>
+    <SortableHelperContext.Provider
+      value={useMemo(
+        () => ({
+          keys: rootKeys,
+          data,
+          customHandle,
+          activeItem,
+          activeIndex,
+          keyManager,
+          activeIndexPath,
+        }),
+        [rootKeys, data, customHandle, activeItem, activeIndex, keyManager, activeIndexPath],
+      )}
+    >
+      <DndContext
+        onDragStart={(event) => {
+          const index = rootKeys.indexOf(`${event.active.id}`);
+          onDragStartIndex(index);
+          setActiveIndex(index);
+          onDragStart?.(event);
+
+          // TODO 根据 active.id 查找拖拽的深度
+          setActiveIndexPath([]);
+        }}
+        onDragEnd={handleDragEnd}
+        collisionDetection={closestCenter}
+        sensors={sensors}
+        {...otherProps}
+      >
+        <SortableContext items={rootKeys} strategy={strategy} disabled={disabled}>
+          {children}
+        </SortableContext>
+      </DndContext>
     </SortableHelperContext.Provider>
   );
 };
