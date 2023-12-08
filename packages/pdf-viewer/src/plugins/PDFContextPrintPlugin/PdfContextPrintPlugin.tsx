@@ -18,6 +18,7 @@ const PdfContextPrintPlugin = (props: PdfContextPrintPluginProps) => {
           key: 'print',
           text: locale.printCurrentFile || '打印当前文件',
           icon: <PrinterOutlined />,
+          disabled: pdfViewer.getPageCount() <= 0,
           onClick: async () => {
             const data = await pdfViewer.getPDFInstance()?.getData();
             if (data) {
