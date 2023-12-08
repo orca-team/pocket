@@ -19,6 +19,7 @@
 .dumi/tmp-test
 .dumi/tmp-production
 .env.local
+.umi
 
 # ide
 /.vscode

@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.21.1
+
+### Patch Changes
+
+- fix: disabled 没有页面是；右键 打印功能
+
 ## 1.21.0
 
 ### Minor Changes
