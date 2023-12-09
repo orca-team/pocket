@@ -9,6 +9,7 @@ export type SortableHelperContextType = {
   activeItem: any;
   activeIndex: number;
   activeIndexPath: number[];
+  getChildren: (item: any) => any[];
 };
 export const SortableHelperContext = createContext<SortableHelperContextType>({
   keys: [],
@@ -18,4 +19,5 @@ export const SortableHelperContext = createContext<SortableHelperContextType>({
   activeItem: undefined,
   activeIndex: -1,
   activeIndexPath: [],
+  getChildren: v => v,
 });

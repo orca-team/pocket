@@ -226,6 +226,9 @@ importers:
       classnames:
         specifier: ^2.3.2
         version: 2.3.2
+      immer:
+        specifier: ^9.0.21
+        version: 9.0.21
       react:
         specifier: '>=16.8.0'
         version: 18.2.0
@@ -4598,7 +4601,7 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
-      '@babel/runtime': 7.23.5
+      '@babel/runtime': 7.22.6
       '@types/js-cookie': 2.2.7
       ahooks-v3-count: 1.0.0
       dayjs: 1.11.9
@@ -4608,7 +4611,7 @@ packages:
       react: 17.0.2
       resize-observer-polyfill: 1.5.1
       screenfull: 5.2.0
-      tslib: 2.6.2
+      tslib: 2.6.0
     dev: false
 
   /ahooks@3.7.8(react@18.2.0):

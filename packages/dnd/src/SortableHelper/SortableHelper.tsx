@@ -1,4 +1,4 @@
-import type { ComponentClass, FunctionComponent, HTMLAttributes, ReactHTML, ReactNode } from 'react';
+import type { ComponentClass, FunctionComponent, HTMLAttributes, ReactElement, ReactHTML, ReactNode } from 'react';
 import React, { createElement, useContext, useMemo, useState } from 'react';
 import type { DndContextProps, DragOverlayProps } from '@dnd-kit/core';
 import { closestCenter, DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
@@ -6,6 +6,8 @@ import { useControllableValue } from 'ahooks';
 import cn from 'classnames';
 import type { SortableContextProps } from '@dnd-kit/sortable';
 import { arrayMove, SortableContext, useSortable } from '@dnd-kit/sortable';
+import { useGetState, useMemorizedFn } from '@orca-fe/hooks';
+import produce from 'immer';
 import { SortableHelperContext } from '../context';
 import KeyManager from '../KeyManager';
 import { SortableItemContext } from '../utils/SortHandle';
@@ -14,6 +16,19 @@ import useStyles from './SortableHelper.style';
 const eArr = [];
 
 const ef = () => undefined;
+
+const get = (data: any[], path: number[], getChildren: (item: any) => any[]) => {
+  let root = data;
+  for (let i = 0; i < path.length; i++) {
+    const index = path[i];
+    const item = root[index];
+    if (!item) return undefined;
+    const children = getChildren(item);
+    if (!children) return undefined;
+    root = children;
+  }
+  return root;
+};
 
 export const SortableHelperDragSort = (
   props: Omit<DragOverlayProps, 'children'> & {
@@ -35,7 +50,12 @@ export interface SortableHelperItemProps extends HTMLAttributes<HTMLDivElement> 
 export const SortableHelperItem = (props: SortableHelperItemProps) => {
   const { children, row, style, tag = 'div', className = '', ...otherProps } = props;
   const { keys, data, customHandle } = useContext(SortableHelperContext);
-  const sortable = useSortable({ id: keys[row] });
+  const sortable = useSortable({
+    id: keys[row],
+    data: {
+      originalData: data[row],
+    },
+  });
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = sortable;
   const styles = useStyles();
 
@@ -73,6 +93,61 @@ export const SortableHelperItem = (props: SortableHelperItemProps) => {
   );
 };
 
+export type SubSortableProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
+  row: number;
+  tag?: keyof ReactHTML | FunctionComponent<any> | ComponentClass<any>;
+  children?: (item: any, index: number[]) => ReactElement;
+  strategy?: SortableContextProps['strategy'];
+};
+
+// 多层子列表
+export const SubSortable = (props: SubSortableProps) => {
+  const { children, strategy, tag = 'div', row, ...otherProps } = props;
+
+  const context = useContext(SortableHelperContext);
+  const { data, keyManager, getChildren } = context;
+
+  const childrenData = useMemo(() => getChildren(data[row]), [data[row]]);
+  const childrenKeys = useMemo(() => keyManager.getKeys(childrenData), [childrenData]);
+
+  return (
+    <SortableHelperContext.Provider
+      value={useMemo(
+        () => ({
+          ...context,
+          keys: childrenKeys,
+          data: childrenData,
+        }),
+        [context, childrenKeys, childrenData],
+      )}
+    >
+      <SortableContext items={childrenKeys} strategy={strategy} disabled={false}>
+        {createElement(
+          tag,
+          otherProps,
+          childrenData.map((item, index) => {
+            const key = keyManager.getKey(item);
+            const element = children?.(item, [row, index]);
+            if (!element) return null;
+            return (
+              <SortableHelperItem key={key} row={index}>
+                {element}
+              </SortableHelperItem>
+            );
+          }),
+        )}
+      </SortableContext>
+    </SortableHelperContext.Provider>
+  );
+};
+
+const defaultGetMultipleChildren = (item: any) => item ?? [];
+
+export type MultipleConfig<T> = {
+  getChildren?: (item: T) => any[];
+  disabled?: boolean;
+};
+
 export interface SortableHelperProps<T extends Object> extends DndContextProps, Pick<SortableContextProps, 'strategy' | 'disabled'> {
 
   /** 数据（受控） */
@@ -92,6 +167,9 @@ export interface SortableHelperProps<T extends Object> extends DndContextProps, 
 
   /** 自定义 key 管理器 */
   keyManager?: KeyManager<T> | string;
+
+  /** 多层子列表拖拽 */
+  multiple?: MultipleConfig<T>;
 }
 
 /**
@@ -108,14 +186,29 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
     keyManager: _keyManager,
     strategy,
     disabled,
+    multiple = { disabled: true },
     ...otherProps
   } = props;
 
-  const [data = eArr, setData] = useControllableValue<T[]>(props, {
+  const { disabled: disabledChildren = false, getChildren: _getChildren = defaultGetMultipleChildren } = multiple;
+  const getChildren = useMemorizedFn(_getChildren);
+
+  const [_data = eArr, setData] = useControllableValue<T[]>(props, {
     trigger: 'onChange',
     defaultValuePropName: 'defaultData',
     valuePropName: 'data',
   });
+
+  // 临时数据，用于临时记录拖拽过程中的数据
+  const [tmpData, setTmpData] = useGetState<
+    | {
+        data: T[];
+        // 记录当前被拖拽的元素的路径
+        path: number[];
+      }
+    | undefined
+  >(undefined);
+  const data = tmpData?.data || _data;
 
   const [activeIndexPath, setActiveIndexPath] = useState<number[]>([]);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
@@ -135,7 +228,18 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
   });
 
   // 最外层的 keys
-  const rootKeys = useMemo(() => keyManager.getKeys(data), [data]);
+  const rootKeys = useMemo(() => keyManager.getKeys(data, (_, index) => ({ depth: 0, path: [index] })), [data]);
+
+  // 更新子层的 keys
+  useMemo(() => {
+    if (disabledChildren) return [];
+    return data.map((item, index1) => {
+      const children = getChildren(item);
+      if (!children) return undefined;
+
+      return keyManager.getKeys(children, (_, index2) => ({ depth: 1, path: [index1, index2] }));
+    });
+  }, [data]);
 
   function handleDragEnd(event) {
     const { active, over } = event;
@@ -160,19 +264,73 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
           activeIndex,
           keyManager,
           activeIndexPath,
+          getChildren,
         }),
         [rootKeys, data, customHandle, activeItem, activeIndex, keyManager, activeIndexPath],
       )}
     >
       <DndContext
         onDragStart={(event) => {
+          const { active } = event;
+          const { originalData } = active.data.current || {};
+          const extraInfo = keyManager.getExtraInfo(originalData);
           const index = rootKeys.indexOf(`${event.active.id}`);
           onDragStartIndex(index);
           setActiveIndex(index);
           onDragStart?.(event);
-
-          // TODO 根据 active.id 查找拖拽的深度
-          setActiveIndexPath([]);
+          setActiveIndexPath(extraInfo?.path ?? []);
+          // 如果拖拽的是子列表中的内容，则使用 tmpData 记录临时数据
+          if (extraInfo?.path?.length > 1) {
+            setTmpData({
+              data: data.slice(),
+              path: extraInfo.path,
+            });
+          }
+        }}
+        onDragOver={(event) => {
+          const { over } = event;
+          if (!over) return;
+          const { originalData } = over.data.current || {};
+          const extraInfo = keyManager.getExtraInfo(originalData);
+          let newPath = extraInfo?.path ?? [];
+          if (newPath.length > 1) {
+            setTmpData((o) => {
+              if (!o) return undefined;
+              const { data, path: oldPath } = o;
+              if (newPath.join(',') === oldPath.join(',')) return { data, path: oldPath };
+              const newData = produce(data, (draft) => {
+                const oldParentPath = oldPath.slice(0, oldPath.length - 1);
+                const oldParent = get(draft, oldParentPath, getChildren);
+                const newParentPath = newPath.slice(0, newPath.length - 1);
+                const newParent = get(draft, newParentPath, getChildren);
+                const oldIndex = oldPath[oldPath.length - 1];
+                const newIndex = newPath[newPath.length - 1];
+                if (oldParent && newParent) {
+                  const item = oldParent[oldIndex];
+                  // 从 old 位置 移动到 new 位置
+                  // 如果是同一个父级，则不移动
+                  if (oldParentPath.join(',') === newParentPath.join(',')) {
+                    // oldParent.splice(oldIndex, 1);
+                    // if (newIndex > oldIndex) {
+                    //   newParent.splice(newIndex - 1, 0, item);
+                    // } else {
+                    //   newParent.splice(newIndex, 0, item);
+                    // }
+                    newPath = oldPath;
+                    return;
+                  }
+                  // 如果不是同一个父级，则需要先删除再插入
+                  oldParent.splice(oldIndex, 1);
+                  newParent.splice(newIndex, 0, item);
+                }
+              });
+              return {
+                data: newData,
+                path: newPath,
+              };
+            });
+          }
+          // setActiveIndexPath(extraInfo?.path ?? []);
         }}
         onDragEnd={handleDragEnd}
         collisionDetection={closestCenter}
@@ -186,5 +344,11 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
     </SortableHelperContext.Provider>
   );
 };
+
+SortableHelper.Item = SortableHelperItem;
+
+SortableHelper.DragSort = SortableHelperDragSort;
+
+SortableHelper.SubSortable = SubSortable;
 
 export default SortableHelper;

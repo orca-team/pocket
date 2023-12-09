@@ -3,7 +3,7 @@
  * debug: true
  */
 import React, { useState } from 'react';
-import { SortableHelper, SortableHelperItem } from '@orca-fe/dnd';
+import { SortableHelper } from '@orca-fe/dnd';
 
 const randNum = () => Math.trunc(Math.random() * 255);
 const defaultData = [
@@ -13,18 +13,38 @@ const defaultData = [
   { key: '4', title: 'title4', content: 'content4', color: `rgba(${randNum()},${randNum()},${randNum()},0.1)` },
   { key: '5', title: 'title5', content: 'content5', color: `rgba(${randNum()},${randNum()},${randNum()},0.1)` },
   { key: '6', title: 'title6', content: 'content6', color: `rgba(${randNum()},${randNum()},${randNum()},0.1)` },
-];
+].map(item => ({
+  ...item,
+  children: new Array(3).fill(0)
+    .map((_, index) => ({
+      key: `${item.key}-${index}`,
+      title: `${item.title}-${index}`,
+      content: `${item.content}-${index}`,
+      color: `rgba(${randNum()},${randNum()},${randNum()},0.1)`,
+    })),
+}));
 
 export default () => {
   const [data, setData] = useState(defaultData);
   return (
-    <SortableHelper keyManager="key" data={data} onChange={setData}>
+    <SortableHelper
+      keyManager="key"
+      data={data}
+      onChange={setData}
+      multiple={{
+        getChildren: item => item.children,
+      }}
+    >
       <div style={{}}>
         {data.map(({ key, content, title, color }, index) => (
-          <SortableHelperItem key={key} row={index} style={{ backgroundColor: color }}>
-            <div>{title}</div>
-            <div>{content}</div>
-          </SortableHelperItem>
+          <SortableHelper.SubSortable key={key} row={index} style={{ backgroundColor: color, padding: 12 }}>
+            {item => (
+              <div style={{ backgroundColor: item.color }}>
+                <div>{item.title}</div>
+                <div>{item.content}</div>
+              </div>
+            )}
+          </SortableHelper.SubSortable>
         ))}
       </div>
     </SortableHelper>
