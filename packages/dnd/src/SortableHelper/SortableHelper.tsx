@@ -7,28 +7,15 @@ import cn from 'classnames';
 import type { SortableContextProps } from '@dnd-kit/sortable';
 import { arrayMove, SortableContext, useSortable } from '@dnd-kit/sortable';
 import { useGetState, useMemorizedFn } from '@orca-fe/hooks';
-import produce from 'immer';
 import { SortableHelperContext } from '../context';
 import KeyManager from '../KeyManager';
 import { SortableItemContext } from '../utils/SortHandle';
 import useStyles from './SortableHelper.style';
+import { treeMove } from './utils';
 
 const eArr = [];
 
 const ef = () => undefined;
-
-const get = (data: any[], path: number[], getChildren: (item: any) => any[]) => {
-  let root = data;
-  for (let i = 0; i < path.length; i++) {
-    const index = path[i];
-    const item = root[index];
-    if (!item) return undefined;
-    const children = getChildren(item);
-    if (!children) return undefined;
-    root = children;
-  }
-  return root;
-};
 
 export const SortableHelperDragSort = (
   props: Omit<DragOverlayProps, 'children'> & {
@@ -292,41 +279,16 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
           if (!over) return;
           const { originalData } = over.data.current || {};
           const extraInfo = keyManager.getExtraInfo(originalData);
-          let newPath = extraInfo?.path ?? [];
+          const newPath = extraInfo?.path ?? [];
           if (newPath.length > 1) {
             setTmpData((o) => {
               if (!o) return undefined;
               const { data, path: oldPath } = o;
               if (newPath.join(',') === oldPath.join(',')) return { data, path: oldPath };
-              const newData = produce(data, (draft) => {
-                const oldParentPath = oldPath.slice(0, oldPath.length - 1);
-                const oldParent = get(draft, oldParentPath, getChildren);
-                const newParentPath = newPath.slice(0, newPath.length - 1);
-                const newParent = get(draft, newParentPath, getChildren);
-                const oldIndex = oldPath[oldPath.length - 1];
-                const newIndex = newPath[newPath.length - 1];
-                if (oldParent && newParent) {
-                  const item = oldParent[oldIndex];
-                  // 从 old 位置 移动到 new 位置
-                  // 如果是同一个父级，则不移动
-                  if (oldParentPath.join(',') === newParentPath.join(',')) {
-                    // oldParent.splice(oldIndex, 1);
-                    // if (newIndex > oldIndex) {
-                    //   newParent.splice(newIndex - 1, 0, item);
-                    // } else {
-                    //   newParent.splice(newIndex, 0, item);
-                    // }
-                    newPath = oldPath;
-                    return;
-                  }
-                  // 如果不是同一个父级，则需要先删除再插入
-                  oldParent.splice(oldIndex, 1);
-                  newParent.splice(newIndex, 0, item);
-                }
-              });
+              const { tree: newData, toPath: finalPath } = treeMove(data, oldPath, newPath, getChildren);
               return {
                 data: newData,
-                path: newPath,
+                path: finalPath,
               };
             });
           }
