@@ -187,7 +187,7 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
   });
 
   // 临时数据，用于临时记录拖拽过程中的数据
-  const [tmpData, setTmpData] = useGetState<
+  const [tmpData, setTmpData, getTmpData] = useGetState<
     | {
         data: T[];
         // 记录当前被拖拽的元素的路径
@@ -230,11 +230,24 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
 
   function handleDragEnd(event) {
     const { active, over } = event;
-    if (active.id !== over.id) {
-      const oldIndex = rootKeys.indexOf(active.id);
-      const newIndex = rootKeys.indexOf(over.id);
 
-      setData(data => arrayMove(data, oldIndex, newIndex), oldIndex, newIndex, data);
+    const tmpData = getTmpData();
+    if (active && over && active.id !== over.id) {
+      if (tmpData) {
+        // 涉及到子列表
+        const { originalData } = over.data.current || {};
+        const oldPath = tmpData.path;
+        const newPath = keyManager.getExtraInfo(originalData).path ?? [];
+        const newData = treeMove(data, oldPath, newPath, getChildren, true).tree;
+        setData(newData, oldPath, newPath, data);
+        setTmpData(undefined);
+      } else {
+        // 仅最外层列表移动
+        const oldIndex = rootKeys.indexOf(active.id);
+        const newIndex = rootKeys.indexOf(over.id);
+
+        setData(data => arrayMove(data, oldIndex, newIndex), oldIndex, newIndex, data);
+      }
     }
     setActiveIndex(-1);
     setActiveIndexPath([]);

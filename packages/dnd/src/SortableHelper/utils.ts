@@ -25,18 +25,13 @@ export function treeMove(tree: any[], fromPath: number[], _toPath: number[], get
     if (oldParent && newParent) {
       const item = oldParent[oldIndex];
       // 从 old 位置 移动到 new 位置
-      // 如果是同一个父级，则不移动
+      // 如果是同一个父级，则需要判断是否移动
       if (oldParentPath.join(',') === newParentPath.join(',')) {
-        if (moveSameParent) {
-          oldParent.splice(oldIndex, 1);
-          if (newIndex > oldIndex) {
-            newParent.splice(newIndex - 1, 0, item);
-          } else {
-            newParent.splice(newIndex, 0, item);
-          }
+        if (!moveSameParent) {
+          // 不移动，直接返回，并修改 toPath 为 fromPath，表示未移动
+          toPath = fromPath;
+          return;
         }
-        toPath = fromPath;
-        return;
       }
       // 如果不是同一个父级，则需要先删除再插入
       oldParent.splice(oldIndex, 1);
