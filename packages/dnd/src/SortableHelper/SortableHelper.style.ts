@@ -10,8 +10,9 @@ export default createUseStyles(
     },
     item: {
       touchAction: 'none',
-      transform: 'translate(var(--translate-x), var(--translate-y))',
+      // transform: 'translate(var(--translate-x), var(--translate-y))',
       transition: 'var(--transition)',
+      willChange: 'transform',
     },
     handle: {
       cursor: 'move',

@@ -35,7 +35,7 @@ export default () => {
         getChildren: item => item.children,
       }}
     >
-      <div style={{}}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
         {data.map(({ key, content, title, color }, index) => (
           <SortableHelper.SubSortable key={key} row={index} style={{ backgroundColor: color, padding: 12 }}>
             {item => (

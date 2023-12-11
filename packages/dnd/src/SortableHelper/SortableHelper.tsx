@@ -19,39 +19,51 @@ const ef = () => undefined;
 
 export const SortableHelperDragSort = (
   props: Omit<DragOverlayProps, 'children'> & {
-    children: (data: any, index: number) => ReactNode;
+    children: (data: any, index: number, indexPath: number[]) => ReactNode;
   },
 ) => {
   const { children = () => null, ...otherProps } = props;
-  const { activeItem, activeIndex } = useContext(SortableHelperContext);
-  return <DragOverlay {...otherProps}>{children(activeItem, activeIndex)}</DragOverlay>;
+  const { activeItem, activeIndex, activeIndexPath } = useContext(SortableHelperContext);
+  if (activeItem == null) return null;
+  return <DragOverlay {...otherProps}>{children(activeItem, activeIndex, activeIndexPath)}</DragOverlay>;
 };
 
 export interface SortableHelperItemProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
   tag?: keyof ReactHTML | FunctionComponent<any> | ComponentClass<any>;
   row: number;
+  customHandle?: boolean;
 }
 
 // 子項
 export const SortableHelperItem = (props: SortableHelperItemProps) => {
-  const { children, row, style, tag = 'div', className = '', ...otherProps } = props;
-  const { keys, data, customHandle } = useContext(SortableHelperContext);
+  const { children, row, style, tag = 'div', className = '', customHandle: customHandleFromProps, ...otherProps } = props;
+  const context = useContext(SortableHelperContext);
+  const { keys, data, customHandle: customHandleFromContext, activeIndexPath, depth } = context;
+
+  // const isActive = keys[row] === active?.id;
+  const isActiveDepth = activeIndexPath.length === depth;
+
+  const customHandle = customHandleFromProps ?? customHandleFromContext;
   const sortable = useSortable({
     id: keys[row],
     data: {
       originalData: data[row],
     },
+    // disabled: !isActiveDepth && activeIndexPath.length > 0,
   });
+
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = sortable;
   const styles = useStyles();
 
-  const mergedStyle = {
-    ...style,
-    '--translate-x': transform ? `${transform.x}px` : 0,
-    '--translate-y': transform ? `${transform.y}px` : 0,
-    '--transition': transition,
-  } as React.CSSProperties;
+  const mergedStyle = isActiveDepth
+    ? ({
+      '--translate-x': transform ? `${transform.x}px` : 0,
+      '--translate-y': transform ? `${transform.y}px` : 0,
+      '--transition': transition,
+      transform: 'translate(var(--translate-x), var(--translate-y))',
+    } as React.CSSProperties)
+    : {};
 
   if (!children) return null;
 
@@ -69,7 +81,7 @@ export const SortableHelperItem = (props: SortableHelperItemProps) => {
         {
           className: cn(styles.item, { [styles.dragging]: isDragging, [styles.handle]: !customHandle }, className),
           ref: setNodeRef,
-          style: mergedStyle,
+          style: { ...style, ...mergedStyle },
           ...otherProps,
           ...attributes,
           ...(customHandle ? {} : listeners),
@@ -83,13 +95,14 @@ export const SortableHelperItem = (props: SortableHelperItemProps) => {
 export type SubSortableProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
   row: number;
   tag?: keyof ReactHTML | FunctionComponent<any> | ComponentClass<any>;
-  children?: (item: any, index: number[]) => ReactElement;
+  children?: (item: any, index: number[], key: string) => ReactElement;
   strategy?: SortableContextProps['strategy'];
+  customHandle?: boolean;
 };
 
 // 多层子列表
 export const SubSortable = (props: SubSortableProps) => {
-  const { children, strategy, tag = 'div', row, ...otherProps } = props;
+  const { children, strategy, tag = 'div', row, customHandle = false, ...otherProps } = props;
 
   const context = useContext(SortableHelperContext);
   const { data, keyManager, getChildren } = context;
@@ -102,6 +115,8 @@ export const SubSortable = (props: SubSortableProps) => {
       value={useMemo(
         () => ({
           ...context,
+          depth: context.depth + 1,
+          customHandle,
           keys: childrenKeys,
           data: childrenData,
         }),
@@ -114,10 +129,10 @@ export const SubSortable = (props: SubSortableProps) => {
           otherProps,
           childrenData.map((item, index) => {
             const key = keyManager.getKey(item);
-            const element = children?.(item, [row, index]);
+            const element = children?.(item, [row, index], key);
             if (!element) return null;
             return (
-              <SortableHelperItem key={key} row={index}>
+              <SortableHelperItem key={childrenKeys[index]} row={index}>
                 {element}
               </SortableHelperItem>
             );
@@ -192,6 +207,7 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
         data: T[];
         // 记录当前被拖拽的元素的路径
         path: number[];
+        overPath: number[];
       }
     | undefined
   >(undefined);
@@ -199,7 +215,16 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
 
   const [activeIndexPath, setActiveIndexPath] = useState<number[]>([]);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
-  const activeItem = data[activeIndex];
+  const activeItem = useMemo(() => {
+    if (activeIndexPath.length > 0) {
+      let item = data[activeIndexPath[0]];
+      for (let i = 1; i < activeIndexPath.length; i++) {
+        item = getChildren(item)[activeIndexPath[i]];
+      }
+      return item;
+    }
+    return null;
+  }, [_data, activeIndexPath]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -215,7 +240,8 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
   });
 
   // 最外层的 keys
-  const rootKeys = useMemo(() => keyManager.getKeys(data, (_, index) => ({ depth: 0, path: [index] })), [data]);
+  const rootKeys = useMemo(() => keyManager.getKeys(data, (_, index) => ({ depth: 1, path: [index] })), [data]);
+  const rootKeysSet = useMemo(() => new Set(rootKeys), [rootKeys]);
 
   // 更新子层的 keys
   useMemo(() => {
@@ -224,7 +250,7 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
       const children = getChildren(item);
       if (!children) return undefined;
 
-      return keyManager.getKeys(children, (_, index2) => ({ depth: 1, path: [index1, index2] }));
+      return keyManager.getKeys(children, (_, index2) => ({ depth: 2, path: [index1, index2] }));
     });
   }, [data]);
 
@@ -238,8 +264,14 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
         const { originalData } = over.data.current || {};
         const oldPath = tmpData.path;
         const newPath = keyManager.getExtraInfo(originalData).path ?? [];
-        const newData = treeMove(data, oldPath, newPath, getChildren, true).tree;
-        setData(newData, oldPath, newPath, data);
+        if (oldPath.length !== newPath.length) {
+          const newData = treeMove(data, oldPath, tmpData.overPath, getChildren, true).tree;
+          setData(newData, activeIndexPath, newPath, data);
+        } else {
+          const newData = treeMove(data, oldPath, newPath, getChildren, true).tree;
+          setData(newData, activeIndexPath, newPath, data);
+        }
+
         setTmpData(undefined);
       } else {
         // 仅最外层列表移动
@@ -265,6 +297,7 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
           keyManager,
           activeIndexPath,
           getChildren,
+          depth: 1,
         }),
         [rootKeys, data, customHandle, activeItem, activeIndex, keyManager, activeIndexPath],
       )}
@@ -284,6 +317,7 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
             setTmpData({
               data: data.slice(),
               path: extraInfo.path,
+              overPath: extraInfo.path,
             });
           }
         }}
@@ -295,20 +329,31 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
           const newPath = extraInfo?.path ?? [];
           if (newPath.length > 1) {
             setTmpData((o) => {
-              if (!o) return undefined;
+              if (!o) return o;
               const { data, path: oldPath } = o;
-              if (newPath.join(',') === oldPath.join(',')) return { data, path: oldPath };
+              if (oldPath.length !== newPath.length) {
+                return o;
+              }
+              if (newPath.join(',') === oldPath.join(',')) return { data, path: oldPath, overPath: newPath };
               const { tree: newData, toPath: finalPath } = treeMove(data, oldPath, newPath, getChildren);
               return {
                 data: newData,
                 path: finalPath,
+                overPath: newPath,
               };
             });
           }
           // setActiveIndexPath(extraInfo?.path ?? []);
         }}
         onDragEnd={handleDragEnd}
-        collisionDetection={closestCenter}
+        collisionDetection={args =>
+          closestCenter({
+            ...args,
+            droppableContainers: args.droppableContainers.filter((item) => {
+              const isRoot = rootKeysSet.has(`${item.id}`);
+              return activeIndexPath.length === 1 ? isRoot : !isRoot;
+            }),
+          })}
         sensors={sensors}
         {...otherProps}
       >
