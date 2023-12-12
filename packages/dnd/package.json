@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/dnd",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "description": "A collection of commonly used drag-and-drop functions",
   "keywords": [
     "react",
@@ -43,6 +43,7 @@
     "@orca-fe/simple-jss": "^0.0.3",
     "ahooks": "^3.7.8",
     "classnames": "^2.3.2",
+    "immer": "^9.0.21",
     "tslib": "^2.6.0"
   },
   "peerDependencies": {
@@ -50,7 +51,7 @@
     "react-dom": ">=16.8.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.14",
+    "@types/react": "18.2.25",
     "autod": "^3.1.2",
     "jss": "^10.10.0"
   }

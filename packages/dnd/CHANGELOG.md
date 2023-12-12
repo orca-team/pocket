@@ -1,5 +1,17 @@
 # @orca-fe/dnd
 
+## 1.2.0
+
+### Minor Changes
+
+- feat: 跨列表拖拽
+
+## 1.1.0
+
+### Minor Changes
+
+- 添加跨列表支持
+
 ## 1.0.1
 
 ### Patch Changes

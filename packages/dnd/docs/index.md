@@ -104,3 +104,15 @@ type SortableItemChildren<T> = React.ReactNode | ((item: T, index: number, args?
 | onDragStartIndex | 拖拽开始时的下标   | `(index: number) => void`                                        | -      |        |
 | strategy         | 拖拽策略           | 从 `@dnd-kits/core` 获得 `strategy`                              | -      |        |
 | disabled         | 是否禁用拖拽       | `boolean`                                                        | false  | 1.0.0  |
+
+## 跨列表拖拽
+
+`1.2.0`
+
+在 `1.2.0` 版本中，增加了跨列表拖拽支持。使用 `SortableHelper.SubSortable` 来渲染子列表。
+
+### 示例
+
+<code src="../demo/MultiSortable/MultiDemo1.tsx"></code>
+
+### API

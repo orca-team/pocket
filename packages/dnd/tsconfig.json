@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": "..",
+    "esModuleInterop": true,
     "paths": {
       "@orca-fe/pocket": ["../pocket/src"],
       "@orca-fe/tools": ["../tools/src"],

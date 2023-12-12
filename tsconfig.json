@@ -29,7 +29,7 @@
       "@@/*": [".dumi/tmp/*"]
     }
   },
-  "include": ["src", "packages", ".eslintrc.cjs", "checkDep.ts", ".dumi/**/*", ".dumirc.ts", "jest.config.cjs"],
+  "include": ["src", "packages", ".eslintrc.cjs", "checkDep.ts", ".dumirc.ts", "jest.config.cjs"],
   "ts-node": {
     "esm": true,
     "compilerOptions": {
