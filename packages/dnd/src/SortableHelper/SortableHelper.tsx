@@ -98,11 +98,18 @@ export type SubSortableProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> 
   children?: (item: any, index: number[], key: string) => ReactElement;
   strategy?: SortableContextProps['strategy'];
   customHandle?: boolean;
+  empty?: ReactNode;
+};
+
+// 子列表为空时的默认占位内容
+const DefaultSubSortableEmptyPlaceHolder = () => {
+  const styles = useStyles();
+  return <div className={styles.defaultSubSortableEmptyPlaceHolder}>Empty</div>;
 };
 
 // 多层子列表
 export const SubSortable = (props: SubSortableProps) => {
-  const { children, strategy, tag = 'div', row, customHandle = false, ...otherProps } = props;
+  const { children, strategy, tag = 'div', row, customHandle = false, empty = <DefaultSubSortableEmptyPlaceHolder />, ...otherProps } = props;
 
   const context = useContext(SortableHelperContext);
   const { data, keyManager, getChildren } = context;
@@ -127,16 +134,18 @@ export const SubSortable = (props: SubSortableProps) => {
         {createElement(
           tag,
           otherProps,
-          childrenData.map((item, index) => {
-            const key = keyManager.getKey(item);
-            const element = children?.(item, [row, index], key);
-            if (!element) return null;
-            return (
-              <SortableHelperItem key={childrenKeys[index]} row={index}>
-                {element}
-              </SortableHelperItem>
-            );
-          }),
+          childrenData.length > 0
+            ? childrenData.map((item, index) => {
+              const key = keyManager.getKey(item);
+              const element = children?.(item, [row, index], key);
+              if (!element) return null;
+              return (
+                <SortableHelperItem key={childrenKeys[index]} row={index}>
+                  {element}
+                </SortableHelperItem>
+              );
+            })
+            : empty,
         )}
       </SortableContext>
     </SortableHelperContext.Provider>
@@ -327,6 +336,7 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
           const { originalData } = over.data.current || {};
           const extraInfo = keyManager.getExtraInfo(originalData);
           const newPath = extraInfo?.path ?? [];
+          // console.log(newPath, event);
           if (newPath.length > 1) {
             setTmpData((o) => {
               if (!o) return o;

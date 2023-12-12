@@ -20,6 +20,14 @@ export default createUseStyles(
     dragging: {
       zIndex: 1,
     },
+    defaultSubSortableEmptyPlaceHolder: {
+      color: '#AAA',
+      textAlign: 'center',
+      border: '1px dashed #DDD',
+      padding: [12, 0],
+      pointerEvents: 'none',
+      userSelect: 'none',
+    },
   },
   {
     classNamePrefix: prefix,
