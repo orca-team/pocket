@@ -250,7 +250,7 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
 
   // 最外层的 keys
   const rootKeys = useMemo(() => keyManager.getKeys(data, (_, index) => ({ depth: 1, path: [index] })), [data]);
-  const rootKeysSet = useMemo(() => new Set(rootKeys), [rootKeys]);
+  // const rootKeysSet = useMemo(() => new Set(rootKeys), [rootKeys]);
 
   // 更新子层的 keys
   useMemo(() => {
@@ -335,8 +335,11 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
           if (!over) return;
           const { originalData } = over.data.current || {};
           const extraInfo = keyManager.getExtraInfo(originalData);
-          const newPath = extraInfo?.path ?? [];
-          // console.log(newPath, event);
+          let newPath = extraInfo?.path ?? [];
+          if (activeIndexPath.length > 1 && newPath.length === 1) {
+            // 如果拖拽的层级 > 1 但目标层级 == 1，说明拖拽的目标可能是空的
+            newPath = [...newPath, 0];
+          }
           if (newPath.length > 1) {
             setTmpData((o) => {
               if (!o) return o;
@@ -353,15 +356,20 @@ const SortableHelper = <T extends Object>(props: SortableHelperProps<T>) => {
               };
             });
           }
-          // setActiveIndexPath(extraInfo?.path ?? []);
         }}
         onDragEnd={handleDragEnd}
         collisionDetection={args =>
           closestCenter({
             ...args,
             droppableContainers: args.droppableContainers.filter((item) => {
-              const isRoot = rootKeysSet.has(`${item.id}`);
-              return activeIndexPath.length === 1 ? isRoot : !isRoot;
+              const { originalData } = item.data.current || {};
+              const extraInfo = keyManager.getExtraInfo(originalData);
+              if (extraInfo) {
+                const { depth } = extraInfo;
+                const isRoot = depth === 1 && getChildren(originalData).length > 0;
+                return activeIndexPath.length === 1 ? depth === 1 : !isRoot;
+              }
+              return false;
             }),
           })}
         sensors={sensors}
