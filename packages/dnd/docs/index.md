@@ -114,3 +114,5 @@ type SortableItemChildren<T> = React.ReactNode | ((item: T, index: number, args?
 ### 示例
 
 <code src="../demo/MultiSortable/MultiDemo1.tsx"></code>
+
+### API
