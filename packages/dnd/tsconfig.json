@@ -2,7 +2,6 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
-
     "esModuleInterop": true,
     "paths": {
       "@orca-fe/pocket": ["../pocket/src"],
