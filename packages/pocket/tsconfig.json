@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "rootDir": "..",
+
     "paths": {
       "@orca-fe/pocket": ["./src"],
       "@orca-fe/tools": ["../tools/src"],

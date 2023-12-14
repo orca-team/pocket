@@ -1,1 +1,1 @@
-# `@orca-fe/pdf-viewer`
+# `@orca-fe/painter`
