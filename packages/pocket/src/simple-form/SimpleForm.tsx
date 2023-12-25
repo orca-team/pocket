@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import React, { cloneElement, createContext, isValidElement, useContext, useEffect, useMemo, useState } from 'react';
 import { useMemoizedFn } from 'ahooks';
 import { get, pick, set } from 'lodash-es';
@@ -88,15 +88,17 @@ function defaultGetValueFromEvent(valuePropName: string, event: any) {
   return event;
 }
 
+const eArr = [];
+
 export type SimpleFormItemProps = {
   name?: NamePath;
   valuePropName?: string;
   trigger?: string;
-  children?: ReactNode;
+  children?: ReactElement;
 };
 
 const SimpleFormItem = (props: SimpleFormItemProps) => {
-  const { children, valuePropName = 'value', trigger = 'onChange', name } = props;
+  const { children, valuePropName = 'value', trigger = 'onChange', name = eArr } = props;
   const childProps = children?.props;
   const originTriggerFunc: any = childProps?.[trigger];
 

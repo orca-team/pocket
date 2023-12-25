@@ -1,5 +1,5 @@
 import { useMemoizedFn } from 'ahooks';
-import type { ComponentType, ReactElement } from 'react';
+import type { ComponentType, PropsWithChildren, ReactElement } from 'react';
 import { cloneElement, isValidElement, useMemo } from 'react';
 
 const eArr = [];
@@ -75,7 +75,7 @@ export type createValueMappedOptions = {
 export function createValueMappedComponent<Props>(Comp: ComponentType<Props>, options: createValueMappedOptions) {
   const { mappingTrigger, mappingValue, mapping, trigger, valuePropName } = options;
   return function MappedComponent(props: Props) {
-    const { children } = props as any;
+    const { children } = props as PropsWithChildren;
     return (
       <ValueMapping
         {...props}
@@ -85,6 +85,7 @@ export function createValueMappedComponent<Props>(Comp: ComponentType<Props>, op
         __trigger={trigger}
         __valuePropName={valuePropName}
       >
+        {/* @ts-expect-error */}
         <Comp>{children}</Comp>
       </ValueMapping>
     );

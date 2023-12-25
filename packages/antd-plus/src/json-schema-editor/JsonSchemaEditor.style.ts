@@ -36,12 +36,12 @@ export default createUseStyles(
     },
 
     itemLeft: {
-      extend: [flexCenterStyle],
+      extend: flexCenterStyle,
       flex: '1',
     },
 
     itemRight: {
-      extend: [flexCenterStyle],
+      extend: flexCenterStyle,
       flexShrink: '0',
       flexBasis: '70%',
     },

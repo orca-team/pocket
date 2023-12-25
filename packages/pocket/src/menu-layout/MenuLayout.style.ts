@@ -41,7 +41,7 @@ export default createUseStyles(
     },
 
     header: {
-      extend: [transitionStyle],
+      extend: transitionStyle,
       position: 'relative',
       padding: '0 20px',
       width: '100%',
@@ -61,6 +61,7 @@ export default createUseStyles(
         textDecoration: 'none',
       },
     },
+    logo: {},
     leftSide: {},
     logoContainer: {
       position: 'relative',
@@ -138,7 +139,7 @@ export default createUseStyles(
     },
 
     collapseHandle: {
-      extend: [transitionStyle],
+      extend: transitionStyle,
       flexShrink: '0',
       height: '35px',
       fontSize: '1.3em',
@@ -165,7 +166,7 @@ export default createUseStyles(
     },
 
     sideMenu: {
-      extend: [transitionStyle],
+      extend: transitionStyle,
       overflow: 'auto',
       flex: '1',
     },

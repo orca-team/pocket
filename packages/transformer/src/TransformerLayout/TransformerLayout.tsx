@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useClickAway, useControllableValue, useEventListener, useMemoizedFn } from 'ahooks';
 import { changeArr, removeArrIndex } from '@orca-fe/tools';
@@ -204,10 +205,12 @@ const TransformerLayout = <T extends TransformerLayoutDataType>(props: Transform
       tabIndex={-1}
       ref={rootRef}
       className={cn(styles.root, { [styles.noEvents]: !layoutEvents }, className)}
-      style={{
-        '--transformer-layout-scale': 2 ** zoom,
-        ...style,
-      }}
+      style={
+        {
+          '--transformer-layout-scale': 2 ** zoom,
+          ...style,
+        } as CSSProperties
+      }
       {...otherProps}
     >
       <div ref={setContentContainer} className={styles.contentContainer} />

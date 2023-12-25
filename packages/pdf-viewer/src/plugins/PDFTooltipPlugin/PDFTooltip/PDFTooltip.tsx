@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import React, { useRef, useState } from 'react';
 import { EditableDiv } from '@orca-fe/pocket';
 import cn from 'classnames';
@@ -138,15 +139,17 @@ const PDFTooltip = (props: PDFTooltipProps) => {
     <div
       className={cn(styles.root, { [styles.editable]: editable, [styles.disabled]: disabled }, className)}
       draggable={false}
-      style={{
-        ...style,
-        left: `calc(var(--scale-factor-origin) * ${data.x}px)`,
-        top: `calc(var(--scale-factor-origin) * ${data.y}px)`,
-        width: data.width,
-        transform: 'scale(var(--scale-factor-origin))',
-        transformOrigin: '0 0',
-        '--pdf-tooltip-color': color,
-      }}
+      style={
+        {
+          ...style,
+          left: `calc(var(--scale-factor-origin) * ${data.x}px)`,
+          top: `calc(var(--scale-factor-origin) * ${data.y}px)`,
+          width: data.width,
+          transform: 'scale(var(--scale-factor-origin))',
+          transformOrigin: '0 0',
+          '--pdf-tooltip-color': color,
+        } as CSSProperties
+      }
       {...otherProps}
     >
       <svg

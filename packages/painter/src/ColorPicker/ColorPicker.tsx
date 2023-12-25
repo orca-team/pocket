@@ -1,11 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Color from 'color';
 import { RgbaStringColorPicker } from 'react-colorful';
-import {
-  useControllableValue,
-  useEventListener,
-  useLocalStorageState,
-} from 'ahooks';
+import { useControllableValue, useEventListener, useLocalStorageState } from 'ahooks';
 import { CloseOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { catcher, removeArrIndex } from '@orca-fe/tools';
 import type { TriggerProps } from '@orca-fe/pocket';
@@ -32,8 +28,9 @@ const colorDef = [
   '#fa541c',
 ];
 
-export interface ColorPickerProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'size'> {
+const eArr = [];
+
+export interface ColorPickerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'size'> {
   defaultValue?: string;
   value?: string;
   onChange?: (color: string) => void;
@@ -59,12 +56,9 @@ const ColorPicker = (props: ColorPickerProps) => {
 
   const [visible, setVisible] = useState(false);
 
-  const [savedColor, setSavedColor] = useLocalStorageState<string[]>(
-    localStorageKey,
-    {
-      defaultValue: [],
-    },
-  );
+  const [savedColor = eArr, setSavedColor] = useLocalStorageState<string[]>(localStorageKey, {
+    defaultValue: [],
+  });
 
   const [color, setColor] = useState('#FFFFFF');
   useEffect(() => {
@@ -226,12 +220,7 @@ const ColorPicker = (props: ColorPickerProps) => {
         }}
         {...otherProps}
       >
-        <ColorPreview
-          className={styles.prefixPreviewColor}
-          color={color}
-          border="1px solid #999"
-          size={size}
-        />
+        <ColorPreview className={styles.prefixPreviewColor} color={color} border="1px solid #999" size={size} />
       </div>
     </Trigger>
   );

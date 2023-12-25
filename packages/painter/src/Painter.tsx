@@ -1,4 +1,4 @@
-import type { Ref } from 'react';
+import type { CSSProperties, Ref } from 'react';
 import React, { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useControllableValue, useMemoizedFn } from 'ahooks';
 import { useCombineKeyListener, useStaticClick } from '@orca-fe/hooks';
@@ -285,10 +285,12 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
       ref={rootRef}
       className={`${styles.root} ${className}`}
       // onBlur={() => { unCheck(); }}
-      style={{
-        '--painter-scale': 2 ** zoom,
-        ...style,
-      }}
+      style={
+        {
+          '--painter-scale': 2 ** zoom,
+          ...style,
+        } as CSSProperties
+      }
       {...otherProps}
     >
       <TransformerBoxContext.Provider value={context}>
@@ -332,6 +334,7 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
             );
           }}
           style={{
+            // @ts-expect-error 允许 variable
             '--transformer-layout-scale': 'var(--scale-factor)',
           }}
         >
@@ -368,7 +371,7 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
               dataIndex,
             );
           }}
-          renderTransformingRect={(item, index) => renderTransformingRect(item, shapeIndexMap[index])}
+          renderTransformingRect={(item, index) => renderTransformingRect(item as T, shapeIndexMap[index])}
         />
       </TransformerBoxContext.Provider>
       {drawMode && (

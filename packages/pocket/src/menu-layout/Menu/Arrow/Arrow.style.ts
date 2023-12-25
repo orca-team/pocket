@@ -22,14 +22,14 @@ export default createUseStyles(
     },
 
     before: {
-      extend: [beforeAfterStyle],
+      extend: beforeAfterStyle,
       left: '-3px',
       transformOrigin: 'center',
       transform: 'rotate(-45deg)',
     },
 
     after: {
-      extend: [beforeAfterStyle],
+      extend: beforeAfterStyle,
       transformOrigin: 'center',
       transform: 'rotate(45deg)',
     },

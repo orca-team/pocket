@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import React from 'react';
 import cn from 'classnames';
 import type { DataPositionType } from '../def';
@@ -34,17 +35,19 @@ const Task = (props: TaskProps) => {
         [styles.checked]: checked,
         [styles.placeholder]: isPlaceholder,
       })} ${className}`}
-      style={{
-        ...style,
-        left: `calc(${(100 * (day + order / concurrency)) / length}% + 1px)`,
-        width: `calc(${100 / length / concurrency}% - 3px)`,
-        top: `calc(${startPercent}% + 1px)`,
-        height: `calc(${endPercent - startPercent}% - 2px)`,
-        display: endPercent === startPercent ? 'none' : '',
-        '--day': _day,
-        '--col-left': `calc(${(100 * day) / length}% + 1px)`,
-        '--col-width': `calc(${100 / length}% - 3px)`,
-      }}
+      style={
+        {
+          ...style,
+          left: `calc(${(100 * (day + order / concurrency)) / length}% + 1px)`,
+          width: `calc(${100 / length / concurrency}% - 3px)`,
+          top: `calc(${startPercent}% + 1px)`,
+          height: `calc(${endPercent - startPercent}% - 2px)`,
+          display: endPercent === startPercent ? 'none' : '',
+          '--day': _day,
+          '--col-left': `calc(${(100 * day) / length}% + 1px)`,
+          '--col-width': `calc(${100 / length}% - 3px)`,
+        } as CSSProperties
+      }
       {...otherProps}
     />
   );

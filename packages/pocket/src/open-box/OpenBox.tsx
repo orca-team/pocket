@@ -38,7 +38,7 @@ const OpenBox: React.FC<OpenBoxProps> = React.forwardRef((props, pRef) => {
           // 如果展开高度和当前高度一样，则重新计算一次内部元素高度
           let top = Infinity;
           let bottom = -Infinity;
-          for (const child of dom.children) {
+          for (const child of Array.from(dom.children)) {
             const bounds = child.getBoundingClientRect();
             top = Math.min(top, bounds.top);
             bottom = Math.max(bottom, bounds.top + bounds.height);

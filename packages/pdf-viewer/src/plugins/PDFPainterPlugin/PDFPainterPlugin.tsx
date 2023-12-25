@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unused-prop-types */
+import type { CSSProperties } from 'react';
 import React, { useContext, useImperativeHandle, useState } from 'react';
 import { IconButton, Trigger } from '@orca-fe/pocket';
 import type { PainterRef, ShapeDataType, ShapeType } from '@orca-fe/painter';
@@ -262,11 +263,13 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
           autoCheck={autoCheck}
           draggable={false}
           className={`${styles.painter} ${drawing ? styles.drawing : ''}`}
-          style={{
-            height: '100%',
-            '--painter-scale': 'var(--scale-factor-origin, 1)',
-            '--transformer-layout-scale': 'var(--scale-factor-origin, 1)',
-          }}
+          style={
+            {
+              height: '100%',
+              '--painter-scale': 'var(--scale-factor-origin, 1)',
+              '--transformer-layout-scale': 'var(--scale-factor-origin, 1)',
+            } as CSSProperties
+          }
           zoom={zoom}
           defaultDrawMode={drawing ? drawMode : undefined}
           drawMode={drawing ? drawMode : undefined}

@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import React, { useMemo } from 'react';
 import cn from 'classnames';
 import moment from 'moment';
@@ -36,7 +37,13 @@ const TimeTip = (props: TimeTipProps) => {
   return (
     <div
       className={cn(styles.root, { [styles.visible]: visible }, className)}
-      style={{ ...style, top: `${time * 100}%`, '--color': color }}
+      style={
+        {
+          ...style,
+          top: `${time * 100}%`,
+          '--color': color,
+        } as CSSProperties
+      }
       {...otherProps}
     >
       <div className={styles.line} style={{ left: lineLeft, width: lineWidth }} />

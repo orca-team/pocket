@@ -1,4 +1,4 @@
-import type { ForwardedRef } from 'react';
+import type { ForwardedRef, ReactNode } from 'react';
 import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 import { Transition } from 'react-transition-group';
 import { useBoolean, useClickAway, useEventListener } from 'ahooks-v2';
@@ -29,11 +29,11 @@ const emptyBounds: Bounds = {
 
 export type ContextMenuItemType = {
   key: string;
-  text: React.ReactChild;
+  text: ReactNode;
   children?: ContextMenuItemWithSplitType[];
   disabled?: boolean;
-  icon?: React.ReactChild;
-  extra?: React.ReactChild;
+  icon?: ReactNode;
+  extra?: ReactNode;
   onClick?: (e: React.MouseEvent) => any;
 };
 export type ContextMenuItemWithSplitType = ContextMenuItemType | 'split-line';

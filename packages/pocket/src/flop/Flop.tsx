@@ -114,7 +114,6 @@ const Flop = React.forwardRef<HTMLSpanElement, FlopProps>((props, ref) => {
           decimalPlaces: decimals ?? decimalLength(valueUnit.value),
         });
         _this.countup.start();
-        window.countup = _this.countup;
       }
     }
   }, []);

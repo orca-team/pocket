@@ -1,6 +1,8 @@
+/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { clamp, roundBy } from '@orca-fe/tools';
 import { useCounter, useDebounceEffect, useDebounceFn, useEventListener, useMemoizedFn, useSetState } from 'ahooks';
+import type { CSSProperties } from 'react';
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useGetState, useSizeListener } from '@orca-fe/hooks';
 import cn from 'classnames';
@@ -704,13 +706,15 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                       onClick() {
                         downloadPdf();
                       },
-                    },
+                    } as ContextMenuItemType,
                   ].concat(menuCollector.collect().sort((a, b) => (a.order || 0) - (b.order || 0)))}
-                style={{
-                  '--scale-factor': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
-                  '--scale-factor-origin': scale,
-                  '--pdf-viewer-page-scale': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
-                }}
+                style={
+                  {
+                    '--scale-factor': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
+                    '--scale-factor-origin': scale,
+                    '--pdf-viewer-page-scale': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
+                  } as CSSProperties
+                }
               >
                 {viewports.length === 0 && !loading && !pluginLoading && emptyTips}
                 {viewports.map((viewport, pageIndex) => {

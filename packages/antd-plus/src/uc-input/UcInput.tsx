@@ -17,7 +17,7 @@ const UcInput = (props: UcInputProps, pRef: ForwardedRef<InputRef>) => {
   const [internalValue, setInternalValue] = useState(value);
 
   const rootRef = useRef<InputRef>(null);
-  useImperativeHandle(pRef, () => rootRef.current);
+  useImperativeHandle(pRef, () => rootRef.current!);
 
   const handleFocus = useMemorizedFn(() => {
     setInternalValue(value);

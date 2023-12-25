@@ -61,11 +61,11 @@ const SimplePropsEditor = (props: SimplePropsEditorProps) => {
                     case 'number':
                       return <Slider {...otherProps} />;
                     case 'font':
-                      return 'fontEditor';
+                      return <span>fontEditor</span>;
                     case 'color':
                       return <ColorPicker size={24} triggerProps={colorTriggerProps} {...otherProps} />;
                     default:
-                      return 'Unknown Editor';
+                      return <span>Unknown Editor</span>;
                   }
                 })()}
               </SimpleForm.Item>
