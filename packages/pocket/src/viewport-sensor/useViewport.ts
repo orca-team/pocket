@@ -12,7 +12,7 @@ export type Viewport = {
 };
 
 export type UseViewportType = {
-  ref: MutableRefObject<HTMLElement | null>;
+  ref: MutableRefObject<Element | null>;
   viewport: Viewport;
   onPointerDown?: (e: MjolnirPointerEvent) => boolean;
   onViewportChange?: (viewport: Viewport) => void;
@@ -82,7 +82,7 @@ export function useViewport(options: UseViewportType) {
         top: 0,
         left: 0,
       };
-      if (e.currentTarget instanceof HTMLElement) {
+      if (e.currentTarget instanceof Element) {
         bounds = e.currentTarget.getBoundingClientRect();
       }
       const offsetCenter = {
@@ -92,20 +92,13 @@ export function useViewport(options: UseViewportType) {
 
       const { zoom, center } = viewport;
       if (wheelMode === 'zoom' || e.ctrlKey || e.metaKey) {
-        const newZoom = clamp(
-          zoom + clamp(-e.deltaY * zoomStep, -maxZoomStep, maxZoomStep),
-          minZoom,
-          maxZoom,
-        );
+        const newZoom = clamp(zoom + clamp(-e.deltaY * zoomStep, -maxZoomStep, maxZoomStep), minZoom, maxZoom);
         const delta = {
           x: offsetCenter.x + center[0],
           y: offsetCenter.y + center[1],
         };
 
-        const newCenter = [
-          -offsetCenter.x + delta.x * 2 ** (newZoom - zoom),
-          -offsetCenter.y + delta.y * 2 ** (newZoom - zoom),
-        ] as [number, number];
+        const newCenter = [-offsetCenter.x + delta.x * 2 ** (newZoom - zoom), -offsetCenter.y + delta.y * 2 ** (newZoom - zoom)] as [number, number];
 
         onViewportChange({
           zoom: newZoom,
@@ -113,10 +106,7 @@ export function useViewport(options: UseViewportType) {
         });
       } else {
         // 移动模式
-        const newCenter = [center[0] + e.deltaX, center[1] + e.deltaY] as [
-          number,
-          number,
-        ];
+        const newCenter = [center[0] + e.deltaX, center[1] + e.deltaY] as [number, number];
 
         onViewportChange({
           zoom,
@@ -131,7 +121,7 @@ export function useViewport(options: UseViewportType) {
   const handlePinchEnd = useMemoizedFn((e: MjolnirGestureEvent) => {});
   useEffect(() => {
     if (ref.current) {
-      const eventManager = new EventManager(ref.current, {});
+      const eventManager = new EventManager(ref.current as HTMLElement, {});
       eventManager.on({
         pointerdown: handlePointerDown,
         pointermove: handlePointerMove,
