@@ -1,5 +1,11 @@
 # @orca-fe/pocket
 
+## 3.3.2
+
+### Patch Changes
+
+- chore: useViewport 更新 ref 类型支持，支持 SvgSvgElement
+
 ## 3.3.1
 
 ### Patch Changes
