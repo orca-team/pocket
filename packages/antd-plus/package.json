@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/antd-plus",
-  "version": "0.3.14",
+  "version": "0.3.15",
   "description": "Transformer Container",
   "keywords": [
     "react",
@@ -36,9 +36,9 @@
     "clear": "rimraf lib es"
   },
   "dependencies": {
-    "@orca-fe/hooks": "^1.10.1",
+    "@orca-fe/hooks": "^1.11.0",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
-    "@orca-fe/pocket": "^3.3.2",
+    "@orca-fe/pocket": "^3.4.0",
     "@orca-fe/simple-jss": "^0.0.3",
     "@orca-fe/tools": "^0.10.0",
     "ahooks": "^3.7.8",

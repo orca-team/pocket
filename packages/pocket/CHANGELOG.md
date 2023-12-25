@@ -1,5 +1,16 @@
 # @orca-fe/pocket
 
+## 3.4.0
+
+### Minor Changes
+
+- feat: ViewportSensor 的 children 支持传入回调函数，用于去除默认的 div-root，改为渲染自定义 root; useMergedRefs 支持非 hooks 调用
+
+### Patch Changes
+
+- Updated dependencies
+  - @orca-fe/hooks@1.11.0
+
 ## 3.3.2
 
 ### Patch Changes
