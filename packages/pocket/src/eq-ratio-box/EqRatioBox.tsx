@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import React, { useEffect, useMemo, useRef } from 'react';
-import { useSize } from 'ahooks-v2';
+import { useSize } from 'ahooks';
 import useStyles from './EqRatioBox.style';
 import EqRatioBoxContext, { useRatio } from './EqRatioBoxContext';
 
@@ -33,7 +33,7 @@ const EqRatioBox = (props: EqRatioBoxProps) => {
   } = props;
   const styles = useStyles();
   const rootRef = useRef<HTMLDivElement>(null);
-  const { width: containerWidth, height: containerHeight } = useSize(rootRef);
+  const { width: containerWidth, height: containerHeight } = useSize(rootRef) || {};
 
   const hasSize = containerWidth != null && containerHeight != null;
 

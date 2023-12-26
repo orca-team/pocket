@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { shouldUpdate } from '@orca-fe/pocket';
-import { useInterval } from 'ahooks-v2';
+import { useInterval } from 'ahooks';
 
 const MyComponent = (props: { num: number }) => {
   const { num = 1 } = props;
@@ -13,10 +13,7 @@ const MyComponent = (props: { num: number }) => {
 };
 
 // 包裹生成一个新组件，仅在 num 属性发生变化是才重新渲染
-const NotUpdateMyComponent = shouldUpdate(
-  MyComponent,
-  (props, prevProps) => props.num !== prevProps.num,
-);
+const NotUpdateMyComponent = shouldUpdate(MyComponent, (props, prevProps) => props.num !== prevProps.num);
 
 const Demo = () => {
   const [{ num }, setNum] = useState({ num: 0 });

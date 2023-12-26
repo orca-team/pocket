@@ -1,4 +1,4 @@
-import { usePrevious } from 'ahooks-v2';
+import { usePrevious } from 'ahooks';
 import { eq } from 'lodash-es';
 import type React from 'react';
 import { useEffect, useState } from 'react';
@@ -29,9 +29,7 @@ const ReactScript = (props: ReactScriptProps) => {
   useEffect(() => {
     if (!eq(src, prevSrc)) {
       const srcList = Array.isArray(src) ? src : [src];
-      Promise.all(
-        srcList.map((src) => loadScript(src).catch(handleError)),
-      ).then(handleLoad);
+      Promise.all(srcList.map(src => loadScript(src).catch(handleError))).then(handleLoad);
     }
   }, [src]);
   return (loaded && children) as React.ReactElement;

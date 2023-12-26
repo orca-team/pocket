@@ -1,7 +1,7 @@
 import type { ForwardedRef, ReactNode } from 'react';
 import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 import { Transition } from 'react-transition-group';
-import { useBoolean, useClickAway, useEventListener } from 'ahooks-v2';
+import { useBoolean, useClickAway, useEventListener } from 'ahooks';
 import ReactDOM from 'react-dom';
 import cn from 'classnames';
 import { useMergedRefs } from '@orca-fe/hooks';

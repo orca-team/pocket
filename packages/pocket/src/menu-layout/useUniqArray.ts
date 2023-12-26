@@ -1,5 +1,5 @@
+import { useMemoizedFn } from 'ahooks';
 import { useState } from 'react';
-import { usePersistFn } from 'ahooks-v2';
 
 type UseUniqArrayResult<T> = [
   T[],
@@ -10,20 +10,18 @@ type UseUniqArrayResult<T> = [
   },
 ];
 
-export default function useUniqArray<T>(
-  defaultArr: T[] = [],
-): UseUniqArrayResult<T> {
+export default function useUniqArray<T>(defaultArr: T[] = []): UseUniqArrayResult<T> {
   const [arr, setArr] = useState<T[]>(defaultArr);
 
-  const add = usePersistFn((item: T) => {
-    const has = arr.findIndex((i) => i === item) >= 0;
+  const add = useMemoizedFn((item: T) => {
+    const has = arr.findIndex(i => i === item) >= 0;
     if (!has) {
       setArr([...arr, item]);
     }
   });
 
-  const remove = usePersistFn((item: T) => {
-    const index = arr.findIndex((i) => i === item);
+  const remove = useMemoizedFn((item: T) => {
+    const index = arr.findIndex(i => i === item);
     if (index >= 0) {
       const newArr = [...arr];
       newArr.splice(index, 1);

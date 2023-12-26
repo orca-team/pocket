@@ -1,4 +1,4 @@
-import { useMount, usePersistFn, useUpdateEffect } from 'ahooks-v2';
+import { useMount, useMemoizedFn, useUpdateEffect } from 'ahooks';
 import React, { useImperativeHandle, useRef } from 'react';
 import useStyles from './OpenBox.style';
 
@@ -59,7 +59,7 @@ const OpenBox: React.FC<OpenBoxProps> = React.forwardRef((props, pRef) => {
     }
   }, [open]);
 
-  const handleTransitionEnd = usePersistFn(() => {
+  const handleTransitionEnd = useMemoizedFn(() => {
     if (ref.current) ref.current.style.height = open ? '' : `${height}px`;
   });
   return (

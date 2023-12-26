@@ -1,5 +1,11 @@
 # @orca-fe/pocket
 
+## 3.4.1
+
+### Patch Changes
+
+- chore: remove ahooks@2
+
 ## 3.4.0
 
 ### Minor Changes
