@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.11.1
+
+### Patch Changes
+
+- chore: update dependencies
+
 ## 1.11.0
 
 ### Minor Changes

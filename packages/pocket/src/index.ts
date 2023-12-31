@@ -63,6 +63,7 @@ import type { LoadMoreProps } from './load-more';
 import LoadMore from './load-more';
 import type { SimpleFormProps, SimpleFormItemProps } from './simple-form';
 import SimpleForm from './simple-form';
+import ViewportSensor3d from './viewport-sensor-3d';
 
 export type {
   EqRatioBoxProps,
@@ -142,4 +143,5 @@ export {
   CardCalendar,
   LoadMore,
   SimpleForm,
+  ViewportSensor3d,
 };

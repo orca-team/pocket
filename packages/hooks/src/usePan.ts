@@ -23,6 +23,9 @@ export type UsePanCallbackParams = {
 
   /** 触发拖动事件的 HTML 元素 */
   target: HTMLElement;
+
+  /** 触发拖动事件的 HTML 元素的边界 */
+  bounds: DOMRect;
 };
 
 export default function usePan<T extends Target = Target>(
@@ -41,7 +44,8 @@ export default function usePan<T extends Target = Target>(
       _this.mousedownPosition = [e.clientX, e.clientY];
       _this.target = e.currentTarget as HTMLElement;
       _this.triggerTarget = e.target as HTMLElement;
-      const { left, top } = _this.target.getBoundingClientRect();
+      const bounds = _this.target.getBoundingClientRect();
+      const { left, top } = bounds;
       const res = callback({
         start: true,
         finish: false,
@@ -49,6 +53,7 @@ export default function usePan<T extends Target = Target>(
         offset: [0, 0],
         ev: e,
         target: _this.triggerTarget,
+        bounds,
       });
       if (res === false) {
         _this.mousedownPosition = undefined;
@@ -63,7 +68,8 @@ export default function usePan<T extends Target = Target>(
     if (_this.mousedownPosition && _this.target && _this.triggerTarget) {
       const offsetX = e.clientX - _this.mousedownPosition[0];
       const offsetY = e.clientY - _this.mousedownPosition[1];
-      const { left, top } = _this.target.getBoundingClientRect();
+      const bounds = _this.target.getBoundingClientRect();
+      const { left, top } = bounds;
       const res = callback({
         start: false,
         finish: false,
@@ -71,6 +77,7 @@ export default function usePan<T extends Target = Target>(
         offset: [offsetX, offsetY],
         ev: e,
         target: _this.triggerTarget,
+        bounds,
       });
       if (res === false) {
         _this.mousedownPosition = undefined;
@@ -84,7 +91,8 @@ export default function usePan<T extends Target = Target>(
     if (_this.mousedownPosition && _this.target && _this.triggerTarget) {
       const offsetX = e.clientX - _this.mousedownPosition[0];
       const offsetY = e.clientY - _this.mousedownPosition[1];
-      const { left, top } = _this.target.getBoundingClientRect();
+      const bounds = _this.target.getBoundingClientRect();
+      const { left, top } = bounds;
       callback({
         start: false,
         finish: true,
@@ -92,6 +100,7 @@ export default function usePan<T extends Target = Target>(
         offset: [offsetX, offsetY],
         ev: e,
         target: _this.triggerTarget,
+        bounds,
       });
       _this.mousedownPosition = undefined;
     }

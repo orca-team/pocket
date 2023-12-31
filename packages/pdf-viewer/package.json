@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/pdf-viewer",
-  "version": "1.21.4",
+  "version": "1.21.5",
   "description": "PDF Viewer",
   "keywords": [
     "react",
@@ -38,11 +38,11 @@
     "clear": "rimraf lib es"
   },
   "dependencies": {
-    "@orca-fe/hooks": "^1.11.0",
+    "@orca-fe/hooks": "^1.11.1",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
-    "@orca-fe/painter": "^1.4.51",
+    "@orca-fe/painter": "^1.4.52",
     "@orca-fe/pdfjs-dist-browserify": "^3.8.24",
-    "@orca-fe/pocket": "^3.4.1",
+    "@orca-fe/pocket": "^3.4.2",
     "@orca-fe/simple-jss": "^0.0.3",
     "@orca-fe/tools": "^0.10.0",
     "ahooks": "^3.7.8",
@@ -51,7 +51,7 @@
     "immer": "^9.0.21",
     "print-js": "^1.6.0",
     "rfdc": "^1.3.0",
-    "tslib": "^2.6.0"
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
     "@ant-design/icons": "^4.7.0",
@@ -61,7 +61,7 @@
     "react-router-dom": ">=5.0.0"
   },
   "devDependencies": {
-    "@types/react": "18.2.25",
+    "@types/react": "^18.2.45",
     "autod": "^3.1.2",
     "jss": "^10.10.0"
   }
