@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import type { ContextMenuItemType } from '@orca-fe/pocket/es/context-menu';
+import type { ContextMenuItemType } from '@orca-fe/pocket';
 import { useMemoizedFn } from 'ahooks';
 import PDFViewerContext from '../../context';
 
