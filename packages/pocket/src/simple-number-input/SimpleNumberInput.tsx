@@ -203,7 +203,6 @@ const SimpleNumberInput = (props: SimpleNumberInputProps) => {
       ref={rootRef}
       className={cn(styles.root, { [styles.editing]: editing, [styles.editable]: editable }, className)}
       {...otherProps}
-      // @ts-expect-error
       contentEditable={editing ? 'plaintext-only' : 'false'}
     />
   );

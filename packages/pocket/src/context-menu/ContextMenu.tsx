@@ -1,4 +1,4 @@
-import type { ForwardedRef, ReactNode } from 'react';
+import type { ForwardedRef, ReactNode, RefObject } from 'react';
 import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 import { Transition } from 'react-transition-group';
 import { useBoolean, useClickAway, useEventListener } from 'ahooks';
@@ -180,6 +180,7 @@ export interface ContextMenuProps<T extends ContextMenuItemType> extends React.H
   mainMenuMinWidth?: number;
   wrapperStyle?: React.CSSProperties;
   disabled?: boolean;
+  ref?: RefObject<HTMLDivElement>;
 }
 
 const ContextMenu = <T extends ContextMenuItemType>(props: ContextMenuProps<T>, pRef: ForwardedRef<HTMLDivElement>) => {

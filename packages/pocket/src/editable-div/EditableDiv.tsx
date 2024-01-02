@@ -145,11 +145,7 @@ const EditableDiv = React.forwardRef<HTMLDivElement, EditableDivProps>((props, p
       })} ${className}`}
       {...otherProps}
     >
-      <pre
-        ref={preRef}
-        // @ts-expect-error
-        contentEditable={editing ? 'plaintext-only' : 'false'}
-      />
+      <pre ref={preRef} contentEditable={editing ? 'plaintext-only' : 'false'} />
     </div>
   );
 });
