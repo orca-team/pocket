@@ -20,3 +20,5 @@ group:
 ## 代码演示
 
 <code title="基础用法" src="./demo/basic.tsx"></code>
+
+<code title="结合分页使用" src="./demo/pagination.tsx"></code>

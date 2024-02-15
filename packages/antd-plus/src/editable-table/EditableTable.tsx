@@ -1,12 +1,12 @@
 import { useControllableValue, useMemoizedFn } from 'ahooks';
-import type { FormInstance, FormItemProps, TableProps } from 'antd';
+import type { FormItemProps, TablePaginationConfig, TableProps } from 'antd';
 import { Form, Input, Table } from 'antd';
+import type { AnyObject } from 'antd/es/table/Table';
 import type { NamePath } from 'antd/lib/form/interface';
 import type { ColumnGroupType, ColumnType } from 'antd/lib/table';
 import { cloneDeep, isFunction, isNull, isUndefined } from 'lodash-es';
-import React, { useImperativeHandle, useMemo } from 'react';
-
-type AnyObject = Record<PropertyKey, any>;
+import React, { useImperativeHandle, useMemo, useState } from 'react';
+import type { EditableColumnExtraRenderParams, EditableColumnRenderFunc } from './types';
 
 export type EditableTableActionType<RecordType = any> = {
 
@@ -16,8 +16,6 @@ export type EditableTableActionType<RecordType = any> = {
   /** 移除某一行编辑记录 */
   removeEditRecord: (rowIndex: number) => void;
 };
-
-export type EditableColumnRenderFunc<RecordType> = (value: any, record: RecordType, index: number, form: FormInstance<any>) => React.ReactNode;
 
 export interface EditableExtraColumn<RecordType> {
 
@@ -90,13 +88,17 @@ const InternalEditableTable = <RecordType extends AnyObject = AnyObject>(props: 
     readonly,
     rowKey: _rowKey,
     editableRowKeys,
+    pagination = false,
     onChange,
     onTableChange,
     ...otherProps
   } = props;
-  const [value, setValue] = useControllableValue<RecordType[] | undefined>(props);
 
+  const [value, setValue] = useControllableValue<RecordType[] | undefined>(props);
   const form = Form.useFormInstance();
+  const [_this] = useState<{ currentPagination: TablePaginationConfig }>({
+    currentPagination: !pagination ? { current: 1, pageSize: 10 } : pagination,
+  });
 
   useImperativeHandle(actionRef, () => ({
     addEditRecord: (record, insertIndex) => {
@@ -122,6 +124,13 @@ const InternalEditableTable = <RecordType extends AnyObject = AnyObject>(props: 
     return (record as any)?.[_rowKey ?? 'key'];
   });
 
+  const getNameIndex = useMemoizedFn((index: number) => {
+    if (!pagination) return index;
+    const { current = 1, pageSize = 10 } = _this.currentPagination;
+    const page = current - 1;
+    return page * pageSize + index;
+  });
+
   // 合并 column
   const mergeColumn = useMemoizedFn((column: EditableColumnType<RecordType>) => {
     const { render: _render = v => v, dataIndex, isEditable = true, renderFormItem, formItemProps = {}} = column;
@@ -130,11 +139,16 @@ const InternalEditableTable = <RecordType extends AnyObject = AnyObject>(props: 
       ...column,
       render: (value, record, index) => {
         const currentRowKey = getRowKey(record, index);
-        if (!readonly && isEditable && (isUndefined(editableRowKeys) || editableRowKeys.includes(currentRowKey))) {
-          const formItemComponent = isFunction(renderFormItem) ? renderFormItem(value, record, index, form) : defaultFormItem;
+        const isValidDataIndex = isValidNamePath(dataIndex);
+        const currentNameIndex = getNameIndex(index);
+        const currentName = isValidDataIndex ? [...getNamePath(name), currentNameIndex, ...getNamePath(dataIndex)] : undefined;
+        const extraParams: EditableColumnExtraRenderParams = { form, currentNameIndex, currentName };
 
-          return isValidNamePath(dataIndex) ? (
-            <Form.Item name={[...getNamePath(name), index, ...getNamePath(dataIndex)]} noStyle {...formItemProps}>
+        if (!readonly && isEditable && (isUndefined(editableRowKeys) || editableRowKeys.includes(currentRowKey))) {
+          const formItemComponent = isFunction(renderFormItem) ? renderFormItem(value, record, index, extraParams) : defaultFormItem;
+
+          return isValidDataIndex ? (
+            <Form.Item name={currentName} noStyle {...formItemProps}>
               {formItemComponent}
             </Form.Item>
           ) : (
@@ -142,14 +156,26 @@ const InternalEditableTable = <RecordType extends AnyObject = AnyObject>(props: 
           );
         }
 
-        return _render(value, record, index, form);
+        return _render(value, record, index, extraParams);
       },
     };
   });
 
   const mergedColumns = useMemo(() => columns?.map(mergeColumn) as TableProps<RecordType>['columns'], [columns, readonly]);
 
-  return <Table dataSource={value} columns={mergedColumns} onChange={onTableChange} rowKey={_rowKey} {...otherProps} />;
+  return (
+    <Table
+      dataSource={value}
+      columns={mergedColumns}
+      rowKey={_rowKey}
+      pagination={pagination}
+      onChange={(currentPagination, filters, sorter, extra) => {
+        _this.currentPagination = currentPagination;
+        onTableChange?.(currentPagination, filters, sorter, extra);
+      }}
+      {...otherProps}
+    />
+  );
 };
 
 const EditableTable = <RecordType extends AnyObject = AnyObject>(props: EditableTableProps<RecordType>) => {

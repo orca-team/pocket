@@ -55,6 +55,9 @@ const data: DataType[] = [
   },
 ];
 
+const dataSource = new Array(30).fill(0)
+  .map((_, index) => data[index % 3]);
+
 export default () => {
   const [form] = Form.useForm();
   const [valuesString, setValuesString] = useState('');
@@ -82,28 +85,6 @@ export default () => {
       render: (_, { tags }) => <>{tags?.map(tag => <Tag key={tag}>{tagOptions.find(t => t.value === tag)?.label ?? '-'}</Tag>)}</>,
       renderFormItem: () => <Select mode="multiple" options={tagOptions} placeholder="请选择" />,
     },
-    {
-      title: '操作',
-      isEditable: false,
-      render: (_, record, index, extraParams) => (
-        <Space size="middle">
-          <a
-            onClick={() => {
-              if (readonly) {
-                form.setFieldValue(
-                  'list',
-                  (form.getFieldValue('list') ?? []).filter((_, i) => i !== extraParams.currentNameIndex),
-                );
-              } else {
-                actionRef.current?.removeEditRecord(index);
-              }
-            }}
-          >
-            删除
-          </a>
-        </Space>
-      ),
-    },
   ];
 
   return (
@@ -117,8 +98,8 @@ export default () => {
         />
         <span>只读模式</span>
       </Space>
-      <Form form={form} initialValues={{ list: data }}>
-        <EditableTable name="list" readonly={readonly} actionRef={actionRef} columns={columns} />
+      <Form form={form} initialValues={{ list: dataSource }}>
+        <EditableTable name="list" readonly={readonly} actionRef={actionRef} columns={columns} pagination={{ showSizeChanger: true }} />
       </Form>
       <Space>
         <Button
@@ -129,20 +110,6 @@ export default () => {
           }}
         >
           读取数据
-        </Button>
-        <Button
-          onClick={() => {
-            actionRef.current?.addEditRecord();
-          }}
-        >
-          插入一行数据
-        </Button>
-        <Button
-          onClick={() => {
-            actionRef.current?.addEditRecord({}, 0);
-          }}
-        >
-          在第一行插入数据
         </Button>
       </Space>
       <pre>{valuesString}</pre>
