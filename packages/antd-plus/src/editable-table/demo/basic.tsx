@@ -92,7 +92,7 @@ export default () => {
               if (readonly) {
                 form.setFieldValue(
                   'list',
-                  (form.getFieldValue('list') ?? []).filter((_, i) => i !== extraParams.currentNameIndex),
+                  (form.getFieldValue('list') ?? []).filter((_, i) => i !== extraParams.rowNameIndex),
                 );
               } else {
                 actionRef.current?.removeEditRecord(index);

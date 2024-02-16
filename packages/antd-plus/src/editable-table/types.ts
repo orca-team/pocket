@@ -1,15 +1,20 @@
 import type { FormInstance } from 'antd';
-import type { NamePath } from 'antd/es/form/interface';
+import type { InternalNamePath } from 'antd/es/form/interface';
 import type React from 'react';
 
 export type EditableColumnExtraRenderParams = {
+
+  /** Form 实例 */
   form: FormInstance<any>;
 
   /** 当前行在数据中的索引值 */
-  currentNameIndex: number;
+  rowNameIndex: number;
 
-  /** 当前行的 name */
-  currentName?: NamePath;
+  /** 当前行的 name 路径*/
+  rowNamePath: InternalNamePath;
+
+  /** 表格的 name 路径，用于嵌套多层 Form.List 时，在 render 时可以获取到表格当前行完整的 name 路径 */
+  tableNamePath: InternalNamePath;
 };
 
 /** 为 render 方法增加透传出去的第四个参数 extraParams */

@@ -6,6 +6,7 @@ import type { NamePath } from 'antd/lib/form/interface';
 import type { ColumnGroupType, ColumnType } from 'antd/lib/table';
 import { cloneDeep, isFunction, isNull, isUndefined } from 'lodash-es';
 import React, { useImperativeHandle, useMemo, useState } from 'react';
+import type { InternalNamePath } from 'antd/es/form/interface';
 import type { EditableColumnExtraRenderParams, EditableColumnRenderFunc } from './types';
 
 export type EditableTableActionType<RecordType = any> = {
@@ -45,6 +46,8 @@ export interface EditableTableProps<RecordType extends AnyObject> extends Omit<T
   /** 表单字段名称 */
   name: NamePath;
 
+  tableNamePath?: InternalNamePath;
+
   /** 列配置 */
   columns?: EditableColumnsType<RecordType>;
 
@@ -82,6 +85,7 @@ const getNamePath = (name: NamePath) => (Array.isArray(name) ? name : [name]);
 const InternalEditableTable = <RecordType extends AnyObject = AnyObject>(props: EditableTableProps<RecordType>) => {
   const {
     name,
+    tableNamePath = [],
     columns,
     actionRef,
     defaultFormItem = <Input placeholder="请输入" />,
@@ -137,18 +141,18 @@ const InternalEditableTable = <RecordType extends AnyObject = AnyObject>(props: 
 
     return {
       ...column,
-      render: (value, record, index) => {
+      render: (currentValue, record, index) => {
         const currentRowKey = getRowKey(record, index);
         const isValidDataIndex = isValidNamePath(dataIndex);
-        const currentNameIndex = getNameIndex(index);
-        const currentName = isValidDataIndex ? [...getNamePath(name), currentNameIndex, ...getNamePath(dataIndex)] : undefined;
-        const extraParams: EditableColumnExtraRenderParams = { form, currentNameIndex, currentName };
+        const rowNameIndex = getNameIndex(index);
+        const rowNamePath = isValidDataIndex ? [...getNamePath(name), rowNameIndex, ...getNamePath(dataIndex)] : [];
+        const extraParams: EditableColumnExtraRenderParams = { form, rowNameIndex, rowNamePath, tableNamePath };
 
         if (!readonly && isEditable && (isUndefined(editableRowKeys) || editableRowKeys.includes(currentRowKey))) {
-          const formItemComponent = isFunction(renderFormItem) ? renderFormItem(value, record, index, extraParams) : defaultFormItem;
+          const formItemComponent = isFunction(renderFormItem) ? renderFormItem(currentValue, record, index, extraParams) : defaultFormItem;
 
           return isValidDataIndex ? (
-            <Form.Item name={currentName} noStyle {...formItemProps}>
+            <Form.Item name={rowNamePath} noStyle {...formItemProps}>
               {formItemComponent}
             </Form.Item>
           ) : (
@@ -156,7 +160,7 @@ const InternalEditableTable = <RecordType extends AnyObject = AnyObject>(props: 
           );
         }
 
-        return _render(value, record, index, extraParams);
+        return _render(currentValue, record, index, extraParams);
       },
     };
   });
