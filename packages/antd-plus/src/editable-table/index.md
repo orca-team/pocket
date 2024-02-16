@@ -22,3 +22,5 @@ group:
 <code title="基础用法" src="./demo/basic.tsx"></code>
 
 <code title="结合分页使用" src="./demo/pagination.tsx"></code>
+
+<code title="受控使用" src="./demo/controlled.tsx"></code>
