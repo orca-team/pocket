@@ -36,8 +36,16 @@ const ObjectValueTransfer = (props: FormItemMappingValueProps) => {
     return value;
   }, [propsFromParent, valueMapping]);
 
-  const handleChange = useMemoizedFn((v: Record<string, any>) => {
-    Object.entries(v).forEach(([key, value]) => {
+  const handleChange = useMemoizedFn((v?: Record<string, any>) => {
+    // 兼容 v 为 undefined 的情况：根据 valueMapping 创建一个属性值都为 undefined 的 Object
+    const _v =
+      v ??
+      Object.keys(valueMapping).reduce<Record<string, any>>((prev, key) => {
+        const emptyObj = { ...prev };
+        emptyObj[key] = undefined;
+        return emptyObj;
+      }, {});
+    Object.entries(_v).forEach(([key, value]) => {
       // eslint-disable-next-line react/destructuring-assignment
       const fn = propsFromParent[`trigger_${key}`];
       if (typeof fn === 'function') {
