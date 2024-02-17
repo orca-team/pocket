@@ -135,8 +135,8 @@ export default () => {
           readonly={readonly}
           actionRef={actionRef}
           columns={columns1}
+          style={{ margin: '12px 0' }}
         />
-
         <EditableTable
           name="list2"
           size="small"
@@ -145,6 +145,7 @@ export default () => {
           readonly={readonly}
           actionRef={actionRef}
           columns={columns2}
+          style={{ margin: '12px 0' }}
         />
       </Form>
     </div>

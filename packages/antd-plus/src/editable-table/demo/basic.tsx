@@ -3,6 +3,7 @@ import { Button, Form, InputNumber, Select, Space, Switch, Tag } from 'antd';
 import type { EditableColumnsType, EditableTableActionType } from '@orca-fe/antd-plus';
 import { EditableTable } from '@orca-fe/antd-plus';
 import { useRef, useState } from 'react';
+import { OpenBox } from '@orca-fe/pocket';
 
 interface DataType {
   name: string;
@@ -55,9 +56,12 @@ const data: DataType[] = [
   },
 ];
 
+const initialValues = { list: data };
+
 export default () => {
   const [form] = Form.useForm();
-  const [valuesString, setValuesString] = useState('');
+  const [valuesString, setValuesString] = useState(JSON.stringify(initialValues, null, 2));
+  const [valuesStringVisible, setValuesStringVisible] = useState(false);
   const [readonly, setReadonly] = useState(false);
   const actionRef = useRef<EditableTableActionType>();
 
@@ -117,19 +121,16 @@ export default () => {
         />
         <span>只读模式</span>
       </Space>
-      <Form form={form} initialValues={{ list: data }}>
-        <EditableTable name="list" readonly={readonly} actionRef={actionRef} columns={columns} />
+      <Form
+        form={form}
+        initialValues={initialValues}
+        onValuesChange={(_, values) => {
+          setValuesString(JSON.stringify(values, null, 2));
+        }}
+      >
+        <EditableTable name="list" readonly={readonly} actionRef={actionRef} columns={columns} style={{ margin: '12px 0' }} />
       </Form>
       <Space>
-        <Button
-          type="primary"
-          onClick={() => {
-            const values = form.getFieldsValue();
-            setValuesString(JSON.stringify(values, null, 2));
-          }}
-        >
-          读取数据
-        </Button>
         <Button
           onClick={() => {
             actionRef.current?.addEditRecord();
@@ -144,8 +145,18 @@ export default () => {
         >
           在第一行插入数据
         </Button>
+        <Button
+          type="primary"
+          onClick={() => {
+            setValuesStringVisible(!valuesStringVisible);
+          }}
+        >
+          {valuesStringVisible ? '收起' : '查看表单数据'}
+        </Button>
       </Space>
-      <pre>{valuesString}</pre>
+      <OpenBox open={valuesStringVisible}>
+        <pre>{valuesString}</pre>
+      </OpenBox>
     </div>
   );
 };

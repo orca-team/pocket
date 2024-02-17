@@ -1,60 +1,28 @@
 import { useControllableValue, useMemoizedFn } from 'ahooks';
-import type { FormItemProps, TablePaginationConfig, TableProps } from 'antd';
+import type { TablePaginationConfig, TableProps, FormItemProps } from 'antd';
 import { Form, Input, Table } from 'antd';
 import type { AnyObject } from 'antd/es/table/Table';
 import type { NamePath } from 'antd/lib/form/interface';
-import type { ColumnGroupType, ColumnType } from 'antd/lib/table';
 import { cloneDeep, isFunction, isNull, isUndefined } from 'lodash-es';
 import React, { useImperativeHandle, useMemo, useState } from 'react';
 import type { InternalNamePath } from 'antd/es/form/interface';
-import type { EditableColumnExtraRenderParams, EditableColumnRenderFunc } from './types';
-
-export type EditableTableActionType<RecordType = any> = {
-
-  /** 新增一行编辑记录，支持在特定位置插入 */
-  addEditRecord: (data?: RecordType, insertIndex?: number) => void;
-
-  /** 移除某一行编辑记录 */
-  removeEditRecord: (rowIndex: number) => void;
-};
-
-export interface EditableExtraColumn<RecordType> {
-
-  /** dataIndex 改造为 NamePath */
-  dataIndex?: NamePath;
-
-  /** 当前列是否可编辑，默认可编辑 */
-  isEditable?: boolean;
-
-  /** 自定义 readonly 模式下的组件渲染 */
-  render?: EditableColumnRenderFunc<RecordType>;
-
-  /** 自定义编辑模式下的 formItem 组件渲染 */
-  renderFormItem?: EditableColumnRenderFunc<RecordType>;
-
-  /** Form.Item props */
-  formItemProps?: Omit<FormItemProps, 'label' | 'noStyle'>;
-}
-
-export interface MergedColumnGroupType<RecordType> extends Omit<ColumnGroupType<RecordType>, 'render'>, EditableExtraColumn<RecordType> {}
-export interface MergedColumnType<RecordType> extends Omit<ColumnType<RecordType>, 'render' | 'dataIndex'>, EditableExtraColumn<RecordType> {}
-export type EditableColumnType<RecordType> = MergedColumnGroupType<RecordType> | MergedColumnType<RecordType>;
-export type EditableColumnsType<RecordType> = EditableColumnType<RecordType>[];
+import type { EditableColumnExtraRenderParams, EditableColumnType, EditableColumnsType, EditableTableActionType } from './types';
 
 export interface EditableTableProps<RecordType extends AnyObject> extends Omit<TableProps<RecordType>, 'columns' | 'dataSource' | 'onChange'> {
 
   /** 表单字段名称 */
   name: NamePath;
 
+  /** 表格的 name 路径，用于嵌套多层 Form.List 时，在 render 时可以获取到表格当前行完整的 name 路径 */
   tableNamePath?: InternalNamePath;
-
-  /** 列配置 */
-  columns?: EditableColumnsType<RecordType>;
 
   /** 是否只读 */
   readonly?: boolean;
 
-  /** 外部控制 EditableTable 数据的 ref */
+  /** 列配置 */
+  columns?: EditableColumnsType<RecordType>;
+
+  /** 外部控制 EditableTable 编辑行的 ref */
   actionRef?: React.MutableRefObject<EditableTableActionType<RecordType> | undefined>;
 
   /** 受控的 rowKeys */
@@ -182,12 +150,16 @@ const InternalEditableTable = <RecordType extends AnyObject = AnyObject>(props: 
   );
 };
 
-const EditableTable = <RecordType extends AnyObject = AnyObject>(props: EditableTableProps<RecordType>) => {
-  const { name } = props;
+const EditableTable = <RecordType extends AnyObject = AnyObject>(
+  props: EditableTableProps<RecordType> & {
+    formItemProps?: Omit<FormItemProps, 'name'>;
+  },
+) => {
+  const { name, formItemProps = {}, ...otherProps } = props;
 
   return (
-    <Form.Item name={name}>
-      <InternalEditableTable {...props} />
+    <Form.Item name={name} noStyle {...formItemProps}>
+      <InternalEditableTable name={name} {...otherProps} />
     </Form.Item>
   );
 };

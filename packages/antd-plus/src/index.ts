@@ -20,7 +20,8 @@ import { ValueMapping, createValueMappedComponent } from './value-mapping';
 import type { FormItemListenerProps } from './form-item-listener';
 import FormItemListener from './form-item-listener';
 import EditableTable from './editable-table';
-import type { EditableTableProps, EditableColumnsType, EditableTableActionType } from './editable-table';
+import type { EditableTableProps } from './editable-table';
+import type { EditableColumnsType, EditableTableActionType } from './editable-table/types';
 
 export type {
   JsonSchemaEditorProps,

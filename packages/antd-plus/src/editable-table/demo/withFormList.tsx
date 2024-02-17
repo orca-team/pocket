@@ -1,10 +1,11 @@
 import type { SelectProps } from 'antd';
-import { Button, Card, Form, InputNumber, Select, Space, Tag } from 'antd';
+import { Button, Card, Divider, Form, InputNumber, Select, Space, Tag } from 'antd';
 import type { EditableColumnsType } from '@orca-fe/antd-plus';
 import { EditableTable } from '@orca-fe/antd-plus';
 import { useState } from 'react';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import type { InternalNamePath } from 'antd/es/form/interface';
+import { OpenBox } from '@orca-fe/pocket';
 
 interface DataType {
   name: string;
@@ -45,9 +46,12 @@ const data: DataType[] = [
   },
 ];
 
+const initialValues = { rootList: [{ rootTable: data }] };
+
 export default () => {
   const [form] = Form.useForm();
-  const [valuesString, setValuesString] = useState('');
+  const [valuesString, setValuesString] = useState(JSON.stringify(initialValues, null, 2));
+  const [valuesStringVisible, setValuesStringVisible] = useState(false);
 
   const columns: EditableColumnsType<DataType> = [
     {
@@ -94,7 +98,7 @@ export default () => {
         <Space size="middle">
           <a
             onClick={() => {
-              deleteRowData(extraParams.tableNamePath, extraParams.rowNameIndex);
+              deleteRowData(extraParams.tableNamePath ?? [], extraParams.rowNameIndex);
             }}
           >
             删除
@@ -108,7 +112,13 @@ export default () => {
 
   return (
     <div>
-      <Form form={form} initialValues={{ rootList: [{ rootTable: data }] }}>
+      <Form
+        form={form}
+        initialValues={initialValues}
+        onValuesChange={(_, values) => {
+          setValuesString(JSON.stringify(values, null, 2));
+        }}
+      >
         <Form.List name="rootList">
           {(fields, { add, remove }) => (
             <div>
@@ -134,6 +144,7 @@ export default () => {
                           danger
                           type="primary"
                           icon={<MinusOutlined />}
+                          disabled={fields.length <= 1}
                           onClick={() => {
                             remove(field.name);
                           }}
@@ -143,7 +154,13 @@ export default () => {
                       </Space>
                     )}
                   >
-                    <EditableTable key={field.key} name={[field.name, 'rootTable']} tableNamePath={rootTableName} columns={rootColumns} />
+                    <EditableTable
+                      key={field.key}
+                      name={[field.name, 'rootTable']}
+                      tableNamePath={rootTableName}
+                      columns={rootColumns}
+                      style={{ margin: '12px 0' }}
+                    />
                     <Form.List name={[field.name, 'subList']}>
                       {(subFields, subOpt) => (
                         <Space direction="vertical" size={12} style={{ width: '100%' }}>
@@ -172,6 +189,7 @@ export default () => {
                                       type="dashed"
                                       size="small"
                                       icon={<MinusOutlined />}
+                                      disabled={subFields.length <= 1}
                                       onClick={() => {
                                         subOpt.remove(subField.name);
                                       }}
@@ -188,6 +206,7 @@ export default () => {
                                   columns={subColumns}
                                   size="small"
                                   bordered
+                                  style={{ margin: '12px 0' }}
                                 />
                               </Card>
                             );
@@ -223,18 +242,20 @@ export default () => {
           )}
         </Form.List>
       </Form>
+      <Divider />
       <Space style={{ marginTop: 12 }}>
         <Button
           type="primary"
           onClick={() => {
-            const values = form.getFieldsValue();
-            setValuesString(JSON.stringify(values, null, 2));
+            setValuesStringVisible(!valuesStringVisible);
           }}
         >
-          读取数据
+          {valuesStringVisible ? '收起' : '查看表单数据'}
         </Button>
       </Space>
-      <pre>{valuesString}</pre>
+      <OpenBox open={valuesStringVisible}>
+        <pre>{valuesString}</pre>
+      </OpenBox>
     </div>
   );
 };
