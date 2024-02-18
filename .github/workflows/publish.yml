@@ -17,6 +17,12 @@ on:
 jobs:
   replace-package-json-and-publish:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      packages: write
+      pull-requests: write
+      issues: read
     steps:
       - uses: actions/checkout@v3
         with:
@@ -35,7 +41,7 @@ jobs:
         with:
           publish: npm run pub:only
         env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Format publish log
