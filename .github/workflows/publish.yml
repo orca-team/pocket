@@ -32,7 +32,7 @@ jobs:
       - name: unit tests
         run: pnpm run test
       - name: publish
-        id: publish
+        id: changesets
         uses: changesets/action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -44,7 +44,7 @@ jobs:
         with:
           script: |
             console.log(`::set-output name=log::${
-              ${{ steps.publish.outputs.publishedPackages }}.map(({name,version}) => name+'@'+version).join('\n')
+              ${{ steps.changesets.outputs.publishedPackages }}.map(({name,version}) => name+'@'+version).join('\n')
             }`)
       - name: Dingtalk Notify
         uses: zcong1993/actions-ding@master
