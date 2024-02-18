@@ -64,7 +64,7 @@ jobs:
             }
       - name: Dingtalk Notify Error
         uses: zcong1993/actions-ding@master
-        if: steps.changesets.outputs.published == 'false'
+        if: steps.changesets.outputs.published == 'false' || steps.changesets.outputs.hasChangesets == 'false'
         with:
           dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
           body: |
