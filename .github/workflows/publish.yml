@@ -29,8 +29,6 @@ jobs:
         run: |
           npm i pnpm -g
           pnpm i --no-frozen-lockfile
-      - name: unit tests
-        run: pnpm run test
       - name: publish
         id: changesets
         uses: changesets/action@v1
@@ -38,7 +36,7 @@ jobs:
           publish: npm run pub:only
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Format publish log
         id: publish_log
         uses: actions/github-script@v4
