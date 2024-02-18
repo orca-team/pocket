@@ -1,13 +1,13 @@
 ---
-title: ValueMapping 組件值映射
+title: ValueMapping 组件值映射
 
 group:
-  title: 表單增強
+  title: 表单增强
   path: /form
   order: 1
 ---
 
-# ValueMapping 組件值映射
+# ValueMapping 组件值映射
 
 我们在进行表单功能开发时，通常接口数据和表单组件所需要的数据是不一致的。最典型的就是 日期选择组件，接口返回的是 `String`，而组件需要的是 `moment` / `dayjs` 对象。
 

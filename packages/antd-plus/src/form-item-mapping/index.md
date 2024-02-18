@@ -2,7 +2,7 @@
 title: FormItemMapping 表单多字段映射
 
 group:
-  title: 表單增強
+  title: 表单增强
   path: /form
   order: 1
 ---
