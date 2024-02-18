@@ -41,10 +41,11 @@ jobs:
         id: publish_log
         uses: actions/github-script@v4
         if: steps.changesets.outputs.published == 'true'
-        run: |
-          console.log(`::set-output name=log::${
-            ${{ steps.publish.outputs.publishedPackages }}.map(({name,version}) => name+'@'+version).join('\n')
-          }`)
+        with:
+          script: |
+            console.log(`::set-output name=log::${
+              ${{ steps.publish.outputs.publishedPackages }}.map(({name,version}) => name+'@'+version).join('\n')
+            }`)
       - name: Dingtalk Notify
         uses: zcong1993/actions-ding@master
         if: steps.changesets.outputs.published == 'true'
