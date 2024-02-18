@@ -62,7 +62,7 @@ jobs:
                 "msgtype": "markdown",
                 "markdown": {
                     "title":"orca-fe 发布通知",
-                    "text": "### @orca-fe/pocket\n\n流水线结束，以下模块已发布：\n\n${{ steps.changelog.publish_log.logs }}"
+                    "text": "### @orca-fe/pocket\n\n流水线结束，以下模块已发布：\n\n${{ steps.publish_log.outputs.logs }}"
                 },
                 "at": {
                     "isAtAll": false
