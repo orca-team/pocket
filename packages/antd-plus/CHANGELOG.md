@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.3.22
+
+### Patch Changes
+
+- chore: 发布测试
+
 ## 0.3.21
 
 ### Patch Changes
