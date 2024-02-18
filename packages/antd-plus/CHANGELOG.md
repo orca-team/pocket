@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.3.20
+
+### Patch Changes
+
+- 013ff2b: chore: 文档调整
+
 ## 0.3.19
 
 ### Patch Changes
