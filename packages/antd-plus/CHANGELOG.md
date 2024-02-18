@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.3.19
+
+### Patch Changes
+
+- fix: 修复 Dialog 会遮挡背景内容的 bug
+
 ## 0.3.18
 
 ### Patch Changes

@@ -5,6 +5,7 @@ const prefix = 'orca-dialog';
 export default createUseStyles(
   {
     wrapper: {
+      pointerEvents: 'none',
       position: 'fixed',
       top: '0',
       left: '0',
@@ -28,6 +29,7 @@ export default createUseStyles(
       flexDirection: 'column',
       opacity: '1',
       border: '1px solid transparent',
+      pointerEvents: 'initial',
 
       '&:focus': {
         outline: 'none',
@@ -65,9 +67,8 @@ export default createUseStyles(
     },
 
     hidden: {
-      pointerEvents: 'none',
-
       '& $root': {
+        pointerEvents: 'none',
         transform: 'scale(0.8)',
         opacity: 0,
       },
