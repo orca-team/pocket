@@ -29,32 +29,48 @@ jobs:
         run: |
           npm i pnpm -g
           pnpm i --no-frozen-lockfile
+      - name: unit tests
+        run: pnpm run test
       - name: publish
-        run: npm run pub:only | tee log.txt
+        id: publish
+        uses: changesets/action@v1
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
-      - name: Get package version
-        id: package_version
-        run: echo ::set-output name=version::$(node -e "console.log(require('./package.json').version)")
-      - name: Generate Changelog
-        id: changelog
-        uses: mindsers/changelog-reader-action@v2
-        with:
-          version: ${{ steps.package_version.outputs.version }}
-          path: ./CHANGELOG.md
+      - name: Format publish log
+        id: publish_log
+        uses: actions/github-script@v4
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          console.log(`::set-output name=log::${
+            ${{ steps.publish.outputs.publishedPackages }}.map(({name,version}) => name+'@'+version).join('\n')
+          }`)
       - name: Dingtalk Notify
         uses: zcong1993/actions-ding@master
+        if: steps.changesets.outputs.published == 'true'
         with:
-          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN}}
+          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
           body: |
             {
                 "msgtype": "markdown",
                 "markdown": {
-                    "title": "orca-fe 发布通知",
+                    "title":"orca-fe 发布通知",
                     "text": "### @orca-fe/pocket\n\n流水线结束，以下模块已发布：\n\n${{ steps.changelog.outputs.changes }}"
                 },
                 "at": {
                     "isAtAll": false
+                }
+            }
+      - name: Dingtalk Notify Error
+        uses: zcong1993/actions-ding@master
+        if: steps.changesets.outputs.published == 'false'
+        with:
+          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
+          body: |
+            {
+                "msgtype": "markdown",
+                "markdown": {
+                    "title":"orca-fe 未发布通知",
+                    "text": "### @orca-fe/pocket\n\n流水线结束，未发布模块。"
                 }
             }
