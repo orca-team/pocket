@@ -5,6 +5,9 @@ import type { NamePath } from 'antd/lib/form/interface';
 import FormItemMapping from './FormItemMapping';
 import { PassPropsContext } from './PassPropsElement';
 
+// 前缀，尽量避免属性冲突
+const triggerPrefix = 'form_item_mapping_trigger_prefix';
+
 export interface FormItemMappingValueProps {
 
   /** 外部（表单）与内部（组件）字段的映射关系 */
@@ -20,13 +23,13 @@ export interface FormItemMappingValueProps {
   children?: ReactElement;
 }
 
-// 將 props 上的屬性轉換爲 object
+// 将 props 上的属性转换为对象
 const ObjectValueTransfer = (props: FormItemMappingValueProps) => {
   const { valueMapping, children, trigger = 'onChange', valuePropName = 'value' } = props;
 
   const propsFromParent = useContext(PassPropsContext);
 
-  // 從 propsFromParent 中取得屬性
+  // 从 propsFromParent 中获取属性
   const value = useMemo(() => {
     const value: Record<string, any> = {};
     Object.keys(valueMapping).forEach((key) => {
@@ -37,17 +40,26 @@ const ObjectValueTransfer = (props: FormItemMappingValueProps) => {
   }, [propsFromParent, valueMapping]);
 
   const handleChange = useMemoizedFn((v: Record<string, any>) => {
-    Object.entries(v).forEach(([key, value]) => {
-      // eslint-disable-next-line react/destructuring-assignment
-      const fn = propsFromParent[`trigger_${key}`];
-      if (typeof fn === 'function') {
-        fn(value);
+    const getValue = (key: string) => {
+      if (!!v && typeof v === 'object') {
+        return v[key];
       }
-      if (isValidElement(children)) {
-        const originOnChange = children.props?.[trigger];
-        if (typeof originOnChange === 'function') originOnChange(value);
+      return undefined;
+    };
+
+    Object.keys(valueMapping).forEach((key) => {
+      const oldValue = value[key];
+      const newValue = getValue(key);
+      const fn = propsFromParent[`${triggerPrefix}_${key}`];
+      if (oldValue !== newValue && typeof fn === 'function') {
+        fn(newValue);
       }
     });
+
+    if (isValidElement(children)) {
+      const originOnChange = children.props?.[trigger];
+      if (typeof originOnChange === 'function') originOnChange(v);
+    }
   });
 
   return isValidElement(children) ? (
@@ -63,11 +75,11 @@ const ObjectValueTransfer = (props: FormItemMappingValueProps) => {
 export function FormItemMappingValue(props: FormItemMappingValueProps) {
   const { valueMapping, children, valuePropName, trigger } = props;
 
-  // 根據 valueMapping 自動生成事件
+  // 根据 valueMapping 自动生成事件
   const triggerMapping = useMemo(() => {
     const triggerMapping: Record<string, NamePath> = {};
     Object.keys(valueMapping).forEach((key) => {
-      triggerMapping[`trigger_${key}`] = valueMapping[key];
+      triggerMapping[`${triggerPrefix}_${key}`] = valueMapping[key];
     });
     return triggerMapping;
   }, [valueMapping]);

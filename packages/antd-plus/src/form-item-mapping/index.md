@@ -42,6 +42,25 @@ const res = {
 <code src="./demo/Demo1.tsx"></code>
 <code src="./demo/Demo2.tsx"></code>
 
+```tsx
+/**
+ * debug: true
+ */
+import { Form, Select } from 'antd';
+import { FormItemMappingValue } from '@orca-fe/antd-plus';
+
+export default () => {
+  return (
+    <Form>
+      <div style={{ marginBottom: 8 }}>@orca-fe/antd-plus@0.3.17 版本下，当 clear Select 的值时会导致页面报错</div>
+      <FormItemMappingValue valueMapping={{ label: 'label', value: 'value' }}>
+        <Select options={[{ label: 'demo', value: 'demo' }]} style={{ width: 300 }} labelInValue allowClear />
+      </FormItemMappingValue>
+    </Form>
+  );
+};
+```
+
 ## API
 
 ### FormItemMapping

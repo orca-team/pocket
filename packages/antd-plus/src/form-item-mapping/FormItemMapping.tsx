@@ -7,20 +7,20 @@ const eObj = {};
 
 export type FormItemMappingProps = {
 
-  /** 屬性名稱映射 */
+  /** 属性名映射 */
   valueMapping?: Record<string, NamePath>;
 
   /** 事件映射 */
   triggerMapping?: Record<string, NamePath>;
 
-  /** 是否注入到子組件中，如果需要開發者自行更改注入方式，可以設置爲 false */
+  /** 是否注入到子组件中，如果需要开发者自行更改注入方式，可以设置为 false */
   inject?: boolean;
 
   /** 子组件 */
   children?: ReactElement;
 };
 
-// 從表單中取得多個屬性，並將它們注入到子組件中，支持屬性名稱映射
+// 从表单中获取多个属性，并将它们注入到子组件中，支持属性名映射
 export function FormItemMapping(props: FormItemMappingProps) {
   const { valueMapping = eObj as Record<string, NamePath>, triggerMapping = eObj as Record<string, NamePath>, children, inject = true } = props;
 

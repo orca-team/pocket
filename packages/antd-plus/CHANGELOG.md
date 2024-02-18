@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 0.3.18
+
+### Patch Changes
+
+- fix: FormItemMappingValue 报错：Cannot convert undefined or null to object #9
+
 ## 0.3.17
 
 ### Patch Changes

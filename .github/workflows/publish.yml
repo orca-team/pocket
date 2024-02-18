@@ -34,9 +34,27 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
-      - name: emit log
-        if: always()
-        run: |
-          ./emit-log.sh
-        env:
-          DING_TOKEN: ${{secrets.DING_TALK_ACCESS_TOKEN}}
+      - name: Get package version
+        id: package_version
+        run: echo ::set-output name=version::$(node -e "console.log(require('./package.json').version)")
+      - name: Generate Changelog
+        id: changelog
+        uses: mindsers/changelog-reader-action@v2
+        with:
+          version: ${{ steps.package_version.outputs.version }}
+          path: ./CHANGELOG.md
+      - name: Dingtalk Notify
+        uses: zcong1993/actions-ding@master
+        with:
+          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN}}
+          body: |
+            {
+                "msgtype": "markdown",
+                "markdown": {
+                    "title": "orca-fe 发布通知",
+                    "text": "### @orca-fe/pocket\n\n流水线结束，以下模块已发布：\n\n${{ steps.changelog.outputs.changes }}"
+                },
+                "at": {
+                    "isAtAll": false
+                }
+            }

@@ -22,7 +22,7 @@ const ModalForm = <T extends Record<string, unknown>>(props: ModalFormProps<T>) 
       {...otherProps}
       okButtonProps={{ size: 'middle' }}
       cancelButtonProps={{ size: 'middle' }}
-      onOk={async () => {
+      onOk={() => {
         form.submit();
       }}
     >
