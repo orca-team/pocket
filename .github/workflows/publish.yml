@@ -47,6 +47,8 @@ jobs:
       - name: Format publish log
         id: publish_log
         run: node ./log.cjs
+        env:
+          CHANGED_PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
       - name: Dingtalk Notify
         uses: zcong1993/actions-ding@master
         if: always()
