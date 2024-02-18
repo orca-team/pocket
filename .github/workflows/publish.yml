@@ -46,38 +46,20 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Format publish log
         id: publish_log
-        uses: actions/github-script@v7
-        if: steps.changesets.outputs.published == 'true'
-        with:
-          script: |
-            const actionsCore = require('@actions/core');
-            actionsCore.setOutput('logs', ${{ steps.changesets.outputs.publishedPackages }}.map(({name,version}) => ' - '+name+'@'+version).join('\n'))
+        run: node ./log.cjs
       - name: Dingtalk Notify
         uses: zcong1993/actions-ding@master
-        if: steps.changesets.outputs.published == 'true'
+        if: always()
         with:
           dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
           body: |
             {
                 "msgtype": "markdown",
                 "markdown": {
-                    "title":"orca-fe 发布通知",
-                    "text": "### @orca-fe/pocket\n\n流水线结束，以下模块已发布：\n\n${{ steps.publish_log.outputs.logs }}"
+                    "title":"${{ steps.publish_log.outputs.title }}",
+                    "text": "${{ steps.publish_log.outputs.content }}"
                 },
                 "at": {
                     "isAtAll": false
-                }
-            }
-      - name: Dingtalk Notify Error
-        uses: zcong1993/actions-ding@master
-        if: steps.changesets.outputs.published == 'false'
-        with:
-          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
-          body: |
-            {
-                "msgtype": "markdown",
-                "markdown": {
-                    "title":"orca-fe 未发布通知",
-                    "text": "### @orca-fe/pocket\n\n流水线结束，未发布模块。"
                 }
             }
