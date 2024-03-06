@@ -160,6 +160,9 @@ export default () => {
 | onDataChange   | 绘图数据变化时的回调函数 | `(data: ShapeDataType[][], action: 'add' / 'change' / 'delete', pageIndex: number, index: number) => void` | -       |      |
 | disabledButton | 是否禁用按钮             | `boolean`                                                                                                  | `false` |      |
 | autoCheck      | 是否自动选中             | `boolean`                                                                                                  | `true`  |      |
+| popupVisible   | 是否展示绘图下拉弹出窗     | `boolean`                                                                                                  | `true`  |      |
+| drawingVisible | 是否展示绘图按钮          | `boolean`                                                                                                  | `true`  |      |
+| drawingPluginId | 插件实例ID (解决插件组合使用，状态冲突问题)          | `string`                                                                                                  | `PDFPainterPlugin`  |      |
 | onChangeStart  | 开始绘图时的回调函数     | `(pageIndex: number, index: number) => void`                                                               | -       |      |
 | defaultChecked | 默认选中的区域           | `[number, number]`                                                                                         | -       |      |
 | checked        | 选中的区域               | `[number, number]`                                                                                         | -       |      |

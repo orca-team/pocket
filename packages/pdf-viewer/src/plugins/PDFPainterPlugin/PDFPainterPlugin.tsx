@@ -36,7 +36,7 @@ export type PDFPainterPluginHandle = {
 
 const eArr = [];
 
-const ef = () => {};
+const ef = () => { };
 
 /**
  * PDFPainterPlugin 绘图插件属性
@@ -70,6 +70,15 @@ export interface PDFPainterPluginProps {
   /** 开始绘图时的回调函数 */
   onChangeStart?: (pageIndex: number, index: number) => void;
 
+  /** 是否展示绘图下拉弹出窗 */
+  popupVisible?: boolean;
+
+  /** 是否展示绘图按钮 */
+  drawingVisible?: boolean;
+
+  /** 插件实例ID */
+  drawingPluginId?: string;
+
   buttonName?: string;
 }
 
@@ -84,7 +93,7 @@ const drawingNamePDFPainterPlugin = 'PDFPainterPlugin';
  */
 const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPluginProps>((props, pRef) => {
   const [l] = useLocale(zhCN);
-  const { disabledButton, autoCheck = true, onChangeStart = ef, buttonName = l.paint } = props;
+  const { disabledButton, autoCheck = true, onChangeStart = ef, buttonName = l.paint, popupVisible = true, drawingVisible = true, drawingPluginId = drawingNamePDFPainterPlugin } = props;
   const styles = useStyle();
 
   const { internalState, setInternalState } = useContext(PDFViewerContext);
@@ -118,11 +127,11 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
   });
 
   /* 绘图功能 */
-  const drawing = internalState.drawingPluginName === drawingNamePDFPainterPlugin;
+  const drawing = internalState.drawingPluginName === drawingPluginId;
 
   const setDrawing = useMemoizedFn((b: boolean) => {
-    setInternalState({
-      drawingPluginName: b ? drawingNamePDFPainterPlugin : '',
+    setInternalState({ // 这里设置的时候，已经是全局的了
+      drawingPluginName: b ? drawingPluginId : '',
     });
   });
 
@@ -222,10 +231,10 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
     <>
       {!disabledButton && (
         <ToolbarPortal>
-          <div className={styles.root}>
+          <div className={styles.root} style={{ display: drawingVisible ? 'block' : 'none' }}>
             <Trigger
               action="click"
-              popupVisible={drawing}
+              popupVisible={popupVisible ? drawing : popupVisible}
               popupAlign={{
                 points: ['tr', 'br'],
                 offset: [0, 3],
