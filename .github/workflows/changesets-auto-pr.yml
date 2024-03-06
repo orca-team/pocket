@@ -1,27 +1,18 @@
-# Install dependence and running `changesets publish`
+# This workflow will run changesets version and create PR to master
 
-name: Publish orca-pocket
+name: changesets-auto-pr
 
 on:
   workflow_dispatch:
   push:
-    branches:
+    branches-ignore:
       - master
     paths:
-      - 'packages/*/package.json'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - '.github/workflows/publish.yml'
+      - '.changeset/*'
 
 jobs:
   replace-package-json-and-publish:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: write
-      packages: write
-      pull-requests: write
-      issues: read
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,31 +25,22 @@ jobs:
         run: |
           npm i pnpm -g
           pnpm i --no-frozen-lockfile
-      - name: publish
+      - name: changesets-version
         id: changesets
         uses: changesets/action@v1
-        with:
-          publish: npm run pub:only
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Format publish log
-        id: publish_log
-        run: node ./log.cjs
-        env:
-          CHANGED_PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
       - name: Dingtalk Notify
         uses: zcong1993/actions-ding@master
-        if: always()
+        if: steps.changesets.outputs.hasChangesets == 'true'
         with:
           dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
           body: |
             {
                 "msgtype": "markdown",
                 "markdown": {
-                    "title":"${{ steps.publish_log.outputs.title }}",
-                    "text": "${{ steps.publish_log.outputs.content }}"
+                    "title":"orca-pocket PR 创建提示",
+                    "text": "## Orca-Pocket PR 已创建\n 请查看[PR列表](https://github.com/orca-team/pocket/pulls)"
                 },
                 "at": {
                     "isAtAll": false
