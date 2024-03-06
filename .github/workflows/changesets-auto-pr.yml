@@ -25,9 +25,13 @@ jobs:
         run: |
           npm i pnpm -g
           pnpm i --no-frozen-lockfile
+      - name: Get current timestamp
+        run: echo "timestamp=$(date +'%Y-%m-%d_%H_%M_%S')" >> $GITHUB_ENV
       - name: changesets-version
         id: changesets
         uses: changesets/action@v1
+        with:
+          title: Pull Request ${{ env.timestamp }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Dingtalk Notify
@@ -39,7 +43,7 @@ jobs:
             {
                 "msgtype": "markdown",
                 "markdown": {
-                    "title":"orca-pocket PR 创建提示",
+                    "title":"orca-fe PR 创建提示",
                     "text": "## Orca-Pocket PR 已创建\n 请查看[PR列表](https://github.com/orca-team/pocket/pulls)"
                 },
                 "at": {
