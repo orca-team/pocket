@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.21.6
+
+### Patch Changes
+
+- 354a8a2: 新增插件实例ID，解决状态冲突问题等
+
 ## 1.21.5
 
 ### Patch Changes
