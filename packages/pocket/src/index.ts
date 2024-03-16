@@ -64,6 +64,8 @@ import LoadMore from './load-more';
 import type { SimpleFormProps, SimpleFormItemProps } from './simple-form';
 import SimpleForm from './simple-form';
 import ViewportSensor3d from './viewport-sensor-3d';
+import ScreenCover from './screen-cover';
+import type { ScreenCoverProps } from './screen-cover';
 
 export type {
   EqRatioBoxProps,
@@ -106,6 +108,7 @@ export type {
   LoadMoreProps,
   SimpleFormProps,
   SimpleFormItemProps,
+  ScreenCoverProps,
 };
 
 export {
@@ -144,4 +147,5 @@ export {
   LoadMore,
   SimpleForm,
   ViewportSensor3d,
+  ScreenCover,
 };
