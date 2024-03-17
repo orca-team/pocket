@@ -8,6 +8,8 @@ export default createUseStyles(
     root: {
       position: 'relative',
       visibility: 'hidden',
+      height: 0,
+      overflow: 'hidden',
     },
     show: {
       position: 'fixed',
