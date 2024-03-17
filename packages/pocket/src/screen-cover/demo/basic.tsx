@@ -34,7 +34,7 @@ const Demo = () => {
       <Button type="primary" onClick={handleClick}>
         全屏加载
       </Button>
-      <ScreenCover visible={visible} bodyScrollLock>
+      <ScreenCover visible={visible}>
         <Flex vertical align="center" justify="center" gap={6}>
           <div>进度加载中...</div>
           <Progress type="line" steps={25} percent={percent} />
