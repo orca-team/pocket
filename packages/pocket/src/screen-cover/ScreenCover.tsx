@@ -34,7 +34,17 @@ export interface ScreenCoverProps extends Omit<React.HTMLAttributes<HTMLDivEleme
 }
 
 const ScreenCover = (props: ScreenCoverProps) => {
-  const { className = '', visible, mask = true, bodyScrollLock = true, position = {}, zIndex = 1000, children, style = {}, ...otherProps } = props;
+  const {
+    className = '',
+    visible = false,
+    mask = true,
+    bodyScrollLock = true,
+    position = {},
+    zIndex = 1000,
+    children,
+    style = {},
+    ...otherProps
+  } = props;
   const styles = useStyles();
   const [_this] = useState<{ oldBodyStyle?: CSSProperties }>({});
 

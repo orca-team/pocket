@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ScreenCover } from '@orca-fe/pocket';
-import { Button, Flex, Progress } from 'antd';
+import { Button, Flex, Progress, message } from 'antd';
 import { useRafInterval } from 'ahooks';
 
 const Demo = () => {
@@ -26,6 +26,7 @@ const Demo = () => {
       setPercent(0);
       setDelay(undefined);
       setVisible(false);
+      message.success('数据加载完成');
     }
   }, [percent]);
 
@@ -36,7 +37,7 @@ const Demo = () => {
       </Button>
       <ScreenCover visible={visible}>
         <Flex vertical align="center" justify="center" gap={6}>
-          <div>进度加载中...</div>
+          <div style={{ color: '#d3d3d3' }}>进度加载中...</div>
           <Progress type="line" steps={25} percent={percent} />
         </Flex>
       </ScreenCover>
