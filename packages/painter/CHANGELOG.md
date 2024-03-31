@@ -1,5 +1,14 @@
 # @orca-fe/painter
 
+## 0.0.0-prepublish-20240331144235
+
+### Patch Changes
+
+- Updated dependencies [0bf6c84]
+  - @orca-fe/tools@0.0.0-prepublish-20240331144235
+  - @orca-fe/pocket@0.0.0-prepublish-20240331144235
+  - @orca-fe/transformer@0.0.0-prepublish-20240331144235
+
 ## 1.4.52
 
 ### Patch Changes

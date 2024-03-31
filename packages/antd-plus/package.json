@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/antd-plus",
-  "version": "0.3.28",
+  "version": "0.0.0-prepublish-20240331144235",
   "description": "Transformer Container",
   "keywords": [
     "react",
@@ -38,9 +38,9 @@
   "dependencies": {
     "@orca-fe/hooks": "^1.11.1",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
-    "@orca-fe/pocket": "^3.4.2",
+    "@orca-fe/pocket": "0.0.0-prepublish-20240331144235",
     "@orca-fe/simple-jss": "^0.0.3",
-    "@orca-fe/tools": "^0.10.0",
+    "@orca-fe/tools": "0.0.0-prepublish-20240331144235",
     "ahooks": "^3.7.8",
     "classnames": "^2.3.2",
     "json5": "^2.2.3",

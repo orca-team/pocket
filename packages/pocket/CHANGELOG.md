@@ -1,5 +1,12 @@
 # @orca-fe/pocket
 
+## 0.0.0-prepublish-20240331144235
+
+### Patch Changes
+
+- Updated dependencies [0bf6c84]
+  - @orca-fe/tools@0.0.0-prepublish-20240331144235
+
 ## 3.4.2
 
 ### Patch Changes

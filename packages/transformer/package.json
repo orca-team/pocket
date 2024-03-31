@@ -1,6 +1,6 @@
 {
   "name": "@orca-fe/transformer",
-  "version": "0.3.29",
+  "version": "0.0.0-prepublish-20240331144235",
   "description": "Transformer Container",
   "keywords": [
     "react",
@@ -43,7 +43,7 @@
     "prefix-classnames": "^0.0.7",
     "tslib": "^2.6.2",
     "@orca-fe/hooks": "^1.11.1",
-    "@orca-fe/tools": "^0.10.0"
+    "@orca-fe/tools": "0.0.0-prepublish-20240331144235"
   },
   "peerDependencies": {
     "react": ">=16.8.0",

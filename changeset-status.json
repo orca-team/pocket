@@ -1,0 +1,58 @@
+{
+  "changesets": [
+    {
+      "releases": [
+        {
+          "name": "@orca-fe/tools",
+          "type": "patch"
+        }
+      ],
+      "summary": "just test",
+      "id": "great-donuts-work"
+    }
+  ],
+  "releases": [
+    {
+      "name": "@orca-fe/tools",
+      "type": "patch",
+      "oldVersion": "0.10.0",
+      "changesets": ["great-donuts-work"],
+      "newVersion": "0.10.1"
+    },
+    {
+      "name": "@orca-fe/antd-plus",
+      "type": "patch",
+      "oldVersion": "0.3.28",
+      "changesets": [],
+      "newVersion": "0.3.29"
+    },
+    {
+      "name": "@orca-fe/painter",
+      "type": "patch",
+      "oldVersion": "1.4.52",
+      "changesets": [],
+      "newVersion": "1.4.53"
+    },
+    {
+      "name": "@orca-fe/pdf-viewer",
+      "type": "patch",
+      "oldVersion": "1.21.6",
+      "changesets": [],
+      "newVersion": "1.21.7"
+    },
+    {
+      "name": "@orca-fe/pocket",
+      "type": "patch",
+      "oldVersion": "3.4.2",
+      "changesets": [],
+      "newVersion": "3.4.3"
+    },
+    {
+      "name": "@orca-fe/transformer",
+      "type": "patch",
+      "oldVersion": "0.3.29",
+      "changesets": [],
+      "newVersion": "0.3.30"
+    }
+  ]
+}
