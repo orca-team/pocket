@@ -27,11 +27,25 @@ jobs:
           pnpm i --no-frozen-lockfile
       - name: Get current timestamp
         run: echo "timestamp=$(date +'%Y-%m-%d_%H_%M_%S')" >> $GITHUB_ENV
+      - name: Get changeset status
+        uses: actions/github-script@v5
+        id: changesetStatus
+        with:
+          script: |
+            require('zx/globals');
+            const fs = require('fs');
+            const core = require('@actions/core');
+            await $`npx changeset status --output changeset-status.json`;
+            const status = JSON.parse(fs.readFileSync('changeset-status.json'));
+            const message = [...new Set(status.changesets.map(({summary}) => summary))].join('; ');
+            core.setOutput('status', message);
       - name: changesets-version
         id: changesets
         uses: changesets/action@v1
         with:
-          title: Pull Request ${{ env.timestamp }}
+          title: Pull Request ${{ steps.changesetStatus.outputs.status }}
+          version: changeset version --snapshot prepublish
+          publish: npm run pub:only
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Dingtalk Notify
