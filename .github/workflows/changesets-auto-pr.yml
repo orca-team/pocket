@@ -32,9 +32,9 @@ jobs:
         id: changesetStatus
         with:
           script: |
-            import 'zx/globals';
-            import fs from 'fs';
-            await $`npx changeset status --output changeset-status.json`;
+            const { execSync } = require('child_process');
+            const fs = require('fs');
+            execSync(`npx changeset status --output changeset-status.json`);
             const status = JSON.parse(fs.readFileSync('changeset-status.json'));
             const message = [...new Set(status.changesets.map(({summary}) => summary))].join('; ');
             core.setOutput('status', message);
