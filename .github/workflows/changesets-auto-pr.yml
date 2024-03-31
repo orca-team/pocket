@@ -32,8 +32,8 @@ jobs:
         id: changesetStatus
         with:
           script: |
-            require('zx/globals');
-            const fs = require('fs');
+            import 'zx/globals';
+            import fs from 'fs';
             await $`npx changeset status --output changeset-status.json`;
             const status = JSON.parse(fs.readFileSync('changeset-status.json'));
             const message = [...new Set(status.changesets.map(({summary}) => summary))].join('; ');
