@@ -36,7 +36,7 @@ jobs:
         uses: changesets/action@v1
         with:
           title: Pull Request ${{ steps.changesetStatus.outputs.status }}
-          version: changeset version --snapshot prepublish
+          version: node ./node_modules/@changesets/cli/bin.js version --snapshot prepublish
           publish: npm run pub:only
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
