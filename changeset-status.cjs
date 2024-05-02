@@ -14,4 +14,4 @@ const changedPackages = [...new Set(status.releases.map(({ name }) => `- ${name}
 core.setOutput('changedPackages', changedPackages);
 
 console.log('Updating pre-publish version...');
-execSync(`npm run cv:pub`);
+execSync(`npm run cv:pre`);
