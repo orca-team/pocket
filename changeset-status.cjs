@@ -10,7 +10,19 @@ const message = [...new Set(status.changesets.map(({ summary }) => summary))].jo
 core.setOutput('status', message);
 core.setOutput('hasChangesets', String(status.changesets.length > 0));
 
-const changedPackages = [...new Set(status.releases.map(({ name }) => `- ${name}@0.0.0-prepublish-${process.env.TIMESTAMP}`))].join('\n ');
+const now = new Date();
+const year = now.getFullYear();
+const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+const day = String(now.getDate()).padStart(2, '0');
+const hours = String(now.getHours()).padStart(2, '0');
+const minutes = String(now.getMinutes()).padStart(2, '0');
+const seconds = String(now.getSeconds()).padStart(2, '0');
+
+const timestamp = `${year}${month}${day}${hours}${minutes}${seconds}`;
+
+process.env.TIMESTAMP = timestamp;
+
+const changedPackages = [...new Set(status.releases.map(({ name }) => `- ${name}@0.0.0-prepublish-${timestamp}`))].join('\n ');
 core.setOutput('changedPackages', changedPackages);
 
 console.log('Updating pre-publish version...');
