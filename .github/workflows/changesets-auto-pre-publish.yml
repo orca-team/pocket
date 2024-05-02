@@ -1,6 +1,6 @@
 # This workflow will run changesets version and create PR to master
 
-name: changesets-auto-pr
+name: changesets-auto-pre-publish
 
 on:
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
       - name: Get current timestamp
         run: echo "timestamp=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
       - name: Pre Publish
-        id: changesetStatus
+        id: changesets
         run: |
           node ./changeset-status.cjs
           npm run pub:pre
