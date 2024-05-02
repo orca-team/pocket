@@ -4,11 +4,10 @@ name: changesets-auto-pr
 
 on:
   workflow_dispatch:
-  push:
-    branches-ignore:
+  pull_request:
+    types: [ opened, reopened ]
+    branches:
       - master
-    paths:
-      - '.changeset/*'
 
 jobs:
   replace-package-json-and-publish:
@@ -31,15 +30,18 @@ jobs:
         id: changesetStatus
         run: |
           node ./changeset-status.cjs
-      - name: changesets-version
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          title: Pull Request ${{ steps.changesetStatus.outputs.status }}
-          version: node ./node_modules/@changesets/cli/bin.js version --snapshot prepublish
-          publish: npm run pub:only
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #      - name: changesets-version
+      #        id: changesets
+      #        uses: changesets/action@v1
+      #        with:
+      #          title: Pull Request ${{ steps.changesetStatus.outputs.status }}
+      #          version: node ./node_modules/@changesets/cli/bin.js version --snapshot prepublish
+      #        env:
+      #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: changesets update version
+        run: changeset version --snapshot prepublish
+      - name: Pre Publish
+        run: npm run pub:pre
       - name: Dingtalk Notify
         uses: zcong1993/actions-ding@master
         if: steps.changesets.outputs.hasChangesets == 'true'
@@ -49,8 +51,8 @@ jobs:
             {
                 "msgtype": "markdown",
                 "markdown": {
-                    "title":"orca-fe PR 创建提示",
-                    "text": "## Orca-Pocket PR 已创建\n 请查看[PR列表](https://github.com/orca-team/pocket/pulls)"
+                    "title":"orca-fe 发布提醒",
+                    "text": "## Orca-Pocket 临时版本已发布\n "
                 },
                 "at": {
                     "isAtAll": false
