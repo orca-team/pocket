@@ -10,7 +10,7 @@ on:
       - master
 
 jobs:
-  replace-package-json-and-publish:
+  pre-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -38,10 +38,10 @@ jobs:
       #          version: node ./node_modules/@changesets/cli/bin.js version --snapshot prepublish
       #        env:
       #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: changesets update version
-        run: changeset version --snapshot prepublish
       - name: Pre Publish
-        run: npm run pub:pre
+        run: |
+          npm run cv:pre
+          npm run pub:pre
       - name: Dingtalk Notify
         uses: zcong1993/actions-ding@master
         if: steps.changesets.outputs.hasChangesets == 'true'

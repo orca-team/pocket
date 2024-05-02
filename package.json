@@ -16,6 +16,7 @@
     "deploy": "npm run docs:build && npm run docs:deploy",
     "c": "changeset",
     "cv": "changeset && changeset version",
+    "cv:pre": "changeset version --snapshot prepublish",
     "pub": "npm run test && changeset publish && git push",
     "pub:only": "npm run test && changeset publish",
     "pub:pre": "changeset publish --tag prepublish",
