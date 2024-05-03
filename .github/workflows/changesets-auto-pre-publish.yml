@@ -8,6 +8,9 @@ on:
     types: [ opened, reopened, synchronize ]
     branches:
       - master
+concurrency:
+  group: changesets-auto-pre-publish-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   pre-publish:
@@ -24,8 +27,8 @@ jobs:
         run: |
           npm i pnpm -g
           pnpm i --no-frozen-lockfile
-      - name: Get current timestamp
-        run: echo "timestamp=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+#      - name: Get current timestamp
+#        run: echo "timestamp=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
       - name: Pre Publish
         id: changesets
         run: |
