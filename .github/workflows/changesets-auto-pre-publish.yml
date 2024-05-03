@@ -46,7 +46,7 @@ jobs:
               owner,
               repo,
               issue_number,
-              body: '## Orca-Pocket 临时版本已发布\n ${{steps.changesets.outputs.changedPackages}}'
+              body: `## Orca-Pocket 临时版本已发布\n ${{steps.changesets.outputs.changedPackages}}`
             });
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
