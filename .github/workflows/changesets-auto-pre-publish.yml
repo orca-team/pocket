@@ -1,0 +1,68 @@
+# This workflow will run changesets version and create PR to master
+
+name: changesets-auto-pre-publish
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [ opened, reopened, synchronize ]
+    branches:
+      - master
+concurrency:
+  group: changesets-auto-pre-publish-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  pre-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+      - name: install dependencies
+        run: |
+          npm i pnpm -g
+          pnpm i --no-frozen-lockfile
+      - name: Pre Publish
+        id: changesets
+        run: |
+          node ./changeset-status.cjs
+          npm run pub:pre
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Comment PR
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const issue_number = context.payload.pull_request.number;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const { data: comment } = await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number,
+              body: `## Orca-Pocket 临时版本已发布\n ${{steps.changesets.outputs.changedPackages}}`
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Dingtalk Notify
+        uses: zcong1993/actions-ding@master
+        if: steps.changesets.outputs.hasChangesets == 'true'
+        with:
+          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
+          body: |
+            {
+                "msgtype": "markdown",
+                "markdown": {
+                    "title":"orca-fe 发布提醒",
+                    "text": "## Orca-Pocket 临时版本已发布\n ${{steps.changesets.outputs.changedPackages}}\n\nTriggered by [PR#${{ github.event.pull_request.number }}](https://github.com/orca-team/pocket/pull/${{ github.event.pull_request.number }})"
+                },
+                "at": {
+                    "isAtAll": false
+                }
+            }
