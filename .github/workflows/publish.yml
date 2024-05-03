@@ -34,6 +34,8 @@ jobs:
         run: |
           npm i pnpm -g
           pnpm i --no-frozen-lockfile
+          git config --global user.email "action-robot@github.com"
+          git config --global user.name "action-robot"
           git commit -am 'commit lock file'
       - name: publish
         id: changesets
