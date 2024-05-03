@@ -34,6 +34,7 @@ jobs:
         run: |
           npm i pnpm -g
           pnpm i --no-frozen-lockfile
+          git commit -am 'commit lock file'
       - name: publish
         id: changesets
         uses: changesets/action@v1
