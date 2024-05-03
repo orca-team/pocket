@@ -32,7 +32,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: install dependencies
         run: |
-          npm i pnpm -g
+          npm i pnpm@latest-8 -g
           pnpm i --no-frozen-lockfile
           git config --global user.email "action-robot@github.com"
           git config --global user.name "action-robot"
