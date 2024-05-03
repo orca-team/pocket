@@ -22,7 +22,8 @@ const timestamp = `${year}${month}${day}${hours}${minutes}${seconds}`;
 
 process.env.TIMESTAMP = timestamp;
 
-const changedPackages = [...new Set(status.releases.map(({ name }) => `- ${name}@0.0.0-prepublish-${timestamp}`))].join('\n ');
+const changedPackages = [...new Set(status.releases.map(({ name }) =>
+  `- [${name}@0.0.0-prepublish-${timestamp}](https://www.npmjs.com/package/${name}/v/0.0.0-prepublish-${timestamp})`))].join('\n ');
 core.setOutput('changedPackages', changedPackages);
 
 console.log('Updating pre-publish version...');
