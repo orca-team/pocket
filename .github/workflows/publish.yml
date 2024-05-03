@@ -41,6 +41,7 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
+          title: MR Check
           publish: npm run pub:only
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
