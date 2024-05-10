@@ -1,3 +1,6 @@
+/**
+ * title: 基本使用
+ */
 import React from 'react';
 import { usePromisifyModal } from '@orca-fe/hooks';
 import { Button, Modal } from 'antd';
@@ -10,18 +13,16 @@ export default () => {
     <div>
       <Button
         onClick={() => {
-          // 3. 调用 modal.show 打开弹窗，弹框的书写方式和 antd 的 Modal 一致
-          modal.show(
+          // 3. 调用 modal.open 打开弹窗，弹框的书写方式和 antd 的 Modal 一致
+          modal.open(
             <Modal title="弹框标题">
               <div>弹框内容</div>
+              <div>工具会默认监听 onOk onCancel 事件，自动处理 visible 状态。</div>
               <div>
-                工具会默认监听 onOk onCancel 事件，自动处理 visible 状态。
-              </div>
-              <div>
-                你也可以使用 close 方法主动关闭弹框，比如：
+                你也可以使用 destroy 方法主动关闭弹框，比如：
                 <Button
                   onClick={() => {
-                    modal.hide();
+                    modal.destroy();
                   }}
                 >
                   主动关闭

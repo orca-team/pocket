@@ -1,19 +1,18 @@
 import React from 'react';
 import { usePromisifyDrawer } from '@orca-fe/hooks';
-import { Button, Drawer, DrawerProps, Form, Input, message } from 'antd';
+import type { DrawerProps } from 'antd';
+import { Button, Drawer, Form, Input, message } from 'antd';
 
 const ef = () => {};
 
-const CustomDrawer = (
-  props: DrawerProps & { onOk?: (res: string) => void },
-) => {
+const CustomDrawer = (props: DrawerProps & { onOk?: (res: string) => void }) => {
   const { onOk = ef, ...otherProps } = props;
   const [form] = Form.useForm();
   return (
     <Drawer
       title="添加"
       {...otherProps}
-      footer={
+      footer={(
         <Button
           type="primary"
           htmlType="submit"
@@ -25,7 +24,7 @@ const CustomDrawer = (
         >
           确认
         </Button>
-      }
+      )}
     >
       <Form
         form={form}
@@ -44,13 +43,13 @@ const CustomDrawer = (
 export default () => {
   const drawer = usePromisifyDrawer();
   const handleClick = () => {
-    drawer.show(<Drawer title="标题">Drawer 的内容</Drawer>);
+    drawer.open(<Drawer title="标题">Drawer 的内容</Drawer>);
   };
   const customDrawer = usePromisifyDrawer({
     onOkField: 'onOk',
   });
   const handleCustomClick = async () => {
-    const res = await customDrawer.show<string>(<CustomDrawer />);
+    const res = await customDrawer.open<string>(<CustomDrawer />);
 
     message.info(`成功添加了：${res}`);
   };
