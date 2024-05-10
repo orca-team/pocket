@@ -2,14 +2,16 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDebounceFn, useMemoizedFn } from 'ahooks';
 import useMemorizedFn from './useMemorizedFn';
 
-// export type OnOkType<T> = (result: T) => (void | boolean | Promise<void | boolean>);
+const emptyFn = () => undefined;
 
 export const PromisifyModalContext = React.createContext({
-  ok: (() => {}) as (...args: any[]) => void,
-  cancel: () => {},
-  minimize: () => {},
-  resume: () => {},
-  resolve: (value: any) => {},
+  ok: emptyFn as (...args: any[]) => void,
+  cancel: emptyFn as () => void,
+  destroy: emptyFn as () => void,
+  minimize: emptyFn as () => void,
+  resume: emptyFn as () => void,
+  resolve: emptyFn as (...args: any[]) => void,
+  update: emptyFn as (...args: any[]) => void,
 });
 
 export type UsePromisifyModalOptions = {
