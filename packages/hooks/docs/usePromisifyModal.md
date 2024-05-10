@@ -38,8 +38,8 @@ export default () => {
     <div>
       <Button
         onClick={() => {
-          // 3. 调用 modal.show 打开弹窗，弹框的书写方式和 antd 的 Modal 一致
-          modal.show(<Modal title="弹框标题">弹框内容</Modal>);
+          // 3. 调用 modal.open 打开弹窗，弹框的书写方式和 antd 的 Modal 一致
+          modal.open(<Modal title="弹框标题">弹框内容</Modal>);
         }}
       >
         打开弹窗
@@ -51,15 +51,21 @@ export default () => {
 };
 ```
 
-> 注意：本工具使用函数的方式唤起弹窗，如果你在 show 弹窗的时候，使用到了 state 中的变量，在弹窗打开之后，state 的变化将无法影响到弹窗的渲染。如果你需要实现受状态控制的弹框，请不要使用本工具。
+> 注意：本工具使用函数的方式唤起弹窗，如果你在 open 弹窗的时候，使用到了 state 中的变量，在弹窗打开之后，state 的变化将无法影响到弹窗的渲染。如果你需要实现受状态控制的弹框，请不要使用本工具。
 
 ## Demo
 
-<code title="基本使用" src="../demo/usePromisifyModal/basic.tsx" ></code>
+<code src="../demo/usePromisifyModal/basic.tsx" ></code>
 
-<code title="带交互" description="弹窗中包含输入框等需要交互的内容" src="../demo/usePromisifyModal/interactive.tsx" ></code>
+<code src="../demo/usePromisifyModal/interactive.tsx" ></code>
 
-<code title="自定义弹窗" description="自定义弹窗指的是，你可以基于`Modal`封装属于自己的弹框组件，将复杂的业务逻辑放在弹框组件内部实现，只要对外仍保留 visible/onOk/onCancel 属性即可。" src="../demo/usePromisifyModal/custom.tsx" ></code>
+<code src="../demo/usePromisifyModal/custom.tsx" ></code>
+
+<code src="../demo/usePromisifyModal/async.tsx" ></code>
+
+<code src="../demo/usePromisifyModal/async2.tsx" ></code>
+
+<code src="../demo/usePromisifyModal/update.tsx" ></code>
 
 ### usePromisifyDrawer
 
@@ -108,28 +114,80 @@ function usePromisifyDrawer(options: UsePromisifyDrawerOptions): Handler;
 const modal = usePromisifyModal();
 ```
 
-#### show 显示
+#### modal.open 显示
 
 ```tsx | pure
-modal.show(<Modal title="title">content</Modal>);
+modal.open(<Modal title="title">content</Modal>);
 ```
 
-`modal.show` 返回一个 `Promise` 实例，当弹框点击确认时，`Promise` 的状态将由 `pending` 变为 `resolved`
+> modal.show === modal.open
 
-#### hide 隐藏（关闭）
+`modal.open` 返回一个 `Promise` 实例，当弹框点击确认时，`Promise` 的状态将由 `pending` 变为 `resolved`
 
-使用 `modal.hide()` 即可隐藏弹框。
+#### modal.ok 模拟 OK 按钮
 
-#### minimize 最小化
+如有 onOk 事件，会调用。执行完逻辑后，能够完成 Promise。
 
-与隐藏功能相同，但是不会销毁实例，恢复时可以继续上次的工作。
+#### modal.cancel 模拟 Cancel 按钮
 
-#### resume 恢复
+如有 onCancel 事件，会调用。执行完逻辑后，根据 rejectOnClose 配置，可能是永久 pending 或 抛出异常。
+
+#### modal.destroy 销毁（关闭）
+
+> modal.destroy === modal.hide
+
+使用 `modal.destroy()` 即可直接关闭弹框。Promise 仍会处于 pending。
+
+#### modal.minimize 最小化
+
+与关闭弹框功能相同，但是不会销毁实例，恢复时可以继续上次的工作。
+
+#### modal.resume 恢复
 
 恢复被最小化的弹窗
 
-使用 `modal.hide()` 即可隐藏弹框。
+使用 `modal.resume()` 即可回复隐藏的弹框。
 
-#### instance 渲染实例
+#### modal.instance 渲染实例
 
 你必须将 `modal.instance` 作为 `render` 渲染的内容，才能够正确渲染弹框。
+
+#### modal.resolve
+
+当 open 了一个弹窗后，调用 modal.resolve();
+
+直接触发 Promise.resolve，推进当前 Promise 结束。
+
+#### modal.update 更新已打开的弹窗属性
+
+```ts
+// 更新标题
+modal.update({
+  title: '新的标题',
+});
+```
+
+### open 实例的控制句柄
+
+> 不推荐通过 instance 操作 modal，因为所有方法都可以使用 modal.xxx 代替
+> open 后获得的 instance 本质是一个 Promise，只是上面挂载了一些方法。
+
+```tsx | pure
+const modal = usePromisifyModal();
+
+const instance = modal.open(<Modal>...</Modal>);
+
+// 模拟点击确认按钮 同 modal.ok();
+instance.ok();
+
+// 模拟点击取消按钮，会触发 onCancel 事件 同 modal.cancel();
+instance.cancel();
+
+// 直接关闭弹窗 同 modal.destroy();
+instance.destroy();
+// 或 同 modal.hide();
+instance.hide();
+
+// 跳过 onOk，直接完成 Promise。注意：该方法不会帮你关闭弹窗，需要自行主动调用 同 modal.resolve();
+instance.resolve(value);
+```

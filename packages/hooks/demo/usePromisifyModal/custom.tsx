@@ -1,13 +1,16 @@
+/**
+ * title: 自定义弹窗
+ * description: 自定义弹窗指的是，你可以基于`Modal`封装属于自己的弹框组件，将复杂的业务逻辑放在弹框组件内部实现，只要对外仍保留 visible/onOk/onCancel 属性即可。
+ */
 import React from 'react';
 import { usePromisifyModal } from '@orca-fe/hooks';
-import { Alert, Button, Form, Input, message, Modal, ModalProps } from 'antd';
+import type { ModalProps } from 'antd';
+import { Alert, Button, Form, Input, message, Modal } from 'antd';
 
 const ef = () => {};
 
 // 这是一个简单的自定义弹框组件
-const CustomModal = (
-  props: Omit<ModalProps, 'onOk'> & { onOk?: (name: string) => void },
-) => {
+const CustomModal = (props: Omit<ModalProps, 'onOk'> & { onOk?: (name: string) => void }) => {
   const { onOk = ef } = props;
   const [form] = Form.useForm();
   return (
@@ -36,7 +39,7 @@ export default () => {
     <div>
       <Button
         onClick={async () => {
-          const name = await modal.show<string>(<CustomModal />);
+          const name = await modal.open<string>(<CustomModal />);
           message.success(`已添加：${name}`);
         }}
       >

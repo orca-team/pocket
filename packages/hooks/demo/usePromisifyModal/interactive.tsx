@@ -1,3 +1,7 @@
+/**
+ * title: 带交互
+ * description: 弹窗中包含输入框等需要交互的内容
+ */
 import React from 'react';
 import { usePromisifyModal } from '@orca-fe/hooks';
 import { Button, Form, Input, message, Modal, Radio } from 'antd';
@@ -9,7 +13,7 @@ export default () => {
 
   const handleClick = async () => {
     let result: ResultType | undefined = undefined;
-    await modal.show(
+    await modal.open(
       <Modal title="添加商品">
         <Form<ResultType>
           onValuesChange={(_, v) => {
