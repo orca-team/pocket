@@ -272,5 +272,6 @@ export const usePromisifyDrawer = (options: UsePromisifyModalOptions = {}) =>
   usePromisifyModal({
     onCloseField: 'onClose',
     onOkField: '',
+    confirmLoadingPropName: '',
     ...options,
   });
