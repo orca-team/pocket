@@ -553,7 +553,6 @@ export const getPointByEvent = (event: PointerEvent | MouseEvent | TouchEvent) =
       y: event.touches?.[0]?.clientY,
     };
   }
-
   return {
     x: event.pageX,
     y: event.pageY,
