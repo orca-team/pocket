@@ -48,6 +48,7 @@ const ViewportSensor3d = (props: ViewportSensorProps) => {
   // console.log(viewport);
 
   usePan(({ start, startPosition, offset, ev, bounds }) => {
+    if (ev instanceof TouchEvent) return;
     if (start) {
       _this.button = ev.button;
       const viewport3d = new Viewport3d(viewport);

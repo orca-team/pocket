@@ -38,7 +38,7 @@ export interface TransformerBoxProps extends Omit<React.HTMLAttributes<HTMLDivEl
   onChangeStart?: (e: Event, type: ResizeType) => void;
 
   /** 拖动前的回调函数 */
-  onDragBefore?: (e: MouseEvent) => boolean;
+  onDragBefore?: (e: MouseEvent | TouchEvent) => boolean;
 
   /** Bounds信息变化时的回调函数 */
   onBoundsChange?: (bounds: Bounds) => void;
@@ -192,6 +192,7 @@ const TransformerBox = (props: TransformerBoxProps) => {
 
   const rootRef = useRef<HTMLDivElement>(null);
   usePan(({ target, start, startPosition, ev, offset, finish }) => {
+    // 兼容 touchEvent
     const currentPoint = getPointMapping(getPointByEvent(ev));
     if (start) {
       _this.distanceLock = true;

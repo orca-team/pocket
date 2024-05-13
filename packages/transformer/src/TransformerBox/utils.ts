@@ -374,7 +374,12 @@ export function calcLimitBounds(bounds: Bounds, limit?: Bounds) {
  * @param pointOffset 鼠标偏移
  * @param options
  */
-export const calcBoundsChangeBack = (startBounds: Bounds, _currentPoint: Point, pointOffset: Point, options: CalcPropsChangeOptions = {}): Partial<Bounds> => {
+export const calcBoundsChangeBack = (
+  startBounds: Bounds,
+  _currentPoint: Point,
+  pointOffset: Point,
+  options: CalcPropsChangeOptions = {},
+): Partial<Bounds> => {
   const { resizeType = 'move', eqRatio = false, symmetrical = false } = options;
   const { x, y } = pointOffset;
   const { top, left, width, height } = startBounds;
@@ -541,11 +546,19 @@ export const calcBoundsChangeBack = (startBounds: Bounds, _currentPoint: Point, 
   return {};
 };
 
-export const getPointByEvent = (event: PointerEvent | MouseEvent) =>
-  ({
+export const getPointByEvent = (event: PointerEvent | MouseEvent | TouchEvent) => {
+  if (event instanceof TouchEvent) {
+    return {
+      x: event.touches?.[0]?.clientX,
+      y: event.touches?.[0]?.clientY,
+    };
+  }
+
+  return {
     x: event.pageX,
     y: event.pageY,
-  } as Point);
+  };
+};
 
 export const getPointOffset = (p1: Point, p2: Point) => ({
   x: p2.x - p1.x,
