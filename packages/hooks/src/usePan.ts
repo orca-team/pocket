@@ -138,7 +138,7 @@ export default function usePan<T extends Target = Target>(
         }
       }
     },
-    { passive: false }, // 对于 touchmove，阻止默认的 passive 模式以允许阻止滚动
+    { passive: false }, // 对于 touchmove，阻止默认的 passive 模式，以允许阻止滚动
   );
 
   useEventListener('mouseup', (e) => {
