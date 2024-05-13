@@ -38,7 +38,7 @@ export interface TransformerLineProps extends Omit<React.HTMLAttributes<HTMLDivE
   onChangeStart?: (e: Event) => void;
 
   /** 拖动前的回调函数 */
-  onDragBefore?: (e: MouseEvent) => boolean;
+  onDragBefore?: (e: MouseEvent | TouchEvent) => boolean;
 
   /** 点位信息(默认) */
   defaultPoints?: Point[];
