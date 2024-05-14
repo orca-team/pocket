@@ -36,8 +36,7 @@ jobs:
           pnpm i --no-frozen-lockfile
           git config --global user.email "action-robot@github.com"
           git config --global user.name "action-robot"
-          git diff --quiet --cached || exit 0
-          git commit -am 'commit lock file'
+          git diff --quiet || git commit -am 'commit lock file'
       - name: publish
         id: changesets
         uses: changesets/action@v1
