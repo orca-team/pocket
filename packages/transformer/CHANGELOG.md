@@ -1,5 +1,18 @@
 # @orca-fe/painter
 
+## 0.3.31
+
+### Patch Changes
+
+- c602688: 更新发布
+- 9ffff97: PDF 新增的图片兼容 touch 事件
+- 2dc6f86: 更新版本
+- Updated dependencies [9a65ee8]
+- Updated dependencies [c602688]
+- Updated dependencies [9ffff97]
+- Updated dependencies [2dc6f86]
+  - @orca-fe/hooks@1.12.0
+
 ## 0.3.30
 
 ### Patch Changes
