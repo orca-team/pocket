@@ -1,5 +1,17 @@
 # @orca-fe/hooks
 
+## 1.12.0
+
+### Minor Changes
+
+- 9a65ee8: feat: usePromisifyModal 的句柄增加 resolve, update, ok, cancel, destroy 等方法
+
+### Patch Changes
+
+- c602688: 更新发布
+- 9ffff97: PDF 新增的图片兼容 touch 事件
+- 2dc6f86: 更新版本
+
 ## 1.11.1
 
 ### Patch Changes
