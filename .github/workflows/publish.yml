@@ -41,7 +41,7 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          title: MR Check
+          title: Prepublish check
           publish: npm run pub:only
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -51,7 +51,10 @@ jobs:
         id: publish_log
         run: node ./log.cjs
         env:
-          CHANGED_PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
+          CHANGESET_PUBLISHED_PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
+          CHANGESET_PUBLISHED: ${{ steps.changesets.outputs.published }}
+          CHANGESET_HAS_CHANGESETS: ${{ steps.changesets.outputs.hasChangesets }}
+          CHANGESET_PULL_REQUEST_NUMBER: ${{ steps.changesets.outputs.pullRequestNumber }}
       - name: Dingtalk Notify
         uses: zcong1993/actions-ding@master
         if: always()
