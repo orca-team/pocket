@@ -20,7 +20,7 @@
     "pub:only": "npm run test && changeset publish",
     "pub:pre": "changeset publish --tag prepublish",
     "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\"",
-    "lint-staged": "lint-staged",
+    "lint-staged": "lint-staged --allow-empty",
     "test": "pnpm --filter=@orca-fe/* run test ",
     "test:coverage": "umi-test --coverage",
     "postinstall": "husky install"
