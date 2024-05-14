@@ -123,7 +123,7 @@ async function main() {
 
   } else {
     core.setOutput('title', 'orca-fe 发布通知');
-    core.setOutput('content', `# Pocket 组件库\n\n流水线结束，未检测到新模块。
+    core.setOutput('content', `# Pocket 组件库\n\n流水线结束，未检测到新模块。`);
   }
 }
 
