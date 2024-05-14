@@ -105,7 +105,7 @@ async function main() {
 
     const resultTitle = result.length > 0 ? 'orca-fe 发布通知' : 'orca-fe 发布失败';
     const resultContent = result.length > 0 ? `# Pocket 组件库\\n\\n流水线结束，以下模块已发布：\n\n${
-      result.map(({ name, version, text }) => `## ${name}@${version}\n${text}`)
+      result.map(({ name, version, text }) => `## ${name}@${version}\n${text}`).join('\n\n')
     }` : '# Pocket 组件库\\n\\n流水线结束，模块发布失败，请检查。';
 
     core.setOutput('title', resultTitle);
