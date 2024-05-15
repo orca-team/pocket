@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 1.4.55
+
+### Patch Changes
+
+- fix: 修复图片下的缩放变量问题
+
 ## 1.4.54
 
 ### Patch Changes

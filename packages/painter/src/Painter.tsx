@@ -333,10 +333,10 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
               dataIndex,
             );
           }}
-          style={{
-            // @ts-expect-error 允许 variable
-            '--transformer-layout-scale': 'var(--scale-factor)',
-          }}
+          // style={{
+          //   // @ts-expect-error 允许 variable
+          //   '--transformer-layout-scale': 'var(--scale-factor)',
+          // }}
         >
           {(item, index) => (
             <>
