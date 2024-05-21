@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.21.10
+
+### Patch Changes
+
+- 6ca819d: orca-fe 依赖更改为 peerDependencies
+
 ## 1.21.9
 
 ### Patch Changes
