@@ -38,11 +38,8 @@
     "clear": "rimraf lib es"
   },
   "dependencies": {
-    "@orca-fe/hooks": "^1.12.0",
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
-    "@orca-fe/painter": "^1.4.55",
     "@orca-fe/pdfjs-dist-browserify": "^3.8.24",
-    "@orca-fe/pocket": "^3.4.4",
     "@orca-fe/simple-jss": "^0.0.3",
     "@orca-fe/tools": "^0.10.1",
     "ahooks": "^3.7.8",
@@ -54,6 +51,9 @@
     "tslib": "^2.6.2"
   },
   "peerDependencies": {
+    "@orca-fe/hooks": "^1.11.0",
+    "@orca-fe/painter": "^1.4.53",
+    "@orca-fe/pocket": "^3.2.4",
     "@ant-design/icons": "^4.7.0",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
