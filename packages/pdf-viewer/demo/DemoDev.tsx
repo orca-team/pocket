@@ -5,7 +5,14 @@
  */
 
 import React from 'react';
-import PdfViewer, { PDFContextPrintPlugin, PDFOpenFileButtonPlugin, PDFPainterPlugin, PDFTooltipPlugin, usePdfViewerRef } from '@orca-fe/pdf-viewer';
+import PdfViewer, {
+  PDFContextPrintPlugin,
+  PDFOpenFileButtonPlugin,
+  PDFPageDebugPlugin,
+  PDFPainterPlugin,
+  PDFTooltipPlugin,
+  usePdfViewerRef,
+} from '@orca-fe/pdf-viewer';
 
 const Demo1 = () => {
   const pdfViewerRef = usePdfViewerRef();
@@ -29,6 +36,7 @@ const Demo1 = () => {
         <PDFPainterPlugin />
         <PDFTooltipPlugin />
         <PDFContextPrintPlugin />
+        <PDFPageDebugPlugin />
       </PdfViewer>
     </div>
   );
