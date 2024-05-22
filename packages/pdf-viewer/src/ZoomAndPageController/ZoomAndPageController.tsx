@@ -39,8 +39,9 @@ const ZoomAndPageController = (props: ZoomAndPageControllerProps) => {
           }
         }}
         onChange={(value) => {
-          if (!Number.isNaN(Number(value) - 1)) {
-            pdfViewer.changePage(Number(value) - 1);
+          const newPage = Number(value) - 1;
+          if (!Number.isNaN(newPage) && pdfViewer.getCurrentPage() !== newPage) {
+            pdfViewer.changePage(newPage);
           }
         }}
       />
