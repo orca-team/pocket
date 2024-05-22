@@ -30,6 +30,9 @@ const ef = () => undefined;
 
 const round001 = roundBy(0.001);
 
+const PAGE_PADDING_TOP = 24;
+const PAGE_PADDING_BOTTOM = 60;
+
 const DefaultLoadingTips = () => {
   const [l] = useLocale(zhCN);
   return <div className="pdf-viewer-default-loading-tips">{l.loadingTips}</div>;
@@ -218,27 +221,32 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
 
   // 根据 viewport 信息生成每一页的实际位置信息
   const {
-    topArr: pageTopArr,
+    topArr: topArrOrigin,
     maxWidth,
-    pageMaxWidth,
-    pageMaxHeight,
+    pageMaxWidth: pageMaxWidthOrigin,
+    pageMaxHeight: pageMaxHeightOrigin,
+    bottom: pageBottomOrigin,
   } = useMemo(() => {
     let top = 0;
     let maxWidth = 0;
     let pageMaxWidth = 0;
     let pageMaxHeight = 0;
     const topArr = viewports.map(({ height: _height, width: _width }) => {
-      const width = _width * PixelsPerInch.PDF_TO_CSS_UNITS;
-      const height = _height * PixelsPerInch.PDF_TO_CSS_UNITS;
+      const width = _width;
+      const height = _height;
       const _top = top;
-      top += Math.floor(height + pageGap) * scale;
-      maxWidth = Math.max(width * scale, maxWidth);
+      top += height + pageGap;
+      maxWidth = Math.max(width, maxWidth);
       pageMaxWidth = Math.max(width, pageMaxWidth);
       pageMaxHeight = Math.max(height, pageMaxHeight);
       return _top;
     });
-    return { topArr, maxWidth, pageMaxWidth, pageMaxHeight };
-  }, [viewports, pageGap, scale]);
+    return { topArr, maxWidth, pageMaxWidth, pageMaxHeight, bottom: top };
+  }, [viewports, pageGap]);
+
+  const pageTopArr = useMemo(() => topArrOrigin.map(top => top * scale * PixelsPerInch.PDF_TO_CSS_UNITS), [scale, topArrOrigin]);
+  const pageMaxWidth = pageMaxWidthOrigin * scale * PixelsPerInch.PDF_TO_CSS_UNITS;
+  const pageMaxHeight = pageMaxHeightOrigin * scale * PixelsPerInch.PDF_TO_CSS_UNITS;
 
   const [zoomMode, setZoomMode] = useState<false | 'autoWidth' | 'autoHeight'>(typeof defaultZoom === 'number' ? false : defaultZoom);
 
@@ -264,7 +272,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
 
   useEffect(() => {
     autoZoomDebounce.run();
-  }, [zoomMode, pageMaxHeight, pageMaxWidth]);
+  }, [zoomMode, pageMaxHeightOrigin, pageMaxWidthOrigin]);
 
   // 自动调整缩放级别
   useSizeListener((size) => {
@@ -719,11 +727,13 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                 {viewports.length === 0 && !loading && !pluginLoading && emptyTips}
                 {viewports.map((viewport, pageIndex) => {
                   const shouldRender = pageIndex >= renderRange[0] && pageIndex <= renderRange[1];
+                  const top = `calc(var(--scale-factor) * ${PAGE_PADDING_TOP + Math.floor(topArrOrigin[pageIndex])}px)`;
+                  const left = `calc(var(--scale-factor) * ${Math.floor((maxWidth - viewport.width) * 0.5)}px)`;
                   const width = `calc(var(--scale-factor) * ${Math.floor(viewport.width)}px)`;
                   const height = `calc(var(--scale-factor) * ${Math.floor(viewport.height)}px)`;
-                  const gap = `calc(var(--scale-factor) * ${pageGap}px)`;
+                  // const gap = `calc(var(--scale-factor) * ${pageGap}px)`;
                   return (
-                    <div key={pageIndex} className={styles.pageContainer} style={{ width, height, marginBottom: gap }}>
+                    <div key={pageIndex} className={styles.pageContainer} style={{ top, marginLeft: left, width, height /* , marginBottom: gap*/ }}>
                       {shouldRender && (
                         <>
                           <PDFPage className={styles.page} outputScale={outputScale} index={pageIndex} zoom={zoom} render={shouldRender} />
@@ -734,6 +744,13 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                     </div>
                   );
                 })}
+                <div
+                  className={styles.pageBottomPlaceholder}
+                  data-name="page-bottom-place-holder"
+                  style={{ top: `calc(var(--scale-factor) * ${pageBottomOrigin + PAGE_PADDING_BOTTOM}px)` }}
+                >
+                  &nbsp;
+                </div>
               </ContextMenu>
               {(loading || !!pluginLoading) && loadingTips}
 
