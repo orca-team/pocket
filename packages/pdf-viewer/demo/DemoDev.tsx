@@ -4,7 +4,7 @@
  * debug: true
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import PdfViewer, {
   PDFContextPrintPlugin,
   PDFOpenFileButtonPlugin,
@@ -13,8 +13,11 @@ import PdfViewer, {
   PDFTooltipPlugin,
   usePdfViewerRef,
 } from '@orca-fe/pdf-viewer';
+import { JsonViewer } from '@orca-fe/pocket';
 
 const Demo1 = () => {
+  const [data, setData] = useState<any[]>([]);
+
   const pdfViewerRef = usePdfViewerRef();
   return (
     <div>
@@ -33,11 +36,13 @@ const Demo1 = () => {
       />
       <PdfViewer ref={pdfViewerRef} dropFile pdfJsParams={{ cMapUrl: '/pdfjs-bcmaps/' }} style={{ height: 600 }}>
         <PDFOpenFileButtonPlugin />
-        <PDFPainterPlugin />
+        <PDFPainterPlugin data={data} onDataChange={setData} />
         <PDFTooltipPlugin />
         <PDFContextPrintPlugin />
         <PDFPageDebugPlugin />
       </PdfViewer>
+      <div>绘图数据：</div>
+      <JsonViewer value={data} />
     </div>
   );
 };
