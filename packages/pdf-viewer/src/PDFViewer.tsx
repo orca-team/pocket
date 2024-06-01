@@ -31,6 +31,7 @@ const ef = () => undefined;
 const round001 = roundBy(0.001);
 
 const PAGE_PADDING_TOP = 24;
+const PAGE_PADDING_HORIZONTAL = 24;
 const PAGE_PADDING_BOTTOM = 60;
 
 const DefaultLoadingTips = () => {
@@ -222,13 +223,11 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   // 根据 viewport 信息生成每一页的实际位置信息
   const {
     topArr: topArrOrigin,
-    maxWidth,
-    pageMaxWidth: pageMaxWidthOrigin,
-    pageMaxHeight: pageMaxHeightOrigin,
+    pageMaxWidth,
+    pageMaxHeight,
     bottom: pageBottomOrigin,
   } = useMemo(() => {
     let top = 0;
-    let maxWidth = 0;
     let pageMaxWidth = 0;
     let pageMaxHeight = 0;
     const topArr = viewports.map(({ height: _height, width: _width }) => {
@@ -236,29 +235,26 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       const height = _height;
       const _top = top;
       top += height + pageGap;
-      maxWidth = Math.max(width, maxWidth);
       pageMaxWidth = Math.max(width, pageMaxWidth);
       pageMaxHeight = Math.max(height, pageMaxHeight);
       return _top;
     });
-    return { topArr, maxWidth, pageMaxWidth, pageMaxHeight, bottom: top };
+    return { topArr, pageMaxWidth, pageMaxHeight, bottom: top };
   }, [viewports, pageGap]);
 
   const pageTopArr = useMemo(() => topArrOrigin.map(top => top * scale * PixelsPerInch.PDF_TO_CSS_UNITS), [scale, topArrOrigin]);
-  const pageMaxWidth = pageMaxWidthOrigin * scale * PixelsPerInch.PDF_TO_CSS_UNITS;
-  const pageMaxHeight = pageMaxHeightOrigin * scale * PixelsPerInch.PDF_TO_CSS_UNITS;
 
   const [zoomMode, setZoomMode] = useState<false | 'autoWidth' | 'autoHeight'>(typeof defaultZoom === 'number' ? false : defaultZoom);
 
   const autoZoomDebounce = useDebounceFn(
     () => {
       let newZoom = zoom;
-      if (zoomMode && _this.size && maxWidth && pageMaxHeight) {
+      if (zoomMode && _this.size && pageMaxWidth && pageMaxHeight) {
         if (zoomMode === 'autoWidth') {
           // 调整缩放级别，使其与容器宽度匹配
-          newZoom = Math.log2((_this.size.width - 32) / pageMaxWidth);
+          newZoom = Math.log2((_this.size.width - 20 - 2 * PAGE_PADDING_HORIZONTAL) / (pageMaxWidth * PixelsPerInch.PDF_TO_CSS_UNITS));
         } else if (zoomMode === 'autoHeight') {
-          newZoom = Math.log2((_this.size.height - 32) / pageMaxHeight);
+          newZoom = Math.log2((_this.size.height - 32) / (pageMaxHeight * PixelsPerInch.PDF_TO_CSS_UNITS));
         }
       }
 
@@ -272,7 +268,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
 
   useEffect(() => {
     autoZoomDebounce.run();
-  }, [zoomMode, pageMaxHeightOrigin, pageMaxWidthOrigin]);
+  }, [zoomMode, pageMaxHeight, pageMaxWidth]);
 
   // 自动调整缩放级别
   useSizeListener((size) => {
@@ -283,8 +279,13 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
 
     _this.size = size;
 
+    const body = bodyRef;
+    if (body) {
+      body.style.setProperty('--pdf-viewer-page-width', `${size.width}px`);
+    }
+
     autoZoomDebounce.run();
-  }, rootRef);
+  }, bodyRef);
 
   // 翻頁
   const changePage = useMemoizedFn((page: number, anim = false) => {
@@ -495,9 +496,11 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
         const x = clientX - left;
         const y = clientY - top;
 
+        const pageMaxWidthScale = pageMaxWidth * scale * PixelsPerInch.PDF_TO_CSS_UNITS;
+
         if (!_this.mousePositionBeforeWheel) {
           _this.mousePositionBeforeWheel = {
-            x: x + dom.scrollLeft - 0.5 * (maxWidth < width ? width - maxWidth : 0),
+            x: x + dom.scrollLeft - 0.5 * (pageMaxWidthScale < width ? width - pageMaxWidthScale : 0),
             y: y + dom.scrollTop,
             zoom,
           };
@@ -698,7 +701,17 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                 setToolbarRightDom(dom);
               }}
             />
-            <div ref={setBodyRef} className={cn(styles.pagesOuter, { [styles.droppable]: dropFile })}>
+            <div
+              ref={setBodyRef}
+              className={cn(styles.pagesOuter, { [styles.droppable]: dropFile })}
+              style={
+                {
+                  '--scale-factor': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
+                  '--scale-factor-origin': scale,
+                  '--pdf-viewer-page-scale': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
+                } as CSSProperties
+              }
+            >
               <ContextMenu
                 ref={pageContainerRef}
                 className={styles.pages}
@@ -716,24 +729,18 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                       },
                     } as ContextMenuItemType,
                   ].concat(menuCollector.collect().sort((a, b) => (a.order || 0) - (b.order || 0)))}
-                style={
-                  {
-                    '--scale-factor': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
-                    '--scale-factor-origin': scale,
-                    '--pdf-viewer-page-scale': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
-                  } as CSSProperties
-                }
               >
                 {viewports.length === 0 && !loading && !pluginLoading && emptyTips}
                 {viewports.map((viewport, pageIndex) => {
                   const shouldRender = pageIndex >= renderRange[0] && pageIndex <= renderRange[1];
                   const top = `calc(var(--scale-factor) * ${PAGE_PADDING_TOP + Math.floor(topArrOrigin[pageIndex])}px)`;
-                  const left = `calc(var(--scale-factor) * ${Math.floor((maxWidth - viewport.width) * 0.5)}px)`;
+                  const marginLeft = `max(${PAGE_PADDING_HORIZONTAL}px, (var(--pdf-viewer-page-width) - var(--scale-factor) * ${pageMaxWidth}px) * 0.5)`;
+                  const left = `calc(${marginLeft} + var(--scale-factor) * ${Math.floor((pageMaxWidth - viewport.width) * 0.5)}px)`;
                   const width = `calc(var(--scale-factor) * ${Math.floor(viewport.width)}px)`;
                   const height = `calc(var(--scale-factor) * ${Math.floor(viewport.height)}px)`;
                   // const gap = `calc(var(--scale-factor) * ${pageGap}px)`;
                   return (
-                    <div key={pageIndex} className={styles.pageContainer} style={{ top, marginLeft: left, width, height /* , marginBottom: gap*/ }}>
+                    <div key={pageIndex} className={styles.pageContainer} style={{ top, left, width, height }}>
                       {shouldRender && (
                         <>
                           <PDFPage className={styles.page} outputScale={outputScale} index={pageIndex} zoom={zoom} render={shouldRender} />
@@ -747,7 +754,10 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                 <div
                   className={styles.pageBottomPlaceholder}
                   data-name="page-bottom-place-holder"
-                  style={{ top: `calc(var(--scale-factor) * ${pageBottomOrigin + PAGE_PADDING_BOTTOM}px)` }}
+                  style={{
+                    top: `calc(var(--scale-factor) * ${pageBottomOrigin}px + ${PAGE_PADDING_BOTTOM}px)`,
+                    width: `calc(var(--scale-factor) * ${pageMaxWidth}px + 2 * ${PAGE_PADDING_HORIZONTAL}px)`,
+                  }}
                 >
                   &nbsp;
                 </div>

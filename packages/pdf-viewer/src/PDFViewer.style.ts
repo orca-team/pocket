@@ -59,8 +59,8 @@ export default createUseStyles(
       // marginLeft: 'auto',
       // marginRight: 'auto',
       boxShadow: [0, 0, 12, 'rgba(0, 0, 0, 0.3)'],
-      left: '50%',
-      transform: 'translateX(-50%)',
+      left: '0%',
+      // transform: 'translateX(-50%)',
     },
     page: {
       width: '100%',

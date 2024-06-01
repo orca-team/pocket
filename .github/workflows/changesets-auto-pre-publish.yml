@@ -60,7 +60,7 @@ jobs:
                 "msgtype": "markdown",
                 "markdown": {
                     "title":"orca-fe 发布提醒",
-                    "text": "## Orca-Pocket 临时版本已发布\n ${{steps.changesets.outputs.changedPackages}}\n\nTriggered by [PR#${{ github.event.pull_request.number }}](https://github.com/orca-team/pocket/pull/${{ github.event.pull_request.number }})"
+                    "text": "## Orca-Pocket 临时版本已发布\n ${{steps.changesets.outputs.changedPackages}}\n\nTriggered by [PR#${{ github.event.pull_request.number }} {{github.event.pull_request.title}}](https://github.com/orca-team/pocket/pull/${{ github.event.pull_request.number }})"
                 },
                 "at": {
                     "isAtAll": false
