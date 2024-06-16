@@ -12,6 +12,7 @@ import PDFOpenFileButtonPlugin from './plugins/PDFOpenFileButtonPlugin';
 import type { ToolbarButtonProps } from './ToolbarButton';
 import ToolbarButton from './ToolbarButton';
 import ToolbarPortal from './ToolbarPortal';
+import PDFPageDebugPlugin from './plugins/PDFPageDebugPlugin';
 
 export default PDFViewer;
 
@@ -47,3 +48,5 @@ export type * from './plugins/PDFOpenFileButtonPlugin';
 
 export { PDFContextPrintPlugin, PDFContextMenuPlugin };
 export type * from './plugins/PDFContextMenuPlugin';
+
+export { PDFPageDebugPlugin };
