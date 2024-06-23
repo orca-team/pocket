@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unused-prop-types */
 import type { CSSProperties } from 'react';
-import React, { useContext, useImperativeHandle, useState } from 'react';
+import React, { useMemo, useContext, useImperativeHandle, useState } from 'react';
 import { IconButton, Trigger } from '@orca-fe/pocket';
 import type { PainterRef, ShapeDataType, ShapeType } from '@orca-fe/painter';
 import Painter from '@orca-fe/painter';
@@ -20,6 +20,7 @@ import type { PropsType } from '../SimplePropsEditor/def';
 import useStyle from './PDFPainterPlugin.style';
 import { useLocale } from '../../locale/context';
 import zhCN from '../../locale/zh_CN';
+import { shapeCssToPdf, shapePdfToCss } from './utils';
 
 const deepClone = rfdc();
 
@@ -36,7 +37,7 @@ export type PDFPainterPluginHandle = {
 
 const eArr = [];
 
-const ef = () => { };
+const ef = () => {};
 
 /**
  * PDFPainterPlugin 绘图插件属性
@@ -93,7 +94,15 @@ const drawingNamePDFPainterPlugin = 'PDFPainterPlugin';
  */
 const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPluginProps>((props, pRef) => {
   const [l] = useLocale(zhCN);
-  const { disabledButton, autoCheck = true, onChangeStart = ef, buttonName = l.paint, popupVisible = true, drawingVisible = true, drawingPluginId = drawingNamePDFPainterPlugin } = props;
+  const {
+    disabledButton,
+    autoCheck = true,
+    onChangeStart = ef,
+    buttonName = l.paint,
+    popupVisible = true,
+    drawingVisible = true,
+    drawingPluginId = drawingNamePDFPainterPlugin,
+  } = props;
   const styles = useStyle();
 
   const { internalState, setInternalState } = useContext(PDFViewerContext);
@@ -120,17 +129,31 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
     valuePropName: 'checked',
   });
 
-  const [dataList = eArr, setDataList] = useControllableValue<ShapeDataType[][]>(props, {
+  const [_dataList = eArr, _setDataList] = useControllableValue<ShapeDataType[][]>(props, {
     defaultValuePropName: 'defaultData',
     trigger: 'onDataChange',
     valuePropName: 'data',
+  });
+
+  const dataList = useMemo(() => _dataList.map(shapes => shapes.map(shapePdfToCss)), [_dataList]);
+
+  const setDataList = useMemoizedFn<typeof _setDataList>((data, ...args) => {
+    if (typeof data === 'function') {
+      _setDataList(oData => data(oData).map(shapes => shapes.map(shapeCssToPdf)), ...args);
+    } else {
+      _setDataList(
+        data.map(shapes => shapes.map(shapeCssToPdf)),
+        ...args,
+      );
+    }
   });
 
   /* 绘图功能 */
   const drawing = internalState.drawingPluginName === drawingPluginId;
 
   const setDrawing = useMemoizedFn((b: boolean) => {
-    setInternalState({ // 这里设置的时候，已经是全局的了
+    setInternalState({
+      // 这里设置的时候，已经是全局的了
       drawingPluginName: b ? drawingPluginId : '',
     });
   });
