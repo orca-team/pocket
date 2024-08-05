@@ -8,7 +8,8 @@ import { useGetState, useSizeListener } from '@orca-fe/hooks';
 import cn from 'classnames';
 import type { PDFDocumentProxy } from '@orca-fe/pdfjs-dist-browserify';
 import { getDocument } from '@orca-fe/pdfjs-dist-browserify';
-import * as pdfjsWorker from '@orca-fe/pdfjs-dist-browserify/build/pdf.worker';
+import * as pdfjsLib from '@orca-fe/pdfjs-dist-browserify';
+// import * as pdfjsWorker from '@orca-fe/pdfjs-dist-browserify/build/pdf.worker';
 import type { DocumentInitParameters } from '@orca-fe/pdfjs-dist-browserify/types/src/display/api';
 import { ContextMenu } from '@orca-fe/pocket';
 import { saveAs } from 'file-saver';
@@ -84,12 +85,18 @@ export interface PDFViewerProps extends Omit<React.HTMLAttributes<HTMLDivElement
   /** 是否支持拖拽打开文件 */
   dropFile?: boolean;
 
+  /** 是否首次渲染所有的 PDF 页面 */
+  renderAllPages?: boolean;
+
   pdfJsParams?: DocumentInitParameters;
 
   locale?: LocaleType;
 
   outputScale?: number;
 }
+
+// 使用全局变量
+let isWorkerLoaded = false;
 
 const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef) => {
   const {
@@ -112,13 +119,18 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     onPageChange = ef,
     locale,
     outputScale,
+    renderAllPages = false,
     ...otherProps
   } = props;
 
   useEffect(() => {
-    if (!window['pdfjsWorker']) {
-      window['pdfjsWorker'] = pdfjsWorker;
+    if (!isWorkerLoaded) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
+      isWorkerLoaded = true;
     }
+    // if (!window['pdfjsWorker']) {
+    //   window['pdfjsWorker'] = pdfjsWorker;
+    // }
   }, []);
 
   const styles = useStyle();
@@ -130,6 +142,9 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
 
   // 页面容器（随页面长度）
   const pageContainerRef = useRef<HTMLDivElement>(null);
+
+  // 页面缓存（已经渲染过的页面进行缓存）
+  const pageCacheRef = useRef<{ [key: number]: boolean }>({});
 
   const [current, setCurrent, getCurrent] = useGetState(0);
 
@@ -456,6 +471,11 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     }
   });
 
+  // 渲染完成的回调，缓存 page
+  const onRenderFinish = (pageIndex: number) => {
+    pageCacheRef.current[pageIndex] = true;
+  }
+
   // 监听滚动事件，并更新需要展示的页面范围（虚拟列表）
   useEventListener(
     'scroll',
@@ -718,15 +738,21 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
               >
                 {viewports.length === 0 && !loading && !pluginLoading && emptyTips}
                 {viewports.map((viewport, pageIndex) => {
-                  const shouldRender = pageIndex >= renderRange[0] && pageIndex <= renderRange[1];
+                  let shouldRender = (pageIndex >= renderRange[0] && pageIndex <= renderRange[1]) || renderAllPages;
                   const width = `calc(var(--scale-factor) * ${Math.floor(viewport.width)}px)`;
                   const height = `calc(var(--scale-factor) * ${Math.floor(viewport.height)}px)`;
                   const gap = `calc(var(--scale-factor) * ${pageGap}px)`;
+
+                  // 已渲染好的页面，不应该卸载
+                  if (pageCacheRef.current?.[pageIndex]) {
+                    shouldRender = true;
+                  }
+
                   return (
                     <div key={pageIndex} className={styles.pageContainer} style={{ width, height, marginBottom: gap }}>
                       {shouldRender && (
                         <>
-                          <PDFPage className={styles.page} outputScale={outputScale} index={pageIndex} zoom={zoom} render={shouldRender} />
+                          <PDFPage className={styles.page} outputScale={outputScale} index={pageIndex} zoom={zoom} render={shouldRender} onRenderFinish={onRenderFinish} />
                           <div ref={node => (pageCoverRefs[pageIndex] = node)} className={styles.pageCover} />
                           <div className={styles.pageCover}>{renderPageCover(pageIndex, { viewport, zoom })}</div>
                         </>

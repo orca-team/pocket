@@ -4,6 +4,7 @@ import PDFViewerContext, { usePageCoverRenderer } from './context';
 import OpenFileButton from './OpenFileButton';
 import PDFViewer from './PDFViewer';
 import PDFPainterPlugin from './plugins/PDFPainterPlugin';
+import PDFMarkPlugin from './plugins/PDFMarkPlugin';
 import PDFTooltipPlugin from './plugins/PDFTooltipPlugin';
 import PDFContextMenuPlugin from './plugins/PDFContextMenuPlugin';
 import PDFContextPrintPlugin from './plugins/PDFContextPrintPlugin';
@@ -36,6 +37,9 @@ export { usePageCoverRenderer };
 export { PDFPainterPlugin };
 
 export * from './plugins/PDFPainterPlugin';
+
+export { PDFMarkPlugin };
+export * from './plugins/PDFMarkPlugin';
 
 export { PDFTooltipPlugin };
 

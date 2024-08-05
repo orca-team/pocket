@@ -114,6 +114,50 @@ const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) =
                 />
               );
               break;
+            case 'mark':
+              element = (
+                <g>
+                  <rect
+                    x={shape.x}
+                    y={shape.y}
+                    width={shape.width}
+                    height={shape.height}
+                    rotate={`${shape.rotate}deg`}
+                    style={{
+                      fill: 'rgba(255, 77, 79, 0.05)',
+                      transformOrigin: `${shape.x}px ${shape.y}px`,
+                      transform: `rotate(${shape.rotate}deg)`,
+                    }}
+                    {...strokeStyle}
+                  />
+
+                  {/* 圆形背景 */}
+                  <circle
+                    cx={shape.x + shape.width + 5} // 圆心在矩形右边缘外20px
+                    cy={shape.y + shape.height + 5} // 圆心在矩形下边缘外20px
+                    r={12}
+                    fill='#F33B40' // 圆形背景颜色
+                    stroke='#F33B40' // 圆形边框颜色
+                    strokeWidth='1'
+                  />
+
+                  {/* 文字 */}
+                  <text
+                    x={shape.x + shape.width + 5} // 文字开始于圆心x坐标
+                    y={shape.y + shape.height + 5} // 文字开始于圆心y坐标
+                    textAnchor="middle" // 文字水平居中
+                    dominantBaseline="central" // 文字垂直居中
+                    fill="#fff" // 文字填充为无色
+                    stroke="#fff" // 边框颜色
+                    strokeWidth="1" // 边框宽度
+                    fontSize={14} // 文字大小
+                  >
+                    {shape.markNum}
+                  </text>
+                </g>
+
+              );
+              break;
             case 'line-path':
               element = (
                 <path
