@@ -1,5 +1,17 @@
 # @orca-fe/pdf-viewer
 
+## 1.21.11
+
+### Patch Changes
+
+- ea1cd06: fix: 缩小时，调整页码的位置不对的 bug
+
+## 1.21.10
+
+### Patch Changes
+
+- 6ca819d: orca-fe 依赖更改为 peerDependencies
+
 ## 1.21.9
 
 ### Patch Changes

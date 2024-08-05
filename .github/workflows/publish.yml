@@ -12,6 +12,7 @@ on:
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/publish.yml'
+      - '.changeset/*'
 
 jobs:
   replace-package-json-and-publish:

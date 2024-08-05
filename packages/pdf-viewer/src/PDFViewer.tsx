@@ -298,8 +298,10 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     const dom = pageContainerRef.current;
     if (dom) {
       const top = pageTopArr[page];
+      const height = viewports[page]?.height * scale * PixelsPerInch.PDF_TO_CSS_UNITS;
+      const containerHeight = dom.getBoundingClientRect().height;
       dom.scrollTo({
-        top,
+        top: Math.min(top, top + 0.5 * (height - containerHeight)),
         behavior: anim ? 'smooth' : 'auto',
       });
     }
