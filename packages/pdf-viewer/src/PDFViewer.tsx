@@ -85,8 +85,11 @@ export interface PDFViewerProps extends Omit<React.HTMLAttributes<HTMLDivElement
   /** 是否支持拖拽打开文件 */
   dropFile?: boolean;
 
-  /** 是否首次渲染所有的 PDF 页面 */
+  /** 是否一次性渲染所有的 PDF 页面 */
   renderAllPages?: boolean;
+
+  /** 在项目中使用的 pdf.worker.min.js 路径，默认放在 public 目录下的 /pdf.worker.min.js，版本 3.8.24 */
+  workerSrc?: string;
 
   pdfJsParams?: DocumentInitParameters;
 
@@ -120,12 +123,13 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     locale,
     outputScale,
     renderAllPages = false,
+    workerSrc,
     ...otherProps
   } = props;
 
   useEffect(() => {
     if (!isWorkerLoaded) {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
+      pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc ?? '/pdf.worker.min.js';
       isWorkerLoaded = true;
     }
     // if (!window['pdfjsWorker']) {
