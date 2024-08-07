@@ -12,10 +12,12 @@ export interface ShapeCreatorProps extends React.HTMLAttributes<HTMLDivElement> 
   onCreate?: (shape: GraphShapeType) => void;
   onCancel?: () => void;
   pointMapping?: (point: { x: number; y: number }) => { x: number; y: number };
+  graphMarkList?: GraphShapeType[];
+  maxMarkNum?: number;
 }
 
 const ShapeCreator = (props: ShapeCreatorProps) => {
-  const { className = '', shapeType = 'line', onCreate = ef, onDrawing = ef, onCancel = ef, pointMapping = a => a, ...otherProps } = props;
+  const { className = '', shapeType = 'line', onCreate = ef, onDrawing = ef, onCancel = ef, pointMapping = a => a, maxMarkNum = 0, ...otherProps } = props;
   const styles = useStyle();
 
   const rootRef = useRef<HTMLDivElement>(null);
@@ -56,8 +58,11 @@ const ShapeCreator = (props: ShapeCreatorProps) => {
           rotate: 0,
         };
         break;
-      case 'rectangle':
-        _this.data = { type: 'rectangle', x, y, width, height, rotate: 0 };
+        case 'rectangle':
+          _this.data = { type: 'rectangle', x, y, width, height, rotate: 0 };
+        break;
+      case 'mark':
+        _this.data = { type: 'mark', x, y, width, height, rotate: 0, markNum: maxMarkNum + 1 };
         break;
       case 'line-path':
         // 折线

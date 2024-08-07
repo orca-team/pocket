@@ -19,10 +19,11 @@ export interface PdfPageProps extends React.HTMLAttributes<HTMLDivElement> {
   zoom?: number;
   maxPixel?: number;
   outputScale?: number;
+  onRenderFinish?: (pageNumber: number) => void;
 }
 
 const PDFPage = (props: PdfPageProps) => {
-  const { className = '', index, render, zoom = 0, maxPixel = defaultMaxPixel, outputScale = globalOutputScale, ...otherProps } = props;
+  const { className = '', index, render, zoom = 0, maxPixel = defaultMaxPixel, outputScale = globalOutputScale, onRenderFinish, ...otherProps } = props;
   const styles = useStyle();
 
   const rootRef = useRef<HTMLDivElement>(null);
@@ -95,6 +96,13 @@ const PDFPage = (props: PdfPageProps) => {
                 if (node !== canvas) root.removeChild(node);
               });
               _this.canvasList = _this.canvasList.filter(node => node === canvas);
+            }
+            // 解决 canvas 渲染黑屏问题，重新绘制一次
+            if ('fillRule' in context && context.fillRule) {
+              onRenderFinish?.(index);
+            } else {
+              // 黑屏
+              renderPdfDebounce.run();
             }
           })
           .catch((err) => {

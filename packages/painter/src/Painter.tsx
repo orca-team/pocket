@@ -1,6 +1,7 @@
 import type { CSSProperties, Ref } from 'react';
 import React, { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useControllableValue, useMemoizedFn } from 'ahooks';
+import { flattenDeep } from 'lodash-es';
 import { useCombineKeyListener, useStaticClick } from '@orca-fe/hooks';
 import type { TransformerBoxContextType } from '@orca-fe/transformer';
 import { TransformerBoxContext, TransformerLayout } from '@orca-fe/transformer';
@@ -86,6 +87,9 @@ export interface PainterProps<T extends ShapeDataType> extends Omit<React.HTMLAt
 
   /** 开始拖拽事件 */
   onChangeStart?: (index: number) => void;
+
+  /** 整个PDF，所有图型的数据 */
+  dataList?: T[][];
 }
 
 const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProps<T>, pRef: Ref<PainterRef>) {
@@ -106,6 +110,7 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
     style,
     autoCheck = true,
     onChangeStart = ef,
+    dataList,
     ...otherProps
   } = props;
   const styles = useStyle();
@@ -128,8 +133,33 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
     defaultValuePropName: 'defaultData',
   });
 
+  const getMaxMarkNum = useMemoizedFn((list: T[]) => {
+    let max = 0;
+    list.forEach(item => {
+      if (item && item.type === 'mark') {
+        max = Math.max(max, item.markNum);
+      }
+    });
+    return max;
+  });
+
+  // 处理 dataList，返回 maxMarkNum
+  const {
+    maxMarkNum,
+  } = useMemo(() => {
+
+    // 合并二维数组为一维数组
+    const mergedData = flattenDeep(dataList);
+    const maxMarkNum = getMaxMarkNum(mergedData);
+
+    return {
+      maxMarkNum,
+    };
+  }, [dataList]);
+
   // 将 data 拆分为 graphShapeList 和 imageList，并保留 index 映射
   const {
+    graphMarkList,
     graphShapeList,
     imageList,
     graphIndexMap: shapeIndexMap,
@@ -143,7 +173,13 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
     const dataTypeMap: Record<number, 'shape' | 'image'> = {};
     const graphIndexMap: Record<number, number> = {};
     const imageIndexMap: Record<number, number> = {};
+    const graphMarkList: GraphShapeType[] = [];
+
     data.forEach((item, index) => {
+      if (item.type === 'mark') {
+        graphMarkList.push(item);
+      }
+
       if (isGraphShapeType(item)) {
         graphShapeList.push(item);
         graphIndexMap[graphShapeList.length - 1] = index;
@@ -163,6 +199,7 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
       graphIndexMap,
       imageIndexMap,
       dataIndexMap,
+      graphMarkList,
     };
   }, [data]);
 
@@ -378,6 +415,8 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
         <ShapeCreator
           pointMapping={getPointMapping}
           shapeType={drawMode.shapeType}
+          graphMarkList={graphMarkList}
+          maxMarkNum={maxMarkNum}
           onCancel={() => {
             setTempShape(false);
             setDrawMode(false);

@@ -45,6 +45,7 @@
     "ahooks": "^3.7.8",
     "classnames": "^2.3.2",
     "color": "^4.2.3",
+    "lodash-es": "^4.17.21",
     "react-colorful": "^5.6.1",
     "tslib": "^2.6.2",
     "@orca-fe/transformer": "^0.3.31"

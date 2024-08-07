@@ -28,6 +28,17 @@ export type EllipseType = StrokeStyle &
     rotate: number;
   };
 
+export type MarkType = StrokeStyle &
+  CommonShapeType & {
+    type: 'mark';
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    rotate: number;
+    markNum: number;
+  };
+
 export type RectangleType = StrokeStyle &
   CommonShapeType & {
     type: 'rectangle';
@@ -59,7 +70,7 @@ export type ImageType = CommonShapeType & {
   src: string;
 };
 
-export type GraphShapeType = LineShapeType | EllipseType | RectangleType | LinePathType;
+export type GraphShapeType = LineShapeType | EllipseType | RectangleType | LinePathType | MarkType;
 
 export type ShapeDataType = GraphShapeType | ImageType;
 
