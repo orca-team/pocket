@@ -77,6 +77,7 @@ export interface PDFMarkPluginProps {
   /** 插件实例ID */
   drawingPluginId?: string;
 
+  /** 按钮名称 */
   buttonName?: string;
 }
 

@@ -133,8 +133,8 @@ const ShapeRenderer = <T extends GraphShapeType>(props: ShapeRendererProps<T>) =
 
                   {/* 圆形背景 */}
                   <circle
-                    cx={shape.x + shape.width + 5} // 圆心在矩形右边缘外20px
-                    cy={shape.y + shape.height + 5} // 圆心在矩形下边缘外20px
+                    cx={shape.x + shape.width + 5} // 圆心在矩形右边缘外 5px
+                    cy={shape.y + shape.height + 5} // 圆心在矩形下边缘外 5px
                     r={12}
                     fill='#F33B40' // 圆形背景颜色
                     stroke='#F33B40' // 圆形边框颜色
