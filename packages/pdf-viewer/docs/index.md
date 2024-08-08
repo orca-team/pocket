@@ -33,6 +33,10 @@ title: PDF 阅读器 PdfViewer
 
 ### 重要更新
 
+- `1.22.0`
+  - 修复大文件卡顿，特别注意：该版本需要在项目 public 下的，引入 pdf.worker.min.js 3.8.24 的版本！！！pdf.worker.min.js 可以在 https://github.com/orca-team/pocket/tree/master/public 目录下获取
+  - 修复 PDF 缓存 page，以及个别 page 黑屏问题；
+  - 增加 PDFMarkPlugin 插件； 
 - `1.14.0`
   - 增加了国际化支持
 - `1.0.0`
@@ -73,6 +77,10 @@ title: PDF 阅读器 PdfViewer
 | onPageChange                                 | 翻页事件                                                                                                                | `(page: number) => void`                                                                    | `-`                                    | `1.11.2` |
 | pdfJsParams                                  | 额外的 pdfjs 参数，具体参数可(查看这里)[https://mozilla.github.io/pdf.js/api/draft/module-pdfjsLib.html]                | `object`                                                                                    | `-`                                    | `1.11.0` |
 | outputScale                                  | 渲染頁面的缩放级别                                                                                                      | `number`                                                                                    | `Math.max(window.devicePixelRatio, 1)` | `1.17.0` |
+| renderAllPages                               | 是否一次性渲染所有的页面，默认 false，不加载所有的 page                                                                     | `boolean`                                                                                    | `false`                                | `1.22.0` |
+| workerSrc                                    | 手动制定 pdfjsLib.GlobalWorkerOptions.workerSrc 的地址，默认是放在项目 public 下的，名称版本分别为 pdf.worker.min.js 3.8.24   | `string`                                                                                    | `/pdf.worker.min.js`                   | `1.22.0` |
+
+
 
 ### PDFViewerHandle
 
