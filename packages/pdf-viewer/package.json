@@ -52,7 +52,7 @@
   },
   "peerDependencies": {
     "@orca-fe/hooks": "^1.11.0",
-    "@orca-fe/painter": "^1.4.53",
+    "@orca-fe/painter": "^1.5.0",
     "@orca-fe/pocket": "^3.2.4",
     "@ant-design/icons": "^4.7.0",
     "react": ">=16.8.0",

@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 1.5.0
+
+### Minor Changes
+
+- 80aa0ab: feat: 增加 PDFMarkPlugin 插件；fix：修复大文件卡顿问题；修复 PDF 缓存 page，出现个别 page 黑屏问题；
+
 ## 1.4.55
 
 ### Patch Changes
