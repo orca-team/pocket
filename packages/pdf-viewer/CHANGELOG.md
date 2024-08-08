@@ -1,5 +1,16 @@
 # @orca-fe/pdf-viewer
 
+## 1.22.0
+
+### Minor Changes
+
+- 80aa0ab: feat: 增加 PDFMarkPlugin 插件；fix：修复大文件卡顿问题；修复 PDF 缓存 page，出现个别 page 黑屏问题；
+
+### Patch Changes
+
+- Updated dependencies [80aa0ab]
+  - @orca-fe/painter@1.21.11
+
 ## 1.21.11
 
 ### Patch Changes
