@@ -1,5 +1,11 @@
 # @orca-fe/pdf-viewer
 
+## 1.23.0
+
+### Minor Changes
+
+- c963e4e: 测试changeset发布组件的版本问题
+
 ## 1.22.0
 
 ### Minor Changes

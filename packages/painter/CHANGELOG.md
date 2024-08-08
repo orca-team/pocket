@@ -1,5 +1,11 @@
 # @orca-fe/painter
 
+## 1.6.0
+
+### Minor Changes
+
+- c963e4e: 测试changeset发布组件的版本问题
+
 ## 1.5.0
 
 ### Minor Changes
