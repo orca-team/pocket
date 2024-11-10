@@ -2,7 +2,7 @@
 import { useDebounceFn, useMemoizedFn, useUpdateEffect } from 'ahooks';
 import React, { useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { floorBy } from '@orca-fe/tools';
-import type { PageViewport } from '../context';
+import type { RenderTask } from 'pdfjs-dist';
 import PDFViewerContext from '../context';
 import useStyle from './PDFPage.style';
 import { PixelsPerInch } from '../utils';
@@ -30,7 +30,7 @@ const PDFPage = (props: PdfPageProps) => {
   const scale = 2 ** zoom * PixelsPerInch.PDF_TO_CSS_UNITS;
 
   const [_this] = useState<{
-    task?: any;
+    task?: RenderTask;
     canvasList: HTMLCanvasElement[];
   }>({
     canvasList: [],
@@ -40,12 +40,12 @@ const PDFPage = (props: PdfPageProps) => {
   const page = pages[index];
 
   const { viewport, scale: realScale } = useMemo(() => {
-    const viewport = page.getViewport({ scale }) as PageViewport;
+    const viewport = page.getViewport({ scale });
     const pixel = viewport.width * viewport.height;
     if (pixel > maxPixel) {
       const scaleLimit = floor(scale * (maxPixel / pixel) ** 0.5);
       return {
-        viewport: page.getViewport({ scale: scaleLimit }) as PageViewport,
+        viewport: page.getViewport({ scale: scaleLimit }),
         scale: scaleLimit,
       };
     }
@@ -68,7 +68,7 @@ const PDFPage = (props: PdfPageProps) => {
       canvas.hidden = true;
       const context = canvas.getContext('2d', { alpha: false });
       if (context) {
-        const transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
+        const transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : undefined;
 
         if (_this.task && typeof _this.task.cancel === 'function') {
           _this.task.cancel();
@@ -100,6 +100,8 @@ const PDFPage = (props: PdfPageProps) => {
           .catch((err) => {
             if (err.name !== 'RenderingCancelledException') {
               console.error(err);
+            } else if (err instanceof Error) {
+              console.warn(err.message);
             }
           });
       }
@@ -108,6 +110,11 @@ const PDFPage = (props: PdfPageProps) => {
 
   useLayoutEffect(() => {
     renderPdf();
+    return () => {
+      if (_this.task) {
+        _this.task.cancel();
+      }
+    };
   }, [render, page]);
 
   const renderPdfDebounce = useDebounceFn(renderPdf, { wait: 300 });

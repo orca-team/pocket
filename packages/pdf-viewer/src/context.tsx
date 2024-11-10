@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import ReactDOM from 'react-dom';
-import type { PDFDocumentProxy } from '@orca-fe/pdfjs-dist-browserify';
 import type { SetState } from 'ahooks/es/useSetState';
+import type { PageViewport, PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 
 export type SourceType = string | URL | ArrayBuffer;
 
@@ -60,22 +60,22 @@ export type PDFViewerHandle = {
   pluginLoaded: () => void;
 };
 
-export type PageViewport = {
-  height: number;
-  offsetX: number;
-  offsetY: number;
-  rotation: number;
-  scale: number;
-  transform: [number, number, number, number, number, number];
-  viewBox: [number, number, number, number];
-  width: number;
-  rawDims: {
-    pageHeight: number;
-    pageWidth: number;
-    pageX: number;
-    pageY: number;
-  };
-};
+// export type PageViewport = {
+//   height: number;
+//   offsetX: number;
+//   offsetY: number;
+//   rotation: number;
+//   scale: number;
+//   transform: [number, number, number, number, number, number];
+//   viewBox: [number, number, number, number];
+//   width: number;
+//   rawDims: {
+//     pageHeight: number;
+//     pageWidth: number;
+//     pageX: number;
+//     pageY: number;
+//   };
+// };
 
 export type RenderPageCoverFnType = (
   pageIndex: number,
@@ -94,7 +94,7 @@ export type PDFViewerInternalStateType = Record<string, any> & {
 export type PDFViewerContextType = {
   loading: boolean;
   pluginLoading: number;
-  pages: any[];
+  pages: PDFPageProxy[];
   current: number;
   zoom: number;
   pdfViewer: PDFViewerHandle;

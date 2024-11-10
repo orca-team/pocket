@@ -6,15 +6,15 @@ import type { CSSProperties } from 'react';
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useGetState, useSizeListener } from '@orca-fe/hooks';
 import cn from 'classnames';
-import type { PDFDocumentProxy } from '@orca-fe/pdfjs-dist-browserify';
-import { getDocument } from '@orca-fe/pdfjs-dist-browserify';
-import * as pdfjsWorker from '@orca-fe/pdfjs-dist-browserify/build/pdf.worker';
-import type { DocumentInitParameters } from '@orca-fe/pdfjs-dist-browserify/types/src/display/api';
+import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
+// import * as pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs';
 import { ContextMenu } from '@orca-fe/pocket';
 import { saveAs } from 'file-saver';
 import { DownloadOutlined } from '@ant-design/icons';
 import type { ContextMenuItemType } from '@orca-fe/pocket';
-import type { PageViewport, PDFViewerHandle, RenderPageCoverFnType, PDFViewerInternalStateType, SourceType } from './context';
+import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api';
+import type { PDFViewerHandle, RenderPageCoverFnType, PDFViewerInternalStateType, SourceType } from './context';
 import PDFViewerContext, { PDFToolbarContext } from './context';
 import PDFPage from './PDFPage';
 import { findSortedArr, PixelsPerInch } from './utils';
@@ -26,6 +26,7 @@ import { LocaleContext, useLocale } from './locale/context';
 import zhCN from './locale/zh_CN';
 import useCollector from './useCollector';
 
+GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
 const ef = () => undefined;
 
 const round001 = roundBy(0.001);
@@ -93,6 +94,8 @@ export interface PDFViewerProps extends Omit<React.HTMLAttributes<HTMLDivElement
   locale?: LocaleType;
 
   outputScale?: number;
+
+  workerSrc?: string;
 }
 
 const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef) => {
@@ -116,14 +119,18 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     onPageChange = ef,
     locale,
     outputScale,
+    workerSrc,
     ...otherProps
   } = props;
 
   useEffect(() => {
-    if (!window['pdfjsWorker']) {
-      window['pdfjsWorker'] = pdfjsWorker;
+    // if (!window['pdfjsWorker']) {
+    //   // window['pdfjsWorker'] = pdfjsWorker;
+    // }
+    if (workerSrc) {
+      GlobalWorkerOptions.workerSrc = workerSrc;
     }
-  }, []);
+  }, [workerSrc]);
 
   const styles = useStyle();
 
@@ -184,7 +191,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
 
   const [renderRange, setRenderRange] = useState<[number, number]>([0, 0]);
 
-  const [pages, setPages, getPages] = useGetState<any[]>([]);
+  const [pages, setPages, getPages] = useGetState<PDFPageProxy[]>([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -214,7 +221,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   const viewports = useMemo(
     () =>
       pages.map((page) => {
-        const viewport = page.getViewport({ scale: 1 }) as PageViewport;
+        const viewport = page.getViewport({ scale: 1 });
         return viewport;
       }),
     [pages],
@@ -323,14 +330,18 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
     const key = `${Date.now()}_${Math.random()}`;
     _this.pdfLoadingKey = key;
     setLoading(true);
+    let needRevokeUrlObj = false;
+    let pdfContent = file;
 
     try {
-      let pdfContent = file;
       if (pdfContent instanceof Promise) {
         pdfContent = await pdfContent;
       }
       if (pdfContent instanceof Blob) {
-        pdfContent = await pdfContent.arrayBuffer();
+        // pdfContent = await pdfContent.arrayBuffer();
+        // window.pdfContent = pdfContent;
+        pdfContent = URL.createObjectURL(pdfContent);
+        needRevokeUrlObj = true;
       }
 
       // key 不一致，说明已经有更新的 load 请求。
@@ -370,6 +381,9 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       }
     } finally {
       if (_this.pdfLoadingKey === key) setLoading(false);
+      if (needRevokeUrlObj) {
+        URL.revokeObjectURL(pdfContent as string);
+      }
     }
     // 總頁數
   });
