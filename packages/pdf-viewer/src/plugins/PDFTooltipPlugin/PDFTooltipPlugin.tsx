@@ -138,15 +138,18 @@ const PDFTooltipPlugin = React.forwardRef<PDFTooltipPluginHandle, PDFTooltipPlug
           onDrawChange={setDrawing}
           checked={checked?.[0] === pageIndex ? checked[1] : undefined}
           onCheck={(index) => {
-            setChecked((checked) => {
+            const newCheck = (() => {
               if (index >= 0) {
-                return [pageIndex, index];
+                return [pageIndex, index] as const;
               }
               if (checked && checked[0] !== pageIndex) {
                 return checked;
               }
               return undefined;
-            });
+            })();
+            if (checked !== newCheck) {
+              setChecked(newCheck as typeof checked);
+            }
           }}
           drawing={drawing}
           zoom={zoom}

@@ -93,7 +93,9 @@ const PDFTooltipPainter = (props: PDFTooltipPainterProps) => {
 
   const rootRef = useRef<HTMLDivElement>(null);
   useClickAway(() => {
-    check(-1);
+    if (checked !== -1) {
+      check(-1);
+    }
   }, rootRef);
 
   // 删除事件

@@ -321,7 +321,7 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
           }}
           checked={checked?.[0] === pageIndex ? checked[1] : undefined}
           onCheck={(index) => {
-            setChecked((checked) => {
+            const newCheck = (() => {
               if (index >= 0) {
                 return [pageIndex, index];
               }
@@ -329,7 +329,10 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
                 return checked;
               }
               return undefined;
-            });
+            })();
+            if (checked !== newCheck) {
+              setChecked(newCheck as typeof checked);
+            }
           }}
           renderTransformingRect={(shape, index) => {
             // 是否圖片類型

@@ -234,7 +234,9 @@ const Painter = forwardRef(function <T extends ShapeDataType>(props: PainterProp
   useStaticClick((e) => {
     const root = rootRef.current;
     if (root && (root === e.target || !root.contains(e.target as Node))) {
-      setChecked(-1);
+      if (checked !== -1) {
+        setChecked(-1);
+      }
     }
   });
 
