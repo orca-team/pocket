@@ -25,6 +25,7 @@ import type { LocaleType } from './locale/context';
 import { LocaleContext, useLocale } from './locale/context';
 import zhCN from './locale/zh_CN';
 import useCollector from './useCollector';
+import AsyncQueueProvider from './AsyncQueueProvider';
 
 GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
 const ef = () => undefined;
@@ -715,73 +716,88 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                 setToolbarRightDom(dom);
               }}
             />
-            <div
-              ref={setBodyRef}
-              className={cn(styles.pagesOuter, { [styles.droppable]: dropFile })}
-              style={
-                {
-                  '--scale-factor': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
-                  '--scale-factor-origin': scale,
-                  '--pdf-viewer-page-scale': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
-                } as CSSProperties
-              }
+            <AsyncQueueProvider
+              priorityCallback={(queue) => {
+                let maxPriority = Infinity;
+                let index = -1;
+
+                queue.forEach(([task, params], i) => {
+                  const priority = Math.abs(params.index - getCurrent());
+                  if (priority < maxPriority) {
+                    maxPriority = priority;
+                    index = i;
+                  }
+                });
+                return index;
+              }}
             >
-              <ContextMenu
-                ref={pageContainerRef}
-                className={styles.pages}
-                onScroll={onPageScroll}
-                mainMenuMinWidth={200}
-                data={() =>
-                  [
-                    {
-                      key: 'download',
-                      icon: <DownloadOutlined />,
-                      text: mergedLocale.downloadCurrentFile || '下载当前文件',
-                      disabled: pages.length <= 0,
-                      onClick() {
-                        downloadPdf();
-                      },
-                    } as ContextMenuItemType,
-                  ].concat(menuCollector.collect().sort((a, b) => (a.order || 0) - (b.order || 0)))}
+              <div
+                ref={setBodyRef}
+                className={cn(styles.pagesOuter, { [styles.droppable]: dropFile })}
+                style={
+                  {
+                    '--scale-factor': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
+                    '--scale-factor-origin': scale,
+                    '--pdf-viewer-page-scale': scale * PixelsPerInch.PDF_TO_CSS_UNITS,
+                  } as CSSProperties
+                }
               >
-                {viewports.length === 0 && !loading && !pluginLoading && emptyTips}
-                {viewports.map((viewport, pageIndex) => {
-                  const shouldRender = pageIndex >= renderRange[0] && pageIndex <= renderRange[1];
-                  const top = `calc(var(--scale-factor) * ${PAGE_PADDING_TOP + Math.floor(topArrOrigin[pageIndex])}px)`;
-                  const marginLeft = `max(${PAGE_PADDING_HORIZONTAL}px, (var(--pdf-viewer-page-width) - var(--scale-factor) * ${pageMaxWidth}px) * 0.5)`;
-                  const left = `calc(${marginLeft} + var(--scale-factor) * ${Math.floor((pageMaxWidth - viewport.width) * 0.5)}px)`;
-                  const width = `calc(var(--scale-factor) * ${Math.floor(viewport.width)}px)`;
-                  const height = `calc(var(--scale-factor) * ${Math.floor(viewport.height)}px)`;
-                  // const gap = `calc(var(--scale-factor) * ${pageGap}px)`;
-                  return (
-                    <div key={pageIndex} className={styles.pageContainer} style={{ top, left, width, height }}>
-                      {shouldRender && (
-                        <>
-                          <PDFPage className={styles.page} outputScale={outputScale} index={pageIndex} zoom={zoom} render={shouldRender} />
-                          <div ref={node => (pageCoverRefs[pageIndex] = node)} className={styles.pageCover} />
-                          <div className={styles.pageCover}>{renderPageCover(pageIndex, { viewport, zoom })}</div>
-                        </>
-                      )}
-                    </div>
-                  );
-                })}
-                <div
-                  className={styles.pageBottomPlaceholder}
-                  data-name="page-bottom-place-holder"
-                  style={{
-                    top: `calc(var(--scale-factor) * ${pageBottomOrigin}px + ${PAGE_PADDING_BOTTOM}px)`,
-                    width: `calc(var(--scale-factor) * ${pageMaxWidth}px + 2 * ${PAGE_PADDING_HORIZONTAL}px)`,
-                  }}
+                <ContextMenu
+                  ref={pageContainerRef}
+                  className={styles.pages}
+                  onScroll={onPageScroll}
+                  mainMenuMinWidth={200}
+                  data={() =>
+                    [
+                      {
+                        key: 'download',
+                        icon: <DownloadOutlined />,
+                        text: mergedLocale.downloadCurrentFile || '下载当前文件',
+                        disabled: pages.length <= 0,
+                        onClick() {
+                          downloadPdf();
+                        },
+                      } as ContextMenuItemType,
+                    ].concat(menuCollector.collect().sort((a, b) => (a.order || 0) - (b.order || 0)))}
                 >
-                  &nbsp;
-                </div>
-              </ContextMenu>
-              {(loading || !!pluginLoading) && loadingTips}
+                  {viewports.length === 0 && !loading && !pluginLoading && emptyTips}
+                  {viewports.map((viewport, pageIndex) => {
+                    const shouldRender = pageIndex >= renderRange[0] && pageIndex <= renderRange[1];
+                    const top = `calc(var(--scale-factor) * ${PAGE_PADDING_TOP + Math.floor(topArrOrigin[pageIndex])}px)`;
+                    const marginLeft = `max(${PAGE_PADDING_HORIZONTAL}px, (var(--pdf-viewer-page-width) - var(--scale-factor) * ${pageMaxWidth}px) * 0.5)`;
+                    const left = `calc(${marginLeft} + var(--scale-factor) * ${Math.floor((pageMaxWidth - viewport.width) * 0.5)}px)`;
+                    const width = `calc(var(--scale-factor) * ${Math.floor(viewport.width)}px)`;
+                    const height = `calc(var(--scale-factor) * ${Math.floor(viewport.height)}px)`;
+                    // const gap = `calc(var(--scale-factor) * ${pageGap}px)`;
+                    return (
+                      <div key={pageIndex} className={styles.pageContainer} style={{ top, left, width, height }}>
+                        {shouldRender && (
+                          <>
+                            <PDFPage className={styles.page} outputScale={outputScale} index={pageIndex} zoom={zoom} render={shouldRender} />
+                            <div ref={node => (pageCoverRefs[pageIndex] = node)} className={styles.pageCover} />
+                            <div className={styles.pageCover}>{renderPageCover(pageIndex, { viewport, zoom })}</div>
+                          </>
+                        )}
+                      </div>
+                    );
+                  })}
+                  <div
+                    className={styles.pageBottomPlaceholder}
+                    data-name="page-bottom-place-holder"
+                    style={{
+                      top: `calc(var(--scale-factor) * ${pageBottomOrigin}px + ${PAGE_PADDING_BOTTOM}px)`,
+                      width: `calc(var(--scale-factor) * ${pageMaxWidth}px + 2 * ${PAGE_PADDING_HORIZONTAL}px)`,
+                    }}
+                  >
+                    &nbsp;
+                  </div>
+                </ContextMenu>
+                {(loading || !!pluginLoading) && loadingTips}
 
-              {/* 绘图的工具栏渲染 */}
-              {children}
-            </div>
-
+                {/* 绘图的工具栏渲染 */}
+                {children}
+              </div>
+            </AsyncQueueProvider>
             {/* 页码 */}
             {pages.length > 0 && (
               <ZoomAndPageController
