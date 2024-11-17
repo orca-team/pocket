@@ -323,7 +323,7 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
           onCheck={(index) => {
             const newCheck = (() => {
               if (index >= 0) {
-                return [pageIndex, index];
+                return [pageIndex, index] as [number, number];
               }
               if (checked && checked[0] !== pageIndex) {
                 return checked;
@@ -331,7 +331,7 @@ const PDFPainterPlugin = React.forwardRef<PDFPainterPluginHandle, PDFPainterPlug
               return undefined;
             })();
             if (checked !== newCheck) {
-              setChecked(newCheck as typeof checked);
+              setChecked(newCheck);
             }
           }}
           renderTransformingRect={(shape, index) => {
