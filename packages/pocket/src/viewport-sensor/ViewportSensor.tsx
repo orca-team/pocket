@@ -124,7 +124,10 @@ const ViewportSensor = (props: ViewportSensorProps) => {
       <GetViewportContext.Provider
         value={useMemoizedFn(() => ({
           viewport: { center, zoom },
-          mousePoint: [Math.round((_this.currentPoint[0] + center[0]) / 2 ** zoom), Math.round((_this.currentPoint[1] + center[1]) / 2 ** zoom)],
+          mousePoint: [Math.round((_this.currentPoint[0] + center[0]) / 2 ** zoom), Math.round((_this.currentPoint[1] + center[1]) / 2 ** zoom)] as [
+            number,
+            number,
+          ],
         }))}
       >
         <div ref={rootRef as RefObject<HTMLDivElement>} {...otherProps}>
