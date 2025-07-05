@@ -148,7 +148,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   const pageContainerRef = useRef<HTMLDivElement>(null);
 
   // 页面缓存（已经渲染过的页面进行缓存）
-  const pageCacheRef = useRef<{ [key: number]: boolean }>({});
+  const pageCacheRef = useRef<Record<number, boolean>>({});
 
   const [current, setCurrent, getCurrent] = useGetState(0);
 
@@ -480,7 +480,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
   // 渲染完成的回调，缓存 page
   const onRenderFinish = (pageIndex: number) => {
     pageCacheRef.current[pageIndex] = true;
-  }
+  };
 
   // 监听滚动事件，并更新需要展示的页面范围（虚拟列表）
   useEventListener(
@@ -642,7 +642,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
       getPageBlob,
       getCurrentPage,
       getPageCount,
-      scrollTo,
+      scrollTo: scrollTo as PDFViewerHandle['scrollTo'],
       setTitle,
       getRoot,
       getFileSource,
@@ -750,7 +750,7 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                   const gap = `calc(var(--scale-factor) * ${pageGap}px)`;
 
                   // 已渲染好的页面，不应该卸载
-                  if (pageCacheRef.current?.[pageIndex]) {
+                  if (pageCacheRef.current[pageIndex]) {
                     shouldRender = true;
                   }
 
@@ -758,7 +758,14 @@ const PDFViewer = React.forwardRef<PDFViewerHandle, PDFViewerProps>((props, pRef
                     <div key={pageIndex} className={styles.pageContainer} style={{ width, height, marginBottom: gap }}>
                       {shouldRender && (
                         <>
-                          <PDFPage className={styles.page} outputScale={outputScale} index={pageIndex} zoom={zoom} render={shouldRender} onRenderFinish={onRenderFinish} />
+                          <PDFPage
+                            className={styles.page}
+                            outputScale={outputScale}
+                            index={pageIndex}
+                            zoom={zoom}
+                            render={shouldRender}
+                            onRenderFinish={onRenderFinish}
+                          />
                           <div ref={node => (pageCoverRefs[pageIndex] = node)} className={styles.pageCover} />
                           <div className={styles.pageCover}>{renderPageCover(pageIndex, { viewport, zoom })}</div>
                         </>
