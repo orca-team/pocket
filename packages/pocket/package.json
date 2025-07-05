@@ -35,7 +35,6 @@
     "build": "father build",
     "prepublishOnly": "npm run build",
     "autod": "autod",
-    "test": "jest --passWithNoTests",
     "clear": "rimraf lib es"
   },
   "dependencies": {
