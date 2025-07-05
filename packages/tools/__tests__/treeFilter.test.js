@@ -1,4 +1,4 @@
-const { treeFilter } = require('../src/tree');
+import { treeFilter } from '../src/tree';
 
 // 测试用例
 describe('@orca-fe/tools: treeFilter', () => {

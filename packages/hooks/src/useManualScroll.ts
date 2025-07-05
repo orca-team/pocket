@@ -140,7 +140,7 @@ export default function useManualScroll(target: BasicTarget, options: UseManualS
           left: el.scrollLeft,
           top: el.scrollTop,
         };
-        if (shouldUpdateRef.current(newPosition)) {
+        if (shouldUpdateRef.current?.(newPosition)) {
           setPosition(newPosition);
         }
 

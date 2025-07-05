@@ -1,4 +1,4 @@
-import lodash from 'lodash-es';
+import { cloneDeep, isPlainObject, omit as lodashOmit, pick, set } from 'lodash-es';
 
 /* eslint-disable @typescript-eslint/ban-types,@typescript-eslint/no-explicit-any */
 type ObjMapCallback = (key: string, value: any) => any;
@@ -107,21 +107,21 @@ export type AggregateOptions = {
  */
 function aggregate<T extends Object>(obj: T, depth: number = 1, mapping: AggregateKeysMapping = {}, options: AggregateOptions = {}): Object {
   const { maxDepth = 1, omitAggregatedKeys = true } = options;
-  let result = lodash.cloneDeep(obj) as any;
+  let result = cloneDeep(obj) as any;
   Object.entries(mapping).forEach(([key, aggregatedKeys]) => {
     // 存在同名键直接跳过
     if (Object.prototype.hasOwnProperty.call(result, key)) {
       return;
     }
     // 存在键值为对象的情况，未达到递归最大深度设置，继续递归
-    if (lodash.isPlainObject(result[key]) && (maxDepth === 'auto' || depth < maxDepth)) {
-      lodash.set(result, key, aggregate(result[key], depth + 1, mapping, options));
+    if (isPlainObject(result[key]) && (maxDepth === 'auto' || depth < maxDepth)) {
+      set(result, key, aggregate(result[key], depth + 1, mapping, options));
       return;
     }
-    lodash.set(result, key, lodash.pick(result, aggregatedKeys));
+    set(result, key, pick(result, aggregatedKeys));
     // 剔除已经被聚合的键
     if (omitAggregatedKeys) {
-      result = lodash.omit(result, aggregatedKeys);
+      result = lodashOmit(result, ...aggregatedKeys);
     }
   });
 

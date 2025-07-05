@@ -1,4 +1,4 @@
-const { convertNullToUndefined } = require('../src/obj');
+import { convertNullToUndefined } from '../src/obj';
 
 // 测试用例
 describe('@orca-fe/tools: convertNullToUndefined', () => {

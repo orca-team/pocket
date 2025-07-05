@@ -31,8 +31,7 @@
   },
   "scripts": {
     "build": "father build",
-    "prepublishOnly": "npm run build",
-    "test": "jest --passWithNoTests"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "immer": "^9.0.21"

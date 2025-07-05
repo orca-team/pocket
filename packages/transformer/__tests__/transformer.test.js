@@ -1,7 +1,4 @@
-'use strict';
-//
-// const foo = require('..');
-//
+// import foo from '..';
 describe('@orca-fe/transformer', () => {
   it('needs tests', () => {});
 });

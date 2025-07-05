@@ -265,6 +265,7 @@ export default function usePromisifyModal(options: UsePromisifyModalOptions = {}
     cancel,
     resolve,
     update,
+    isOpen: Boolean(instance),
   };
 }
 
