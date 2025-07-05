@@ -1,5 +1,11 @@
 # @orca-fe/hooks
 
+## 1.12.1
+
+### Patch Changes
+
+- c662f09: chore: add isOpen status
+
 ## 1.12.0
 
 ### Minor Changes
