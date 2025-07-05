@@ -42,8 +42,8 @@
     "gl-matrix": "^3.4.3",
     "prefix-classnames": "^0.0.7",
     "tslib": "^2.6.2",
-    "@orca-fe/hooks": "^1.12.0",
-    "@orca-fe/tools": "^0.10.1"
+    "@orca-fe/hooks": "workspace:*",
+    "@orca-fe/tools": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=16.8.0",

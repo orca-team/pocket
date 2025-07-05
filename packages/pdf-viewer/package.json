@@ -41,7 +41,7 @@
     "@orca-fe/jss-plugin-auto-prefix": "^0.0.1",
     "@orca-fe/pdfjs-dist-browserify": "^3.8.24",
     "@orca-fe/simple-jss": "^0.0.3",
-    "@orca-fe/tools": "^0.10.1",
+    "@orca-fe/tools": "workspace:*",
     "ahooks": "^3.7.8",
     "classnames": "^2.3.2",
     "file-saver": "^2.0.5",
@@ -51,9 +51,9 @@
     "tslib": "^2.6.2"
   },
   "peerDependencies": {
-    "@orca-fe/hooks": "^1.11.0",
-    "@orca-fe/painter": "^1.5.0",
-    "@orca-fe/pocket": "^3.2.4",
+    "@orca-fe/hooks": "workspace:*",
+    "@orca-fe/painter": "workspace:*",
+    "@orca-fe/pocket": "workspace:*",
     "@ant-design/icons": "^4.7.0",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
